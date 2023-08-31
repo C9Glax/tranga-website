@@ -124,6 +124,11 @@ function CreateDownloadNewChaptersJob(connector, internalId){
     PostData(uri);
 }
 
+function StartJob(jobId){
+    var uri = `${apiUri}/Jobs/StartNow?jobId=${jobId}`;
+    PostData(uri);
+}
+
 function UpdateDownloadLocation(downloadLocation){
     var uri = `${apiUri}/Settings/UpdateDownloadLocation?downloadLocation=${downloadLocation}`;
     PostData(uri);	
