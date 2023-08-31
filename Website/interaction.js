@@ -1,22 +1,37 @@
-﻿let publications = [];
-let tasks = [];
-let toEditId;
+﻿let jobs = [];
+let notificationConnectorTypes = [];
+let libraryConnectorTypes = [];
+
+function Setup(){
+  GetAvailableNotificationConnectors().then((json) => {
+    json.forEach(connector => {
+      notificationConnectorTypes[connector.Key] = connector.Value;
+    });
+  });
+
+  GetAvailableLibraryConnectors().then((json) => {
+    json.forEach(connector => {
+      libraryConnectorTypes[connector.Key] = connector.Value;
+    });
+  });
+  
+  GetMonitorJobs().then((json) => {
+    json.forEach(job => {
+      if(!jobs.includes(job)){
+        jobs.push(job);
+      }
+    });
+  });
+}
+Setup();
+
 
 const searchBox = document.querySelector("#searchbox");
-const searchPublicationQuery = document.querySelector("#searchPublicationQuery");
-const selectPublication = document.querySelector("#taskSelectOutput");
-const connectorSelect = document.querySelector("#connectors");
 const settingsPopup = document.querySelector("#settingsPopup");
 const settingsCog = document.querySelector("#settingscog");
-const selectRecurrence = document.querySelector("#selectReccurrence");
 const tasksContent = document.querySelector("content");
-const selectPublicationPopup = document.querySelector("#selectPublicationPopup");
 const createMonitorTaskButton = document.querySelector("#createMonitorTaskButton");
 const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterTaskButton");
-const createMonitorTaskPopup = document.querySelector("#createMonitorTaskPopup");
-const createDownloadChaptersTask = document.querySelector("#createDownloadChaptersTask");
-const chapterOutput = document.querySelector("#chapterOutput");
-const selectedChapters = document.querySelector("#selectedChapters");
 const publicationViewerPopup = document.querySelector("#publicationViewerPopup");
 const publicationViewerWindow = document.querySelector("publication-viewer");
 const publicationViewerDescription = document.querySelector("#publicationViewerDescription");
@@ -36,88 +51,28 @@ const settingKavitaPass = document.querySelector("#kavitaPassword");
 const settingGotifyUrl = document.querySelector("#gotifyUrl");
 const settingGotifyAppToken = document.querySelector("#gotifyAppToken");
 const settingLunaseaWebhook = document.querySelector("#lunaseaWebhook");
-const libraryUpdateTime = document.querySelector("#libraryUpdateTime");
 const settingKomgaConfigured = document.querySelector("#komgaConfigured");
 const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingApiUri = document.querySelector("#settingApiUri");
-const tagTasksRunning = document.querySelector("#tasksRunningTag");
-const tagTasksQueued = document.querySelector("#tasksQueuedTag");
-const downloadTasksPopup = document.querySelector("#downloadTasksPopup");
-const downloadTasksOutput = downloadTasksPopup.querySelector("popup-content");
 
-searchBox.addEventListener("keyup", () => FilterResults());
-settingsCog.addEventListener("click", () => OpenSettings());
-document.querySelector("#blurBackgroundSettingsPopup").addEventListener("click", () => settingsPopup.style.display = "none");
-document.querySelector("#blurBackgroundTaskPopup").addEventListener("click", () => selectPublicationPopup.style.display = "none");
-document.querySelector("#blurBackgroundPublicationPopup").addEventListener("click", () => HidePublicationPopup());
-document.querySelector("#blurBackgroundCreateMonitorTaskPopup").addEventListener("click", () => createMonitorTaskPopup.style.display = "none");
-document.querySelector("#blurBackgroundCreateDownloadChaptersTask").addEventListener("click", () => createDownloadChaptersTask.style.display = "none");
-document.querySelector("#blurBackgroundTasksQueuePopup").addEventListener("click", () => downloadTasksPopup.style.display = "none");
-selectedChapters.addEventListener("keypress", (event) => {
-    if(event.key === "Enter"){
-        DownloadChapterTaskClick();
-    }
-})
-publicationDelete.addEventListener("click", () => DeleteTaskClick());
-createMonitorTaskButton.addEventListener("click", () => {
-    HidePublicationPopup();
-    createMonitorTaskPopup.style.display = "block";
-});
-createDownloadChapterTaskButton.addEventListener("click", () => {
-    HidePublicationPopup();
-    OpenDownloadChapterTaskPopup();
-});
-publicationTaskStart.addEventListener("click", () => StartTaskClick());
-searchPublicationQuery.addEventListener("keypress", (event) => {
-    if(event.key === "Enter"){
-        NewSearch();
-    }
-});
-
-
-GetAvailableControllers()
-    .then(json => availableConnectors = json)
-    .then(json => 
-        json.forEach(connector => {
-            var option = document.createElement('option');
-            option.value = connector;
-            option.innerText = connector;
-            connectorSelect.appendChild(option);
-        })
-    );
-
-
-function NewSearch(){
-    //Disable inputs
-    connectorSelect.disabled = true;
-    searchPublicationQuery.disabled = true;
-    //Waitcursor
-    document.body.style.cursor = "wait";
-
-    //Empty previous results
-    selectPublication.replaceChildren();
-    GetPublicationFromConnector(connectorSelect.value, searchPublicationQuery.value)
-        .then(json =>
-            json.forEach(publication => {
-                    var option = CreatePublication(publication, connectorSelect.value);
-                    option.addEventListener("click", (mouseEvent) => {
-                        ShowPublicationViewerWindow(publication.internalId, mouseEvent, true);
-                    });
-                    selectPublication.appendChild(option);
-                }
-            ))
-        .then(() => {
-            //Re-enable inputs
-            connectorSelect.disabled = false;
-            searchPublicationQuery.disabled = false;
-            //Cursor
-            document.body.style.cursor = "initial";
-        });
+ResetContent();
+function ResetContent(){
+    //Delete everything
+    tasksContent.replaceChildren();
+    
+    //Add "Add new Task" Button
+    var add = document.createElement("div");
+    add.setAttribute("id", "addPublication")
+    var plus = document.createElement("p");
+    plus.innerText = "+";
+    add.appendChild(plus);
+    add.addEventListener("click", () => ShowNewTaskWindow());
+    tasksContent.appendChild(add);
 }
 
-//Returns a new "Publication" Item to display in the tasks section
+//Returns a new "Publication" Item to display in the jobs section
 function CreatePublication(publication, connector){
     var publicationElement = document.createElement('publication');
     publicationElement.setAttribute("id", publication.internalId);
@@ -138,78 +93,6 @@ function CreatePublication(publication, connector){
     return publicationElement;
 }
 
-function AddMonitorTask(){
-    var hours = document.querySelector("#hours").value;
-    var minutes = document.querySelector("#minutes").value;
-    CreateMonitorTask(connectorSelect.value, toEditId, `${hours}:${minutes}:00`, "en");
-    HidePublicationPopup();
-    createMonitorTaskPopup.style.display = "none";
-    selectPublicationPopup.style.display = "none";
-}
-
-function OpenDownloadChapterTaskPopup(){
-    selectedChapters.value = "";
-    chapterOutput.replaceChildren();
-    createDownloadChaptersTask.style.display = "block";
-    GetChapters(toEditId, connectorSelect.value, true, "en").then((json) => {
-        var i = 0;
-        json.forEach(chapter => {
-            var chapterDom = document.createElement("div");
-            var indexDom = document.createElement("span");
-            indexDom.className = "index";
-            indexDom.innerText = i++;
-            chapterDom.appendChild(indexDom);
-            
-            var volDom = document.createElement("span");
-            volDom.className = "vol";
-            volDom.innerText = chapter.volumeNumber;
-            chapterDom.appendChild(volDom);
-            
-            var chDom = document.createElement("span");
-            chDom.className = "ch";
-            chDom.innerText = chapter.chapterNumber;
-            chapterDom.appendChild(chDom);
-            
-            var titleDom = document.createElement("span");
-            titleDom.innerText = chapter.name;
-            chapterDom.appendChild(titleDom);
-            chapterOutput.appendChild(chapterDom);
-        });
-    });
-}
-
-function DownloadChapterTaskClick(){
-    CreateDownloadChaptersTask(connectorSelect.value, toEditId, selectedChapters.value, "en");
-    HidePublicationPopup();
-    createDownloadChaptersTask.style.display = "none";
-    selectPublicationPopup.style.display = "none";
-}
-
-function DeleteTaskClick(){
-    taskToDelete = tasks.filter(tTask => tTask.publication.internalId === toEditId)[0];
-    DeleteTask("MonitorPublication", taskToDelete.connectorName, toEditId);
-    HidePublicationPopup();
-}
-
-function StartTaskClick(){
-    var toEditTask = tasks.filter(task => task.publication.internalId == toEditId)[0];
-    StartTask("MonitorPublication", toEditTask.connectorName, toEditId);
-    HidePublicationPopup();
-}
-
-function ResetContent(){
-    //Delete everything
-    tasksContent.replaceChildren();
-    
-    //Add "Add new Task" Button
-    var add = document.createElement("div");
-    add.setAttribute("id", "addPublication")
-    var plus = document.createElement("p");
-    plus.innerText = "+";
-    add.appendChild(plus);
-    add.addEventListener("click", () => ShowNewTaskWindow());
-    tasksContent.appendChild(add);
-}
 function ShowPublicationViewerWindow(publicationId, event, add){
     //Show popup
     publicationViewerPopup.style.display = "block";
@@ -253,108 +136,9 @@ function HidePublicationPopup(){
     publicationViewerPopup.style.display = "none";
 }
 
-function ShowNewTaskWindow(){
-    selectPublication.replaceChildren();
-    searchPublicationQuery.value = "";
-    selectPublicationPopup.style.display = "flex";
-}
+searchBox.addEventListener("keyup", () => FilterResults());
 
-
-const fadeIn = [
-    { opacity: "0" },
-    { opacity: "1" }
-];
-
-const fadeInTiming = {
-    duration: 50,
-    iterations: 1,
-    fill: "forwards"
-}
-
-function OpenSettings(){
-    GetSettingsClick();
-    settingsPopup.style.display = "flex";
-}
-
-function GetSettingsClick(){
-    settingApiUri.value = "";
-    settingKomgaUrl.value = "";
-    settingKomgaUser.value = "";
-    settingKomgaPass.value = "";
-    settingKomgaConfigured.innerText = "❌";
-    settingKavitaUrl.value = "";
-    settingKavitaUser.value = "";
-    settingKavitaPass.value = "";
-    settingKavitaConfigured.innerText = "❌";
-    settingGotifyUrl.value = "";
-    settingGotifyAppToken.value = "";
-    settingGotifyConfigured.innerText = "❌";
-    settingLunaseaWebhook.value = "";
-    settingLunaseaConfigured.innerText = "❌";
-    
-    settingApiUri.placeholder = apiUri;
-    
-    GetSettings().then(json => {
-        settingDownloadLocation.innerText = json.downloadLocation;
-        json.libraryManagers.forEach(lm => {
-           if(lm.libraryType == 0){
-               settingKomgaUrl.placeholder = lm.baseUrl;
-               settingKomgaUser.placeholder = "User";
-               settingKomgaPass.placeholder = "***";
-               settingKomgaConfigured.innerText = "✅";
-           } else if(lm.libraryType == 1){
-               settingKavitaUrl.placeholder = lm.baseUrl;
-               settingKavitaUser.placeholder = "User";
-               settingKavitaPass.placeholder = "***";
-               settingKavitaConfigured.innerText = "✅";
-           }
-        });
-        json.notificationManagers.forEach(nm => {
-           if(nm.notificationManagerType == 0){
-               settingGotifyConfigured.innerText = "✅";
-           } else if(nm.notificationManagerType == 1){
-               settingLunaseaConfigured.innerText = "✅";
-           }
-        });
-    });
-    
-    GetKomgaTask().then(json => {
-        if(json.length > 0)
-            libraryUpdateTime.value = json[0].reoccurrence;
-    });
-}
-
-function UpdateLibrarySettings(){
-    if(settingKomgaUrl.value != "" && settingKomgaUser.value != "" && settingKomgaPass.value != ""){
-        var auth = utf8_to_b64(`${settingKomgaUser.value}:${settingKomgaPass.value}`);
-        console.log(auth);
-        UpdateKomga(settingKomgaUrl.value, auth);
-    }
-    
-    if(settingKavitaUrl.value != "" && settingKavitaUser.value != "" && settingKavitaPass.value != ""){
-        UpdateKavita(settingKavitaUrl.value, settingKavitaUser.value, settingKavitaPass.value);
-    }
-    
-    if(settingGotifyUrl.value != "" && settingGotifyAppToken.value != ""){
-        UpdateGotify(settingGotifyUrl.value, settingGotifyAppToken.value);
-    }
-    
-    if(settingLunaseaWebhook.value != ""){
-        UpdateLunaSea(settingLunaseaWebhook.value);
-    }
-
-    if(settingApiUri.value != ""){
-        apiUri = settingApiUri.value;
-        document.cookie = `apiUri=${apiUri};`;
-    }
-    
-    setTimeout(() => GetSettingsClick(), 200);
-}
-
-function utf8_to_b64( str ) {
-    return window.btoa(unescape(encodeURIComponent( str )));
-}
-
+//Filter shown jobs
 function FilterResults(){
     if(searchBox.value.length > 0){
         tasksContent.childNodes.forEach(publication => {
@@ -377,148 +161,119 @@ function FilterResults(){
     }
 }
 
-function ShowTasksQueue(){
+settingsCog.addEventListener("click", () => {
+  OpenSettings();
+  settingsPopup.style.display = "flex";
+});
 
-    downloadTasksOutput.replaceChildren();
-    GetRunningTasks()
-        .then(json => {
-            tagTasksRunning.innerText = json.length;
-            json.forEach(task => {
-                if(task.task == 2 || task.task == 4) {
-                    downloadTasksOutput.appendChild(CreateProgressChild(task));
-                    document.querySelector(`#progress${GetValidSelector(task.taskId)}`).value = task.progress;
-                    var finishedHours = task.executionApproximatelyRemaining.split(':')[0];
-                    var finishedMinutes = task.executionApproximatelyRemaining.split(':')[1];
-                    var finishedSeconds = task.executionApproximatelyRemaining.split(':')[2].split('.')[0];
-                    document.querySelector(`#progressStr${GetValidSelector(task.taskId)}`).innerText = `${finishedHours}:${finishedMinutes}:${finishedSeconds}`;
-                }
-            });
-        });
+settingKomgaUrl.addEventListener("keypress", (event) => { { if(event.key === "Enter") UpdateSettings(); } });
+settingKomgaUser.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKomgaPass.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKavitaUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKavitaUser.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKavitaPass.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingGotifyUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingGotifyAppToken.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingLunaseaWebhook.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
-    GetQueue()
-        .then(json => {
-            tagTasksQueued.innerText = json.length;
-            json.forEach(task => {
-                downloadTasksOutput.appendChild(CreateProgressChild(task));
-            });
-        });
-    downloadTasksPopup.style.display = "flex";
+function OpenSettings(){
+  settingGotifyConfigured.innerText = "❌";
+  settingLunaseaConfigured.innerText = "❌";
+  settingKavitaConfigured.innerText = "❌";
+  settingKomgaConfigured.innerText = "❌";
+  settingKomgaUrl.value = "";
+  settingKomgaUser.value = "";
+  settingKomgaPass.value = "";
+  settingKavitaUrl.value = "";
+  settingKavitaUser.value = "";
+  settingKavitaPass.value = "";
+  settingGotifyUrl.value = "";
+  settingGotifyAppToken.value = "";
+  settingLunaseaWebhook.value = "";
+  settingApiUri.value = "";
+  
+  GetSettings().then((json) => {
+    //console.log(json);
+    settingDownloadLocation.innerText = json.downloadLocation;
+    settingApiUri.placeholder = apiUri;
+  });
+  GetLibraryConnectors().then((json) => {
+    //console.log(json);
+    json.forEach(connector => {
+      switch(libraryConnectorTypes[connector.libraryType]){
+        case "Kavita":
+          settingKavitaConfigured.innerText = "✅";
+          settingKavitaUrl.placeholder = connector.baseUrl;
+          settingKavitaUser.placeholder = "***";
+          settingKavitaPass.placeholder = "***";
+          break;
+        case "Komga":
+          settingKomgaConfigured.innerText = "✅";
+          settingKomgaUrl.placeholder = connector.baseUrl;
+          settingKomgaUser.placeholder = "***";
+          settingKomgaPass.placeholder = "***";
+          break;
+        default:
+          console.log("Unknown type");
+          console.log(connector);
+          break;
+      }
+    });
+  });
+  GetNotificationConnectors().then((json) => {
+    //console.log(json);
+    json.forEach(connector => {
+      switch(notificationConnectorTypes[connector.notificationConnectorType]){
+        case "Gotify":
+          settingGotifyUrl.placeholder = connector.endpoint;
+          settingGotifyAppToken.placeholder = "***";
+          settingGotifyConfigured.innerText = "✅";
+          break;
+        case "LunaSea":
+          settingLunaseaConfigured.innerText = "✅";
+          settingLunaseaWebhook.placeholder = connector.id;
+          break;
+        default:
+          console.log("Unknown type");
+          console.log(connector);
+          break;
+      }
+    });
+  });
 }
 
-function CreateProgressChild(task){
-    var child = document.createElement("div");
-    var img = document.createElement('img');
-    img.src = `imageCache/${task.publication.coverFileNameInCache}`;
-    child.appendChild(img);
-    
-    var name = document.createElement("span");
-    name.innerText = task.publication.sortName;
-    name.className = "pubTitle";
-    child.appendChild(name);
-
-
-    var progress = document.createElement("progress");
-    progress.id = `progress${GetValidSelector(task.taskId)}`;
-    child.appendChild(progress);
-    
-    var progressStr = document.createElement("span");
-    progressStr.innerText = " \t∞";
-    progressStr.className = "progressStr";
-    progressStr.id = `progressStr${GetValidSelector(task.taskId)}`;
-    child.appendChild(progressStr);
-    
-    if(task.chapter != undefined){
-        var chapterNumber = document.createElement("span");
-        chapterNumber.className = "chapterNumber";
-        chapterNumber.innerText = `Vol.${task.chapter.volumeNumber} Ch.${task.chapter.chapterNumber}`;
-        child.appendChild(chapterNumber);
-        
-        var chapterName = document.createElement("span");
-        chapterName.className = "chapterName";
-        chapterName.innerText = task.chapter.name;
-        child.appendChild(chapterName);
-    }
-    
-    
-    return child;
+function UpdateSettings(){
+  if(settingApiUri.value != ""){
+    apiUri = settingApiUri.value;
+    setCookie("apiUri", apiUri);
+    Setup();
+  }
+  
+  if(settingKomgaUrl.value != "" &&
+     settingKomgaUser.value != "" &&
+     settingKomgaPass.value != ""){
+    UpdateKomga(settingKomgaUrl.value, utf8_to_b64(`${settingKomgaUser.value}:${settingKomgaPass.value}`));
+  }
+  
+  if(settingKavitaUrl.value != "" &&
+    settingKavitaUser.value != "" &&
+    settingKavitaPass.value != ""){
+    UpdateKavita(settingKavitaUrl.value, settingKavitaUser.value, settingKavitaPass.value);
+  }
+  
+  if(settingGotifyUrl.value != "" &&
+    settingGotifyAppToken.value != ""){
+    UpdateGotify(settingGotifyUrl.value, settingGotifyAppToken.value);
+  }
+  
+  if(settingLunaseaWebhook.value != ""){
+    UpdateLunaSea(settingLunaseaWebhook.value);
+  }
+  
+  OpenSettings();
 }
 
-//Resets the tasks shown
-ResetContent();
-downloadTasksOutput.replaceChildren();
-//Get Tasks and show them
-GetDownloadTasks()
-    .then(json => json.forEach(task => {
-        var publication = CreatePublication(task.publication, task.connectorName);
-        publication.addEventListener("click", (event) => ShowPublicationViewerWindow(task.publication.internalId, event, false));
-        tasksContent.appendChild(publication);
-        tasks.push(task);
-    }));
-
-GetRunningTasks()
-    .then(json => {
-        tagTasksRunning.innerText = json.length;
-        json.forEach(task => {
-            downloadTasksOutput.appendChild(CreateProgressChild(task));
-        });
-    });
-
-GetQueue()
-    .then(json => {
-        tagTasksQueued.innerText = json.length;
-        json.forEach(task => {
-            downloadTasksOutput.appendChild(CreateProgressChild(task));
-        });
-    })
-
-setInterval(() => {
-    //Tasks from API
-    var cTasks = [];
-    GetDownloadTasks()
-        .then(json => json.forEach(task => cTasks.push(task)))
-        .then(() => {
-            //Only update view if tasks-amount has changed
-            if(tasks.length != cTasks.length) {
-                //Resets the tasks shown
-                ResetContent();
-                //Add all currenttasks to view
-                cTasks.forEach(task => {
-                    var publication = CreatePublication(task.publication, task.connectorName);
-                    publication.addEventListener("click", (event) => ShowPublicationViewerWindow(task.publication.internalId, event, false));
-                    tasksContent.appendChild(publication);
-                })
-
-                tasks = cTasks;
-            }
-        }
-    );
-
-    GetRunningTasks()
-        .then(json => {
-           tagTasksRunning.innerText = json.length;
-        });
-    
-    GetQueue()
-        .then(json => {
-            tagTasksQueued.innerText = json.length;
-        });
-}, 1000);
-
-setInterval(() => {
-    GetRunningTasks().then((json) => {
-        json.forEach(task => {
-            if(task.task == 2 || task.task == 4){
-                document.querySelector(`#progress${GetValidSelector(task.taskId)}`).value = task.progress;
-                var finishedHours = task.executionApproximatelyRemaining.split(':')[0];
-                var finishedMinutes = task.executionApproximatelyRemaining.split(':')[1];
-                var finishedSeconds = task.executionApproximatelyRemaining.split(':')[2].split('.')[0];
-                document.querySelector(`#progressStr${GetValidSelector(task.taskId)}`).innerText = `${finishedHours}:${finishedMinutes}:${finishedSeconds}`;
-            }
-        });
-    });
-},500);
-
-function GetValidSelector(str){
-    var clean = [...str.matchAll(/[a-zA-Z0-9]*-*_*/g)];
-    return clean.join('');
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent( str )));
 }
