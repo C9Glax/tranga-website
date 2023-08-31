@@ -47,7 +47,7 @@ const tagTasksQueued = document.querySelector("#tasksQueuedTag");
 const downloadTasksPopup = document.querySelector("#downloadTasksPopup");
 const downloadTasksOutput = downloadTasksPopup.querySelector("popup-content");
 
-searchbox.addEventListener("keyup", (event) => FilterResults());
+searchBox.addEventListener("keyup", () => FilterResults());
 settingsCog.addEventListener("click", () => OpenSettings());
 document.querySelector("#blurBackgroundSettingsPopup").addEventListener("click", () => settingsPopup.style.display = "none");
 document.querySelector("#blurBackgroundTaskPopup").addEventListener("click", () => selectPublicationPopup.style.display = "none");
@@ -77,7 +77,6 @@ searchPublicationQuery.addEventListener("keypress", (event) => {
 });
 
 
-let availableConnectors;
 GetAvailableControllers()
     .then(json => availableConnectors = json)
     .then(json => 
