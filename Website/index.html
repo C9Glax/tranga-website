@@ -24,7 +24,7 @@
         <div id="addPublication">
           <p>+</p>
         </div>
-        <publication>
+        <publication onclick="ShowNewMangaSearch()">
           <img alt="cover" src="media/cover.jpg">
           <publication-information>
             <connector-name class="pill">MangaDex</connector-name>
@@ -32,6 +32,15 @@
           </publication-information>
         </publication>
       </content>
+      
+      <popup id="newMangaPopup">
+        <blur-background id="blurBackgroundNewMangaPopup" onclick="newMangaPopup.style.display = 'none';"></blur-background>
+        <div id="newMangaPopupSelector">
+          <select id="newMangaConnector" />
+          <input type="text" placeholder="Title" id="newMangaTitle" />
+        </div>
+        <div id="newMangaResult"></div>
+      </popup>
       
       <popup id="settingsPopup">
         <blur-background id="blurBackgroundSettingsPopup" onclick="

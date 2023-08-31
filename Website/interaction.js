@@ -2,30 +2,6 @@
 let notificationConnectorTypes = [];
 let libraryConnectorTypes = [];
 
-function Setup(){
-  GetAvailableNotificationConnectors().then((json) => {
-    json.forEach(connector => {
-      notificationConnectorTypes[connector.Key] = connector.Value;
-    });
-  });
-
-  GetAvailableLibraryConnectors().then((json) => {
-    json.forEach(connector => {
-      libraryConnectorTypes[connector.Key] = connector.Value;
-    });
-  });
-  
-  GetMonitorJobs().then((json) => {
-    json.forEach(job => {
-      if(!jobs.includes(job)){
-        jobs.push(job);
-      }
-    });
-  });
-}
-Setup();
-
-
 const searchBox = document.querySelector("#searchbox");
 const settingsPopup = document.querySelector("#settingsPopup");
 const settingsCog = document.querySelector("#settingscog");
@@ -56,8 +32,45 @@ const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingApiUri = document.querySelector("#settingApiUri");
+const newMangaPopup = document.querySelector("#newMangaPopup");
+const newMangaConnector = document.querySelector("#newMangaConnector");
+const newMangaTitle = document.querySelector("#newMangaTitle");
+const newMangaResult = document.querySelector("#newMangaResult");
 
-ResetContent();
+function Setup(){
+  GetAvailableNotificationConnectors().then((json) => {
+    json.forEach(connector => {
+      notificationConnectorTypes[connector.Key] = connector.Value;
+    });
+  });
+
+  GetAvailableLibraryConnectors().then((json) => {
+    json.forEach(connector => {
+      libraryConnectorTypes[connector.Key] = connector.Value;
+    });
+  });
+  
+  GetAvailableControllers().then((json) => {
+    json.forEach(connector => {
+      var option = document.createElement('option');
+      option.value = connector;
+      option.innerText = connector;
+      newMangaConnector.appendChild(option);
+    });
+    
+  });
+  
+  GetMonitorJobs().then((json) => {
+    json.forEach(job => {
+      if(!jobs.includes(job)){
+        jobs.push(job);
+      }
+    });
+  });
+  ResetContent();
+}
+Setup();
+
 function ResetContent(){
     //Delete everything
     tasksContent.replaceChildren();
@@ -68,8 +81,42 @@ function ResetContent(){
     var plus = document.createElement("p");
     plus.innerText = "+";
     add.appendChild(plus);
-    add.addEventListener("click", () => ShowNewTaskWindow());
+    add.addEventListener("click", () => ShowNewMangaSearch());
     tasksContent.appendChild(add);
+}
+
+function ShowNewMangaSearch(){
+  newMangaTitle.value = "";
+  newMangaPopup.style.display = "block";
+  newMangaResult.replaceChildren();
+}
+
+newMangaTitle.addEventListener("keypress", (event) => { if(event.key === "Enter") GetNewMangaItems();})
+function GetNewMangaItems(){
+  if(newMangaTitle.value.length < 4)
+    return;
+  
+  newMangaConnector.disabled = true;
+  newMangaTitle.disabled = true;
+  GetPublicationFromConnector(newMangaConnector.value, newMangaTitle.value).then((json) => {
+    console.log(json);
+    if(json.length > 0)
+      newMangaResult.style.display = "flex";
+    json.forEach(result => {
+      var item = document.createElement("div");
+      item.className = "mangaResultItem";
+      
+      var mangaTitle = document.createElement("span");
+      mangaTitle.className = "mangaResultItemTitle";
+      mangaTitle.innerText = result.sortName;
+      item.appendChild(mangaTitle);
+      
+      newMangaResult.appendChild(item);
+    });
+    
+    newMangaConnector.disabled = false;
+    newMangaTitle.disabled = false;
+  });
 }
 
 //Returns a new "Publication" Item to display in the jobs section
