@@ -135,12 +135,12 @@ function UpdateDownloadLocation(downloadLocation){
 }
 
 function UpdateKomga(komgaUrl, komgaAuth){
-    var uri = `/LibraryManagers/Update?libraryManager=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
+    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
     PostData(uri);
 }
 
 function UpdateKavita(kavitaUrl, kavitaUser, kavitaPass){
-    var uri = `/LibraryManagers/Update?libraryManager=Kavita&kavitaUrl=${kavitaUrl}&kavitaUser=${kavitaUser}&kavitaPass={kavitaPass}`;
+    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUser=${kavitaUser}&kavitaPass={kavitaPass}`;
     PostData(uri);
 }
 
