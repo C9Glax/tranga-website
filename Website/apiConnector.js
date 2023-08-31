@@ -3,6 +3,15 @@
 if(getCookie("apiUri") != ""){
     apiUri = getCookie("apiUri");
 }
+setCookie("apiUri", apiUri);
+
+function setCookie(cname, cvalue) {
+  const d = new Date();
+  d.setTime(d.getTime() + (365*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;samesite=strict";
+}
+
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -78,6 +87,12 @@ async function GetWaitingJobs(){
     return json;
 }
 
+async function GetMonitorJobs(){
+  var uri = `${apiUri}/Jobs/MonitorJobs`;
+  let json = await GetData(uri);
+  return json;
+}
+
 async function GetProgress(jobId){
     var uri = `${apiUri}/Jobs/Progress?jobId=${jobId}`;
     let json = await GetData(uri);
@@ -139,8 +154,8 @@ function UpdateKomga(komgaUrl, komgaAuth){
     PostData(uri);
 }
 
-function UpdateKavita(kavitaUrl, kavitaUser, kavitaPass){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUser=${kavitaUser}&kavitaPass={kavitaPass}`;
+function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
+    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword={kavitaPassword}`;
     PostData(uri);
 }
 
