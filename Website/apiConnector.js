@@ -48,121 +48,108 @@ async function GetAvailableControllers(){
     return json;
 }
 
-async function GetPublicationFromConnector(connectorName, title){
-    var uri = apiUri + `/Publications/FromConnector?connectorName=${connectorName}&title=${title}`;
+async function GetPublicationFromConnector(connector, title){
+    var uri = `${apiUri}/Manga/FromConnector?connector=${connector}&title=${title}`;
     let json = await GetData(uri);
     return json;
 }
 
-async function GetKnownPublications(){
-    var uri = apiUri + "/Publications/Known";
+async function GetChapters(connector, internalId){
+    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${internalId}`;
     let json = await GetData(uri);
     return json;
 }
 
-async function GetPublication(internalId){
-    var uri = apiUri + `/Publications/Known?internalId=${internalId}`;
+async function GetAllJobs(){
+	var uri = `${apiUri}/Jobs`;
+	let json = await GetData(uri);
+	return json;
+}
+
+async function GetRunningJobs(){
+    var uri = `${apiUri}/Jobs/Running`;
     let json = await GetData(uri);
     return json;
 }
 
-async function GetChapters(internalId, connectorName, onlyNew, language){
-    var uri = apiUri + `/Publications/Chapters?internalId=${internalId}&connectorName=${connectorName}&onlyNew=${onlyNew}&language=${language}`;
+async function GetWaitingJobs(){
+    var uri = `${apiUri}/Jobs/Waiting`;
     let json = await GetData(uri);
     return json;
 }
 
-async function GetTaskTypes(){
-    var uri = apiUri + "/Tasks/Types";
-    let json = await GetData(uri);
-    return json;
-}
-async function GetRunningTasks(){
-    var uri = apiUri + "/Tasks/RunningTasks";
-    let json = await GetData(uri);
-    return json;
-}
-
-async function GetDownloadTasks(){
-    var uri = apiUri + "/Tasks?taskType=MonitorPublication";
+async function GetProgress(jobId){
+    var uri = `${apiUri}/Jobs/Progress?jobId=${jobId}`;
     let json = await GetData(uri);
     return json;
 }
 
 async function GetSettings(){
-    var uri = apiUri + "/Settings";
+    var uri = `${apiUri}/Settings`;
     let json = await GetData(uri);
     return json;
 }
 
-async function GetKomgaTask(){
-    var uri = apiUri + "/Tasks?taskType=UpdateLibraries";
-    let json = await GetData(uri);
-    return json;
+async function GetAvailableNotificationConnectors(){
+	var uri = `${apiUri}/NotificationConnectors/Types`;
+	let json = await GetData(uri);
+	return json;
 }
 
-function CreateMonitorTask(connectorName, internalId, reoccurrence, language){
-    var uri = apiUri + `/Tasks/CreateMonitorTask?connectorName=${connectorName}&internalId=${internalId}&reoccurrenceTime=${reoccurrence}&language=${language}`;
+async function GetNotificationConnectors(){
+	var uri = `${apiUri}/NotificationConnectors`;
+	let json = await GetData(uri);
+	return json;
+}
+
+async function GetAvailableLibraryConnectors(){
+	var uri = `${apiUri}/LibraryConnectors/Types`;
+	let json = await GetData(uri);
+	return json;
+}
+
+async function GetLibraryConnectors(){
+	var uri = `${apiUri}/LibraryConnectors`;
+	let json = await GetData(uri);
+	return json;
+}
+
+function CreateMonitorJob(connector, internalId, interval){
+	var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}`;
     PostData(uri);
 }
 
-function CreateDownloadChaptersTask(connectorName, internalId, chapters, language){
-    var uri = apiUri + `/Tasks/CreateDownloadChaptersTask?connectorName=${connectorName}&internalId=${internalId}&chapters=${chapters}&language=${language}`;
-    PostData(uri);
-}
-
-function StartTask(taskType, connectorName, internalId){
-    var uri = apiUri + `/Tasks/Start?taskType=${taskType}&connectorName=${connectorName}&internalId=${internalId}`;
-    PostData(uri);
-}
-
-function EnqueueTask(taskType, connectorName, publicationId){
-    var uri = apiUri + `/Queue/Enqueue?taskType=${taskType}&connectorName=${connectorName}&publicationId=${publicationId}`;
+function CreateDownloadNewChaptersJob(connector, internalId){
+    var uri = `${apiUri}/Jobs/DownloadNewChapters?connector=${connector}&internalId=${internalId}`;
     PostData(uri);
 }
 
 function UpdateDownloadLocation(downloadLocation){
-    var uri = apiUri + "/Settings/Update?"
-    uri += "&downloadLocation="+downloadLocation;
-    PostData(uri);
+    var uri = `${apiUri}/Settings/UpdateDownloadLocation?downloadLocation=${downloadLocation}`;
+    PostData(uri);	
 }
 
 function UpdateKomga(komgaUrl, komgaAuth){
-    var uri = apiUri + "/Settings/Update?"
-    uri += `&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
+    var uri = `/LibraryManagers/Update?libraryManager=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
     PostData(uri);
 }
 
 function UpdateKavita(kavitaUrl, kavitaUser, kavitaPass){
-    var uri = apiUri + "/Settings/Update?"
-    uri += `&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUser}&kavitaPassword=${kavitaPass}`;
+    var uri = `/LibraryManagers/Update?libraryManager=Kavita&kavitaUrl=${kavitaUrl}&kavitaUser=${kavitaUser}&kavitaPass={kavitaPass}`;
     PostData(uri);
 }
 
 function UpdateGotify(gotifyUrl, gotifyAppToken){
-    var uri = apiUri + "/Settings/Update?"
-    uri += `&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
+    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
     PostData(uri);
 }
 
 function UpdateLunaSea(lunaseaWebhook){
-    var uri = apiUri + "/Settings/Update?"
-    uri += `&lunaseaWebhook=${lunaseaWebhook}`;
+    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
     PostData(uri);
 }
 
-function DeleteTask(taskType, connectorName, publicationId){
-    var uri = apiUri + `/Tasks?taskType=${taskType}&connectorName=${connectorName}&publicationId=${publicationId}`;
+function RemoveJob(jobId){
+    var uri = `${apiUri}/Jobs?jobId=${jobId}`;
     DeleteData(uri);
-}
-
-function DequeueTask(taskType, connectorName, publicationId){
-    var uri = apiUri + `/Queue/Dequeue?taskType=${taskType}&connectorName=${connectorName}&publicationId=${publicationId}`;
-    DeleteData(uri);
-}
-
-async function GetQueue(){
-    var uri = apiUri + "/Queue/List";
-    let json = await GetData(uri);
-    return json;
 }
