@@ -1,6 +1,7 @@
 ﻿let jobs = [];
 let notificationConnectorTypes = [];
 let libraryConnectorTypes = [];
+let selectedManga;
 
 const searchBox = document.querySelector("#searchbox");
 const settingsPopup = document.querySelector("#settingsPopup");
@@ -8,13 +9,13 @@ const settingsCog = document.querySelector("#settingscog");
 const tasksContent = document.querySelector("content");
 const createMonitorTaskButton = document.querySelector("#createMonitorTaskButton");
 const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterTaskButton");
-const publicationViewerPopup = document.querySelector("#publicationViewerPopup");
-const publicationViewerWindow = document.querySelector("publication-viewer");
-const publicationViewerDescription = document.querySelector("#publicationViewerDescription");
-const publicationViewerName = document.querySelector("#publicationViewerName");
-const publicationViewerTags = document.querySelector("#publicationViewerTags");
-const publicationViewerAuthor = document.querySelector("#publicationViewerAuthor");
-const pubviewcover = document.querySelector("#pubviewcover");
+const mangaViewerPopup = document.querySelector("#publicationViewerPopup");
+const mangaViewerWindow = document.querySelector("publication-viewer");
+const mangaViewerDescription = document.querySelector("#publicationViewerDescription");
+const mangaViewerName = document.querySelector("#publicationViewerName");
+const mangaViewerTags = document.querySelector("#publicationViewerTags");
+const mangaViewerAuthor = document.querySelector("#publicationViewerAuthor");
+const mangaViewCover = document.querySelector("#pubviewcover");
 const publicationDelete = document.querySelector("publication-delete");
 const publicationTaskStart = document.querySelector("publication-starttask");
 const settingDownloadLocation = document.querySelector("#downloadLocation");
@@ -59,15 +60,6 @@ function Setup(){
     });
     
   });
-  
-  GetMonitorJobs().then((json) => {
-    json.forEach(job => {
-      if(!jobs.includes(job)){
-        jobs.push(job);
-      }
-    });
-  });
-  ResetContent();
 }
 Setup();
 
@@ -96,22 +88,19 @@ function GetNewMangaItems(){
   if(newMangaTitle.value.length < 4)
     return;
   
+  newMangaResult.replaceChildren();
   newMangaConnector.disabled = true;
   newMangaTitle.disabled = true;
   GetPublicationFromConnector(newMangaConnector.value, newMangaTitle.value).then((json) => {
-    console.log(json);
+    //console.log(json);
     if(json.length > 0)
       newMangaResult.style.display = "flex";
     json.forEach(result => {
-      var item = document.createElement("div");
-      item.className = "mangaResultItem";
-      
-      var mangaTitle = document.createElement("span");
-      mangaTitle.className = "mangaResultItemTitle";
-      mangaTitle.innerText = result.sortName;
-      item.appendChild(mangaTitle);
-      
-      newMangaResult.appendChild(item);
+      var mangaElement = CreateManga(result, newMangaConnector.value)
+      newMangaResult.appendChild(mangaElement);
+      mangaElement.addEventListener("click", (event) => {
+        ShowMangaWindow(result, event, true);
+      });
     });
     
     newMangaConnector.disabled = false;
@@ -120,49 +109,56 @@ function GetNewMangaItems(){
 }
 
 //Returns a new "Publication" Item to display in the jobs section
-function CreatePublication(publication, connector){
-    var publicationElement = document.createElement('publication');
-    publicationElement.setAttribute("id", publication.internalId);
-    var img = document.createElement('img');
-    img.src = `imageCache/${publication.coverFileNameInCache}`;
-    publicationElement.appendChild(img);
+function CreateManga(manga, connector){
+    var mangaElement = document.createElement('publication');
+    mangaElement.setAttribute("id", manga.internalId);
+    var mangaImage = document.createElement('img');
+    mangaImage.src = GetCoverUrl(manga.internalId);
+    mangaElement.appendChild(mangaImage);
     var info = document.createElement('publication-information');
     var connectorName = document.createElement('connector-name');
     connectorName.innerText = connector;
     connectorName.className = "pill";
     info.appendChild(connectorName);
-    var publicationName = document.createElement('publication-name');
-    publicationName.innerText = publication.sortName;
-    info.appendChild(publicationName);
-    publicationElement.appendChild(info);
-    if(publications.filter(pub => pub.internalId === publication.internalId) < 1)
-        publications.push(publication);
-    return publicationElement;
+    var mangaName = document.createElement('publication-name');
+    mangaName.innerText = manga.sortName;
+    info.appendChild(mangaName);
+    mangaElement.appendChild(info);
+    return mangaElement;
 }
 
-function ShowPublicationViewerWindow(publicationId, event, add){
+createMonitorTaskButton.addEventListener("click", () => {
+  NewMonitorJob();
+  mangaViewerPopup.style.display = "none";
+});
+function NewMonitorJob(){
+  CreateMonitorJob(newMangaConnector.value, selectedManga.internalId);
+  UpdateJobs();
+}
+
+function ShowMangaWindow(manga, event, add){
+    selectedManga = manga;
     //Show popup
-    publicationViewerPopup.style.display = "block";
+    mangaViewerPopup.style.display = "block";
     
     //Set position to mouse-position
-    if(event.clientY < window.innerHeight - publicationViewerWindow.offsetHeight)
-        publicationViewerWindow.style.top = `${event.clientY}px`;
+    if(event.clientY < window.innerHeight - mangaViewerWindow.offsetHeight)
+        mangaViewerWindow.style.top = `${event.clientY}px`;
     else
-        publicationViewerWindow.style.top = `${event.clientY - publicationViewerWindow.offsetHeight}px`;
+        mangaViewerWindow.style.top = `${event.clientY - mangaViewerWindow.offsetHeight}px`;
     
-    if(event.clientX < window.innerWidth - publicationViewerWindow.offsetWidth)
-        publicationViewerWindow.style.left = `${event.clientX}px`;
+    if(event.clientX < window.innerWidth - mangaViewerWindow.offsetWidth)
+        mangaViewerWindow.style.left = `${event.clientX}px`;
     else
-        publicationViewerWindow.style.left = `${event.clientX - publicationViewerWindow.offsetWidth}px`;
+        mangaViewerWindow.style.left = `${event.clientX - mangaViewerWindow.offsetWidth}px`;
     
     //Edit information inside the window
-    var publication = publications.filter(pub => pub.internalId === publicationId)[0];
-    publicationViewerName.innerText = publication.sortName;
-    publicationViewerTags.innerText = publication.tags.join(", ");
-    publicationViewerDescription.innerText = publication.description;
-    publicationViewerAuthor.innerText = publication.authors.join(',');
-    pubviewcover.src = `imageCache/${publication.coverFileNameInCache}`;
-    toEditId = publicationId;
+    mangaViewerName.innerText = manga.sortName;
+    mangaViewerTags.innerText = manga.tags.join(", ");
+    mangaViewerDescription.innerText = manga.description;
+    mangaViewerAuthor.innerText = manga.authors.join(',');
+    mangaViewCover.src = GetCoverUrl(manga.internalId);
+    toEditId = manga.internalId;
     
     //Check what action should be listed
     if(add){
@@ -323,4 +319,23 @@ function UpdateSettings(){
 
 function utf8_to_b64(str) {
     return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+
+UpdateJobs();
+setInterval(() => {
+  UpdateJobs();
+}, 1000);
+function UpdateJobs(){
+  GetMonitorJobs().then((json) => {
+    ResetContent();
+    console.log(json);
+    json.forEach(job => {
+      var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+      mangaView.addEventListener("click", (event) => {
+        ShowMangaWindow(job.manga, event, false);
+      });
+      tasksContent.appendChild(mangaView);
+    });
+  });
 }
