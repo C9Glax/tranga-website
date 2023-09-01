@@ -339,21 +339,15 @@ popup popup-window popup-content input, select {
 
 #newMangaResult {
   display: none;
-  flex-direction: column;
-  margin: 5px auto 0 !important;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px auto 0;
   border-radius: 5px;
   padding: 5px;
-  width: 590px !important;
-  max-height: 500px;
-  flex-grow: 1;
-  overflow-y: scroll;
-  background-color: white;
-  color: black;
-}
-
-#newMangaResult .mangaResultItem {
-  width: 100%;
-  margin: 2px 0 !important;
+  width: min-content;
+  max-width: 98%;
+  max-height: 400px;
+  overflow-x: scroll;
 }
 
 blur-background {
@@ -361,8 +355,10 @@ blur-background {
     height: 100%;
     position: absolute;
     left: 0;
-    background-color: black;
-    opacity: 0.5;
+    background: rgba(245, 169, 184, 0.58);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.5px);
+    -webkit-backdrop-filter: blur(4.5px);
 }
 
 #publicationViewerPopup{
