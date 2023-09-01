@@ -69,6 +69,10 @@ async function GetChapters(connector, internalId){
     return json;
 }
 
+function GetCoverUrl(internalId){
+  return `${apiUri}/Manga/Cover?internalId=${internalId}`;
+}
+
 async function GetAllJobs(){
 	var uri = `${apiUri}/Jobs`;
 	let json = await GetData(uri);
@@ -129,8 +133,8 @@ async function GetLibraryConnectors(){
 	return json;
 }
 
-function CreateMonitorJob(connector, internalId, interval){
-	var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}`;
+function CreateMonitorJob(connector, internalId){
+    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00`;
     PostData(uri);
 }
 
