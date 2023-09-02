@@ -2,13 +2,16 @@
 let notificationConnectorTypes = [];
 let libraryConnectorTypes = [];
 let selectedManga;
+let selectedJob;
 
 const searchBox = document.querySelector("#searchbox");
 const settingsPopup = document.querySelector("#settingsPopup");
 const settingsCog = document.querySelector("#settingscog");
 const tasksContent = document.querySelector("content");
-const createMonitorTaskButton = document.querySelector("#createMonitorTaskButton");
-const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterTaskButton");
+const createMonitorTaskButton = document.querySelector("#createMonitoJobButton");
+const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterJobButton");
+const startJobButton = document.querySelector("#startJobButton");
+const deleteJobButton = document.querySelector("#deleteJobButton");
 const mangaViewerPopup = document.querySelector("#publicationViewerPopup");
 const mangaViewerWindow = document.querySelector("publication-viewer");
 const mangaViewerDescription = document.querySelector("#publicationViewerDescription");
@@ -16,8 +19,6 @@ const mangaViewerName = document.querySelector("#publicationViewerName");
 const mangaViewerTags = document.querySelector("#publicationViewerTags");
 const mangaViewerAuthor = document.querySelector("#publicationViewerAuthor");
 const mangaViewCover = document.querySelector("#pubviewcover");
-const publicationDelete = document.querySelector("publication-delete");
-const publicationTaskStart = document.querySelector("publication-starttask");
 const settingDownloadLocation = document.querySelector("#downloadLocation");
 const settingKomgaUrl = document.querySelector("#komgaUrl");
 const settingKomgaUser = document.querySelector("#komgaUsername");
@@ -99,7 +100,7 @@ function GetNewMangaItems(){
       var mangaElement = CreateManga(result, newMangaConnector.value)
       newMangaResult.appendChild(mangaElement);
       mangaElement.addEventListener("click", (event) => {
-        ShowMangaWindow(result, event, true);
+        ShowMangaWindow(null, result, event, true);
       });
     });
     
@@ -127,17 +128,24 @@ function CreateManga(manga, connector){
     return mangaElement;
 }
 
-createMonitorTaskButton.addEventListener("click", () => {
-  NewMonitorJob();
-  mangaViewerPopup.style.display = "none";
-});
-function NewMonitorJob(){
+createMonitorJobButton.addEventListener("click", () => {
   CreateMonitorJob(newMangaConnector.value, selectedManga.internalId);
   UpdateJobs();
-}
+  mangaViewerPopup.style.display = "none";
+});
+startJobButton.addEventListener("click", () => {
+  StartJob(selectedJob.id);
+  mangaViewerPopup.style.display = "none";
+});
+deleteJobButton.addEventListener("click", () => {
+  RemoveJob(selectedJob.id);
+  UpdateJobs();
+  mangaViewerPopup.style.display = "none";
+});
 
-function ShowMangaWindow(manga, event, add){
+function ShowMangaWindow(job, manga, event, add){
     selectedManga = manga;
+    selectedJob = job;
     //Show popup
     mangaViewerPopup.style.display = "block";
     
@@ -162,16 +170,16 @@ function ShowMangaWindow(manga, event, add){
     
     //Check what action should be listed
     if(add){
-        createMonitorTaskButton.style.display = "initial";
-        createDownloadChapterTaskButton.style.display = "initial";
-        publicationDelete.style.display = "none";
-        publicationTaskStart.style.display = "none";
+        createMonitorJobButton.style.display = "initial";
+        createDownloadChapterJobButton.style.display = "initial";
+        startJobButton.style.display = "none";
+        deleteJobButton.style.display = "none";
     }
     else{
-        createMonitorTaskButton.style.display = "none";
-        createDownloadChapterTaskButton.style.display = "none";
-        publicationDelete.style.display = "initial";
-        publicationTaskStart.style.display = "initial";
+        createMonitorJobButton.style.display = "none";
+        createDownloadChapterJobButton.style.display = "none";
+        startJobButton.style.display = "initial";
+        deleteJobButton.style.display = "initial";
     }
 }
 
@@ -180,7 +188,6 @@ function HidePublicationPopup(){
 }
 
 searchBox.addEventListener("keyup", () => FilterResults());
-
 //Filter shown jobs
 function FilterResults(){
     if(searchBox.value.length > 0){
@@ -333,7 +340,7 @@ function UpdateJobs(){
     json.forEach(job => {
       var mangaView = CreateManga(job.manga, job.mangaConnector.name);
       mangaView.addEventListener("click", (event) => {
-        ShowMangaWindow(job.manga, event, false);
+        ShowMangaWindow(job, job.manga, event, false);
       });
       tasksContent.appendChild(mangaView);
     });
