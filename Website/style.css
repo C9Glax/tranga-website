@@ -462,6 +462,10 @@ publication-viewer publication-information publication-interactions publication-
     color: red;
 }
 
+publication-view publication-information publication-interactions publication-canceltask {
+  color: yellow;
+}
+
 publication-viewer publication-information publication-interactions publication-add {
     color: limegreen;
 }

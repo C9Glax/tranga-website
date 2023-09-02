@@ -11,6 +11,7 @@ const tasksContent = document.querySelector("content");
 const createMonitorTaskButton = document.querySelector("#createMonitoJobButton");
 const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterJobButton");
 const startJobButton = document.querySelector("#startJobButton");
+const cancelJobButton = document.querySelector("#cancelJobButton");
 const deleteJobButton = document.querySelector("#deleteJobButton");
 const mangaViewerPopup = document.querySelector("#publicationViewerPopup");
 const mangaViewerWindow = document.querySelector("publication-viewer");
@@ -137,6 +138,10 @@ startJobButton.addEventListener("click", () => {
   StartJob(selectedJob.id);
   mangaViewerPopup.style.display = "none";
 });
+cancelJobButton.addEventListener("click", () => {
+  CancelJob(selectedJob.id);
+  mangaViewerPopup.style.display = "none";
+});
 deleteJobButton.addEventListener("click", () => {
   RemoveJob(selectedJob.id);
   UpdateJobs();
@@ -172,12 +177,14 @@ function ShowMangaWindow(job, manga, event, add){
     if(add){
         createMonitorJobButton.style.display = "initial";
         createDownloadChapterJobButton.style.display = "initial";
+        cancelJobButton.style.display = "none";
         startJobButton.style.display = "none";
         deleteJobButton.style.display = "none";
     }
     else{
         createMonitorJobButton.style.display = "none";
         createDownloadChapterJobButton.style.display = "none";
+        cancelJobButton.style.display = "initial";
         startJobButton.style.display = "initial";
         deleteJobButton.style.display = "initial";
     }

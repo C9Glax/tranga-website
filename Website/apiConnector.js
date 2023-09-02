@@ -177,3 +177,8 @@ function RemoveJob(jobId){
     var uri = `${apiUri}/Jobs?jobId=${jobId}`;
     DeleteData(uri);
 }
+
+function CancelJob(jobId){
+    var uri = `${apiUri}/Jobs/Cancel?jobId=${jobId}`;
+    PostData(uri);
+}
