@@ -178,7 +178,7 @@ function ShowMangaWindow(job, manga, event, add){
     //Check what action should be listed
     if(add){
         createMonitorJobButton.style.display = "initial";
-        createDownloadChapterJobButton.style.display = "initial";
+        createDownloadChapterJobButton.style.display = "none";
         cancelJobButton.style.display = "none";
         startJobButton.style.display = "none";
         deleteJobButton.style.display = "none";
