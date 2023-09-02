@@ -58,9 +58,14 @@ async function GetAvailableControllers(){
 }
 
 async function GetPublicationFromConnector(connector, title){
-    var uri = `${apiUri}/Manga/FromConnector?connector=${connector}&title=${title}`;
-    let json = await GetData(uri);
-    return json;
+  var uri;
+  if(title.includes("http")){
+    uri = `${apiUri}/Manga/FromConnector?connector=${connector}&url=${title}`;
+  }else{
+    uri = `${apiUri}/Manga/FromConnector?connector=${connector}&title=${title}`;
+  }
+  let json = await GetData(uri);
+  return json;
 }
 
 async function GetChapters(connector, internalId){
