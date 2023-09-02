@@ -39,6 +39,8 @@ const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
 const newMangaTitle = document.querySelector("#newMangaTitle");
 const newMangaResult = document.querySelector("#newMangaResult");
+const jobsRunningTag = document.querySelector("#jobsRunningTag");
+const jobsQueuedTag = document.querySelector("#jobsQueuedTag");
 
 function Setup(){
   GetAvailableNotificationConnectors().then((json) => {
@@ -343,7 +345,7 @@ setInterval(() => {
 function UpdateJobs(){
   GetMonitorJobs().then((json) => {
     ResetContent();
-    console.log(json);
+    //console.log(json);
     json.forEach(job => {
       var mangaView = CreateManga(job.manga, job.mangaConnector.name);
       mangaView.addEventListener("click", (event) => {
@@ -351,5 +353,17 @@ function UpdateJobs(){
       });
       tasksContent.appendChild(mangaView);
     });
+  });
+  
+  GetRunningJobs().then((json) => {
+    console.log("Running");
+    console.log(json);
+    jobsRunningTag.innerText = json.length;
+  });
+  
+  GetWaitingJobs().then((json) => {
+    console.log("Waiting");
+    console.log(json);
+    jobsQueuedTag.innerText = json.length;
   });
 }
