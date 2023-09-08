@@ -41,28 +41,37 @@ const newMangaTitle = document.querySelector("#newMangaTitle");
 const newMangaResult = document.querySelector("#newMangaResult");
 const jobsRunningTag = document.querySelector("#jobsRunningTag");
 const jobsQueuedTag = document.querySelector("#jobsQueuedTag");
+const loaderdiv = document.querySelector('#loaderdiv');
 
 function Setup(){
-  GetAvailableNotificationConnectors().then((json) => {
-    json.forEach(connector => {
-      notificationConnectorTypes[connector.Key] = connector.Value;
+  Ping().then((ret) => {
+    loaderdiv.style.display = 'none';
+    
+    GetAvailableNotificationConnectors().then((json) => {
+      json.forEach(connector => {
+        notificationConnectorTypes[connector.Key] = connector.Value;
+      });
     });
-  });
 
-  GetAvailableLibraryConnectors().then((json) => {
-    json.forEach(connector => {
-      libraryConnectorTypes[connector.Key] = connector.Value;
+    GetAvailableLibraryConnectors().then((json) => {
+      json.forEach(connector => {
+        libraryConnectorTypes[connector.Key] = connector.Value;
+      });
     });
-  });
-  
-  GetAvailableControllers().then((json) => {
-    json.forEach(connector => {
-      var option = document.createElement('option');
-      option.value = connector;
-      option.innerText = connector;
-      newMangaConnector.appendChild(option);
+
+    GetAvailableControllers().then((json) => {
+      json.forEach(connector => {
+        var option = document.createElement('option');
+        option.value = connector;
+        option.innerText = connector;
+        newMangaConnector.appendChild(option);
+      });
     });
     
+    UpdateJobs();
+    setInterval(() => {
+      UpdateJobs();
+    }, 1000);
   });
 }
 Setup();
@@ -331,17 +340,13 @@ function UpdateSettings(){
   }
   
   OpenSettings();
+  Setup();
 }
 
 function utf8_to_b64(str) {
     return window.btoa(unescape(encodeURIComponent( str )));
 }
 
-
-UpdateJobs();
-setInterval(() => {
-  UpdateJobs();
-}, 1000);
 function UpdateJobs(){
   GetMonitorJobs().then((json) => {
     ResetContent();
