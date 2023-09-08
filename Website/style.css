@@ -148,7 +148,7 @@ content {
 }
 
 #settingsPopup{
-    z-index: 10;
+    z-index: 300;
 }
 
 #settingsPopup popup-content{
@@ -507,4 +507,42 @@ footer-tag-popup::before{
     left: 0;
     bottom: -17px;
     border-radius: 0 0 0 5px;
+}
+
+#loaderdiv {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+}
+
+#loader {
+  border: 16px solid transparent;
+  border-top: 16px solid var(--secondary-color);
+  border-bottom: 16px solid var(--primary-color);
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  left: calc(50% - 60px);
+  top: calc(50% - 120px);
+  z-index: 201;
+}
+
+#loaderText {
+  position: relative;
+  margin: 0 auto;
+  top: calc(50% + 80px);
+  z-index: 201;
+  text-align: center;
+  color: var(--second-background-color);
+  font-size: 20pt;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
