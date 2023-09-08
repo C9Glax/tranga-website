@@ -114,6 +114,18 @@
           </publication-information>
         </publication-viewer>
       </popup>
+      
+      <popup id="jobStatusView">
+        <blur-background id="blurBackgroundJobStatus" onclick="jobStatusView.style.display= 'none';"></blur-background>
+        <popup-window>
+          <div>
+            <div id="jobStatusRunning" style="border-right: 1px solid gray;"></div>
+          </div>
+          <div>
+            <div id="jobStatusWaiting" style="border-left: 1px solid gray;"></div>
+          </div>
+        </popup-window>
+      </popup>
     </viewport>
 	  
     <footer>

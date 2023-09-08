@@ -1,4 +1,5 @@
-﻿let jobs = [];
+﻿let runningJobs = [];
+let waitingJobs = [];
 let notificationConnectorTypes = [];
 let libraryConnectorTypes = [];
 let selectedManga;
@@ -42,6 +43,9 @@ const newMangaResult = document.querySelector("#newMangaResult");
 const jobsRunningTag = document.querySelector("#jobsRunningTag");
 const jobsQueuedTag = document.querySelector("#jobsQueuedTag");
 const loaderdiv = document.querySelector('#loaderdiv');
+const jobStatusView = document.querySelector("#jobStatusView");
+const jobStatusRunning = document.querySelector("#jobStatusRunning");
+const jobStatusWaiting = document.querySelector("#jobStatusWaiting");
 
 function Setup(){
   Ping().then((ret) => {
@@ -124,7 +128,7 @@ function GetNewMangaItems(){
 //Returns a new "Publication" Item to display in the jobs section
 function CreateManga(manga, connector){
     var mangaElement = document.createElement('publication');
-    mangaElement.setAttribute("id", manga.internalId);
+    mangaElement.id = GetValidSelector(manga.internalId);
     var mangaImage = document.createElement('img');
     mangaImage.src = GetCoverUrl(manga.internalId);
     mangaElement.appendChild(mangaImage);
@@ -359,16 +363,120 @@ function UpdateJobs(){
       tasksContent.appendChild(mangaView);
     });
   });
+    
+  GetWaitingJobs().then((json) => {
+    jobsQueuedTag.innerText = json.length;
+    
+    var nowWaitingJobs = [];
+    
+    json.forEach(job => {
+      if(!waitingJobs.includes(GetValidSelector(job.id))){
+        var jobDom = createJob(job);
+        jobStatusWaiting.appendChild(jobDom);
+      }
+      nowWaitingJobs.push(GetValidSelector(job.id));
+    });
+    waitingJobs = nowWaitingJobs;
+  });
+  
+  jobStatusWaiting.childNodes.forEach(child => {
+    if(!waitingJobs.includes(child.id))
+      jobStatusWaiting.removeChild(child);
+  });
   
   GetRunningJobs().then((json) => {
-    console.log("Running");
-    console.log(json);
     jobsRunningTag.innerText = json.length;
+    
+    var nowRunningJobs = [];
+    
+    json.forEach(job => {
+      if(!runningJobs.includes(GetValidSelector(job.id))){
+        var jobDom = createJob(job);
+        jobStatusRunning.appendChild(jobDom);
+      }
+      nowRunningJobs.push(GetValidSelector(job.id));
+      UpdateJobProgress(job.id);
+    });
+    
+    runningJobs = nowRunningJobs;
   });
   
-  GetWaitingJobs().then((json) => {
-    console.log("Waiting");
-    console.log(json);
-    jobsQueuedTag.innerText = json.length;
+  jobStatusRunning.childNodes.forEach(child => {
+    if(!runningJobs.includes(child.id))
+      jobStatusRunning.removeChild(child);
   });
+}
+
+function createJob(jobjson){
+  var manga;
+  if(jobjson.chapter != null)
+    manga = jobjson.chapter.parentManga;
+  else if(jobjson.manga != null)
+    manga = jobjson.manga;
+  else return null;
+  
+  
+  var wrapper = document.createElement("div");
+  wrapper.className = "jobWrapper";
+  wrapper.id = GetValidSelector(jobjson.id);
+  
+  var image = document.createElement("img");
+  image.className = "jobImage";
+  image.src = GetCoverUrl(manga.internalId);
+  wrapper.appendChild(image);
+  
+  var title = document.createElement("span");
+  title.className = "jobTitle";
+  if(jobjson.chapter != null)
+    title.innerText = `${manga.sortName} - ${jobjson.chapter.fileName}`;
+  else if(jobjson.manga != null)
+    title.innerText = manga.sortName;
+  wrapper.appendChild(title);
+  
+  var progressBar = document.createElement("progress");
+  progressBar.className = "jobProgressBar";
+  progressBar.id = `jobProgressBar${GetValidSelector(jobjson.id)}`;
+  wrapper.appendChild(progressBar);
+  
+  var progressSpan = document.createElement("span");
+  progressSpan.className = "jobProgressSpan";
+  progressSpan.id = `jobProgressSpan${GetValidSelector(jobjson.id)}`;
+  progressSpan.innerText = "0% 00:00:00";
+  wrapper.appendChild(progressSpan);
+  
+  var cancelSpan = document.createElement("span");
+  cancelSpan.className = "jobCancel";
+  cancelSpan.innerText = "Cancel";
+  cancelSpan.addEventListener("click", () => CancelJob(jobjson.id));
+  wrapper.appendChild(cancelSpan);
+  
+  return wrapper;
+}
+
+function ShowJobQueue(){  
+  jobStatusView.style.display = "initial";
+}
+
+function UpdateJobProgress(jobId){
+  GetProgress(jobId).then((json) => {
+    var progressBar = document.querySelector(`#jobProgressBar${GetValidSelector(jobId)}`);
+    var progressSpan = document.querySelector(`#jobProgressSpan${GetValidSelector(jobId)}`);
+    if(progressBar != null && json.progress != 0){
+      progressBar.value = json.progress;
+    }
+    if(progressSpan != null){
+      var percentageStr = "0%";
+      var timeleftStr = "00:00:00";
+      if(json.progress != 0){
+        percentageStr = Intl.NumberFormat("en-US", { style: "percent"}).format(json.progress);
+        timeleftStr = json.timeRemaining.split('.')[0];
+      }
+      progressSpan.innerText = `${percentageStr} ${timeleftStr}`;
+    }
+  });
+}
+
+function GetValidSelector(str){
+    var clean = [...str.matchAll(/[a-zA-Z0-9]*-*_*/g)];
+    return clean.join('');
 }
