@@ -51,6 +51,11 @@ function DeleteData(uri){
     });
 }
 
+async function Ping(){
+  let ret = await GetData(`${apiUri}/Ping`);
+  return ret;
+}
+
 async function GetAvailableControllers(){
     var uri = apiUri + "/Connectors";
     let json = await GetData(uri);
