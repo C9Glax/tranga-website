@@ -73,8 +73,8 @@ async function GetPublicationFromConnector(connector, title){
   return json;
 }
 
-async function GetChapters(connector, internalId){
-    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${internalId}`;
+async function GetChapters(connector, internalId, language){
+    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${internalId}&translatedLanguage=${language}`;
     let json = await GetData(uri);
     return json;
 }
@@ -143,13 +143,13 @@ async function GetLibraryConnectors(){
 	return json;
 }
 
-function CreateMonitorJob(connector, internalId){
-    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00`;
+function CreateMonitorJob(connector, internalId, language){
+    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00&translatedLanguage=${language}`;
     PostData(uri);
 }
 
-function CreateDownloadNewChaptersJob(connector, internalId){
-    var uri = `${apiUri}/Jobs/DownloadNewChapters?connector=${connector}&internalId=${internalId}`;
+function CreateDownloadNewChaptersJob(connector, internalId, language){
+    var uri = `${apiUri}/Jobs/DownloadNewChapters?connector=${connector}&internalId=${internalId}&translatedLanguage=${language}`;
     PostData(uri);
 }
 

@@ -40,6 +40,7 @@ const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
 const newMangaTitle = document.querySelector("#newMangaTitle");
 const newMangaResult = document.querySelector("#newMangaResult");
+const newMangaTranslatedLanguage = document.querySelector("#newMangaTranslatedLanguage");
 const jobsRunningTag = document.querySelector("#jobsRunningTag");
 const jobsQueuedTag = document.querySelector("#jobsQueuedTag");
 const loaderdiv = document.querySelector('#loaderdiv');
@@ -108,6 +109,7 @@ function GetNewMangaItems(){
   newMangaResult.replaceChildren();
   newMangaConnector.disabled = true;
   newMangaTitle.disabled = true;
+  newMangaTranslatedLanguage.disabled = true;
   GetPublicationFromConnector(newMangaConnector.value, newMangaTitle.value).then((json) => {
     //console.log(json);
     if(json.length > 0)
@@ -122,6 +124,7 @@ function GetNewMangaItems(){
     
     newMangaConnector.disabled = false;
     newMangaTitle.disabled = false;
+  newMangaTranslatedLanguage.disabled = false;
   });
 }
 
@@ -145,7 +148,7 @@ function CreateManga(manga, connector){
 }
 
 createMonitorJobButton.addEventListener("click", () => {
-  CreateMonitorJob(newMangaConnector.value, selectedManga.internalId);
+  CreateMonitorJob(newMangaConnector.value, selectedManga.internalId, newMangaTranslatedLanguage.value);
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
 });
