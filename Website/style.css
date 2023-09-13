@@ -316,25 +316,32 @@ popup popup-window popup-content input, select {
   margin: 80px auto 0;
 }
 
-#newMangaPopup > div > #newMangaConnector, #newMangaTitle {
+#newMangaPopup > div > #newMangaConnector, #newMangaTitle, #newMangaTranslatedLanguage {
   margin: 0;
   display: inline-block;
+  height: 40px;
 }
 
 #newMangaPopup #newMangaConnector {
-  height: 40px;
   width: 100px;
   padding: 0 0 0 5px;
   border-radius: 5px 0 0 5px;
+  border: 0;
   border-right: 1px solid darkgray;
 }
 
 #newMangaPopup #newMangaTitle{
-  height: 40px;
-  width: 495px;
-  padding: 0 0 0 5px;
+  width: 445px;
+  padding: 0 5px 0 5px;
+  border: 0;
+}
+
+#newMangaPopup #newMangaTranslatedLanguage {
+  width: 45px;
   border-radius: 0 5px 5px 0;
   border: 0;
+  border-left: 1px solid darkgray;
+  margin-left: -5px;
 }
 
 #newMangaResult {
