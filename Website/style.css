@@ -148,7 +148,7 @@ content {
 }
 
 #settingsPopup{
-    z-index: 10;
+    z-index: 300;
 }
 
 #settingsPopup popup-content{
@@ -205,6 +205,7 @@ publication{
     margin: 10px 10px;
     padding: 15px 20px;
     position: relative;
+    flex-shrink: 0;
 }
 
 publication::after{
@@ -305,138 +306,57 @@ popup popup-window popup-content input, select {
     border-radius: 3px;
 }
 
-#selectPublicationPopup publication {
-    width: 150px;
-    height: 250px;
+#newMangaPopup > div {
+  z-index: 3;
+  position: relative;
 }
 
-#createTaskPopup {
-    z-index: 7;
+#newMangaPopup > #newMangaPopupSelector {
+  width: 600px;
+  height: 40px;
+  margin: 80px auto 0;
 }
 
-#createTaskPopup input {
-    height: 30px;
-    width: 200px;
+#newMangaPopup > div > #newMangaConnector, #newMangaTitle, #newMangaTranslatedLanguage {
+  margin: 0;
+  display: inline-block;
+  height: 40px;
 }
 
-#createMonitorTaskPopup, #createDownloadChaptersTask {
-    z-index: 9;
+#newMangaPopup #newMangaConnector {
+  width: 100px;
+  padding: 0 0 0 5px;
+  border-radius: 5px 0 0 5px;
+  border: 0;
+  border-right: 1px solid darkgray;
 }
 
-#createMonitorTaskPopup input[type="number"] {
-    width: 40px;
+#newMangaPopup #newMangaTitle{
+  width: 445px;
+  padding: 0 5px 0 5px;
+  border: 0;
 }
 
-#createDownloadChaptersTask popup-content {
-    flex-direction: column;
-    align-items: start;
+#newMangaPopup #newMangaTranslatedLanguage {
+  width: 45px;
+  border-radius: 0 5px 5px 0;
+  border: 0;
+  border-left: 1px solid darkgray;
+  margin-left: -5px;
 }
 
-#createDownloadChaptersTask popup-content > * {
-    margin: 3px 0;
-}
-
-#createDownloadChaptersTask #chapterOutput {
-    max-height: 50vh;
-    overflow-y: scroll;
-}
-
-#createDownloadChaptersTask #chapterOutput .index{
-    display: inline-block;
-    width: 25px;
-}
-
-#createDownloadChaptersTask #chapterOutput .index::after{
-    content: ':';
-}
-
-#createDownloadChaptersTask #chapterOutput .vol::before{
-    content: 'Vol.';
-}
-
-#createDownloadChaptersTask #chapterOutput .vol{
-    display: inline-block;
-    width: 45px;
-}
-
-#createDownloadChaptersTask #chapterOutput .ch::before{
-    content: 'Ch.';
-}
-
-#createDownloadChaptersTask #chapterOutput .ch {
-    display: inline-block;
-    width: 60px;
-}
-
-#downloadTasksPopup popup-window {
-    left: 0;
-    top: 80px;
-    margin: 0 0 0 10px;
-    height: calc(100vh - 140px);
-    width: 400px;
-    max-width: 95vw;
-    overflow-y: scroll;
-}
-
-#downloadTasksPopup popup-content {
-    flex-direction: column;
-    align-items: start;
-    margin: 5px;
-}
-
-#downloadTasksPopup popup-content > div {
-    display: block;
-    height: 80px;
-    position: relative;
-    margin: 5px 0;
-}
-
-#downloadTasksPopup popup-content > div > img {
-    display: block;
-    position: absolute;
-    height: 100%;
-    width: 60px;
-    left: 0;
-    top: 0;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-#downloadTasksPopup popup-content > div > span {
-    display: block;
-    position: absolute;
-    width: max-content;
-}
-
-#downloadTasksPopup popup-content > div > .pubTitle {
-    left: 70px;
-    top: 0;
-}
-
-#downloadTasksPopup popup-content > div > .chapterName {
-    left: 70px;
-    top: 28pt;
-}
-
-#downloadTasksPopup popup-content > div > .chapterNumber {
-    left: 70px;
-    top: 14pt;
-}
-
-#downloadTasksPopup popup-content > div > progress {
-    display: block;
-    position: absolute;
-    left: 150px;
-    bottom: 0;
-    width: 200px;
-}
-
-#downloadTasksPopup popup-content > div > .progressStr {
-    display: block;
-    position: absolute;
-    left: 70px;
-    bottom: 0;
-    width: 70px;
+#newMangaResult {
+  display: none;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 5px auto 0;
+  border-radius: 5px;
+  padding: 5px;
+  width: min-content;
+  max-width: 98%;
+  max-height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 blur-background {
@@ -444,18 +364,10 @@ blur-background {
     height: 100%;
     position: absolute;
     left: 0;
-    background-color: black;
-    opacity: 0.5;
-}
-
-#taskSelectOutput{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    align-content: start;
-    max-height: 70vh;
-    overflow-y: scroll;
+    background: rgba(245, 169, 184, 0.58);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.5px);
+    -webkit-backdrop-filter: blur(4.5px);
 }
 
 #publicationViewerPopup{
@@ -464,7 +376,7 @@ blur-background {
 
 publication-viewer{
     display: block;
-    width: 450px;
+    width: 460px;
     position: absolute;
     top: 200px;
     left: 400px;
@@ -559,6 +471,10 @@ publication-viewer publication-information publication-interactions publication-
     color: red;
 }
 
+publication-view publication-information publication-interactions publication-canceltask {
+  color: yellow;
+}
+
 publication-viewer publication-information publication-interactions publication-add {
     color: limegreen;
 }
@@ -600,4 +516,123 @@ footer-tag-popup::before{
     left: 0;
     bottom: -17px;
     border-radius: 0 0 0 5px;
+}
+
+#loaderdiv {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+}
+
+#loader {
+  border: 16px solid transparent;
+  border-top: 16px solid var(--secondary-color);
+  border-bottom: 16px solid var(--primary-color);
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  left: calc(50% - 60px);
+  top: calc(50% - 120px);
+  z-index: 201;
+}
+
+#loaderText {
+  position: relative;
+  margin: 0 auto;
+  top: calc(50% + 80px);
+  z-index: 201;
+  text-align: center;
+  color: var(--second-background-color);
+  font-size: 20pt;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#jobStatusView {
+  z-index: 50;
+}
+
+#jobStatusView > popup-window {
+  top: 80px;
+  width: 50%;
+  max-height: calc(100% - 140px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  background-color: transparent;
+}
+
+#jobStatusView > popup-window > div {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 50%;
+  margin: 0;
+  max-height: 100%;
+}
+
+#jobStatusView > popup-window > div > div {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  margin: 0;
+}
+
+.jobWrapper {
+  width: 90%;
+  margin: 2px 5%;
+  height: 100px;
+  position: relative;
+  flex-shrink: 0;
+  background-color: rgba(187,187,187,0.4);
+  border-radius: 3px;
+}
+
+.jobWrapper > .jobImage {
+  height: 90%;
+  width: 20%;
+  left: 5px;
+  object-fit: contain;
+  position: absolute;
+  top: 5%;
+}
+
+.jobWrapper > .jobTitle {
+  position: absolute;
+  left: calc(20% + 10px);
+  top: 5px;
+}
+
+.jobWrapper > .jobProgressBar {
+  position: absolute;
+  left: calc(20% + 10px);
+  bottom: calc(12pt + 10px);
+  width: calc(80% - 20px);
+  height: 10px;
+}
+
+.jobWrapper > .jobProgressSpan {
+  position: absolute;
+  right: 10px;
+  bottom: calc(12pt + 20px);
+  width: 60%;
+  text-align: right;
+}
+
+.jobWrapper > .jobCancel {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  font-size: 12pt;
+  color: var(--secondary-color);
+  cursor: pointer;
 }

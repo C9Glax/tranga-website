@@ -1,31 +1,26 @@
-﻿let publications = [];
-let tasks = [];
-let toEditId;
+﻿let runningJobs = [];
+let waitingJobs = [];
+let notificationConnectorTypes = [];
+let libraryConnectorTypes = [];
+let selectedManga;
+let selectedJob;
 
 const searchBox = document.querySelector("#searchbox");
-const searchPublicationQuery = document.querySelector("#searchPublicationQuery");
-const selectPublication = document.querySelector("#taskSelectOutput");
-const connectorSelect = document.querySelector("#connectors");
 const settingsPopup = document.querySelector("#settingsPopup");
 const settingsCog = document.querySelector("#settingscog");
-const selectRecurrence = document.querySelector("#selectReccurrence");
 const tasksContent = document.querySelector("content");
-const selectPublicationPopup = document.querySelector("#selectPublicationPopup");
-const createMonitorTaskButton = document.querySelector("#createMonitorTaskButton");
-const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterTaskButton");
-const createMonitorTaskPopup = document.querySelector("#createMonitorTaskPopup");
-const createDownloadChaptersTask = document.querySelector("#createDownloadChaptersTask");
-const chapterOutput = document.querySelector("#chapterOutput");
-const selectedChapters = document.querySelector("#selectedChapters");
-const publicationViewerPopup = document.querySelector("#publicationViewerPopup");
-const publicationViewerWindow = document.querySelector("publication-viewer");
-const publicationViewerDescription = document.querySelector("#publicationViewerDescription");
-const publicationViewerName = document.querySelector("#publicationViewerName");
-const publicationViewerTags = document.querySelector("#publicationViewerTags");
-const publicationViewerAuthor = document.querySelector("#publicationViewerAuthor");
-const pubviewcover = document.querySelector("#pubviewcover");
-const publicationDelete = document.querySelector("publication-delete");
-const publicationTaskStart = document.querySelector("publication-starttask");
+const createMonitorTaskButton = document.querySelector("#createMonitoJobButton");
+const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterJobButton");
+const startJobButton = document.querySelector("#startJobButton");
+const cancelJobButton = document.querySelector("#cancelJobButton");
+const deleteJobButton = document.querySelector("#deleteJobButton");
+const mangaViewerPopup = document.querySelector("#publicationViewerPopup");
+const mangaViewerWindow = document.querySelector("publication-viewer");
+const mangaViewerDescription = document.querySelector("#publicationViewerDescription");
+const mangaViewerName = document.querySelector("#publicationViewerName");
+const mangaViewerTags = document.querySelector("#publicationViewerTags");
+const mangaViewerAuthor = document.querySelector("#publicationViewerAuthor");
+const mangaViewCover = document.querySelector("#pubviewcover");
 const settingDownloadLocation = document.querySelector("#downloadLocation");
 const settingKomgaUrl = document.querySelector("#komgaUrl");
 const settingKomgaUser = document.querySelector("#komgaUsername");
@@ -36,166 +31,55 @@ const settingKavitaPass = document.querySelector("#kavitaPassword");
 const settingGotifyUrl = document.querySelector("#gotifyUrl");
 const settingGotifyAppToken = document.querySelector("#gotifyAppToken");
 const settingLunaseaWebhook = document.querySelector("#lunaseaWebhook");
-const libraryUpdateTime = document.querySelector("#libraryUpdateTime");
 const settingKomgaConfigured = document.querySelector("#komgaConfigured");
 const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingApiUri = document.querySelector("#settingApiUri");
-const tagTasksRunning = document.querySelector("#tasksRunningTag");
-const tagTasksQueued = document.querySelector("#tasksQueuedTag");
-const downloadTasksPopup = document.querySelector("#downloadTasksPopup");
-const downloadTasksOutput = downloadTasksPopup.querySelector("popup-content");
+const newMangaPopup = document.querySelector("#newMangaPopup");
+const newMangaConnector = document.querySelector("#newMangaConnector");
+const newMangaTitle = document.querySelector("#newMangaTitle");
+const newMangaResult = document.querySelector("#newMangaResult");
+const newMangaTranslatedLanguage = document.querySelector("#newMangaTranslatedLanguage");
+const jobsRunningTag = document.querySelector("#jobsRunningTag");
+const jobsQueuedTag = document.querySelector("#jobsQueuedTag");
+const loaderdiv = document.querySelector('#loaderdiv');
+const jobStatusView = document.querySelector("#jobStatusView");
+const jobStatusRunning = document.querySelector("#jobStatusRunning");
+const jobStatusWaiting = document.querySelector("#jobStatusWaiting");
 
-searchBox.addEventListener("keyup", () => FilterResults());
-settingsCog.addEventListener("click", () => OpenSettings());
-document.querySelector("#blurBackgroundSettingsPopup").addEventListener("click", () => settingsPopup.style.display = "none");
-document.querySelector("#blurBackgroundTaskPopup").addEventListener("click", () => selectPublicationPopup.style.display = "none");
-document.querySelector("#blurBackgroundPublicationPopup").addEventListener("click", () => HidePublicationPopup());
-document.querySelector("#blurBackgroundCreateMonitorTaskPopup").addEventListener("click", () => createMonitorTaskPopup.style.display = "none");
-document.querySelector("#blurBackgroundCreateDownloadChaptersTask").addEventListener("click", () => createDownloadChaptersTask.style.display = "none");
-document.querySelector("#blurBackgroundTasksQueuePopup").addEventListener("click", () => downloadTasksPopup.style.display = "none");
-selectedChapters.addEventListener("keypress", (event) => {
-    if(event.key === "Enter"){
-        DownloadChapterTaskClick();
-    }
-})
-publicationDelete.addEventListener("click", () => DeleteTaskClick());
-createMonitorTaskButton.addEventListener("click", () => {
-    HidePublicationPopup();
-    createMonitorTaskPopup.style.display = "block";
-});
-createDownloadChapterTaskButton.addEventListener("click", () => {
-    HidePublicationPopup();
-    OpenDownloadChapterTaskPopup();
-});
-publicationTaskStart.addEventListener("click", () => StartTaskClick());
-searchPublicationQuery.addEventListener("keypress", (event) => {
-    if(event.key === "Enter"){
-        NewSearch();
-    }
-});
-
-
-GetAvailableControllers()
-    .then(json => availableConnectors = json)
-    .then(json => 
-        json.forEach(connector => {
-            var option = document.createElement('option');
-            option.value = connector;
-            option.innerText = connector;
-            connectorSelect.appendChild(option);
-        })
-    );
-
-
-function NewSearch(){
-    //Disable inputs
-    connectorSelect.disabled = true;
-    searchPublicationQuery.disabled = true;
-    //Waitcursor
-    document.body.style.cursor = "wait";
-
-    //Empty previous results
-    selectPublication.replaceChildren();
-    GetPublicationFromConnector(connectorSelect.value, searchPublicationQuery.value)
-        .then(json =>
-            json.forEach(publication => {
-                    var option = CreatePublication(publication, connectorSelect.value);
-                    option.addEventListener("click", (mouseEvent) => {
-                        ShowPublicationViewerWindow(publication.internalId, mouseEvent, true);
-                    });
-                    selectPublication.appendChild(option);
-                }
-            ))
-        .then(() => {
-            //Re-enable inputs
-            connectorSelect.disabled = false;
-            searchPublicationQuery.disabled = false;
-            //Cursor
-            document.body.style.cursor = "initial";
-        });
-}
-
-//Returns a new "Publication" Item to display in the tasks section
-function CreatePublication(publication, connector){
-    var publicationElement = document.createElement('publication');
-    publicationElement.setAttribute("id", publication.internalId);
-    var img = document.createElement('img');
-    img.src = `imageCache/${publication.coverFileNameInCache}`;
-    publicationElement.appendChild(img);
-    var info = document.createElement('publication-information');
-    var connectorName = document.createElement('connector-name');
-    connectorName.innerText = connector;
-    connectorName.className = "pill";
-    info.appendChild(connectorName);
-    var publicationName = document.createElement('publication-name');
-    publicationName.innerText = publication.sortName;
-    info.appendChild(publicationName);
-    publicationElement.appendChild(info);
-    if(publications.filter(pub => pub.internalId === publication.internalId) < 1)
-        publications.push(publication);
-    return publicationElement;
-}
-
-function AddMonitorTask(){
-    var hours = document.querySelector("#hours").value;
-    var minutes = document.querySelector("#minutes").value;
-    CreateMonitorTask(connectorSelect.value, toEditId, `${hours}:${minutes}:00`, "en");
-    HidePublicationPopup();
-    createMonitorTaskPopup.style.display = "none";
-    selectPublicationPopup.style.display = "none";
-}
-
-function OpenDownloadChapterTaskPopup(){
-    selectedChapters.value = "";
-    chapterOutput.replaceChildren();
-    createDownloadChaptersTask.style.display = "block";
-    GetChapters(toEditId, connectorSelect.value, true, "en").then((json) => {
-        var i = 0;
-        json.forEach(chapter => {
-            var chapterDom = document.createElement("div");
-            var indexDom = document.createElement("span");
-            indexDom.className = "index";
-            indexDom.innerText = i++;
-            chapterDom.appendChild(indexDom);
-            
-            var volDom = document.createElement("span");
-            volDom.className = "vol";
-            volDom.innerText = chapter.volumeNumber;
-            chapterDom.appendChild(volDom);
-            
-            var chDom = document.createElement("span");
-            chDom.className = "ch";
-            chDom.innerText = chapter.chapterNumber;
-            chapterDom.appendChild(chDom);
-            
-            var titleDom = document.createElement("span");
-            titleDom.innerText = chapter.name;
-            chapterDom.appendChild(titleDom);
-            chapterOutput.appendChild(chapterDom);
-        });
+function Setup(){
+  Ping().then((ret) => {
+    loaderdiv.style.display = 'none';
+    
+    GetAvailableNotificationConnectors().then((json) => {
+      json.forEach(connector => {
+        notificationConnectorTypes[connector.Key] = connector.Value;
+      });
     });
-}
 
-function DownloadChapterTaskClick(){
-    CreateDownloadChaptersTask(connectorSelect.value, toEditId, selectedChapters.value, "en");
-    HidePublicationPopup();
-    createDownloadChaptersTask.style.display = "none";
-    selectPublicationPopup.style.display = "none";
-}
+    GetAvailableLibraryConnectors().then((json) => {
+      json.forEach(connector => {
+        libraryConnectorTypes[connector.Key] = connector.Value;
+      });
+    });
 
-function DeleteTaskClick(){
-    taskToDelete = tasks.filter(tTask => tTask.publication.internalId === toEditId)[0];
-    DeleteTask("MonitorPublication", taskToDelete.connectorName, toEditId);
-    HidePublicationPopup();
+    GetAvailableControllers().then((json) => {
+      json.forEach(connector => {
+        var option = document.createElement('option');
+        option.value = connector;
+        option.innerText = connector;
+        newMangaConnector.appendChild(option);
+      });
+    });
+    
+    UpdateJobs();
+    setInterval(() => {
+      UpdateJobs();
+    }, 1000);
+  });
 }
-
-function StartTaskClick(){
-    var toEditTask = tasks.filter(task => task.publication.internalId == toEditId)[0];
-    StartTask("MonitorPublication", toEditTask.connectorName, toEditId);
-    HidePublicationPopup();
-}
+Setup();
 
 function ResetContent(){
     //Delete everything
@@ -207,45 +91,120 @@ function ResetContent(){
     var plus = document.createElement("p");
     plus.innerText = "+";
     add.appendChild(plus);
-    add.addEventListener("click", () => ShowNewTaskWindow());
+    add.addEventListener("click", () => ShowNewMangaSearch());
     tasksContent.appendChild(add);
 }
-function ShowPublicationViewerWindow(publicationId, event, add){
+
+function ShowNewMangaSearch(){
+  newMangaTitle.value = "";
+  newMangaPopup.style.display = "block";
+  newMangaResult.replaceChildren();
+}
+
+newMangaTitle.addEventListener("keypress", (event) => { if(event.key === "Enter") GetNewMangaItems();})
+function GetNewMangaItems(){
+  if(newMangaTitle.value.length < 4)
+    return;
+  
+  newMangaResult.replaceChildren();
+  newMangaConnector.disabled = true;
+  newMangaTitle.disabled = true;
+  newMangaTranslatedLanguage.disabled = true;
+  GetPublicationFromConnector(newMangaConnector.value, newMangaTitle.value).then((json) => {
+    //console.log(json);
+    if(json.length > 0)
+      newMangaResult.style.display = "flex";
+    json.forEach(result => {
+      var mangaElement = CreateManga(result, newMangaConnector.value)
+      newMangaResult.appendChild(mangaElement);
+      mangaElement.addEventListener("click", (event) => {
+        ShowMangaWindow(null, result, event, true);
+      });
+    });
+    
+    newMangaConnector.disabled = false;
+    newMangaTitle.disabled = false;
+  newMangaTranslatedLanguage.disabled = false;
+  });
+}
+
+//Returns a new "Publication" Item to display in the jobs section
+function CreateManga(manga, connector){
+    var mangaElement = document.createElement('publication');
+    mangaElement.id = GetValidSelector(manga.internalId);
+    var mangaImage = document.createElement('img');
+    mangaImage.src = GetCoverUrl(manga.internalId);
+    mangaElement.appendChild(mangaImage);
+    var info = document.createElement('publication-information');
+    var connectorName = document.createElement('connector-name');
+    connectorName.innerText = connector;
+    connectorName.className = "pill";
+    info.appendChild(connectorName);
+    var mangaName = document.createElement('publication-name');
+    mangaName.innerText = manga.sortName;
+    info.appendChild(mangaName);
+    mangaElement.appendChild(info);
+    return mangaElement;
+}
+
+createMonitorJobButton.addEventListener("click", () => {
+  CreateMonitorJob(newMangaConnector.value, selectedManga.internalId, newMangaTranslatedLanguage.value);
+  UpdateJobs();
+  mangaViewerPopup.style.display = "none";
+});
+startJobButton.addEventListener("click", () => {
+  StartJob(selectedJob.id);
+  mangaViewerPopup.style.display = "none";
+});
+cancelJobButton.addEventListener("click", () => {
+  CancelJob(selectedJob.id);
+  mangaViewerPopup.style.display = "none";
+});
+deleteJobButton.addEventListener("click", () => {
+  RemoveJob(selectedJob.id);
+  UpdateJobs();
+  mangaViewerPopup.style.display = "none";
+});
+
+function ShowMangaWindow(job, manga, event, add){
+    selectedManga = manga;
+    selectedJob = job;
     //Show popup
-    publicationViewerPopup.style.display = "block";
+    mangaViewerPopup.style.display = "block";
     
     //Set position to mouse-position
-    if(event.clientY < window.innerHeight - publicationViewerWindow.offsetHeight)
-        publicationViewerWindow.style.top = `${event.clientY}px`;
+    if(event.clientY < window.innerHeight - mangaViewerWindow.offsetHeight)
+        mangaViewerWindow.style.top = `${event.clientY}px`;
     else
-        publicationViewerWindow.style.top = `${event.clientY - publicationViewerWindow.offsetHeight}px`;
+        mangaViewerWindow.style.top = `${event.clientY - mangaViewerWindow.offsetHeight}px`;
     
-    if(event.clientX < window.innerWidth - publicationViewerWindow.offsetWidth)
-        publicationViewerWindow.style.left = `${event.clientX}px`;
+    if(event.clientX < window.innerWidth - mangaViewerWindow.offsetWidth)
+        mangaViewerWindow.style.left = `${event.clientX}px`;
     else
-        publicationViewerWindow.style.left = `${event.clientX - publicationViewerWindow.offsetWidth}px`;
+        mangaViewerWindow.style.left = `${event.clientX - mangaViewerWindow.offsetWidth}px`;
     
     //Edit information inside the window
-    var publication = publications.filter(pub => pub.internalId === publicationId)[0];
-    publicationViewerName.innerText = publication.sortName;
-    publicationViewerTags.innerText = publication.tags.join(", ");
-    publicationViewerDescription.innerText = publication.description;
-    publicationViewerAuthor.innerText = publication.authors.join(',');
-    pubviewcover.src = `imageCache/${publication.coverFileNameInCache}`;
-    toEditId = publicationId;
+    mangaViewerName.innerText = manga.sortName;
+    mangaViewerTags.innerText = manga.tags.join(", ");
+    mangaViewerDescription.innerText = manga.description;
+    mangaViewerAuthor.innerText = manga.authors.join(',');
+    mangaViewCover.src = GetCoverUrl(manga.internalId);
+    toEditId = manga.internalId;
     
     //Check what action should be listed
     if(add){
-        createMonitorTaskButton.style.display = "initial";
-        createDownloadChapterTaskButton.style.display = "initial";
-        publicationDelete.style.display = "none";
-        publicationTaskStart.style.display = "none";
+        createMonitorJobButton.style.display = "initial";
+        createDownloadChapterJobButton.style.display = "none";
+        cancelJobButton.style.display = "none";
+        startJobButton.style.display = "none";
+        deleteJobButton.style.display = "none";
     }
     else{
-        createMonitorTaskButton.style.display = "none";
-        createDownloadChapterTaskButton.style.display = "none";
-        publicationDelete.style.display = "initial";
-        publicationTaskStart.style.display = "initial";
+        createMonitorJobButton.style.display = "none";
+        createDownloadChapterJobButton.style.display = "none";
+        cancelJobButton.style.display = "initial";
+        startJobButton.style.display = "initial";
+        deleteJobButton.style.display = "initial";
     }
 }
 
@@ -253,108 +212,8 @@ function HidePublicationPopup(){
     publicationViewerPopup.style.display = "none";
 }
 
-function ShowNewTaskWindow(){
-    selectPublication.replaceChildren();
-    searchPublicationQuery.value = "";
-    selectPublicationPopup.style.display = "flex";
-}
-
-
-const fadeIn = [
-    { opacity: "0" },
-    { opacity: "1" }
-];
-
-const fadeInTiming = {
-    duration: 50,
-    iterations: 1,
-    fill: "forwards"
-}
-
-function OpenSettings(){
-    GetSettingsClick();
-    settingsPopup.style.display = "flex";
-}
-
-function GetSettingsClick(){
-    settingApiUri.value = "";
-    settingKomgaUrl.value = "";
-    settingKomgaUser.value = "";
-    settingKomgaPass.value = "";
-    settingKomgaConfigured.innerText = "❌";
-    settingKavitaUrl.value = "";
-    settingKavitaUser.value = "";
-    settingKavitaPass.value = "";
-    settingKavitaConfigured.innerText = "❌";
-    settingGotifyUrl.value = "";
-    settingGotifyAppToken.value = "";
-    settingGotifyConfigured.innerText = "❌";
-    settingLunaseaWebhook.value = "";
-    settingLunaseaConfigured.innerText = "❌";
-    
-    settingApiUri.placeholder = apiUri;
-    
-    GetSettings().then(json => {
-        settingDownloadLocation.innerText = json.downloadLocation;
-        json.libraryManagers.forEach(lm => {
-           if(lm.libraryType == 0){
-               settingKomgaUrl.placeholder = lm.baseUrl;
-               settingKomgaUser.placeholder = "User";
-               settingKomgaPass.placeholder = "***";
-               settingKomgaConfigured.innerText = "✅";
-           } else if(lm.libraryType == 1){
-               settingKavitaUrl.placeholder = lm.baseUrl;
-               settingKavitaUser.placeholder = "User";
-               settingKavitaPass.placeholder = "***";
-               settingKavitaConfigured.innerText = "✅";
-           }
-        });
-        json.notificationManagers.forEach(nm => {
-           if(nm.notificationManagerType == 0){
-               settingGotifyConfigured.innerText = "✅";
-           } else if(nm.notificationManagerType == 1){
-               settingLunaseaConfigured.innerText = "✅";
-           }
-        });
-    });
-    
-    GetKomgaTask().then(json => {
-        if(json.length > 0)
-            libraryUpdateTime.value = json[0].reoccurrence;
-    });
-}
-
-function UpdateLibrarySettings(){
-    if(settingKomgaUrl.value != "" && settingKomgaUser.value != "" && settingKomgaPass.value != ""){
-        var auth = utf8_to_b64(`${settingKomgaUser.value}:${settingKomgaPass.value}`);
-        console.log(auth);
-        UpdateKomga(settingKomgaUrl.value, auth);
-    }
-    
-    if(settingKavitaUrl.value != "" && settingKavitaUser.value != "" && settingKavitaPass.value != ""){
-        UpdateKavita(settingKavitaUrl.value, settingKavitaUser.value, settingKavitaPass.value);
-    }
-    
-    if(settingGotifyUrl.value != "" && settingGotifyAppToken.value != ""){
-        UpdateGotify(settingGotifyUrl.value, settingGotifyAppToken.value);
-    }
-    
-    if(settingLunaseaWebhook.value != ""){
-        UpdateLunaSea(settingLunaseaWebhook.value);
-    }
-
-    if(settingApiUri.value != ""){
-        apiUri = settingApiUri.value;
-        document.cookie = `apiUri=${apiUri};`;
-    }
-    
-    setTimeout(() => GetSettingsClick(), 200);
-}
-
-function utf8_to_b64( str ) {
-    return window.btoa(unescape(encodeURIComponent( str )));
-}
-
+searchBox.addEventListener("keyup", () => FilterResults());
+//Filter shown jobs
 function FilterResults(){
     if(searchBox.value.length > 0){
         tasksContent.childNodes.forEach(publication => {
@@ -377,146 +236,248 @@ function FilterResults(){
     }
 }
 
-function ShowTasksQueue(){
+settingsCog.addEventListener("click", () => {
+  OpenSettings();
+  settingsPopup.style.display = "flex";
+});
 
-    downloadTasksOutput.replaceChildren();
-    GetRunningTasks()
-        .then(json => {
-            tagTasksRunning.innerText = json.length;
-            json.forEach(task => {
-                if(task.task == 2 || task.task == 4) {
-                    downloadTasksOutput.appendChild(CreateProgressChild(task));
-                    document.querySelector(`#progress${GetValidSelector(task.taskId)}`).value = task.progress;
-                    var finishedHours = task.executionApproximatelyRemaining.split(':')[0];
-                    var finishedMinutes = task.executionApproximatelyRemaining.split(':')[1];
-                    var finishedSeconds = task.executionApproximatelyRemaining.split(':')[2].split('.')[0];
-                    document.querySelector(`#progressStr${GetValidSelector(task.taskId)}`).innerText = `${finishedHours}:${finishedMinutes}:${finishedSeconds}`;
-                }
-            });
-        });
+settingKomgaUrl.addEventListener("keypress", (event) => { { if(event.key === "Enter") UpdateSettings(); } });
+settingKomgaUser.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKomgaPass.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKavitaUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKavitaUser.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingKavitaPass.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingGotifyUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingGotifyAppToken.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingLunaseaWebhook.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
-    GetQueue()
-        .then(json => {
-            tagTasksQueued.innerText = json.length;
-            json.forEach(task => {
-                downloadTasksOutput.appendChild(CreateProgressChild(task));
-            });
-        });
-    downloadTasksPopup.style.display = "flex";
+function OpenSettings(){
+  settingGotifyConfigured.innerText = "❌";
+  settingLunaseaConfigured.innerText = "❌";
+  settingKavitaConfigured.innerText = "❌";
+  settingKomgaConfigured.innerText = "❌";
+  settingKomgaUrl.value = "";
+  settingKomgaUser.value = "";
+  settingKomgaPass.value = "";
+  settingKavitaUrl.value = "";
+  settingKavitaUser.value = "";
+  settingKavitaPass.value = "";
+  settingGotifyUrl.value = "";
+  settingGotifyAppToken.value = "";
+  settingLunaseaWebhook.value = "";
+  settingApiUri.value = "";
+  
+  GetSettings().then((json) => {
+    //console.log(json);
+    settingDownloadLocation.innerText = json.downloadLocation;
+    settingApiUri.placeholder = apiUri;
+  });
+  GetLibraryConnectors().then((json) => {
+    //console.log(json);
+    json.forEach(connector => {
+      switch(libraryConnectorTypes[connector.libraryType]){
+        case "Kavita":
+          settingKavitaConfigured.innerText = "✅";
+          settingKavitaUrl.placeholder = connector.baseUrl;
+          settingKavitaUser.placeholder = "***";
+          settingKavitaPass.placeholder = "***";
+          break;
+        case "Komga":
+          settingKomgaConfigured.innerText = "✅";
+          settingKomgaUrl.placeholder = connector.baseUrl;
+          settingKomgaUser.placeholder = "***";
+          settingKomgaPass.placeholder = "***";
+          break;
+        default:
+          console.log("Unknown type");
+          console.log(connector);
+          break;
+      }
+    });
+  });
+  GetNotificationConnectors().then((json) => {
+    //console.log(json);
+    json.forEach(connector => {
+      switch(notificationConnectorTypes[connector.notificationConnectorType]){
+        case "Gotify":
+          settingGotifyUrl.placeholder = connector.endpoint;
+          settingGotifyAppToken.placeholder = "***";
+          settingGotifyConfigured.innerText = "✅";
+          break;
+        case "LunaSea":
+          settingLunaseaConfigured.innerText = "✅";
+          settingLunaseaWebhook.placeholder = connector.id;
+          break;
+        default:
+          console.log("Unknown type");
+          console.log(connector);
+          break;
+      }
+    });
+  });
 }
 
-function CreateProgressChild(task){
-    var child = document.createElement("div");
-    var img = document.createElement('img');
-    img.src = `imageCache/${task.publication.coverFileNameInCache}`;
-    child.appendChild(img);
-    
-    var name = document.createElement("span");
-    name.innerText = task.publication.sortName;
-    name.className = "pubTitle";
-    child.appendChild(name);
+function UpdateSettings(){
+  if(settingApiUri.value != ""){
+    apiUri = settingApiUri.value;
+    setCookie("apiUri", apiUri);
+    Setup();
+  }
+  
+  if(settingKomgaUrl.value != "" &&
+     settingKomgaUser.value != "" &&
+     settingKomgaPass.value != ""){
+    UpdateKomga(settingKomgaUrl.value, utf8_to_b64(`${settingKomgaUser.value}:${settingKomgaPass.value}`));
+  }
+  
+  if(settingKavitaUrl.value != "" &&
+    settingKavitaUser.value != "" &&
+    settingKavitaPass.value != ""){
+    UpdateKavita(settingKavitaUrl.value, settingKavitaUser.value, settingKavitaPass.value);
+  }
+  
+  if(settingGotifyUrl.value != "" &&
+    settingGotifyAppToken.value != ""){
+    UpdateGotify(settingGotifyUrl.value, settingGotifyAppToken.value);
+  }
+  
+  if(settingLunaseaWebhook.value != ""){
+    UpdateLunaSea(settingLunaseaWebhook.value);
+  }
+  
+  OpenSettings();
+  Setup();
+}
 
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent( str )));
+}
 
-    var progress = document.createElement("progress");
-    progress.id = `progress${GetValidSelector(task.taskId)}`;
-    child.appendChild(progress);
+function UpdateJobs(){
+  GetMonitorJobs().then((json) => {
+    ResetContent();
+    //console.log(json);
+    json.forEach(job => {
+      var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+      mangaView.addEventListener("click", (event) => {
+        ShowMangaWindow(job, job.manga, event, false);
+      });
+      tasksContent.appendChild(mangaView);
+    });
+  });
     
-    var progressStr = document.createElement("span");
-    progressStr.innerText = " \t∞";
-    progressStr.className = "progressStr";
-    progressStr.id = `progressStr${GetValidSelector(task.taskId)}`;
-    child.appendChild(progressStr);
+  GetWaitingJobs().then((json) => {
+    jobsQueuedTag.innerText = json.length;
     
-    if(task.chapter != undefined){
-        var chapterNumber = document.createElement("span");
-        chapterNumber.className = "chapterNumber";
-        chapterNumber.innerText = `Vol.${task.chapter.volumeNumber} Ch.${task.chapter.chapterNumber}`;
-        child.appendChild(chapterNumber);
-        
-        var chapterName = document.createElement("span");
-        chapterName.className = "chapterName";
-        chapterName.innerText = task.chapter.name;
-        child.appendChild(chapterName);
+    var nowWaitingJobs = [];
+    
+    json.forEach(job => {
+      if(!waitingJobs.includes(GetValidSelector(job.id))){
+        var jobDom = createJob(job);
+        jobStatusWaiting.appendChild(jobDom);
+      }
+      nowWaitingJobs.push(GetValidSelector(job.id));
+    });
+    waitingJobs = nowWaitingJobs;
+  });
+  
+  jobStatusWaiting.childNodes.forEach(child => {
+    if(!waitingJobs.includes(child.id))
+      jobStatusWaiting.removeChild(child);
+  });
+  
+  GetRunningJobs().then((json) => {
+    jobsRunningTag.innerText = json.length;
+    
+    var nowRunningJobs = [];
+    
+    json.forEach(job => {
+      if(!runningJobs.includes(GetValidSelector(job.id))){
+        var jobDom = createJob(job);
+        jobStatusRunning.appendChild(jobDom);
+      }
+      nowRunningJobs.push(GetValidSelector(job.id));
+      UpdateJobProgress(job.id);
+    });
+    
+    runningJobs = nowRunningJobs;
+  });
+  
+  jobStatusRunning.childNodes.forEach(child => {
+    if(!runningJobs.includes(child.id))
+      jobStatusRunning.removeChild(child);
+  });
+}
+
+function createJob(jobjson){
+  var manga;
+  if(jobjson.chapter != null)
+    manga = jobjson.chapter.parentManga;
+  else if(jobjson.manga != null)
+    manga = jobjson.manga;
+  else return null;
+  
+  
+  var wrapper = document.createElement("div");
+  wrapper.className = "jobWrapper";
+  wrapper.id = GetValidSelector(jobjson.id);
+  
+  var image = document.createElement("img");
+  image.className = "jobImage";
+  image.src = GetCoverUrl(manga.internalId);
+  wrapper.appendChild(image);
+  
+  var title = document.createElement("span");
+  title.className = "jobTitle";
+  if(jobjson.chapter != null)
+    title.innerText = `${manga.sortName} - ${jobjson.chapter.fileName}`;
+  else if(jobjson.manga != null)
+    title.innerText = manga.sortName;
+  wrapper.appendChild(title);
+  
+  var progressBar = document.createElement("progress");
+  progressBar.className = "jobProgressBar";
+  progressBar.id = `jobProgressBar${GetValidSelector(jobjson.id)}`;
+  wrapper.appendChild(progressBar);
+  
+  var progressSpan = document.createElement("span");
+  progressSpan.className = "jobProgressSpan";
+  progressSpan.id = `jobProgressSpan${GetValidSelector(jobjson.id)}`;
+  progressSpan.innerText = "0% 00:00:00";
+  wrapper.appendChild(progressSpan);
+  
+  var cancelSpan = document.createElement("span");
+  cancelSpan.className = "jobCancel";
+  cancelSpan.innerText = "Cancel";
+  cancelSpan.addEventListener("click", () => CancelJob(jobjson.id));
+  wrapper.appendChild(cancelSpan);
+  
+  return wrapper;
+}
+
+function ShowJobQueue(){  
+  jobStatusView.style.display = "initial";
+}
+
+function UpdateJobProgress(jobId){
+  GetProgress(jobId).then((json) => {
+    var progressBar = document.querySelector(`#jobProgressBar${GetValidSelector(jobId)}`);
+    var progressSpan = document.querySelector(`#jobProgressSpan${GetValidSelector(jobId)}`);
+    if(progressBar != null && json.progress != 0){
+      progressBar.value = json.progress;
     }
-    
-    
-    return child;
+    if(progressSpan != null){
+      var percentageStr = "0%";
+      var timeleftStr = "00:00:00";
+      if(json.progress != 0){
+        percentageStr = Intl.NumberFormat("en-US", { style: "percent"}).format(json.progress);
+        timeleftStr = json.timeRemaining.split('.')[0];
+      }
+      progressSpan.innerText = `${percentageStr} ${timeleftStr}`;
+    }
+  });
 }
-
-//Resets the tasks shown
-ResetContent();
-downloadTasksOutput.replaceChildren();
-//Get Tasks and show them
-GetDownloadTasks()
-    .then(json => json.forEach(task => {
-        var publication = CreatePublication(task.publication, task.connectorName);
-        publication.addEventListener("click", (event) => ShowPublicationViewerWindow(task.publication.internalId, event, false));
-        tasksContent.appendChild(publication);
-        tasks.push(task);
-    }));
-
-GetRunningTasks()
-    .then(json => {
-        tagTasksRunning.innerText = json.length;
-        json.forEach(task => {
-            downloadTasksOutput.appendChild(CreateProgressChild(task));
-        });
-    });
-
-GetQueue()
-    .then(json => {
-        tagTasksQueued.innerText = json.length;
-        json.forEach(task => {
-            downloadTasksOutput.appendChild(CreateProgressChild(task));
-        });
-    })
-
-setInterval(() => {
-    //Tasks from API
-    var cTasks = [];
-    GetDownloadTasks()
-        .then(json => json.forEach(task => cTasks.push(task)))
-        .then(() => {
-            //Only update view if tasks-amount has changed
-            if(tasks.length != cTasks.length) {
-                //Resets the tasks shown
-                ResetContent();
-                //Add all currenttasks to view
-                cTasks.forEach(task => {
-                    var publication = CreatePublication(task.publication, task.connectorName);
-                    publication.addEventListener("click", (event) => ShowPublicationViewerWindow(task.publication.internalId, event, false));
-                    tasksContent.appendChild(publication);
-                })
-
-                tasks = cTasks;
-            }
-        }
-    );
-
-    GetRunningTasks()
-        .then(json => {
-           tagTasksRunning.innerText = json.length;
-        });
-    
-    GetQueue()
-        .then(json => {
-            tagTasksQueued.innerText = json.length;
-        });
-}, 1000);
-
-setInterval(() => {
-    GetRunningTasks().then((json) => {
-        json.forEach(task => {
-            if(task.task == 2 || task.task == 4){
-                document.querySelector(`#progress${GetValidSelector(task.taskId)}`).value = task.progress;
-                var finishedHours = task.executionApproximatelyRemaining.split(':')[0];
-                var finishedMinutes = task.executionApproximatelyRemaining.split(':')[1];
-                var finishedSeconds = task.executionApproximatelyRemaining.split(':')[2].split('.')[0];
-                document.querySelector(`#progressStr${GetValidSelector(task.taskId)}`).innerText = `${finishedHours}:${finishedMinutes}:${finishedSeconds}`;
-            }
-        });
-    });
-},500);
 
 function GetValidSelector(str){
     var clean = [...str.matchAll(/[a-zA-Z0-9]*-*_*/g)];
