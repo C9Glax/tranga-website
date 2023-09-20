@@ -66,7 +66,8 @@ function Setup(){
     });
 
     GetAvailableControllers().then((json) => {
-      json.forEach(connector => {
+      newMangaConnector.replaceChildren();
+      json.forEach(connector => {        
         var option = document.createElement('option');
         option.value = connector;
         option.innerText = connector;
@@ -140,6 +141,7 @@ function CreateManga(manga, connector){
     var connectorName = document.createElement('connector-name');
     connectorName.innerText = connector;
     connectorName.className = "pill";
+    connectorName.style.backgroundColor = stringToColour(connector);
     info.appendChild(connectorName);
     var mangaName = document.createElement('publication-name');
     mangaName.innerText = manga.sortName;
@@ -486,4 +488,17 @@ function UpdateJobProgress(jobId){
 function GetValidSelector(str){
     var clean = [...str.matchAll(/[a-zA-Z0-9]*-*_*/g)];
     return clean.join('');
+}
+
+const stringToColour = (str) => {
+  let hash = 0;
+  str.split('').forEach(char => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash)
+  })
+  let colour = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff
+    colour += value.toString(16).padStart(2, '0')
+  }
+  return colour
 }
