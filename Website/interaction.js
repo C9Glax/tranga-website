@@ -1,4 +1,5 @@
-﻿let runningJobs = [];
+﻿let monitoringJobsCount = 0;
+let runningJobs = [];
 let waitingJobs = [];
 let notificationConnectorTypes = [];
 let libraryConnectorTypes = [];
@@ -356,15 +357,18 @@ function utf8_to_b64(str) {
 
 function UpdateJobs(){
   GetMonitorJobs().then((json) => {
-    ResetContent();
-    //console.log(json);
-    json.forEach(job => {
-      var mangaView = CreateManga(job.manga, job.mangaConnector.name);
-      mangaView.addEventListener("click", (event) => {
-        ShowMangaWindow(job, job.manga, event, false);
+    if(monitoringJobsCount != json.length){
+      ResetContent();
+      //console.log(json);
+      json.forEach(job => {
+        var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+        mangaView.addEventListener("click", (event) => {
+          ShowMangaWindow(job, job.manga, event, false);
+        });
+        tasksContent.appendChild(mangaView);
       });
-      tasksContent.appendChild(mangaView);
-    });
+      monitoringJobsCount = json.length;
+    }
   });
     
   GetWaitingJobs().then((json) => {
