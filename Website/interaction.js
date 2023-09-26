@@ -75,6 +75,7 @@ function Setup(){
       });
     });
     
+    ResetContent();
     UpdateJobs();
     setInterval(() => {
       UpdateJobs();
