@@ -192,3 +192,9 @@ function CancelJob(jobId){
     var uri = `${apiUri}/Jobs/Cancel?jobId=${jobId}`;
     PostData(uri);
 }
+
+async function GetLogmessages(count){
+	var uri = `${apiUri}/LogMessages?count=${count}`;
+	let json = await GetData(uri);
+	return json;
+}
