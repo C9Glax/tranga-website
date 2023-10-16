@@ -636,3 +636,43 @@ footer-tag-popup::before{
   color: var(--secondary-color);
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  titlebox {
+    margin: 10px;
+  }
+
+  titlebox span {
+    font-size: 18pt;
+  }
+
+  titlebox img {
+    height: auto;
+    width: 60px;
+    margin-right: 10px;
+  }
+
+  #searchbox {
+    width: 100%;
+  }
+
+  publication,
+  #addPublication {
+    width: 35%;
+    margin: 10px 2.5%;
+  }
+
+  #newMangaPopup > #newMangaPopupSelector {
+    padding: 10px;
+    width: 100%;
+  }
+
+  #newMangaTitle {
+    padding: 10px;
+    width: 100%;
+  }
+}

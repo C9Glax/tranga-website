@@ -5,6 +5,7 @@
   <title>Tranga</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
   <wrapper>
@@ -37,7 +38,7 @@
           </publication-information>
         </publication>
       </content>
-      
+
       <popup id="newMangaPopup">
         <blur-background id="blurBackgroundNewMangaPopup" onclick="newMangaPopup.style.display = 'none';"></blur-background>
         <div id="newMangaPopupSelector">
@@ -51,7 +52,7 @@
         </div>
         <div id="newMangaResult"></div>
       </popup>
-      
+
       <popup id="settingsPopup">
         <blur-background id="blurBackgroundSettingsPopup" onclick="
     settingsPopup.style.display = 'none';"></blur-background>
@@ -97,7 +98,7 @@
           </popup-content>
         </popup-window>
       </popup>
-		
+
 	  <popup id="publicationViewerPopup">
         <blur-background id="blurBackgroundPublicationPopup" onclick="publicationViewerPopup.style.display= 'none';"></blur-background>
         <publication-viewer>
@@ -119,7 +120,7 @@
           </publication-information>
         </publication-viewer>
       </popup>
-      
+
       <popup id="jobStatusView">
         <blur-background id="blurBackgroundJobStatus" onclick="jobStatusView.style.display= 'none';"></blur-background>
         <popup-window>
@@ -132,7 +133,7 @@
         </popup-window>
       </popup>
     </viewport>
-	  
+
     <footer>
       <div onclick="ShowJobQueue();">
         <img src="media/running.svg" alt="running"><div id="jobsRunningTag">0</div>
@@ -141,9 +142,9 @@
         <img src="media/queue.svg" alt="queue"><div id="jobsQueuedTag">0</div>
       </div>
       <p id="madeWith">Made with Blåhaj 🦈</p>
-    </footer> 
+    </footer>
   </wrapper>
-  
+
   <script src="apiConnector.js"></script>
   <script src="interaction.js"></script>
 </body>
