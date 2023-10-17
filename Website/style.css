@@ -688,4 +688,24 @@ footer-tag-popup::before{
     padding: 10px;
     overflow-x: auto;
   }
+
+  #newMangaResult {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 5px auto 0;
+    border-radius: 5px;
+    padding: 5px;
+    width: min-content;
+    max-width: 98%;
+    max-height: 400px;
+    overflow-x: scroll;
+    overflow-y: auto;
+  }
+
+  #newMangaPopup publication {
+    width: 100%;
+    max-width: 100%;
+    min-width: 200px;
+  }
 }
