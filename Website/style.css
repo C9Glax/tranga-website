@@ -666,13 +666,26 @@ footer-tag-popup::before{
     margin: 10px 2.5%;
   }
 
-  #newMangaPopup > #newMangaPopupSelector {
+  #newMangaPopup {
+    width: 100%;
+    max-width: 100%;
     padding: 10px;
+    box-sizing: border-box;
+  }
+
+  #newMangaPopup #newMangaPopupSelector {
     width: 100%;
   }
 
-  #newMangaTitle {
-    padding: 10px;
+  #newMangaPopup #newMangaConnector,
+  #newMangaPopup #newMangaTranslatedLanguage {
     width: 100%;
+    margin: 0;
+  }
+
+  #newMangaPopup #newMangaTitle {
+    width: 100%;
+    padding: 10px;
+    overflow-x: auto;
   }
 }
