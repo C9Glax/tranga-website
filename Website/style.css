@@ -208,17 +208,29 @@ publication{
     flex-shrink: 0;
 }
 
+publication:hover {
+    background-color: black;
+}
+
+publication:hover > img {
+    opacity: 0.5;
+}
+
+publication:hover > publication-information {
+    display: flex;
+    opacity:1;
+}
+
 publication::after{
     content: '';
     position: absolute;
     left: 0; top: 0;
     border-radius: 5px;
     width: 100%; height: 100%;
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.2));
 }
 
 publication-information {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: start;
 }
