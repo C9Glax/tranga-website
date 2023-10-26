@@ -1,0 +1,650 @@
+﻿:root{
+    --background-color: #030304;
+    --second-background-color: #fff;
+    --primary-color: #f5a9b8;
+    --secondary-color: #5bcefa;
+    --accent-color: #fff;
+    --topbar-height: 60px;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    background-color: var(--background-color);
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+}
+
+wrapper {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    height: 100vh;
+}
+
+background-placeholder{
+    background-color: var(--second-background-color);
+    opacity: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 0 5px 0;
+    z-index: -1;
+}
+
+topbar {
+    display: flex;
+    align-items: center;
+    height: var(--topbar-height);
+    background-color: var(--secondary-color);
+    z-index: 100;
+    box-shadow: 0 0 20px black;
+}
+
+titlebox {
+    position: relative;
+    display: flex;
+    margin: 0 0 0 40px;
+    height: 100%;
+    align-items:center;
+    justify-content:center;
+}
+
+titlebox span{
+    cursor: default;
+    font-size: 24pt;
+    font-weight: bold;
+    background: linear-gradient(150deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 20px;
+}
+
+titlebox img {
+    height: 100%;
+    margin-right: 10px;
+    cursor: grab;
+}
+
+spacer{
+    flex-grow: 1;
+}
+
+searchdiv{
+    display: block;
+    margin: 0 10px 0 0;
+}
+
+#searchbox {
+    padding: 3px 10px;
+    border: 0;
+    border-radius: 4px;
+    font-size: 14pt;
+    width: 250px;
+}
+
+#settingscog {
+    cursor: pointer;
+    margin: 0px 30px;
+    height: 50%;
+    filter: invert(100%) sepia(0%) saturate(7465%) hue-rotate(115deg) brightness(116%) contrast(101%);
+}
+
+viewport {
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    align-content: center;
+}
+
+footer > div {
+    height: 100%;
+    margin: 0 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    cursor: pointer;
+}
+
+footer > div > *{
+    height: 40%;
+    margin: 0 5px;
+}
+
+#madeWith {
+    flex-grow: 1;
+    text-align: right;
+    margin-right: 20px;
+    cursor: url("media/blahaj.png"), grab;
+}
+
+content {
+    position: relative;
+    flex-grow: 1;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-content: start;
+}
+
+#settingsPopup{
+    z-index: 300;
+}
+
+#settingsPopup popup-content{
+    flex-direction: column;
+    align-items: start;
+    margin: 15px 10px;
+}
+
+#settingsPopup popup-content > * {
+    margin: 5px 10px;
+}
+
+#settingsPopup popup-content .title {
+    font-weight: bolder;
+}
+
+#addPublication {
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    width: 180px;
+    height: 300px;
+    border-radius: 5px;
+    margin: 10px 10px;
+    padding: 15px 20px;
+    position: relative;
+}
+
+#addPublication p{
+    width: 100%;
+    text-align: center;
+    font-size: 150pt;
+    vertical-align: middle;
+    line-height: 300px;
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.pill {
+    flex-grow: 0;
+    height: 14pt;
+    font-size: 12pt;
+    border-radius: 9pt;
+    background-color: var(--primary-color);
+    padding: 2pt 17px;
+    color: black;
+}
+
+publication{
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    width: 180px;
+    height: 300px;
+    border-radius: 5px;
+    margin: 10px 10px;
+    padding: 15px 20px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+publication:hover {
+    background-color: black;
+}
+
+publication:hover::after{
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.2));
+}
+
+publication:hover > publication-information {
+    display: flex;
+    opacity:1;
+}
+
+publication::after{
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    border-radius: 5px;
+    width: 100%; height: 100%;
+}
+
+publication-information {
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+}
+
+publication-information * {
+    z-index: 1;
+    color: var(--accent-color);
+}
+
+connector-name{
+    width: fit-content;
+    margin: 10px 0;
+}
+
+publication-name{
+    width: fit-content;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+publication img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    border-radius: 5px;
+}
+
+popup{
+    display: none;
+    width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 2;
+    flex-direction: column;
+}
+
+
+popup popup-window {
+    position: absolute;
+    z-index: 3;
+    left: 25%;
+    top: 100px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--second-background-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+popup popup-window popup-title {
+    height: 30px;
+    font-size: 14pt;
+    font-weight: bolder;
+    padding: 5px 10px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: var(--accent-color)
+}
+
+popup popup-window popup-content{
+    margin: 15px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+popup popup-window popup-content div > * {
+    margin: 2px 3px 0 0;
+}
+
+popup popup-window popup-content input, select {
+    padding: 3px 4px;
+    width: 130px;
+    border: 1px solid lightgrey;
+    background-color: var(--accent-color);
+    border-radius: 3px;
+}
+
+#newMangaPopup > div {
+  z-index: 3;
+  position: relative;
+}
+
+#newMangaPopup > #newMangaPopupSelector {
+  width: 600px;
+  height: 40px;
+  margin: 80px auto 0;
+}
+
+#newMangaPopup > div > #newMangaConnector, #newMangaTitle, #newMangaTranslatedLanguage {
+  margin: 0;
+  display: inline-block;
+  height: 40px;
+}
+
+#newMangaPopup #newMangaConnector {
+  width: 100px;
+  padding: 0 0 0 5px;
+  border-radius: 5px 0 0 5px;
+  border: 0;
+  border-right: 1px solid darkgray;
+}
+
+#newMangaPopup #newMangaTitle{
+  width: 445px;
+  padding: 0 5px 0 5px;
+  border: 0;
+}
+
+#newMangaPopup #newMangaTranslatedLanguage {
+  width: 45px;
+  border-radius: 0 5px 5px 0;
+  border: 0;
+  border-left: 1px solid darkgray;
+  margin-left: -5px;
+}
+
+#newMangaResult {
+  display: none;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 5px auto 0;
+  border-radius: 5px;
+  padding: 5px;
+  width: min-content;
+  max-width: 98%;
+  max-height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+blur-background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    background: rgba(245, 169, 184, 0.58);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.5px);
+    -webkit-backdrop-filter: blur(4.5px);
+}
+
+#publicationViewerPopup{
+    z-index: 5;
+}
+
+publication-viewer{
+    display: block;
+    width: 460px;
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    background-color: var(--accent-color);
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 15px;
+}
+
+publication-viewer::after{
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(3px);
+}
+
+publication-viewer img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    z-index: 0;
+}
+
+publication-viewer publication-information > * {
+    margin: 5px 0;
+}
+
+publication-viewer publication-information publication-name {
+    width: initial;
+    overflow-x: scroll;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+publication-viewer publication-information publication-tags::before {
+    content: "Tags";
+    display: block;
+    font-weight: bolder;
+}
+
+publication-viewer publication-information publication-tags {
+    overflow-x: scroll;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+publication-viewer publication-information publication-author::before {
+    content: "Author: ";
+    font-weight: bolder;
+}
+
+publication-viewer publication-information publication-description::before {
+    content: "Description";
+    display: block;
+    font-weight: bolder;
+}
+
+publication-viewer publication-information publication-description {
+    font-size: 12pt;
+    margin: 5px 0;
+    height: 145px;
+    overflow-x: scroll;
+}
+
+publication-viewer publication-information publication-interactions {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: start;
+    width: 100%;
+}
+
+publication-viewer publication-information publication-interactions > * {
+    margin: 0 10px;
+    font-size: 16pt;
+    cursor: pointer;
+}
+
+publication-viewer publication-information publication-interactions publication-starttask {
+    color: var(--secondary-color);
+}
+
+publication-viewer publication-information publication-interactions publication-delete {
+    color: red;
+}
+
+publication-view publication-information publication-interactions publication-canceltask {
+  color: yellow;
+}
+
+publication-viewer publication-information publication-interactions publication-add {
+    color: limegreen;
+}
+
+footer-tag-popup {
+    display: none;
+    padding: 2px 4px;
+    position: fixed;
+    bottom: 58px;
+    left: 20px;
+    background-color: var(--second-background-color);
+    z-index: 8;
+    border-radius: 5px;
+    max-height: 400px;
+}
+
+footer-tag-content{
+    position: relative;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-y: scroll;
+}
+
+footer-tag-content > * {
+    margin: 2px 5px;
+}
+
+footer-tag-popup::before{
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-right: 10px solid var(--second-background-color);
+    border-left: 10px solid transparent;
+    border-top: 10px solid var(--second-background-color);
+    border-bottom: 10px solid transparent;
+    left: 0;
+    bottom: -17px;
+    border-radius: 0 0 0 5px;
+}
+
+#loaderdiv {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+}
+
+#loader {
+  border: 16px solid transparent;
+  border-top: 16px solid var(--secondary-color);
+  border-bottom: 16px solid var(--primary-color);
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  left: calc(50% - 60px);
+  top: calc(50% - 120px);
+  z-index: 201;
+}
+
+#loaderText {
+  position: relative;
+  margin: 0 auto;
+  top: calc(50% + 80px);
+  z-index: 201;
+  text-align: center;
+  color: var(--second-background-color);
+  font-size: 20pt;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#jobStatusView {
+  z-index: 50;
+}
+
+#jobStatusView > popup-window {
+  top: 80px;
+  width: 50%;
+  max-height: calc(100% - 140px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  background-color: transparent;
+}
+
+#jobStatusView > popup-window > div {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 50%;
+  margin: 0;
+  max-height: 100%;
+}
+
+#jobStatusView > popup-window > div > div {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  margin: 0;
+}
+
+.jobWrapper {
+  width: 90%;
+  margin: 2px 5%;
+  height: 100px;
+  position: relative;
+  flex-shrink: 0;
+  background-color: rgba(187,187,187,0.4);
+  border-radius: 3px;
+}
+
+.jobWrapper > .jobImage {
+  height: 90%;
+  width: 20%;
+  left: 5px;
+  object-fit: contain;
+  position: absolute;
+  top: 5%;
+}
+
+.jobWrapper > .jobTitle {
+  position: absolute;
+  left: calc(20% + 10px);
+  top: 5px;
+}
+
+.jobWrapper > .jobProgressBar {
+  position: absolute;
+  left: calc(20% + 10px);
+  bottom: calc(12pt + 10px);
+  width: calc(80% - 20px);
+  height: 10px;
+}
+
+.jobWrapper > .jobProgressSpan {
+  position: absolute;
+  right: 10px;
+  bottom: calc(12pt + 20px);
+  width: 60%;
+  text-align: right;
+}
+
+.jobWrapper > .jobCancel {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  font-size: 12pt;
+  color: var(--secondary-color);
+  cursor: pointer;
+}
