@@ -239,6 +239,17 @@ publication-name{
     font-weight: bold;
 }
 
+publication-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+publication-details * {
+    z-index: 1;
+    color: var(--accent-color);
+}
+
 publication img {
     position: absolute;
     top: 0;
