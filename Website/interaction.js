@@ -78,6 +78,19 @@ function Setup(){
     
     ResetContent();
     UpdateJobs();
+    GetSettings().then((json) => {
+      console.log(json);
+      settingDownloadLocation.innerText = json.downloadLocation;
+      settingApiUri.placeholder = apiUri;
+      console.log(json.styleSheet);
+      if (json.styleSheet == 'default') {
+        settingMangaHoverCheckbox.checked = false;
+        document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+      } else {
+        settingMangaHoverCheckbox.checked = true;
+        document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+      }
+    });
     setInterval(() => {
       UpdateJobs();
     }, 1000);
@@ -278,6 +291,7 @@ function OpenSettings(){
     //console.log(json);
     settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
+    console.log(json.styleSheet);
     if (json.styleSheet == 'default') {
       settingMangaHoverCheckbox.checked = false;
       document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
