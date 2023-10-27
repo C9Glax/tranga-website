@@ -32,10 +32,13 @@ const settingKavitaPass = document.querySelector("#kavitaPassword");
 const settingGotifyUrl = document.querySelector("#gotifyUrl");
 const settingGotifyAppToken = document.querySelector("#gotifyAppToken");
 const settingLunaseaWebhook = document.querySelector("#lunaseaWebhook");
+const settingNtfyEndpoint = document.querySelector("#ntfyEndpoint");
+const settingNtfyAuth = document.querySelector("#ntfyAuth");
 const settingKomgaConfigured = document.querySelector("#komgaConfigured");
 const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
+const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
 const settingApiUri = document.querySelector("#settingApiUri");
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
@@ -254,11 +257,14 @@ settingKavitaPass.addEventListener("keypress", (event) => { if(event.key === "En
 settingGotifyUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingGotifyAppToken.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingLunaseaWebhook.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingNtfyEndpoint.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingNtfyAuth.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
 function OpenSettings(){
   settingGotifyConfigured.innerText = "❌";
   settingLunaseaConfigured.innerText = "❌";
+  settingNtfyConfiguredConfigured.innerText = "❌";
   settingKavitaConfigured.innerText = "❌";
   settingKomgaConfigured.innerText = "❌";
   settingKomgaUrl.value = "";
@@ -270,6 +276,8 @@ function OpenSettings(){
   settingGotifyUrl.value = "";
   settingGotifyAppToken.value = "";
   settingLunaseaWebhook.value = "";
+  settingNtfyAuth.value = "";
+  settingNtfyEndpoint.value = "";
   settingApiUri.value = "";
   
   GetSettings().then((json) => {
@@ -313,6 +321,11 @@ function OpenSettings(){
           settingLunaseaConfigured.innerText = "✅";
           settingLunaseaWebhook.placeholder = connector.id;
           break;
+        case "Ntfy":
+          settingNtfyConfigured.innerText = "✅";
+          settingNtfyEndpoint.placeholder = connector.endpoint;
+          settingNtfyAuth.placeholder = "***";
+          break;
         default:
           console.log("Unknown type");
           console.log(connector);
@@ -348,6 +361,11 @@ function UpdateSettings(){
   
   if(settingLunaseaWebhook.value != ""){
     UpdateLunaSea(settingLunaseaWebhook.value);
+  }
+  
+  if(settingNtfyEndpoint.value != "" &&
+    settingNtfyAuth.value != ""){
+    UpdateNtfy(settingNtfyEndpoint.value, settingNtfyAuth.value);
   }
   
   OpenSettings();
