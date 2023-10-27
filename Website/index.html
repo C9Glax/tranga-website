@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Tranga</title>
-  <link rel="stylesheet" href="style_mangahover.css">
+  <link id='pagestyle' rel="stylesheet" href="styles/style_default.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
@@ -90,6 +90,10 @@
               <span class="title">LunaSea</span>
               <div>Configured: <span id="lunaseaConfigured">✅❌</span></div>
               <label for="lunaseaWebhook"></label><input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
+            </div>
+            <div>
+              <input type="checkbox" id="mangaHoverCheckbox" name="css-style" value="style_mangahover.css">
+              <label for="css-style"> Show manga titles and sources on hover</label><br>
             </div>
             <div>
               <input type="submit" value="Update" onclick="UpdateSettings()">

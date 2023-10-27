@@ -163,6 +163,11 @@ function UpdateDownloadLocation(downloadLocation){
     PostData(uri);	
 }
 
+function ChangeStyleSheet(sheet){
+    var uri = `${apiUri}/Settings/ChangeStyleSheet?styleSheet=${sheet}`;
+    PostData(uri);
+}
+
 function UpdateKomga(komgaUrl, komgaAuth){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
     PostData(uri);

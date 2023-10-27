@@ -37,6 +37,7 @@ const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingApiUri = document.querySelector("#settingApiUri");
+const settingMangaHoverCheckbox = document.querySelector("#mangaHoverCheckbox");
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
 const newMangaTitle = document.querySelector("#newMangaTitle");
@@ -271,11 +272,19 @@ function OpenSettings(){
   settingGotifyAppToken.value = "";
   settingLunaseaWebhook.value = "";
   settingApiUri.value = "";
+  settingMangaHoverCheckbox.checked = false;
   
   GetSettings().then((json) => {
     //console.log(json);
     settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
+    if (json.styleSheet == 'default') {
+      settingMangaHoverCheckbox.checked = false;
+      document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+    } else {
+      settingMangaHoverCheckbox.checked = true;
+      document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+    }
   });
   GetLibraryConnectors().then((json) => {
     //console.log(json);
@@ -328,6 +337,15 @@ function UpdateSettings(){
     setCookie("apiUri", apiUri);
     Setup();
   }
+
+  // If the checkbox is checked, set the style to style_mangahover.css and 
+  if (document.getElementById("mangaHoverCheckbox").checked == true){
+    ChangeStyleSheet('hover')
+    console.log('Changing theme to mangahover')
+  } else {
+    ChangeStyleSheet('default');
+    console.log('Changing theme to default')
+  }
   
   if(settingKomgaUrl.value != "" &&
      settingKomgaUser.value != "" &&
@@ -373,7 +391,6 @@ function UpdateJobs(){
       monitoringJobsCount = json.length;
     }
   });
-    
   GetWaitingJobs().then((json) => {
     jobsQueuedTag.innerText = json.length;
     
