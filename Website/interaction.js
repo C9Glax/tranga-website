@@ -264,7 +264,7 @@ settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter"
 function OpenSettings(){
   settingGotifyConfigured.innerText = "❌";
   settingLunaseaConfigured.innerText = "❌";
-  settingNtfyConfiguredConfigured.innerText = "❌";
+  settingNtfyConfigured.innerText = "❌";
   settingKavitaConfigured.innerText = "❌";
   settingKomgaConfigured.innerText = "❌";
   settingKomgaUrl.value = "";
