@@ -83,12 +83,12 @@ function Setup(){
       settingDownloadLocation.innerText = json.downloadLocation;
       settingApiUri.placeholder = apiUri;
       console.log(json.styleSheet);
-      if (json.styleSheet == 'default') {
-        settingMangaHoverCheckbox.checked = false;
-        document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
-      } else {
+      if (json.styleSheet == 'hover') {
         settingMangaHoverCheckbox.checked = true;
         document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+      } else {
+        settingMangaHoverCheckbox.checked = false;
+        document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
       }
     });
     setInterval(() => {
@@ -292,12 +292,12 @@ function OpenSettings(){
     settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
     console.log(json.styleSheet);
-    if (json.styleSheet == 'default') {
-      settingMangaHoverCheckbox.checked = false;
-      document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
-    } else {
+    if (json.styleSheet == 'hover') {
       settingMangaHoverCheckbox.checked = true;
       document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+    } else {
+      settingMangaHoverCheckbox.checked = false;
+      document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
     }
   });
   GetLibraryConnectors().then((json) => {
