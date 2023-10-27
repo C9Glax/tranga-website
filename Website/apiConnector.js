@@ -183,6 +183,11 @@ function UpdateLunaSea(lunaseaWebhook){
     PostData(uri);
 }
 
+function UpdateNtfy(ntfyEndpoint, ntfyAuth){
+    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
+    PostData(uri);
+}
+
 function RemoveJob(jobId){
     var uri = `${apiUri}/Jobs?jobId=${jobId}`;
     DeleteData(uri);

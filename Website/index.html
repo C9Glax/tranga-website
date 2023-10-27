@@ -92,6 +92,12 @@
               <label for="lunaseaWebhook"></label><input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
             </div>
             <div>
+              <span class="title">Ntfy</span>
+              <div>Configured: <span id="ntfyConfigured">✅❌</span></div>
+              <label for="ntfyEndpoint"></label><input placeholder="URL" id="ntfyEndpoint" type="text">
+              <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
+            </div>
+            <div>
               <input type="submit" value="Update" onclick="UpdateSettings()">
             </div>
           </popup-content>
