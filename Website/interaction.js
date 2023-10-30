@@ -148,7 +148,7 @@ function GetNewMangaItems(){
     if(json.length > 0)
       newMangaResult.style.display = "flex";
     json.forEach(result => {
-      var mangaElement = CreateManga(result, newMangaConnector.value)
+      var mangaElement = CreateManga(result, newMangaConnector.value);
       newMangaResult.appendChild(mangaElement);
       mangaElement.addEventListener("click", (event) => {
         ShowMangaWindow(null, result, event, true);
@@ -161,13 +161,20 @@ function GetNewMangaItems(){
   });
 }
 
-//Returns a new "Publication" Item to display in the jobs section
+//Returns a new "Publication" Item to display in the library section
 function CreateManga(manga, connector){
+    //Create a publication HTML element
     var mangaElement = document.createElement('publication');
+
+    //Assign the manga an internal ID
     mangaElement.id = GetValidSelector(manga.internalId);
+    
+    //Append the manga image to the publication element
     var mangaImage = document.createElement('img');
     mangaImage.src = GetCoverUrl(manga.internalId);
     mangaElement.appendChild(mangaImage);
+    
+    //Append the publication information to the publication element
     var info = document.createElement('publication-information');
     var connectorName = document.createElement('connector-name');
     connectorName.innerText = connector;
@@ -178,6 +185,20 @@ function CreateManga(manga, connector){
     mangaName.innerText = manga.sortName;
     info.appendChild(mangaName);
     mangaElement.appendChild(info);
+
+    //Append the latest chapter to the publication element
+    var chapterNo = document.createElement('chapter-number');
+    
+    //If the latestChapterAvailable parameter is not equal to zero, then set the chapter number to this value. This assumes that the only time
+    //the latestChapterAvailable parameter would be non-zero is when searching for a new manga. Otherwise, set it to the latest downloaded chapter.
+    if (manga.latestChapterAvailable != 0) {
+      chapterNo.innerText = manga.latestChapterAvailable;
+      chapterNo.style.backgroundColor = "DodgerBlue";
+    } else {
+      chapterNo.innerText = manga.latestChapterDownloaded;
+      chapterNo.style.backgroundColor = "MediumSeaGreen";
+    }
+    mangaElement.appendChild(chapterNo);
     return mangaElement;
 }
 
