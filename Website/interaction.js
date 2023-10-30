@@ -82,10 +82,10 @@ function Setup(){
     ResetContent();
     UpdateJobs();
     GetSettings().then((json) => {
-      console.log(json);
+      //console.log(json);
       settingDownloadLocation.innerText = json.downloadLocation;
       settingApiUri.placeholder = apiUri;
-      console.log(json.styleSheet);
+      //console.log(json.styleSheet);
       if (json.styleSheet == 'hover') {
         settingMangaHoverCheckbox.checked = true;
         document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
@@ -299,7 +299,7 @@ function OpenSettings(){
     //console.log(json);
     settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
-    console.log(json.styleSheet);
+    //console.log(json.styleSheet);
     if (json.styleSheet == 'hover') {
       settingMangaHoverCheckbox.checked = true;
       document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
@@ -368,10 +368,10 @@ function UpdateSettings(){
   // If the checkbox is checked, set the style to style_mangahover.css and 
   if (document.getElementById("mangaHoverCheckbox").checked == true){
     ChangeStyleSheet('hover')
-    console.log('Changing theme to mangahover')
+    //console.log('Changing theme to mangahover')
   } else {
     ChangeStyleSheet('default');
-    console.log('Changing theme to default')
+    //console.log('Changing theme to default')
   }
   
   if(settingKomgaUrl.value != "" &&
