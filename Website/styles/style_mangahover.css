@@ -208,6 +208,20 @@ publication{
     flex-shrink: 0;
 }
 
+chapter-number {
+    display: flex;
+    font-size: 12pt;
+    font-weight: bold;
+    color:white;
+    position:absolute;
+    bottom:0;
+    right:0;
+    margin: 10px 10px 10px 10px;
+    padding: 5px 15px;
+    z-index: 2;
+    border-radius: 5px;
+}
+
 publication:hover {
     background-color: black;
 }
