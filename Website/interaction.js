@@ -113,6 +113,19 @@ function ResetContent(){
     add.appendChild(plus);
     add.addEventListener("click", () => ShowNewMangaSearch());
     tasksContent.appendChild(add);
+
+    //Populate with the monitored mangas
+    GetMonitorJobs().then((json) => {
+        //console.log(json);
+        json.forEach(job => {
+          var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+          mangaView.addEventListener("click", (event) => {
+            ShowMangaWindow(job, job.manga, event, false);
+          });
+          tasksContent.appendChild(mangaView);
+        });
+        monitoringJobsCount = json.length;
+    });
 }
 
 function ShowNewMangaSearch(){
@@ -172,6 +185,7 @@ createMonitorJobButton.addEventListener("click", () => {
   CreateMonitorJob(newMangaConnector.value, selectedManga.internalId, newMangaTranslatedLanguage.value);
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
+  ResetContent();
 });
 startJobButton.addEventListener("click", () => {
   StartJob(selectedJob.id);
@@ -185,6 +199,7 @@ deleteJobButton.addEventListener("click", () => {
   RemoveJob(selectedJob.id);
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
+  ResetContent();
 });
 
 function ShowMangaWindow(job, manga, event, add){
@@ -409,6 +424,7 @@ function utf8_to_b64(str) {
 }
 
 function UpdateJobs(){
+
   GetMonitorJobs().then((json) => {
     if(monitoringJobsCount != json.length){
       ResetContent();
@@ -423,6 +439,8 @@ function UpdateJobs(){
       monitoringJobsCount = json.length;
     }
   });
+
+  //Get the jobs that are waiting in the queue
   GetWaitingJobs().then((json) => {
     jobsQueuedTag.innerText = json.length;
     
@@ -443,6 +461,7 @@ function UpdateJobs(){
       jobStatusWaiting.removeChild(child);
   });
   
+  //Get currently running jobs
   GetRunningJobs().then((json) => {
     jobsRunningTag.innerText = json.length;
     
