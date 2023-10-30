@@ -392,6 +392,21 @@ function utf8_to_b64(str) {
 }
 
 function UpdateJobs(){
+
+  GetMonitorJobs().then((json) => {
+    if(monitoringJobsCount != json.length){
+      ResetContent();
+      //console.log(json);
+      json.forEach(job => {
+        var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+        mangaView.addEventListener("click", (event) => {
+          ShowMangaWindow(job, job.manga, event, false);
+        });
+        tasksContent.appendChild(mangaView);
+      });
+      monitoringJobsCount = json.length;
+    }
+  });
    
   //Get the jobs that are waiting in the queue
   GetWaitingJobs().then((json) => {
