@@ -113,6 +113,18 @@ function ResetContent(){
     add.appendChild(plus);
     add.addEventListener("click", () => ShowNewMangaSearch());
     tasksContent.appendChild(add);
+
+    //Populate the manga library view with all the jobs that are currently being monitored
+    GetMonitorJobs().then((json) => {
+        json.forEach(job => {
+          var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+          mangaView.addEventListener("click", (event) => {
+            ShowMangaWindow(job, job.manga, event, false);
+          });
+          tasksContent.appendChild(mangaView);
+        });
+        monitoringJobsCount = json.length;
+    });
 }
 
 function ShowNewMangaSearch(){
@@ -409,20 +421,6 @@ function utf8_to_b64(str) {
 }
 
 function UpdateJobs(){
-  GetMonitorJobs().then((json) => {
-    if(monitoringJobsCount != json.length){
-      ResetContent();
-      //console.log(json);
-      json.forEach(job => {
-        var mangaView = CreateManga(job.manga, job.mangaConnector.name);
-        mangaView.addEventListener("click", (event) => {
-          ShowMangaWindow(job, job.manga, event, false);
-        });
-        tasksContent.appendChild(mangaView);
-      });
-      monitoringJobsCount = json.length;
-    }
-  });
   GetWaitingJobs().then((json) => {
     jobsQueuedTag.innerText = json.length;
     
