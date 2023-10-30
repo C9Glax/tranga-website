@@ -182,6 +182,7 @@ function CreateManga(manga, connector){
 
 createMonitorJobButton.addEventListener("click", () => {
   CreateMonitorJob(newMangaConnector.value, selectedManga.internalId, newMangaTranslatedLanguage.value);
+  ResetContent();
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
 });
@@ -195,6 +196,7 @@ cancelJobButton.addEventListener("click", () => {
 });
 deleteJobButton.addEventListener("click", () => {
   RemoveJob(selectedJob.id);
+  ResetContent();
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
 });
