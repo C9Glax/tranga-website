@@ -174,7 +174,7 @@ function UpdateKomga(komgaUrl, komgaAuth){
 }
 
 function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword={kavitaPassword}`;
+    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
     PostData(uri);
 }
 
