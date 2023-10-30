@@ -40,6 +40,7 @@ const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
 const settingApiUri = document.querySelector("#settingApiUri");
+const settingMangaHoverCheckbox = document.querySelector("#mangaHoverCheckbox");
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
 const newMangaTitle = document.querySelector("#newMangaTitle");
@@ -80,6 +81,19 @@ function Setup(){
     
     ResetContent();
     UpdateJobs();
+    GetSettings().then((json) => {
+      //console.log(json);
+      settingDownloadLocation.innerText = json.downloadLocation;
+      settingApiUri.placeholder = apiUri;
+      //console.log(json.styleSheet);
+      if (json.styleSheet == 'hover') {
+        settingMangaHoverCheckbox.checked = true;
+        document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+      } else {
+        settingMangaHoverCheckbox.checked = false;
+        document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+      }
+    });
     setInterval(() => {
       UpdateJobs();
     }, 1000);
@@ -279,11 +293,20 @@ function OpenSettings(){
   settingNtfyAuth.value = "";
   settingNtfyEndpoint.value = "";
   settingApiUri.value = "";
+  settingMangaHoverCheckbox.checked = false;
   
   GetSettings().then((json) => {
     //console.log(json);
     settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
+    //console.log(json.styleSheet);
+    if (json.styleSheet == 'hover') {
+      settingMangaHoverCheckbox.checked = true;
+      document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+    } else {
+      settingMangaHoverCheckbox.checked = false;
+      document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+    }
   });
   GetLibraryConnectors().then((json) => {
     //console.log(json);
@@ -341,6 +364,15 @@ function UpdateSettings(){
     setCookie("apiUri", apiUri);
     Setup();
   }
+
+  // If the checkbox is checked, set the style to style_mangahover.css and 
+  if (document.getElementById("mangaHoverCheckbox").checked == true){
+    ChangeStyleSheet('hover')
+    //console.log('Changing theme to mangahover')
+  } else {
+    ChangeStyleSheet('default');
+    //console.log('Changing theme to default')
+  }
   
   if(settingKomgaUrl.value != "" &&
      settingKomgaUser.value != "" &&
@@ -391,7 +423,6 @@ function UpdateJobs(){
       monitoringJobsCount = json.length;
     }
   });
-    
   GetWaitingJobs().then((json) => {
     jobsQueuedTag.innerText = json.length;
     
