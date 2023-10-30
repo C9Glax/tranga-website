@@ -636,3 +636,74 @@ footer-tag-popup::before{
   color: var(--secondary-color);
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  titlebox {
+    margin: 10px;
+  }
+
+  titlebox span {
+    font-size: 18pt;
+  }
+
+  titlebox img {
+    height: auto;
+    width: 60px;
+    margin-right: 10px;
+  }
+
+  #searchbox {
+    width: 100%;
+  }
+
+  publication,
+  #addPublication {
+    width: 35%;
+    margin: 10px 2.5%;
+  }
+
+  #newMangaPopup {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  #newMangaPopup #newMangaPopupSelector {
+    width: 100%;
+  }
+
+  #newMangaPopup #newMangaConnector,
+  #newMangaPopup #newMangaTranslatedLanguage {
+    width: 100%;
+    margin: 0;
+  }
+
+  #newMangaPopup #newMangaTitle {
+    width: 100%;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  #newMangaResult {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 5px auto 0;
+    margin-top: 100px;
+    padding: 5px;
+    max-height: 800px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  #newMangaPopup publication {
+    width: 100%;
+    max-width: 100%;
+    min-width: 250px;
+  }
+}

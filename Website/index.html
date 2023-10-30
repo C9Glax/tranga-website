@@ -5,6 +5,7 @@
   <title>Tranga</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
   <wrapper>
@@ -15,7 +16,7 @@
       </titlebox>
       <spacer></spacer>
       <searchdiv>
-        <label for="searchbox"></label><input id="searchbox" placeholder="Filter" type="text">
+        <input id="searchbox" placeholder="Filter" type="text">
       </searchdiv>
       <img id="settingscog" src="media/settings-cogwheel.svg" height="100%" alt="settingscog">
     </topbar>
@@ -37,7 +38,7 @@
           </publication-information>
         </publication>
       </content>
-      
+
       <popup id="newMangaPopup">
         <blur-background id="blurBackgroundNewMangaPopup" onclick="newMangaPopup.style.display = 'none';"></blur-background>
         <div id="newMangaPopupSelector">
@@ -51,7 +52,7 @@
         </div>
         <div id="newMangaResult"></div>
       </popup>
-      
+
       <popup id="settingsPopup">
         <blur-background id="blurBackgroundSettingsPopup" onclick="
     settingsPopup.style.display = 'none';"></blur-background>
@@ -64,32 +65,32 @@
             </div>
             <div>
               <p class="title">API-URI</p>
-              <label for="settingApiUri"></label><input placeholder="https://" type="text" id="settingApiUri">
+              <input placeholder="https://" type="text" id="settingApiUri">
             </div>
             <div>
               <span class="title">Komga</span>
               <div>Configured: <span id="komgaConfigured">✅❌</span></div>
-              <label for="komgaUrl"></label><input placeholder="URL" id="komgaUrl" type="text">
-              <label for="komgaUsername"></label><input placeholder="Username" id="komgaUsername" type="text">
-              <label for="komgaPassword"></label><input placeholder="Password" id="komgaPassword" type="password">
+              <input placeholder="URL" id="komgaUrl" type="text">
+              <input placeholder="Username" id="komgaUsername" type="text">
+              <input placeholder="Password" id="komgaPassword" type="password">
             </div>
             <div>
               <span class="title">Kavita</span>
               <div>Configured: <span id="kavitaConfigured">✅❌</span></div>
-              <label for="kavitaUrl"></label><input placeholder="URL" id="kavitaUrl" type="text">
-              <label for="kavitaUsername"></label><input placeholder="Username" id="kavitaUsername" type="text">
-              <label for="kavitaPassword"></label><input placeholder="Password" id="kavitaPassword" type="password">
+              <input placeholder="URL" id="kavitaUrl" type="text">
+              <input placeholder="Username" id="kavitaUsername" type="text">
+              <input placeholder="Password" id="kavitaPassword" type="password">
             </div>
             <div>
               <span class="title">Gotify</span>
               <div>Configured: <span id="gotifyConfigured">✅❌</span></div>
-              <label for="gotifyUrl"></label><input placeholder="URL" id="gotifyUrl" type="text">
-              <label for="gotifyAppToken"></label><input placeholder="App-Token" id="gotifyAppToken" type="text">
+              <input placeholder="URL" id="gotifyUrl" type="text">
+              <input placeholder="App-Token" id="gotifyAppToken" type="text">
             </div>
             <div>
               <span class="title">LunaSea</span>
               <div>Configured: <span id="lunaseaConfigured">✅❌</span></div>
-              <label for="lunaseaWebhook"></label><input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
+              <input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
             </div>
             <div>
               <span class="title">Ntfy</span>
@@ -103,7 +104,7 @@
           </popup-content>
         </popup-window>
       </popup>
-		
+
 	  <popup id="publicationViewerPopup">
         <blur-background id="blurBackgroundPublicationPopup" onclick="publicationViewerPopup.style.display= 'none';"></blur-background>
         <publication-viewer>
@@ -125,7 +126,7 @@
           </publication-information>
         </publication-viewer>
       </popup>
-      
+
       <popup id="jobStatusView">
         <blur-background id="blurBackgroundJobStatus" onclick="jobStatusView.style.display= 'none';"></blur-background>
         <popup-window>
@@ -138,7 +139,7 @@
         </popup-window>
       </popup>
     </viewport>
-	  
+
     <footer>
       <div onclick="ShowJobQueue();">
         <img src="media/running.svg" alt="running"><div id="jobsRunningTag">0</div>
@@ -147,9 +148,9 @@
         <img src="media/queue.svg" alt="queue"><div id="jobsQueuedTag">0</div>
       </div>
       <p id="madeWith">Made with Blåhaj 🦈</p>
-    </footer> 
+    </footer>
   </wrapper>
-  
+
   <script src="apiConnector.js"></script>
   <script src="interaction.js"></script>
 </body>
