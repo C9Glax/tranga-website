@@ -163,13 +163,18 @@ function UpdateDownloadLocation(downloadLocation){
     PostData(uri);	
 }
 
+function ChangeStyleSheet(sheet){
+    var uri = `${apiUri}/Settings/ChangeStyleSheet?styleSheet=${sheet}`;
+    PostData(uri);
+}
+
 function UpdateKomga(komgaUrl, komgaAuth){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
     PostData(uri);
 }
 
 function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword={kavitaPassword}`;
+    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
     PostData(uri);
 }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Tranga</title>
-  <link rel="stylesheet" href="style.css">
+  <link id='pagestyle' rel="stylesheet" href="styles/style_default.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
@@ -98,6 +98,10 @@
               <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
             </div>
             <div>
+              <input type="checkbox" id="mangaHoverCheckbox" name="css-style" value="style_mangahover.css">
+              <label for="css-style"> Show manga titles and sources on hover</label><br>
+            </div>
+            <div>
               <input type="submit" value="Update" onclick="UpdateSettings()">
             </div>
           </popup-content>
@@ -108,7 +112,7 @@
         <blur-background id="blurBackgroundPublicationPopup" onclick="publicationViewerPopup.style.display= 'none';"></blur-background>
         <publication-viewer>
           <img id="pubviewcover" src="media/cover.jpg" alt="cover">
-          <publication-information>
+          <publication-details>
             <publication-name id="publicationViewerName">Best Manga there is</publication-name>
             <publication-tags id="publicationViewerTags">A Manga</publication-tags>
             <publication-author id="publicationViewerAuthor">Glax</publication-author>
@@ -122,7 +126,7 @@
               <publication-add id="createMonitorJobButton">Monitor ➕</publication-add>
               <publication-add id="createDownloadChapterJobButton">Download Chapter 📥</publication-add>
             </publication-interactions>
-          </publication-information>
+          </publication-details>
         </publication-viewer>
       </popup>
       

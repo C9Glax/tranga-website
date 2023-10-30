@@ -223,7 +223,18 @@ publication-information {
     justify-content: start;
 }
 
+publication-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
 publication-information * {
+    z-index: 1;
+    color: var(--accent-color);
+}
+
+publication-details * {
     z-index: 1;
     color: var(--accent-color);
 }
@@ -408,48 +419,48 @@ publication-viewer img {
     z-index: 0;
 }
 
-publication-viewer publication-information > * {
+publication-viewer publication-details > * {
     margin: 5px 0;
 }
 
-publication-viewer publication-information publication-name {
+publication-viewer publication-details publication-name {
     width: initial;
     overflow-x: scroll;
     white-space: nowrap;
     scrollbar-width: none;
 }
 
-publication-viewer publication-information publication-tags::before {
+publication-viewer publication-details publication-tags::before {
     content: "Tags";
     display: block;
     font-weight: bolder;
 }
 
-publication-viewer publication-information publication-tags {
+publication-viewer publication-details publication-tags {
     overflow-x: scroll;
     white-space: nowrap;
     scrollbar-width: none;
 }
 
-publication-viewer publication-information publication-author::before {
+publication-viewer publication-details publication-author::before {
     content: "Author: ";
     font-weight: bolder;
 }
 
-publication-viewer publication-information publication-description::before {
+publication-viewer publication-details publication-description::before {
     content: "Description";
     display: block;
     font-weight: bolder;
 }
 
-publication-viewer publication-information publication-description {
+publication-viewer publication-details publication-description {
     font-size: 12pt;
     margin: 5px 0;
     height: 145px;
     overflow-x: scroll;
 }
 
-publication-viewer publication-information publication-interactions {
+publication-viewer publication-details publication-interactions {
     display: flex;
     flex-direction: row;
     justify-content: end;
@@ -457,25 +468,25 @@ publication-viewer publication-information publication-interactions {
     width: 100%;
 }
 
-publication-viewer publication-information publication-interactions > * {
+publication-viewer publication-details publication-interactions > * {
     margin: 0 10px;
     font-size: 16pt;
     cursor: pointer;
 }
 
-publication-viewer publication-information publication-interactions publication-starttask {
+publication-viewer publication-details publication-interactions publication-starttask {
     color: var(--secondary-color);
 }
 
-publication-viewer publication-information publication-interactions publication-delete {
+publication-viewer publication-details publication-interactions publication-delete {
     color: red;
 }
 
-publication-view publication-information publication-interactions publication-canceltask {
+publication-view publication-details publication-interactions publication-canceltask {
   color: yellow;
 }
 
-publication-viewer publication-information publication-interactions publication-add {
+publication-viewer publication-details publication-interactions publication-add {
     color: limegreen;
 }
 
