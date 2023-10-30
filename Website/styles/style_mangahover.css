@@ -209,7 +209,7 @@ publication{
 }
 
 chapter-number {
-    display: flex;
+    display: none;
     font-size: 12pt;
     font-weight: bold;
     color:white;
