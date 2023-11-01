@@ -163,19 +163,52 @@ function GetNewMangaItems(){
 
 //Returns a new "Publication" Item to display in the jobs section
 function CreateManga(manga, connector){
+  //Create a new publication and set an internal ID
     var mangaElement = document.createElement('publication');
     mangaElement.id = GetValidSelector(manga.internalId);
+    
+  //Append the cover image to the publication
     var mangaImage = document.createElement('img');
     mangaImage.src = GetCoverUrl(manga.internalId);
     mangaElement.appendChild(mangaImage);
+  
+//Append the publication information to the publication
+    console.log(manga);
     var info = document.createElement('publication-information');
     var connectorName = document.createElement('connector-name');
     connectorName.innerText = connector;
     connectorName.className = "pill";
     connectorName.style.backgroundColor = stringToColour(connector);
     info.appendChild(connectorName);
+
     var mangaName = document.createElement('publication-name');
     mangaName.innerText = manga.sortName;
+
+    //Create the publication status indicator
+    var releaseStatus = document.createElement('publication-status');
+    var statusTooltip = document.createElement('status-tooltip');
+    if (manga.releaseStatus == 0) {
+      releaseStatus.style.backgroundColor = 'limegreen';
+      statusTooltip.innerText = "Ongoing"
+    }else if(manga.releaseStatus == 1){
+      releaseStatus.style.backgroundColor = 'blueviolet';
+      statusTooltip.innerText = "Completed"
+    } else if (manga.releaseStatus == 2) {
+      releaseStatus.style.backgroundColor = 'darkorange';
+      statusTooltip.innerText = "On Hiatus"
+    } else if (manga.releaseStatus == 3) {
+      releaseStatus.style.backgroundColor = 'firebrick';
+      statusTooltip.innerText = "Cancelled"
+    } else if (manga.releaseStatus == 4) {
+      releaseStatus.style.backgroundColor = 'aqua';
+      statusTooltip.innerText = "Upcoming";
+    } else {
+      releaseStatus.style.backgroundColor = 'gray';
+        statusTooltip.innerText = 'Status Unavailable';
+    }
+    releaseStatus.appendChild(statusTooltip);         //Append the tooltip to the indicator circle
+    mangaName.appendChild(releaseStatus);                  //Append the release status indicator to the info block
+
     info.appendChild(mangaName);
     mangaElement.appendChild(info);
     return mangaElement;
