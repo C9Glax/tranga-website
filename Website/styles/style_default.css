@@ -269,8 +269,8 @@ status-tooltip {
     position: absolute;
 
     /*Position*/
-    left: -50px ;
-    bottom: 150%;
+    left: 150% ;
+    bottom: -50%;
     z-index: 3;
     
     /*Text Properties*/
@@ -279,6 +279,7 @@ status-tooltip {
     color:white;
     text-align: center;
     padding: 5px 5px;
+    vertical-align: middle;
 
     /*Size*/
     width:100px;
@@ -289,12 +290,12 @@ status-tooltip {
 status-tooltip::after {
     content: " ";
     position: absolute;
-    top: 100%; /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
+    top: 50%;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: black transparent transparent transparent;
+    border-color: transparent black transparent transparent;
   }
 
 publication img {
