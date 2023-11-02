@@ -168,6 +168,11 @@ function ChangeStyleSheet(sheet){
     PostData(uri);
 }
 
+function RefreshLibraryMetadata() {
+    var uri = `${apiUri}/Jobs/UpdateMetadata`;
+    PostData(uri);
+}
+
 function UpdateKomga(komgaUrl, komgaAuth){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
     PostData(uri);
