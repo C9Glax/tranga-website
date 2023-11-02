@@ -173,7 +173,7 @@ function CreateManga(manga, connector){
     mangaElement.appendChild(mangaImage);
   
 //Append the publication information to the publication
-    console.log(manga);
+    //console.log(manga);
     var info = document.createElement('publication-information');
     var connectorName = document.createElement('connector-name');
     connectorName.innerText = connector;
