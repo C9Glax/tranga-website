@@ -101,6 +101,18 @@ function Setup(){
 }
 Setup();
 
+function updateCSS(){
+  if (document.getElementById("mangaHoverCheckbox").checked == true){
+    ChangeStyleSheet('hover')
+    document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+    //console.log('Changing theme to mangahover')
+  } else {
+    ChangeStyleSheet('default');
+    document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+    //console.log('Changing theme to default')
+  }
+}
+
 function ResetContent(){
     //Delete everything
     tasksContent.replaceChildren();
@@ -411,15 +423,6 @@ function UpdateSettings(){
     apiUri = settingApiUri.value;
     setCookie("apiUri", apiUri);
     Setup();
-  }
-
-  // If the checkbox is checked, set the style to style_mangahover.css and 
-  if (document.getElementById("mangaHoverCheckbox").checked == true){
-    ChangeStyleSheet('hover')
-    //console.log('Changing theme to mangahover')
-  } else {
-    ChangeStyleSheet('default');
-    //console.log('Changing theme to default')
   }
   
   if(settingKomgaUrl.value != "" &&
