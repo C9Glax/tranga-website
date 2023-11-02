@@ -207,10 +207,10 @@ function CreateManga(manga, connector){
         statusTooltip.innerText = 'Status Unavailable';
     }
     releaseStatus.appendChild(statusTooltip);         //Append the tooltip to the indicator circle
-    mangaName.appendChild(releaseStatus);                  //Append the release status indicator to the info block
 
     info.appendChild(mangaName);
     mangaElement.appendChild(info);
+    mangaElement.appendChild(releaseStatus);                  //Append the release status indicator to the publication element
     return mangaElement;
 }
 
