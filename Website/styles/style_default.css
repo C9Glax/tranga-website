@@ -251,13 +251,16 @@ publication-name{
 }
 
 publication-status {
-    display: inline-block;
+    display:block;
     height: 10px;
     width: 10px;
     border-radius: 50%;
     margin: 5px;
-    position: relative;
-    vertical-align: middle;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 2;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 10px, rgb(51, 51, 51) 0px 0px 10px 3px;
 }
 
 publication-status:hover > status-tooltip {
@@ -269,8 +272,8 @@ status-tooltip {
     position: absolute;
 
     /*Position*/
-    left: -50px ;
-    bottom: 150%;
+    left: 150%;
+    bottom: -75%;
     z-index: 3;
     
     /*Text Properties*/
@@ -284,17 +287,20 @@ status-tooltip {
     width:100px;
     background-color: black;
     border-radius: 6px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
 }
 
 status-tooltip::after {
     content: " ";
     position: absolute;
-    top: 100%; /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
+    top: 50%;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: black transparent transparent transparent;
+    border-color: transparent black transparent transparent;
   }
 
 publication img {
