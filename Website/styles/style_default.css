@@ -265,45 +265,55 @@ publication-status {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 10px, rgb(51, 51, 51) 0px 0px 10px 3px;
 }
 
-publication-status:hover > status-tooltip {
-    visibility: visible;
-}
-
-status-tooltip {
-    visibility: hidden;
+publication-status::after {
+    content: attr(release-status);
     position: absolute;
+    top: 0;
+    right: 0;
 
-    /*Position*/
-    left: 150%;
-    bottom: -75%;
-    z-index: 3;
-    
+    visibility: hidden;
+
     /*Text Properties*/
     font-size:10pt;
     font-weight:bold;
     color:white;
     text-align: center;
-    padding: 5px 5px;
 
     /*Size*/
-    width:100px;
-    background-color: black;
+    padding: 3px 8px;
     border-radius: 6px;
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
+    border: 0px;
+    background-color: inherit;
 }
 
-status-tooltip::after {
-    content: " ";
-    position: absolute;
-    top: 50%;
-    right: 100%; /* To the left of the tooltip */
-    margin-top: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent black transparent transparent;
-  }
+publication-status:hover::after{
+    visibility:visible;
+}
+
+
+publication-status[release-status="Ongoing"]{
+    background-color: limegreen;
+}
+
+publication-status[release-status="Completed"]{
+    background-color: blueviolet;
+}
+
+publication-status[release-status="On Hiatus"]{
+    background-color: darkorange;
+}
+
+publication-status[release-status="Cancelled"]{
+    background-color: firebrick;
+}
+
+publication-status[release-status="Upcoming"]{
+    background-color: aqua;
+}
+
+publication-status[release-status="Status Unavailable"]{
+    background-color: gray;
+}
 
 publication img {
     position: absolute;

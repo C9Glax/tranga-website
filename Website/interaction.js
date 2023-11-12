@@ -198,27 +198,27 @@ function CreateManga(manga, connector){
 
     //Create the publication status indicator
     var releaseStatus = document.createElement('publication-status');
-    var statusTooltip = document.createElement('status-tooltip');
-    if (manga.releaseStatus == 0) {
-      releaseStatus.style.backgroundColor = 'limegreen';
-      statusTooltip.innerText = "Ongoing"
-    }else if(manga.releaseStatus == 1){
-      releaseStatus.style.backgroundColor = 'blueviolet';
-      statusTooltip.innerText = "Completed"
-    } else if (manga.releaseStatus == 2) {
-      releaseStatus.style.backgroundColor = 'darkorange';
-      statusTooltip.innerText = "On Hiatus"
-    } else if (manga.releaseStatus == 3) {
-      releaseStatus.style.backgroundColor = 'firebrick';
-      statusTooltip.innerText = "Cancelled"
-    } else if (manga.releaseStatus == 4) {
-      releaseStatus.style.backgroundColor = 'aqua';
-      statusTooltip.innerText = "Upcoming";
-    } else {
-      releaseStatus.style.backgroundColor = 'gray';
-        statusTooltip.innerText = 'Status Unavailable';
+    releaseStatus.setAttribute("release-status", manga.releaseStatus);
+    switch(manga.releaseStatus){
+      case 0:
+        releaseStatus.setAttribute("release-status", "Ongoing");
+        break;
+      case 1:
+        releaseStatus.setAttribute("release-status", "Completed");
+        break;
+      case 2:
+        releaseStatus.setAttribute("release-status", "On Hiatus");
+        break;
+      case 3:
+        releaseStatus.setAttribute("release-status", "Cancelled");
+        break;
+      case 4:
+        releaseStatus.setAttribute("release-status", "Upcoming");
+        break;
+      default:
+        releaseStatus.setAttribute("release-status", "Status Unavailable");
+        break;
     }
-    releaseStatus.appendChild(statusTooltip);         //Append the tooltip to the indicator circle
 
     info.appendChild(mangaName);
     mangaElement.appendChild(info);
