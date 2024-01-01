@@ -70,8 +70,8 @@ There is a single release:
 
 ### Docker
 
-Download [docker-compose.yaml](https://github.com/C9Glax/tranga-website/blob/cuttingedge/docker-compose.yaml) and configure to your needs. 
-The `docker-compose` also includes [Tranga](https://github.com/C9Glax/tranga) as backend. For its configuration refer to the repo README.
+Download [tranga](https://github.com/C9Glax/tranga) and configure the `docker-compose` to your needs. 
+For configuration refer to the repo README.
 
 <!-- ROADMAP -->
 ## Roadmap
