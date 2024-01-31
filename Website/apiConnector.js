@@ -198,6 +198,11 @@ function UpdateNtfy(ntfyEndpoint, ntfyAuth){
     PostData(uri);
 }
 
+function UpdateUserAgent(userAgent){
+    var uri = `${apiUri}/Settings/userAgent?userAgent=${userAgent}`;
+    PostData(uri);
+}
+
 function RemoveJob(jobId){
     var uri = `${apiUri}/Jobs?jobId=${jobId}`;
     DeleteData(uri);

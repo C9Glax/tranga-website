@@ -39,6 +39,7 @@ const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
+const settingUserAgent = document.querySelector("#userAgent");
 const settingApiUri = document.querySelector("#settingApiUri");
 const settingMangaHoverCheckbox = document.querySelector("#mangaHoverCheckbox");
 const newMangaPopup = document.querySelector("#newMangaPopup");
@@ -333,6 +334,7 @@ settingGotifyAppToken.addEventListener("keypress", (event) => { if(event.key ===
 settingLunaseaWebhook.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingNtfyEndpoint.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingNtfyAuth.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingUserAgent.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
 function OpenSettings(){
@@ -352,6 +354,7 @@ function OpenSettings(){
   settingLunaseaWebhook.value = "";
   settingNtfyAuth.value = "";
   settingNtfyEndpoint.value = "";
+  settingUserAgent.value = "";
   settingApiUri.value = "";
   settingMangaHoverCheckbox.checked = false;
   
@@ -359,6 +362,7 @@ function OpenSettings(){
     //console.log(json);
     settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
+    settingUserAgent.placeholder = json.userAgent;
     //console.log(json.styleSheet);
     if (json.styleSheet == 'hover') {
       settingMangaHoverCheckbox.checked = true;
@@ -451,8 +455,14 @@ function UpdateSettings(){
     UpdateNtfy(settingNtfyEndpoint.value, settingNtfyAuth.value);
   }
   
-  OpenSettings();
-  Setup();
+  if(settingUserAgent.value != ""){
+      UpdateUserAgent(settingUserAgent.value);
+  }
+  
+  setTimeout(() => {
+      OpenSettings();
+      Setup();
+  }, 100)
 }
 
 function utf8_to_b64(str) {
