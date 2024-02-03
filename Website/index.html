@@ -56,7 +56,10 @@
         <blur-background id="blurBackgroundSettingsPopup" onclick="
     settingsPopup.style.display = 'none';"></blur-background>
         <popup-window>
-          <popup-title>Settings</popup-title>
+          <titlebar>
+            <popup-title>Settings</popup-title>
+            <popup-close onclick="settingsPopup.style.display = 'none'">&times</popup-close>
+          </titlebar>
           <popup-content>
             <div>
               <p class="title">Download Location:</p>
@@ -106,12 +109,12 @@
               <label for="css-style"> Show manga titles and sources on hover</label><br>
             </div>
             <div>
-              <input type="submit" value="Update" onclick="UpdateSettings()">
-            </div>
-            <div>
               <input type="submit" value="Refresh Library Metadata" style="width: fit-content;"onclick="RefreshLibraryMetadata()">
             </div>
           </popup-content>
+          <titlebar>
+              <apply-settings onclick="UpdateSettings()">Apply Settings</apply-settings>
+          </titlebar>
         </popup-window>
       </popup>
 		
