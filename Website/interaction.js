@@ -59,18 +59,21 @@ function Setup(){
     loaderdiv.style.display = 'none';
     
     GetAvailableNotificationConnectors().then((json) => {
+      //console.log(json);
       json.forEach(connector => {
         notificationConnectorTypes[connector.Key] = connector.Value;
       });
     });
 
     GetAvailableLibraryConnectors().then((json) => {
+      //console.log(json);
       json.forEach(connector => {
         libraryConnectorTypes[connector.Key] = connector.Value;
       });
     });
 
     GetAvailableControllers().then((json) => {
+      //console.log(json);
       newMangaConnector.replaceChildren();
       json.forEach(connector => {        
         var option = document.createElement('option');
@@ -89,10 +92,10 @@ function Setup(){
       //console.log(json.styleSheet);
       if (json.styleSheet == 'hover') {
         settingMangaHoverCheckbox.checked = true;
-        document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+        document.getElementById('librarystyle').setAttribute('href', 'styles/card_hover.css');
       } else {
         settingMangaHoverCheckbox.checked = false;
-        document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+        document.getElementById('librarystyle').setAttribute('href', 'styles/card_compact.css');
       }
     });
     setInterval(() => {
@@ -105,11 +108,11 @@ Setup();
 function updateCSS(){
   if (document.getElementById("mangaHoverCheckbox").checked == true){
     ChangeStyleSheet('hover')
-    document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+    document.getElementById('librarystyle').setAttribute('href', 'styles/card_hover.css');
     //console.log('Changing theme to mangahover')
   } else {
     ChangeStyleSheet('default');
-    document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+    document.getElementById('librarystyle').setAttribute('href', 'styles/card_compact.css');
     //console.log('Changing theme to default')
   }
 }
@@ -338,11 +341,11 @@ settingUserAgent.addEventListener("keypress", (event) => { if(event.key === "Ent
 settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
 function OpenSettings(){
-  settingGotifyConfigured.innerText = "❌";
-  settingLunaseaConfigured.innerText = "❌";
-  settingNtfyConfigured.innerText = "❌";
-  settingKavitaConfigured.innerText = "❌";
-  settingKomgaConfigured.innerText = "❌";
+  settingGotifyConfigured.setAttribute("configuration", "Not Configured");
+  settingLunaseaConfigured.setAttribute("configuration", "Not Configured");
+  settingNtfyConfigured.setAttribute("configuration", "Not Configured");
+  settingKavitaConfigured.setAttribute("configuration", "Not Configured");
+  settingKomgaConfigured.setAttribute("configuration", "Not Configured");
   settingKomgaUrl.value = "";
   settingKomgaUser.value = "";
   settingKomgaPass.value = "";
@@ -366,10 +369,10 @@ function OpenSettings(){
     //console.log(json.styleSheet);
     if (json.styleSheet == 'hover') {
       settingMangaHoverCheckbox.checked = true;
-      document.getElementById('pagestyle').setAttribute('href', 'styles/style_mangahover.css');
+      document.getElementById('librarystyle').setAttribute('href', 'styles/card_hover.css');
     } else {
       settingMangaHoverCheckbox.checked = false;
-      document.getElementById('pagestyle').setAttribute('href', 'styles/style_default.css');
+      document.getElementById('librarystyle').setAttribute('href', 'styles/card_compact.css');
     }
   });
   GetLibraryConnectors().then((json) => {
@@ -377,16 +380,16 @@ function OpenSettings(){
     json.forEach(connector => {
       switch(libraryConnectorTypes[connector.libraryType]){
         case "Kavita":
-          settingKavitaConfigured.innerText = "✅";
-          settingKavitaUrl.placeholder = connector.baseUrl;
-          settingKavitaUser.placeholder = "***";
-          settingKavitaPass.placeholder = "***";
+          settingKavitaConfigured.setAttribute("configuration", "Active");
+          settingKavitaUrl.value = connector.baseUrl;
+          settingKavitaUser.value = "***";
+          settingKavitaPass.value = "***";
           break;
         case "Komga":
-          settingKomgaConfigured.innerText = "✅";
-          settingKomgaUrl.placeholder = connector.baseUrl;
-          settingKomgaUser.placeholder = "***";
-          settingKomgaPass.placeholder = "***";
+          settingKomgaConfigured.setAttribute("configuration", "Active");
+          settingKomgaUrl.value = connector.baseUrl;
+          settingKomgaUser.value = "***";
+          settingKomgaPass.value = "***";
           break;
         default:
           console.log("Unknown type");
@@ -396,22 +399,22 @@ function OpenSettings(){
     });
   });
   GetNotificationConnectors().then((json) => {
-    //console.log(json);
+    console.log(json);
     json.forEach(connector => {
       switch(notificationConnectorTypes[connector.notificationConnectorType]){
         case "Gotify":
-          settingGotifyUrl.placeholder = connector.endpoint;
-          settingGotifyAppToken.placeholder = "***";
-          settingGotifyConfigured.innerText = "✅";
+          settingGotifyUrl.value = connector.endpoint;
+          settingGotifyAppToken.value = "***";
+          settingGotifyConfigured.setAttribute("configuration", "Active");
           break;
         case "LunaSea":
-          settingLunaseaConfigured.innerText = "✅";
-          settingLunaseaWebhook.placeholder = connector.id;
+          settingLunaseaConfigured.setAttribute("configuration", "Active");
+          settingLunaseaWebhook.value = connector.id;
           break;
         case "Ntfy":
-          settingNtfyConfigured.innerText = "✅";
-          settingNtfyEndpoint.placeholder = connector.endpoint;
-          settingNtfyAuth.placeholder = "***";
+          settingNtfyConfigured.setAttribute("configuration", "Active");
+          settingNtfyEndpoint.value = connector.endpoint;
+          settingNtfyAuth.value = "***";
           break;
         default:
           console.log("Unknown type");
@@ -420,6 +423,43 @@ function OpenSettings(){
       }
     });
   });
+}
+
+//Functions for clearing/resetting connectors in the settings pop-up
+function ClearKomga(){
+  settingKomgaUrl.value = "";
+  settingKomgaUser.value = "";
+  settingKomgaPass.value = "";
+  settingKomgaConfigured.setAttribute("configuration", "Connector Not Configured");
+  ResetKomga();
+}
+
+function ClearKavita(){
+  settingKavitaUrl.value = "";
+  settingKavitaUser.value = "";
+  settingKavitaPass.value = "";
+  settingKavitaConfigured.setAttribute("configuration", "Connector Not Configured");
+  ResetKavita();
+}
+
+function ClearGotify(){
+  settingGotifyUrl.value = "";
+  settingGotifyAppToken.value = ""
+  settingGotifyConfigured.setAttribute("configuration", "Connector Not Configured");
+  ResetGotify();
+}
+
+function ClearLunasea(){
+  settingLunaseaWebhook.value = "";
+  settingLunaseaConfigured.setAttribute("configuration", "Connector Not Configured");
+  ResetLunaSea();
+}
+
+function ClearNtfy(){
+  settingNtfyEndpoint.value = "";
+  settingNtfyAuth.value = "";
+  settingNtfyConfigured.setAttribute("configuration", "Connector Not Configured");
+  ResetNtfy();
 }
 
 function UpdateSettings(){

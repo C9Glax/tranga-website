@@ -173,28 +173,79 @@ function RefreshLibraryMetadata() {
     PostData(uri);
 }
 
+//Komga
 function UpdateKomga(komgaUrl, komgaAuth){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
     PostData(uri);
 }
 
+function ResetKomga(){
+    var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Komga`;
+}
+
+function TestKomga(komgaUrl, komgaAuth){
+    var uri = `${apiUri}/LibraryConnectors/Test?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
+    PostData(uri);
+}
+
+
+//Kavita
 function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
     PostData(uri);
 }
 
+function ResetKavita(){
+    var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Kavita`;
+}
+
+function TestKavita(kavitaUrl, kavitaUsername, kavitaPassword){
+    var uri = `${apiUri}/LibraryConnectors/Test?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
+    PostData(uri);
+}
+
+//Gotify
 function UpdateGotify(gotifyUrl, gotifyAppToken){
     var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
     PostData(uri);
 }
 
+function ResetGotify(){
+    var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=Gotify`;
+}
+
+function TestGotify(gotifyUrl, gotifyAppToken){
+    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
+    PostData(uri);
+}
+
+//LunaSea
 function UpdateLunaSea(lunaseaWebhook){
     var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
     PostData(uri);
 }
 
+function ResetLunaSea(){
+    var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=LunaSea`;
+}
+
+function TestLunaSea(lunaseaWebhook){
+    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
+    PostData(uri);
+}
+
+//Ntfy
 function UpdateNtfy(ntfyEndpoint, ntfyAuth){
     var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
+    PostData(uri);
+}
+
+function ResetNtfy(){
+    var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=Ntfy`;
+}
+
+function TestNtfy(ntfyEndpoint, ntfyAuth){
+    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
     PostData(uri);
 }
 
@@ -216,5 +267,6 @@ function CancelJob(jobId){
 async function GetLogmessages(count){
 	var uri = `${apiUri}/LogMessages?count=${count}`;
 	let json = await GetData(uri);
+    console.log(json);
 	return json;
 }
