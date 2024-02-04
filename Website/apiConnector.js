@@ -181,6 +181,7 @@ function UpdateKomga(komgaUrl, komgaAuth){
 
 function ResetKomga(){
     var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Komga`;
+    PostData(uri);
 }
 
 function TestKomga(komgaUrl, komgaAuth){
@@ -197,6 +198,7 @@ function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
 
 function ResetKavita(){
     var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Kavita`;
+    PostData(uri);
 }
 
 function TestKavita(kavitaUrl, kavitaUsername, kavitaPassword){
@@ -212,6 +214,7 @@ function UpdateGotify(gotifyUrl, gotifyAppToken){
 
 function ResetGotify(){
     var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=Gotify`;
+    PostData(uri);
 }
 
 function TestGotify(gotifyUrl, gotifyAppToken){
@@ -227,6 +230,7 @@ function UpdateLunaSea(lunaseaWebhook){
 
 function ResetLunaSea(){
     var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=LunaSea`;
+    PostData(uri);
 }
 
 function TestLunaSea(lunaseaWebhook){
@@ -242,6 +246,7 @@ function UpdateNtfy(ntfyEndpoint, ntfyAuth){
 
 function ResetNtfy(){
     var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=Ntfy`;
+    PostData(uri);
 }
 
 function TestNtfy(ntfyEndpoint, ntfyAuth){
