@@ -5,10 +5,18 @@ let notificationConnectorTypes = [];
 let libraryConnectorTypes = [];
 let selectedManga;
 let selectedJob;
+let searchMatch;
+
+let connectorMatch = [];
+let connectorNameMatch;
+let statusMatch = [];
+let statusNameMatch = [];
 
 const searchBox = document.querySelector("#searchbox");
 const settingsPopup = document.querySelector("#settingsPopup");
+const filterBox = document.querySelector("#filterBox");
 const settingsCog = document.querySelector("#settingscog");
+const filterFunnel = document.querySelector("#filterFunnel");
 const tasksContent = document.querySelector("content");
 const createMonitorTaskButton = document.querySelector("#createMonitoJobButton");
 const createDownloadChapterTaskButton = document.querySelector("#createDownloadChapterJobButton");
@@ -75,12 +83,39 @@ function Setup(){
     GetAvailableControllers().then((json) => {
       //console.log(json);
       newMangaConnector.replaceChildren();
-      json.forEach(connector => {        
+      connectorFilterBox = document.querySelector("#connectorFilterBox");
+      json.forEach(connector => {
+        //Add the connector to the New Manga dropdown        
         var option = document.createElement('option');
         option.value = connector;
         option.innerText = connector;
         newMangaConnector.appendChild(option);
+
+        //Add the connector to the filter box
+        connectorFilter = document.createElement('connector-name');
+        connectorFilter.innerText = connector;
+        connectorFilter.className = "pill";
+        connectorFilter.style.backgroundColor = stringToColour(connector);
+
+        connectorFilter.addEventListener("click", (event) => {
+          ToggleFilterConnector(connector, event);
+        });
+        connectorFilterBox.appendChild(connectorFilter);
       });
+    });
+
+    //Add the publication status options to the filter bar
+    publicationStatusOptions = ["Ongoing", "Completed", "On Hiatus", "Cancelled", "Upcoming", "Status Unavailable"]; 
+    statusFilterBox = document.querySelector("#statusFilterBox");
+    publicationStatusOptions.forEach(publicationStatus => {
+      var releaseStatus = document.createElement('status-filter');
+      releaseStatus.innerText = publicationStatus;
+      releaseStatus.setAttribute("release-status", publicationStatus);
+      releaseStatus.addEventListener("click", (event) => {
+        ToggleFilterStatus(publicationStatus, event);
+      });
+
+      statusFilterBox.appendChild(releaseStatus);
     });
     
     ResetContent();
@@ -102,8 +137,47 @@ function Setup(){
       UpdateJobs();
     }, 1000);
   });
+  //Clear the previous values if any exist.
+  searchBox.value = "";
+  connectorMatch.length = 0;
+  statusMatch.length = 0;
 }
 Setup();
+
+function ToggleFilterConnector(connector) {
+  //console.log("Initial Array:");
+  //console.log(connectorMatch);
+  if (connectorMatch.includes(connector)) {
+    idx = connectorMatch.indexOf(connector);
+    connectorMatch.splice(idx, 1);
+  } else {
+    connectorMatch.push(connector);
+  }
+  //console.log("Final Array");
+  //console.log(connectorMatch);
+  FilterResults();
+}
+
+function ToggleFilterStatus(status) {
+  //console.log("Initial Array:");
+  //console.log(statusMatch);
+  if (statusMatch.includes(status)) {
+    idx = statusMatch.indexOf(status);
+    statusMatch.splice(idx, 1);
+  } else {
+    statusMatch.push(status);
+  }
+  //console.log("Final Array");
+  //console.log(statusMatch);
+  FilterResults();
+}
+
+function ClearFilter() {
+  searchBox.value = "";
+  statusMatch.length = 0;
+  connectorMatch.length = 0;
+  FilterResults();
+}
 
 function updateCSS(){
   if (document.getElementById("mangaHoverCheckbox").checked == true){
@@ -300,30 +374,81 @@ function HidePublicationPopup(){
 searchBox.addEventListener("keyup", () => FilterResults());
 //Filter shown jobs
 function FilterResults(){
-    if(searchBox.value.length > 0){
-        tasksContent.childNodes.forEach(publication => {
-            publication.childNodes.forEach(item => {
-                if(item.nodeName.toLowerCase() == "publication-information"){
-                    item.childNodes.forEach(information => {
-                        if(information.nodeName.toLowerCase() == "publication-name"){
-                            if(!information.textContent.toLowerCase().includes(searchBox.value.toLowerCase())){
-                                publication.style.display = "none";
-                            }else{
-                                publication.style.display = "initial";
-                            }
-                        }
-                    });
-                }
-            });
-        });
-    }else{
-        tasksContent.childNodes.forEach(publication => publication.style.display = "initial");
+  //For each publication   
+  tasksContent.childNodes.forEach(publication => {
+    //If the search box isn't empty check that the title contains the searchbox content. If it does then
+    //'searchMatch' is true and the manga is shown. If the search box is empty, then consider this field
+    //to be true anyways.
+    if (searchBox.value.length > 0) {
+      publication.childNodes.forEach(item => {
+        if (item.nodeName.toLowerCase() == "publication-information"){
+          item.childNodes.forEach(information => {
+            if (information.nodeName.toLowerCase() == "publication-name") {
+              if (information.textContent.toLowerCase().includes(searchBox.value.toLowerCase())){
+                searchMatch = 1;
+              } else {
+                searchMatch = 0;
+              }
+            }
+          });
+        }
+      });
+    } else {  
+      searchMatch = 1;
     }
+
+    //If the array connectorMatch isn't empty then check that the connector matches one of the ones
+    //in the array
+    if (connectorMatch.length > 0) {
+      publication.childNodes.forEach(item => {
+        if (item.nodeName.toLowerCase() == "publication-information"){
+          item.childNodes.forEach(information => {
+            if (information.nodeName.toLowerCase() == "connector-name") {
+              if (connectorMatch.includes(information.textContent)){
+                connectorNameMatch = 1;
+              } else {
+                connectorNameMatch = 0;
+              }
+            }
+          });
+        }
+      });
+    } else {
+      connectorNameMatch = 1;
+    }
+
+    //If the array statusMatch isn't empty then check that the status matches one of the ones
+    //in the array
+    if (statusMatch.length > 0) {
+      publication.childNodes.forEach(item => {
+        if (item.nodeName.toLowerCase() == "publication-status"){
+          if (statusMatch.includes(item.getAttribute('release-status'))) {
+            statusNameMatch = 1;
+          } else {
+            statusNameMatch = 0;
+          }
+        }
+      });
+    } else {
+      statusNameMatch = 1;
+    }
+
+    //If all of the filtering conditions are met then show the manga, otherwise hide it.
+    if (searchMatch && connectorNameMatch && statusNameMatch) {
+      publication.style.display = 'initial';
+    } else {
+      publication.style.display = 'none';
+    }
+  });
 }
 
 settingsCog.addEventListener("click", () => {
   OpenSettings();
   settingsPopup.style.display = "flex";
+});
+
+filterFunnel.addEventListener("click", () => {
+  filterBox.classList.toggle("animate");
 });
 
 settingKomgaUrl.addEventListener("keypress", (event) => { { if(event.key === "Enter") UpdateSettings(); } });
@@ -430,7 +555,7 @@ function ClearKomga(){
   settingKomgaUrl.value = "";
   settingKomgaUser.value = "";
   settingKomgaPass.value = "";
-  settingKomgaConfigured.setAttribute("configuration", "Connector Not Configured");
+  settingKomgaConfigured.setAttribute("configuration", "Not Configured");
   ResetKomga();
 }
 
@@ -438,27 +563,27 @@ function ClearKavita(){
   settingKavitaUrl.value = "";
   settingKavitaUser.value = "";
   settingKavitaPass.value = "";
-  settingKavitaConfigured.setAttribute("configuration", "Connector Not Configured");
+  settingKavitaConfigured.setAttribute("configuration", "Not Configured");
   ResetKavita();
 }
 
 function ClearGotify(){
   settingGotifyUrl.value = "";
   settingGotifyAppToken.value = ""
-  settingGotifyConfigured.setAttribute("configuration", "Connector Not Configured");
+  settingGotifyConfigured.setAttribute("configuration", "Not Configured");
   ResetGotify();
 }
 
 function ClearLunasea(){
   settingLunaseaWebhook.value = "";
-  settingLunaseaConfigured.setAttribute("configuration", "Connector Not Configured");
+  settingLunaseaConfigured.setAttribute("configuration", "Not Configured");
   ResetLunaSea();
 }
 
 function ClearNtfy(){
   settingNtfyEndpoint.value = "";
   settingNtfyAuth.value = "";
-  settingNtfyConfigured.setAttribute("configuration", "Connector Not Configured");
+  settingNtfyConfigured.setAttribute("configuration", "Not Configured");
   ResetNtfy();
 }
 

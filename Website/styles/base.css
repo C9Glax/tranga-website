@@ -69,7 +69,6 @@ titlebox span{
 
 titlebox img {
     height: 100%;
-    margin-right: 10px;
     cursor: grab;
 }
 
@@ -77,22 +76,156 @@ spacer{
     flex-grow: 1;
 }
 
-searchdiv{
+filter-box {
+    display: none;
+    align-self: center;
+    flex-direction: column;
+    position: relative;
+
+    margin: 10px;
+    background-color: var(--second-background-color);
+    border-style: solid;
+    border-color: var(--primary-color);
+    border-width: 2px;
+    border-radius: 15px;
+    min-width: 300px;
+    width: 50%;
+    overflow: hidden;
+    max-height: 50%;
+    height: 400px;
+}
+
+filter-box.animate {
+    display: flex;
+}
+
+filter-box border-bar popup-title{
+    font-size: 12pt;
+}
+
+filter-box border-bar popup-close {
+    height: 20px;
+    width: 20px;
+    font-size: 12pt;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+border-bar-button.clearFilter{
+    font-weight: bold;
+    margin: 0px 10px 10px 10px;
+    border-color: lightgray;
+    color: gray;
+    align-content: center;
+    justify-content: center;
+}
+
+border-bar-button.clearFilter:hover {
+    background-color: red;
+    border-color: var(--second-background-color);
+    color: var(--second-background-color);
+}
+
+status-filter {
     display: block;
-    margin: 0 10px 0 0;
+    margin: 10px;
+
+    /*Text Properties*/
+    font-size:10pt;
+    font-weight:bold;
+    color:white;
+    text-align: center;
+
+    /*Size*/
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 0px;
+    background-color: inherit;
+
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+status-filter[release-status="Ongoing"]{
+    background-color: limegreen;
+}
+
+status-filter[release-status="Completed"]{
+    background-color: blueviolet;
+}
+
+status-filter[release-status="On Hiatus"]{
+    background-color: darkorange;
+}
+
+status-filter[release-status="Cancelled"]{
+    background-color: firebrick;
+}
+
+status-filter[release-status="Upcoming"]{
+    background-color: aqua;
+}
+
+status-filter[release-status="Status Unavailable"]{
+    background-color: gray;
+}
+
+
+searchdiv{
+    display: flex;
+    width: 100%;
 }
 
 #searchbox {
-    padding: 3px 10px;
-    border: 0;
-    border-radius: 4px;
-    font-size: 14pt;
-    width: 250px;
+    display: flex;
+    padding: 3px 5px;
+    margin: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    font-size: 12pt;   
+    outline: none;
+    border-color: lightgray;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+#searchbox:focus {
+    border-color: var(--secondary-color);
+}
+
+.pill {
+    flex-grow: 0;
+    height: 14pt;
+    font-size: 12pt;
+    border-radius: 9pt;
+    background-color: var(--primary-color);
+    padding: 2pt 17px;
+    color: black;
+}
+
+#connectorFilterBox .pill {
+    margin: 10px;
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 #settingscog {
     cursor: pointer;
     margin: 0px 30px;
+    margin-left: 15px;
+    height: 50%;
+    filter: invert(100%) sepia(0%) saturate(7465%) hue-rotate(115deg) brightness(116%) contrast(101%);
+}
+
+#filterFunnel {
+    cursor: pointer;
+    margin: 0px 15px;
     height: 50%;
     filter: invert(100%) sepia(0%) saturate(7465%) hue-rotate(115deg) brightness(116%) contrast(101%);
 }
@@ -179,6 +312,7 @@ border-bar {
     margin:0;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 
 popup-title {
@@ -198,7 +332,7 @@ popup-close {
     display: flex;
     cursor: pointer;
     margin-left: auto;
-    margin-right: 5;
+    margin-right: 15px;
     height: 32px;
     width: 32px;
     border-radius: 16px;
@@ -268,7 +402,7 @@ popup popup-window {
     overflow: hidden;
 }
 
-popup popup-window popup-content{
+popup-content{
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -288,7 +422,7 @@ popup-content > .popup-section {
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: lightgray;
-    width: 100%;
+    width: calc(100%-10px);
     padding: 10px;
 }
 
@@ -376,8 +510,6 @@ popup-content > .popup-section {
 .section-item > .title > connector-configured[configuration="Not Configured"] {
     background-color: gray;
 }
-
-
 
 .section-item > input {
     margin: 2px; 

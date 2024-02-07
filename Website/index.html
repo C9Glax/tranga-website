@@ -9,17 +9,44 @@
 </head>
 <body>
   <wrapper>
+
     <topbar>
       <titlebox>
         <img alt="website image is Blahaj" src="media/blahaj.png">
         <span>Tranga</span>
       </titlebox>
       <spacer></spacer>
-      <searchdiv>
-        <label for="searchbox"></label><input id="searchbox" placeholder="Filter" type="text">
-      </searchdiv>
+      <img id="filterFunnel" src="media/filter-funnel.svg" height="50%" alt="filterFunnel">
       <img id="settingscog" src="media/settings-cogwheel.svg" height="100%" alt="settingscog">
     </topbar>
+
+    <filter-box id="filterBox">
+      <border-bar>
+        <popup-title>Filter by: </popup-title>
+        <popup-close onclick="filterBox.classList.toggle('animate')" >&times</popup-close>
+      </border-bar>
+      <popup-content>
+        <div class="popup-section">
+          NAME:
+          <div class="section-content">
+            <label for="searchbox"></label><input id="searchbox" placeholder="Title" type="text">
+          </div>
+        </div>
+        <div class = "popup-section">
+          CONNECTOR:
+          <div class="section-content" id="connectorFilterBox">
+          </div>
+        </div>
+        <div class = "popup-section">
+          STATUS:
+          <div class="section-content" id="statusFilterBox">
+          </div>
+        </div>
+      </popup-content>
+      <border-bar-button onclick="ClearFilter()" class="clearFilter">Clear Filter</border-bar-button>
+    </filter-box>
+
+
     <viewport>
       <div id="loaderdiv">
         <blur-background></blur-background>
@@ -54,8 +81,7 @@
       </popup>
       
       <popup id="settingsPopup">
-        <blur-background id="blurBackgroundSettingsPopup" onclick="
-    settingsPopup.style.display = 'none';"></blur-background>
+        <blur-background id="blurBackgroundSettingsPopup" onclick="settingsPopup.style.display = 'none';"></blur-background>
         <popup-window>
           <border-bar>
             <popup-title>Settings</popup-title>
