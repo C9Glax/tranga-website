@@ -92,7 +92,7 @@ filter-box {
     width: 50%;
     overflow: hidden;
     max-height: 50%;
-    height: 400px;
+    height: 600px;
 }
 
 filter-box.animate {
@@ -390,6 +390,22 @@ border-bar-button.primary:hover {
     border-color: var(--accent-color);
 }
 
+border-bar-button.section {
+    font-weight: bold;
+    color: darkgray;
+    border-color: darkgray;
+    text-align: center;
+    padding: 5px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+border-bar-button.section:hover {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+
 popup popup-window {
     position: absolute;
     z-index: 3;
@@ -449,7 +465,7 @@ popup-content > .popup-section {
     padding: 5px;
 }
 
-.section-item.manga {
+.section-item.dyn-height {
     height: fit-content;
 }
 
@@ -538,7 +554,7 @@ a:active {
 
 .section-item > input {
     margin: 2px; 
-    padding: 2px;
+    padding: 5px;
     height: 20px;
     border-radius: 10px;
     border-style: solid;
@@ -554,12 +570,13 @@ a:active {
     flex-direction: row;
     align-items: center;
     margin-left: 5px;
+    margin-bottom: 5px;
 }
 
 .section-item > row > input {
     margin-left: auto;
     margin-right: 2px; 
-    padding: 2px;
+    padding: 5px;
     height: 20px;
     border-radius: 10px;
     border-style: solid;
@@ -573,6 +590,23 @@ a:active {
     border-color: var(--secondary-color);
 }
 
+.section-item > row > select {
+    margin-left: auto;
+    margin-right: 2px; 
+    padding: 2px;
+    height: 30px;
+    border-radius: 10px;
+    border-style: solid;
+    outline: none;
+    flex-grow: 0;
+    text-align: end;
+    float: right;
+    width: 200px;
+}
+
+.section-item > row > select:focus {
+    border-color: var(--secondary-color);
+}
 
 .section-buttons-container {
     display: flex;

@@ -163,14 +163,14 @@ function UpdateDownloadLocation(downloadLocation){
     PostData(uri);	
 }
 
-function ChangeStyleSheet(sheet){
-    var uri = `${apiUri}/Settings/ChangeStyleSheet?styleSheet=${sheet}`;
-    PostData(uri);
-}
-
 function RefreshLibraryMetadata() {
     var uri = `${apiUri}/Jobs/UpdateMetadata`;
     PostData(uri);
+}
+
+async function DownloadLogs() {
+    var uri = `${apiUri}/LogFile`;
+    let response = await GetData(uri);
 }
 
 //Komga

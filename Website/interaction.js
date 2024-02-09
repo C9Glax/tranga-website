@@ -23,6 +23,8 @@ const createDownloadChapterTaskButton = document.querySelector("#createDownloadC
 const startJobButton = document.querySelector("#startJobButton");
 const cancelJobButton = document.querySelector("#cancelJobButton");
 const deleteJobButton = document.querySelector("#deleteJobButton");
+
+//Manga viewer popup
 const mangaViewerPopup = document.querySelector("#publicationViewerPopup");
 const mangaViewerWindow = document.querySelector("publication-viewer");
 const mangaViewerDescription = document.querySelector("#publicationViewerDescription");
@@ -30,8 +32,8 @@ const mangaViewerName = document.querySelector("#publicationViewerName");
 const mangaViewerTags = document.querySelector("#publicationViewerTags");
 const mangaViewerAuthor = document.querySelector("#publicationViewerAuthor");
 const mangaViewCover = document.querySelector("#pubviewcover");
-const settingDownloadLocation = document.querySelector("#downloadLocation");
 
+//Rate Limits
 const manganatoRateLimit = document.querySelector('#manganatoRL');
 const mangaseeRateLimit = document.querySelector('#mangaseeRL');
 const mangadexRateLimit = document.querySelector('#mDexRL');
@@ -40,22 +42,28 @@ const mangaworldRateLimit = document.querySelector('#mWorldRL');
 const batoRateLimit = document.querySelector('#batoRL');
 const mangalifeRateLimit = document.querySelector('#mLifeRL');
 
+//Komga
 const settingKomgaUrl = document.querySelector("#komgaUrl");
 const settingKomgaUser = document.querySelector("#komgaUsername");
 const settingKomgaPass = document.querySelector("#komgaPassword");
 
+//Kavita
 const settingKavitaUrl = document.querySelector("#kavitaUrl");
 const settingKavitaUser = document.querySelector("#kavitaUsername");
 const settingKavitaPass = document.querySelector("#kavitaPassword");
 
+//Gotify
 const settingGotifyUrl = document.querySelector("#gotifyUrl");
 const settingGotifyAppToken = document.querySelector("#gotifyAppToken");
 
+//Lunasea
 const settingLunaseaWebhook = document.querySelector("#lunaseaWebhook");
 
+//Ntfy
 const settingNtfyEndpoint = document.querySelector("#ntfyEndpoint");
 const settingNtfyAuth = document.querySelector("#ntfyAuth");
 
+//Connector Configured
 const settingKomgaConfigured = document.querySelector("#komgaConfigured");
 const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
@@ -64,12 +72,14 @@ const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
 
 const settingUserAgent = document.querySelector("#userAgent");
 const settingApiUri = document.querySelector("#settingApiUri");
-const settingMangaHoverCheckbox = document.querySelector("#mangaHoverCheckbox");
+const settingCSSStyle = document.querySelector('#cssStyle');
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
 const newMangaTitle = document.querySelector("#newMangaTitle");
 const newMangaResult = document.querySelector("#newMangaResult");
 const newMangaTranslatedLanguage = document.querySelector("#newMangaTranslatedLanguage");
+
+//Jobs
 const jobsRunningTag = document.querySelector("#jobsRunningTag");
 const jobsQueuedTag = document.querySelector("#jobsQueuedTag");
 const loaderdiv = document.querySelector('#loaderdiv');
@@ -137,17 +147,20 @@ function Setup(){
     UpdateJobs();
     GetSettings().then((json) => {
       //console.log(json);
-      settingDownloadLocation.innerText = json.downloadLocation;
       settingApiUri.placeholder = apiUri;
-      //console.log(json.styleSheet);
-      if (json.styleSheet == 'hover') {
-        settingMangaHoverCheckbox.checked = true;
-        document.getElementById('librarystyle').setAttribute('href', 'styles/card_hover.css');
-      } else {
-        settingMangaHoverCheckbox.checked = false;
-        document.getElementById('librarystyle').setAttribute('href', 'styles/card_compact.css');
-      }
     });
+
+    //If the cssStyle key isn't in the local storage of the browser, then set the css style to the default and load the page
+    //Otherwise get the style key from storage and set it.
+    if (!localStorage.getItem('cssStyle')) {
+      localStorage.setItem('cssStyle', 'card_compact');
+      document.getElementById('librarystyle').setAttribute('href', 'styles/' + localStorage.getItem('cssStyle') + '.css');
+      document.getElementById('card_compact').selected = true;
+    } else {
+      css_style = localStorage.getItem('cssStyle');
+      document.getElementById('librarystyle').setAttribute('href', 'styles/' + css_style + '.css');
+      document.getElementById(css_style).selected = true;
+    }
     setInterval(() => {
       UpdateJobs();
     }, 1000);
@@ -219,17 +232,10 @@ function ClearFilter() {
   });
 }
 
-function updateCSS(){
-  if (document.getElementById("mangaHoverCheckbox").checked == true){
-    ChangeStyleSheet('hover')
-    document.getElementById('librarystyle').setAttribute('href', 'styles/card_hover.css');
-    //console.log('Changing theme to mangahover')
-  } else {
-    ChangeStyleSheet('default');
-    document.getElementById('librarystyle').setAttribute('href', 'styles/card_compact.css');
-    //console.log('Changing theme to default')
-  }
-}
+settingCSSStyle.addEventListener("change", (event) => {
+  localStorage.setItem('cssStyle', settingCSSStyle.value);
+  document.getElementById('librarystyle').setAttribute('href', 'styles/' + localStorage.getItem('cssStyle') + '.css');
+}); 
 
 function ResetContent(){
     //Delete everything
@@ -582,21 +588,12 @@ function OpenSettings(){
   settingNtfyEndpoint.value = "";
   settingUserAgent.value = "";
   settingApiUri.value = "";
-  settingMangaHoverCheckbox.checked = false;
   
   GetSettings().then((json) => {
     //console.log(json);
-    settingDownloadLocation.innerText = json.downloadLocation;
     settingApiUri.placeholder = apiUri;
     settingUserAgent.placeholder = json.userAgent;
     //console.log(json.styleSheet);
-    if (json.styleSheet == 'hover') {
-      settingMangaHoverCheckbox.checked = true;
-      document.getElementById('librarystyle').setAttribute('href', 'styles/card_hover.css');
-    } else {
-      settingMangaHoverCheckbox.checked = false;
-      document.getElementById('librarystyle').setAttribute('href', 'styles/card_compact.css');
-    }
   });
   GetLibraryConnectors().then((json) => {
     //console.log(json);

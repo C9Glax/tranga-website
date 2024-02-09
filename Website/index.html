@@ -91,36 +91,54 @@
 
             <div class="popup-section">
               TRANGA
+              <div class="section-content">
+                <div class="section-item dyn-height">
+                  <span class="title">API Settings</span>
+                  <row><label for="settingApiUri">API URI:</label><input placeholder="https://" type="text" id="settingApiUri"></row>
+                  <row><label for="userAgent">User Agent:</label><input placeholder="UserAgent" id="userAgent" type="text"></row>
+                  <row>
+                    <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
+                    <border-bar-button class="section" onclick="DownloadLogs()">Download Logs</border-bar-button>
+                  </row>
+                </div>
+                <div class="section-item dyn-height">
+                  <span class="title">Appearance</span>
+                  <row><label for="cssStyle">Library Style:</label><select id="cssStyle">
+                    <option id="card_compact" value="card_compact">Cards (Compact)</option>
+                    <option id="card_hover" value="card_hover">Cards (Hover)</option>
+                  </select></row>
+                </div>
+              </div>
             </div>
 
             <div class="popup-section">
               MANGA SOURCES
               <div class="section-content">
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/manganato.png"><a href="https://manganato.com">MangaNato</a></span>
                   <row><label for="manganatoRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="manganatoRL" type="text"></row>
                 </div>
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/mangasee.png"><a href="https://mangasee123.com">MangaSee</a></span>
                   <row><label for="mangaseeRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="mangaseeRL" type="text"></row>
                 </div>
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/mangadex-logo.svg"><a href="https://mangadex.org">MangaDex</a></span>
                   <row><label for="mDexRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="mDexRL" type="text"></row>
                 </div>
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/mangakatana.png"><a href="https://mangakatana.com">MangaKatana</a></span>
                   <row><label for="mKatanaRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="mKatanaRL" type="text"></row>
                 </div>
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/mangaworld.png"><a href="https://www.mangaworld.ac">MangaWorld</a></span>
                   <row><label for="mWorldRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="mWorldRL" type="text"></row>
                 </div>
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/bato.ico"><a href="https://bato.to">Bato</a></span>
                   <row><label for="batoRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="batoRL" type="text"></row>
                 </div>
-                <div class="section-item manga">
+                <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/mangalife.png"><a href="https://www.manga4life.com">MangaLife</a></span>
                   <row><label for="mLifeRL">Rate Limit: </label><input placeholder="60 Requests/Minute" id="mLifeRL" type="text"></row>
                 </div>
@@ -189,25 +207,9 @@
                   </div>
                   </div>
                 </div>
-            </div>
-
-            <div>
-              <p class="title">Download Location:</p>
-              <span id="downloadLocation"></span>
-            </div>
-            <div>
-              <p class="title">API-URI</p>
-              <label for="settingApiUri"></label><input placeholder="https://" type="text" id="settingApiUri">
-            </div>
-            <div>
-              <span class="title">UserAgent</span><br />
-              <label for="userAgent"></label><input style="width: 400px" placeholder="UserAgent" id="userAgent" type="text">
-            </div>
-            <div>
-              <input type="checkbox" id="mangaHoverCheckbox" name="css-style" value="style_mangahover.css" onclick="updateCSS()">
-              <label for="css-style"> Show manga titles and sources on hover</label><br>
-            </div>
+            </div> 
           </popup-content>
+
           <border-bar>
             <div class="button-container">
               <border-bar-button onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
