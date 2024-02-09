@@ -721,6 +721,34 @@ function UpdateSettings(){
   if(settingUserAgent.value != ""){
       UpdateUserAgent(settingUserAgent.value);
   }
+
+  if (manganatoRateLimit.value.length > 0) {
+    UpdateRateLimit('Manganato', 1, manganatoRateLimit.value);
+  }
+
+  if (mangaseeRateLimit.value.length > 0) {
+    UpdateRateLimit('Mangasee', 1, mangaseeRateLimit.value);
+  }
+
+  if (mangadexRateLimit.value.length > 0) {
+    UpdateRateLimit('MangaDex', 250, mangadexRateLimit.value);
+  }
+
+  if (mangakatanaRateLimit.value.length > 0) {
+    UpdateRateLimit('MangaKatana', 1, mangakatanaRateLimit.value);
+  }
+
+  if (mangaworldRateLimit.value.length > 0) {
+    UpdateRateLimit('Mangaworld', 1, mangaworldRateLimit.value);
+  }
+
+  if (batoRateLimit.value.length > 0) {
+    UpdateRateLimit('Bato', 1, batoRateLimit.value);
+  }
+
+  if (mangalifeRateLimit.value.length > 0) {
+    UpdateRateLimit('Manga4Life', 1, mangalifeRateLimit.value);
+  }
   
   setTimeout(() => {
       OpenSettings();
