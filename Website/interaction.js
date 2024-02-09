@@ -31,22 +31,37 @@ const mangaViewerTags = document.querySelector("#publicationViewerTags");
 const mangaViewerAuthor = document.querySelector("#publicationViewerAuthor");
 const mangaViewCover = document.querySelector("#pubviewcover");
 const settingDownloadLocation = document.querySelector("#downloadLocation");
+
+const manganatoRateLimit = document.querySelector('#manganatoRL');
+const mangaseeRateLimit = document.querySelector('#mangaseeRL');
+const mangadexRateLimit = document.querySelector('#mDexRL');
+const mangakatanaRateLimit = document.querySelector('#mKatanaRL');
+const mangaworldRateLimit = document.querySelector('#mWorldRL');
+const batoRateLimit = document.querySelector('#batoRL');
+const mangalifeRateLimit = document.querySelector('#mLifeRL');
+
 const settingKomgaUrl = document.querySelector("#komgaUrl");
 const settingKomgaUser = document.querySelector("#komgaUsername");
 const settingKomgaPass = document.querySelector("#komgaPassword");
+
 const settingKavitaUrl = document.querySelector("#kavitaUrl");
 const settingKavitaUser = document.querySelector("#kavitaUsername");
 const settingKavitaPass = document.querySelector("#kavitaPassword");
+
 const settingGotifyUrl = document.querySelector("#gotifyUrl");
 const settingGotifyAppToken = document.querySelector("#gotifyAppToken");
+
 const settingLunaseaWebhook = document.querySelector("#lunaseaWebhook");
+
 const settingNtfyEndpoint = document.querySelector("#ntfyEndpoint");
 const settingNtfyAuth = document.querySelector("#ntfyAuth");
+
 const settingKomgaConfigured = document.querySelector("#komgaConfigured");
 const settingKavitaConfigured = document.querySelector("#kavitaConfigured");
 const settingGotifyConfigured = document.querySelector("#gotifyConfigured");
 const settingLunaseaConfigured = document.querySelector("#lunaseaConfigured");
 const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
+
 const settingUserAgent = document.querySelector("#userAgent");
 const settingApiUri = document.querySelector("#settingApiUri");
 const settingMangaHoverCheckbox = document.querySelector("#mangaHoverCheckbox");
@@ -144,28 +159,36 @@ function Setup(){
 }
 Setup();
 
-function ToggleFilterConnector(connector) {
+function ToggleFilterConnector(connector, event) {
   //console.log("Initial Array:");
   //console.log(connectorMatch);
   if (connectorMatch.includes(connector)) {
     idx = connectorMatch.indexOf(connector);
     connectorMatch.splice(idx, 1);
+    event.target.style.outline = 'none';
+    event.target.style.outlineOffset = "0px";
   } else {
     connectorMatch.push(connector);
+    event.target.style.outline = '4px solid var(--secondary-color)';
+    event.target.style.outlineOffset = '3px';
   }
   //console.log("Final Array");
   //console.log(connectorMatch);
   FilterResults();
 }
 
-function ToggleFilterStatus(status) {
+function ToggleFilterStatus(status, event) {
   //console.log("Initial Array:");
   //console.log(statusMatch);
   if (statusMatch.includes(status)) {
     idx = statusMatch.indexOf(status);
     statusMatch.splice(idx, 1);
+    event.target.style.outline = 'none';
+    event.target.style.outlineOffset = "0px";
   } else {
     statusMatch.push(status);
+    event.target.style.outline = '4px solid var(--secondary-color)';
+    event.target.style.outlineOffset = '3px';
   }
   //console.log("Final Array");
   //console.log(statusMatch);
@@ -177,6 +200,23 @@ function ClearFilter() {
   statusMatch.length = 0;
   connectorMatch.length = 0;
   FilterResults();
+
+  //Get rid of the outlines
+  connectorFilterBox = document.querySelector("#connectorFilterBox");
+  connectorFilterBox.childNodes.forEach(connector => {
+    if (connector.nodeName.toLowerCase() == 'connector-name') {
+      connector.style.outline = 'none';
+      connector.style.outlineOffset = "0px";
+    }
+  });
+
+  statusFilterBox = document.querySelector("#statusFilterBox");
+  statusFilterBox.childNodes.forEach(publicationStatus => {
+    if (publicationStatus.nodeName.toLowerCase() == 'status-filter') {
+      publicationStatus.style.outline = 'none';
+      publicationStatus.style.outlineOffset = "0px";
+    }
+  });
 }
 
 function updateCSS(){
@@ -224,7 +264,11 @@ function ShowNewMangaSearch(){
   newMangaResult.replaceChildren();
 }
 
-newMangaTitle.addEventListener("keypress", (event) => { if(event.key === "Enter") GetNewMangaItems();})
+newMangaTitle.addEventListener("keypress", (event) => { if(event.key === "Enter") GetNewMangaItems();});
+
+
+
+
 function GetNewMangaItems(){
   if(newMangaTitle.value.length < 4)
     return;
@@ -451,7 +495,7 @@ filterFunnel.addEventListener("click", () => {
   filterBox.classList.toggle("animate");
 });
 
-settingKomgaUrl.addEventListener("keypress", (event) => { { if(event.key === "Enter") UpdateSettings(); } });
+settingKomgaUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingKomgaUser.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingKomgaPass.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingKavitaUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
@@ -464,6 +508,60 @@ settingNtfyEndpoint.addEventListener("keypress", (event) => { if(event.key === "
 settingNtfyAuth.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingUserAgent.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+
+manganatoRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+mangaseeRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+mangadexRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+mangakatanaRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+mangaworldRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+batoRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+mangalifeRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+
+function NewRateLimit(event) {
+  if (event.target.value.length > 0 && event.target.value != 0) {
+    console.log(event.target.id);
+    switch (event.target.id) {
+      case "manganatoRL":
+        connector = 'Manganato';
+        byteValue = 1;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      case "mangaseeRL":
+        connector = 'Mangasee';
+        byteValue = 1;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      case "mDexRL":
+        connector = 'MangaDex'
+        byteValue = 250;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      case "mKatanaRL":
+        connector = 'MangaKatana';
+        byteValue = 1;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      case "mWorldRL":
+        connector = 'Mangaworld';
+        byteValue = 1;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      case "batoRL":
+        connector =  'Bato';
+        byteValue = 1;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      case "mLifeRL":
+        connector = 'Manga4Life';
+        byteValue = 1;
+        UpdateRateLimit(connector, byteValue, event.target.value);
+        break;
+      default: 
+        console.log("Unknown connector:");
+        console.log(event.target.id);
+    }
+  }
+}
 
 function OpenSettings(){
   settingGotifyConfigured.setAttribute("configuration", "Not Configured");

@@ -259,6 +259,11 @@ function UpdateUserAgent(userAgent){
     PostData(uri);
 }
 
+function UpdateRateLimit(connector, byteValue, rateLimit) {
+    var uri = `${apiUri}/Settings/customRequestLimit?requestType=${byteValue}&requestsPerMinute=${rateLimit}&connector=${connector}`;
+    PostData(uri);
+}
+
 function RemoveJob(jobId){
     var uri = `${apiUri}/Jobs?jobId=${jobId}`;
     DeleteData(uri);
