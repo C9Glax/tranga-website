@@ -591,8 +591,8 @@ function OpenSettings(){
   
   GetSettings().then((json) => {
     //console.log(json);
-    settingApiUri.placeholder = apiUri;
-    settingUserAgent.placeholder = json.userAgent;
+    settingApiUri.value = apiUri;
+    settingUserAgent.value = json.userAgent;
     //console.log(json.styleSheet);
   });
   GetLibraryConnectors().then((json) => {
