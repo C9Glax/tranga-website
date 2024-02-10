@@ -109,6 +109,7 @@ function Setup(){
       //console.log(json);
       newMangaConnector.replaceChildren();
       connectorFilterBox = document.querySelector("#connectorFilterBox");
+      connectorFilterBox.replaceChildren();
       json.forEach(connector => {
         //Add the connector to the New Manga dropdown        
         var option = document.createElement('option');
@@ -132,6 +133,7 @@ function Setup(){
     //Add the publication status options to the filter bar
     publicationStatusOptions = ["Ongoing", "Completed", "On Hiatus", "Cancelled", "Upcoming", "Status Unavailable"]; 
     statusFilterBox = document.querySelector("#statusFilterBox");
+    statusFilterBox.replaceChildren();
     publicationStatusOptions.forEach(publicationStatus => {
       var releaseStatus = document.createElement('status-filter');
       releaseStatus.innerText = publicationStatus;
