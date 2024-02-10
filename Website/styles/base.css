@@ -420,6 +420,13 @@ popup popup-window {
     overflow: hidden;
 }
 
+popup#jobStatusView popup-window {
+    left: 20%;
+    top: 20%;
+    height: 60%;
+    width: 60%;
+}
+
 popup-content{
     display: flex;
     flex-direction: column;
@@ -894,82 +901,60 @@ footer-tag-popup::before{
   100% { transform: rotate(360deg); }
 }
 
-#jobStatusView {
-  z-index: 50;
+#jobStatusRunning > .section-item {
+    flex-direction: row;
+    height: 150px;
+    padding: 0;
+    overflow: hidden;
 }
 
-#jobStatusView > popup-window {
-  top: 80px;
-  width: 50%;
-  max-height: calc(100% - 140px);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  background-color: transparent;
+#jobStatusWaiting > .section-item {
+    flex-direction: row;
+    height: 150px;
+    padding: 0;
+    overflow: hidden;
 }
 
-#jobStatusView > popup-window > div {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  width: 50%;
-  margin: 0;
-  max-height: 100%;
+.section-item > .jobImage {
+  height: 100%;
+  width: auto;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
 }
 
-#jobStatusView > popup-window > div > div {
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  width: 100%;
-  margin: 0;
+.jobDetails {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
 }
 
-.jobWrapper {
-  width: 90%;
-  margin: 2px 5%;
-  height: 100px;
-  position: relative;
-  flex-shrink: 0;
-  background-color: rgba(187,187,187,0.4);
-  border-radius: 3px;
+.section-item > .jobDetails > .jobTitle {
+  margin: 5px;
+  font-size: 11pt;
+  font-weight: bold;
+  text-wrap: wrap;
 }
 
-.jobWrapper > .jobImage {
-  height: 90%;
-  width: 20%;
-  left: 5px;
-  object-fit: contain;
-  position: absolute;
-  top: 5%;
-}
-
-.jobWrapper > .jobTitle {
-  position: absolute;
-  left: calc(20% + 10px);
-  top: 5px;
-}
-
-.jobWrapper > .jobProgressBar {
-  position: absolute;
-  left: calc(20% + 10px);
-  bottom: calc(12pt + 10px);
-  width: calc(80% - 20px);
+.section-item > .jobDetails > .jobProgressBar {
+  margin: 5px;
   height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.jobWrapper > .jobProgressSpan {
-  position: absolute;
-  right: 10px;
-  bottom: calc(12pt + 20px);
-  width: 60%;
-  text-align: right;
+.section-item > .jobDetails > .jobProgressSpan {
+    margin: 5px;
+    margin-left: auto;
+    margin-right: 5px;
 }
 
-.jobWrapper > .jobCancel {
-  position: absolute;
-  right: 10px;
-  bottom: 5px;
+.section-item > .jobDetails > .jobCancel {
+  margin-top: auto;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: 5px;
   font-size: 12pt;
   color: var(--secondary-color);
   cursor: pointer;

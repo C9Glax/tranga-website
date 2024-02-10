@@ -240,18 +240,39 @@
           </publication-details>
         </publication-viewer>
       </popup>
-      
+
       <popup id="jobStatusView">
-        <blur-background id="blurBackgroundJobStatus" onclick="jobStatusView.style.display= 'none';"></blur-background>
+        <blur-background id="blurBackgroundSettingsPopup" onclick="jobStatusView.style.display = 'none';"></blur-background>
         <popup-window>
-          <div>
-            <div id="jobStatusRunning" style="border-right: 1px solid gray;"></div>
-          </div>
-          <div>
-            <div id="jobStatusWaiting" style="border-left: 1px solid gray;"></div>
-          </div>
+          <border-bar>
+            <popup-title>Jobs</popup-title>
+            <popup-close onclick="jobStatusView.style.display = 'none'">&times</popup-close>
+          </border-bar>
+          <popup-content>
+
+            <div class="popup-section">
+              RUNNING JOBS
+              <div class="section-content" id="jobStatusRunning">
+                
+              </div>
+            </div>
+
+            <div class="popup-section">
+              QUEUED JOBS
+              <div class="section-content" id="jobStatusWaiting">
+                
+              </div>
+            </div>
+
+          </popup-content>
+
+          <border-bar>
+            <!-- <div class="button-container">
+              <border-bar-button class="primary" onclick="UpdateSettings()">Apply Settings</border-bar-button>
+            </div> -->
+          </border-bar>
+
         </popup-window>
-      </popup>
     </viewport>
 	  
     <footer>

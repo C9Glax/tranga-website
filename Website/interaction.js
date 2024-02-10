@@ -360,7 +360,6 @@ createMonitorJobButton.addEventListener("click", () => {
   CreateMonitorJob(newMangaConnector.value, selectedManga.internalId, newMangaTranslatedLanguage.value);
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
-  ResetContent();
 });
 startJobButton.addEventListener("click", () => {
   StartJob(selectedJob.id);
@@ -374,7 +373,6 @@ deleteJobButton.addEventListener("click", () => {
   RemoveJob(selectedJob.id);
   UpdateJobs();
   mangaViewerPopup.style.display = "none";
-  ResetContent();
 });
 
 function ShowMangaWindow(job, manga, event, add){
@@ -764,14 +762,6 @@ function UpdateJobs(){
   GetMonitorJobs().then((json) => {
     if(monitoringJobsCount != json.length){
       ResetContent();
-      //console.log(json);
-      json.forEach(job => {
-        var mangaView = CreateManga(job.manga, job.mangaConnector.name);
-        mangaView.addEventListener("click", (event) => {
-          ShowMangaWindow(job, job.manga, event, false);
-        });
-        tasksContent.appendChild(mangaView);
-      });
       monitoringJobsCount = json.length;
     }
   });
@@ -831,39 +821,44 @@ function createJob(jobjson){
   
   
   var wrapper = document.createElement("div");
-  wrapper.className = "jobWrapper";
+  wrapper.className = "section-item";
   wrapper.id = GetValidSelector(jobjson.id);
   
   var image = document.createElement("img");
   image.className = "jobImage";
   image.src = GetCoverUrl(manga.internalId);
   wrapper.appendChild(image);
-  
+
+  var details = document.createElement("div");
+  details.className = 'jobDetails';
+
   var title = document.createElement("span");
   title.className = "jobTitle";
   if(jobjson.chapter != null)
     title.innerText = `${manga.sortName} - ${jobjson.chapter.fileName}`;
   else if(jobjson.manga != null)
     title.innerText = manga.sortName;
-  wrapper.appendChild(title);
+  details.appendChild(title);
   
   var progressBar = document.createElement("progress");
   progressBar.className = "jobProgressBar";
   progressBar.id = `jobProgressBar${GetValidSelector(jobjson.id)}`;
-  wrapper.appendChild(progressBar);
+  details.appendChild(progressBar);
   
   var progressSpan = document.createElement("span");
   progressSpan.className = "jobProgressSpan";
   progressSpan.id = `jobProgressSpan${GetValidSelector(jobjson.id)}`;
-  progressSpan.innerText = "0% 00:00:00";
-  wrapper.appendChild(progressSpan);
+  progressSpan.innerText = "Pending...";
+  details.appendChild(progressSpan);
   
   var cancelSpan = document.createElement("span");
   cancelSpan.className = "jobCancel";
   cancelSpan.innerText = "Cancel";
   cancelSpan.addEventListener("click", () => CancelJob(jobjson.id));
-  wrapper.appendChild(cancelSpan);
+  details.appendChild(cancelSpan);
   
+  wrapper.appendChild(details);
+
   return wrapper;
 }
 
