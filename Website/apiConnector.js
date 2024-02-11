@@ -39,10 +39,11 @@ async function GetData(uri){
     return json;
 }
 
-function PostData(uri){
-    fetch(uri, {
+async function PostData(uri){
+    let request = await fetch(uri, {
         method: 'POST'
     });
+    console.log(request);
 }
 
 function DeleteData(uri){
@@ -143,6 +144,12 @@ async function GetLibraryConnectors(){
 	return json;
 }
 
+async function GetRateLimits() {
+    var uri = `${apiUri}/Settings/customRequestLimit`
+    let json = await GetData(uri);
+    return json;
+}
+
 function CreateMonitorJob(connector, internalId, language){
     var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00&translatedLanguage=${language}`;
     PostData(uri);
@@ -171,6 +178,7 @@ function RefreshLibraryMetadata() {
 async function DownloadLogs() {
     var uri = `${apiUri}/LogFile`;
     let response = await GetData(uri);
+    console.log(response);
 }
 
 //Komga
@@ -213,7 +221,7 @@ function UpdateGotify(gotifyUrl, gotifyAppToken){
 }
 
 function ResetGotify(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=Gotify`;
+    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=Gotify`;
     PostData(uri);
 }
 
@@ -229,7 +237,7 @@ function UpdateLunaSea(lunaseaWebhook){
 }
 
 function ResetLunaSea(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=LunaSea`;
+    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=LunaSea`;
     PostData(uri);
 }
 
@@ -245,7 +253,7 @@ function UpdateNtfy(ntfyEndpoint, ntfyAuth){
 }
 
 function ResetNtfy(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?libraryConnector=Ntfy`;
+    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=Ntfy`;
     PostData(uri);
 }
 
@@ -259,8 +267,8 @@ function UpdateUserAgent(userAgent){
     PostData(uri);
 }
 
-function UpdateRateLimit(connector, byteValue, rateLimit) {
-    var uri = `${apiUri}/Settings/customRequestLimit?requestType=${byteValue}&requestsPerMinute=${rateLimit}&connector=${connector}`;
+function UpdateRateLimit(byteValue, rateLimit) {
+    var uri = `${apiUri}/Settings/customRequestLimit?requestType=${byteValue}&requestsPerMinute=${rateLimit}`;
     PostData(uri);
 }
 

@@ -33,14 +33,16 @@ const mangaViewerTags = document.querySelector("#publicationViewerTags");
 const mangaViewerAuthor = document.querySelector("#publicationViewerAuthor");
 const mangaViewCover = document.querySelector("#pubviewcover");
 
-//Rate Limits
-const manganatoRateLimit = document.querySelector('#manganatoRL');
-const mangaseeRateLimit = document.querySelector('#mangaseeRL');
-const mangadexRateLimit = document.querySelector('#mDexRL');
-const mangakatanaRateLimit = document.querySelector('#mKatanaRL');
-const mangaworldRateLimit = document.querySelector('#mWorldRL');
-const batoRateLimit = document.querySelector('#batoRL');
-const mangalifeRateLimit = document.querySelector('#mLifeRL');
+//General Rate Limits
+const defaultRL = document.querySelector("#defaultRL");
+const coverRL = document.querySelector("#coverRL");
+const imageRL = document.querySelector("#imageRL");
+const infoRL = document.querySelector("#infoRL");
+
+//MangaDex Rate Limits
+const mDexAuthorRL = document.querySelector("#mDexAuthorRL");
+const mDexFeedRL = document.querySelector("#mDexFeedRL");
+const mDexImageRL = document.querySelector("#mDexImageRL");
 
 //Komga
 const settingKomgaUrl = document.querySelector("#komgaUrl");
@@ -150,6 +152,15 @@ function Setup(){
     GetSettings().then((json) => {
       //console.log(json);
       settingApiUri.placeholder = apiUri;
+    });
+    GetRateLimits().then((json) => {
+      defaultRL.placeholder = json.Default + ' Requests/Minute';
+      coverRL.placeholder = json.MangaCover + ' Requests/Minute';
+      imageRL.placeholder = json.MangaImage + ' Requests/Minute';
+      infoRL.placeholder = json.MangaInfo + ' Requests/Minute';
+      mDexAuthorRL.placeholder = json.MangaDexAuthor + ' Requests/Minute';
+      mDexFeedRL.placeholder = json.MangaDexFeed + ' Requests/Minute';
+      mDexImageRL.placeholder = json.MangaDexImage + ' Requests/Minute';
     });
 
     //If the cssStyle key isn't in the local storage of the browser, then set the css style to the default and load the page
@@ -515,59 +526,14 @@ settingNtfyAuth.addEventListener("keypress", (event) => { if(event.key === "Ente
 settingUserAgent.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
-manganatoRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
-mangaseeRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
-mangadexRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
-mangakatanaRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
-mangaworldRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
-batoRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
-mangalifeRateLimit.addEventListener("keypress", (event) => { if(event.key === "Enter") NewRateLimit(event);}); 
+defaultRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
+coverRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
+imageRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
+infoRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
+mDexAuthorRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
+mDexFeedRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
+mDexImageRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 
-function NewRateLimit(event) {
-  if (event.target.value.length > 0 && event.target.value != 0) {
-    console.log(event.target.id);
-    switch (event.target.id) {
-      case "manganatoRL":
-        connector = 'Manganato';
-        byteValue = 1;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      case "mangaseeRL":
-        connector = 'Mangasee';
-        byteValue = 1;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      case "mDexRL":
-        connector = 'MangaDex'
-        byteValue = 250;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      case "mKatanaRL":
-        connector = 'MangaKatana';
-        byteValue = 1;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      case "mWorldRL":
-        connector = 'Mangaworld';
-        byteValue = 1;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      case "batoRL":
-        connector =  'Bato';
-        byteValue = 1;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      case "mLifeRL":
-        connector = 'Manga4Life';
-        byteValue = 1;
-        UpdateRateLimit(connector, byteValue, event.target.value);
-        break;
-      default: 
-        console.log("Unknown connector:");
-        console.log(event.target.id);
-    }
-  }
-}
 
 function OpenSettings(){
   settingGotifyConfigured.setAttribute("configuration", "Not Configured");
@@ -588,12 +554,28 @@ function OpenSettings(){
   settingNtfyEndpoint.value = "";
   settingUserAgent.value = "";
   settingApiUri.value = "";
+  defaultRL.value = "";
+  coverRL.value = "";
+  imageRL.value = "";
+  infoRL.value = "";
+  mDexAuthorRL.value = "";
+  mDexFeedRL.value = "";
+  mDexImageRL.value = "";
   
   GetSettings().then((json) => {
     //console.log(json);
     settingApiUri.value = apiUri;
     settingUserAgent.value = json.userAgent;
     //console.log(json.styleSheet);
+  });
+  GetRateLimits().then((json) => {
+    defaultRL.placeholder = json.Default + ' Requests/Minute';
+    coverRL.placeholder = json.MangaCover + ' Requests/Minute';
+    imageRL.placeholder = json.MangaImage + ' Requests/Minute';
+    infoRL.placeholder = json.MangaInfo + ' Requests/Minute';
+    mDexAuthorRL.placeholder = json.MangaDexAuthor + ' Requests/Minute';
+    mDexFeedRL.placeholder = json.MangaDexFeed + ' Requests/Minute';
+    mDexImageRL.placeholder = json.MangaDexImage + ' Requests/Minute';
   });
   GetLibraryConnectors().then((json) => {
     //console.log(json);
@@ -619,7 +601,6 @@ function OpenSettings(){
     });
   });
   GetNotificationConnectors().then((json) => {
-    console.log(json);
     json.forEach(connector => {
       switch(notificationConnectorTypes[connector.notificationConnectorType]){
         case "Gotify":
@@ -719,32 +700,32 @@ function UpdateSettings(){
       UpdateUserAgent(settingUserAgent.value);
   }
 
-  if (manganatoRateLimit.value.length > 0) {
-    UpdateRateLimit('Manganato', 1, manganatoRateLimit.value);
+  if (defaultRL.value != "") {
+    UpdateRateLimit(0, defaultRL.value);
   }
 
-  if (mangaseeRateLimit.value.length > 0) {
-    UpdateRateLimit('Mangasee', 1, mangaseeRateLimit.value);
+  if (coverRL.value != "") {
+    UpdateRateLimit(3, coverRL.value);
   }
 
-  if (mangadexRateLimit.value.length > 0) {
-    UpdateRateLimit('MangaDex', 250, mangadexRateLimit.value);
+  if (imageRL.value != "") {
+    UpdateRateLimit(2, imageRL.value);
   }
 
-  if (mangakatanaRateLimit.value.length > 0) {
-    UpdateRateLimit('MangaKatana', 1, mangakatanaRateLimit.value);
+  if (infoRL.value != "") {
+    UpdateRateLimit(6, infoRL.value);
   }
 
-  if (mangaworldRateLimit.value.length > 0) {
-    UpdateRateLimit('Mangaworld', 1, mangaworldRateLimit.value);
+  if (mDexAuthorRL.value != "") {
+    UpdateRateLimit(5, mDexAuthorRL.value);
   }
 
-  if (batoRateLimit.value.length > 0) {
-    UpdateRateLimit('Bato', 1, batoRateLimit.value);
+  if (mDexFeedRL.value != "") {
+    UpdateRateLimit(1, mDexFeedRL.value);
   }
 
-  if (mangalifeRateLimit.value.length > 0) {
-    UpdateRateLimit('Manga4Life', 1, mangalifeRateLimit.value);
+  if (mDexImageRL.value != "") {
+    UpdateRateLimit(5, mDexImageRL.value);
   }
   
   setTimeout(() => {
