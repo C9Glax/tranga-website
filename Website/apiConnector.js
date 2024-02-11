@@ -214,7 +214,7 @@ async function DownloadLogs() {
     )
     .then((result) => {
       // Do things with result
-      console.log(result);
+      //console.log(result);
 
       //Below download taken from https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server
       var element = document.createElement('a');
