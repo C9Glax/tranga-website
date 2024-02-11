@@ -43,7 +43,7 @@ async function PostData(uri){
     let request = await fetch(uri, {
         method: 'POST'
     });
-    console.log(request);
+    //console.log(request);
 }
 
 function DeleteData(uri){
