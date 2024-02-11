@@ -177,8 +177,64 @@ function RefreshLibraryMetadata() {
 
 async function DownloadLogs() {
     var uri = `${apiUri}/LogFile`;
-    let response = await GetData(uri);
-    console.log(response);
+
+    //Below taken from https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream
+    fetch(uri)
+    .then((response) => response.body)
+    .then((rb) => {
+      const reader = rb.getReader();
+  
+      return new ReadableStream({
+        start(controller) {
+          // The following function handles each data chunk
+          function push() {
+            // "done" is a Boolean and value a "Uint8Array"
+            reader.read().then(({ done, value }) => {
+              // If there is no more data to read
+              if (done) {
+                console.log("done", done);
+                controller.close();
+                return;
+              }
+              // Get the data and send it to the browser via the controller
+              controller.enqueue(value);
+              // Check chunks by logging to the console
+              console.log(done, value);
+              push();
+            });
+          }
+  
+          push();
+        },
+      });
+    })
+    .then((stream) =>
+      // Respond with our stream
+      new Response(stream, { headers: { "Content-Type": "text/html" } }).text(),
+    )
+    .then((result) => {
+      // Do things with result
+      console.log(result);
+
+      //Below download taken from https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset-utf-8,' + encodeURIComponent(result));
+      var newDate = new Date();
+      var filename = "Tranga_Logs_" + newDate.today() + "_" + newDate.timeNow() + ".log";
+      element.setAttribute('download', filename);
+      element.click();
+    });
+}
+
+//Following date-time code taken from: https://stackoverflow.com/questions/10211145/getting-current-date-and-time-in-javascript
+// For todays date;
+Date.prototype.today = function () { 
+    return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
+}
+
+// For the time now
+Date.prototype.timeNow = function () {
+     return ((this.getHours() < 10)?"0":"") + this.getHours() +"_"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"_"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
 
 //Komga
