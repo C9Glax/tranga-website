@@ -940,8 +940,7 @@ footer-tag-popup::before{
 .section-item > .jobDetails > .jobProgressBar {
   margin: 5px;
   height: 10px;
-  border-radius: 5px;
-  overflow: hidden;
+  border-radius: 7px;
 }
 
 .section-item > .jobDetails > .jobProgressSpan {

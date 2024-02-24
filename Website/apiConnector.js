@@ -1,4 +1,4 @@
-﻿let apiUri = `http://${window.location.host.split(':')[0]}:6531`
+﻿let apiUri = `${window.location.protocol}//${window.location.host.split(':')[0]}:6531`
 
 if(getCookie("apiUri") != ""){
     apiUri = getCookie("apiUri");
