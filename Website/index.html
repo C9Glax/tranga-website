@@ -3,22 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>Tranga</title>
-  <link id='pagestyle' rel="stylesheet" href="styles/style_default.css">
+  <link id='basestyle' rel="stylesheet" href="styles/base.css">
+  <link id='librarystyle' rel="stylesheet" href="styles/style_default.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
   <wrapper>
+
     <topbar>
       <titlebox>
         <img alt="website image is Blahaj" src="media/blahaj.png">
         <span>Tranga</span>
       </titlebox>
       <spacer></spacer>
-      <searchdiv>
-        <label for="searchbox"></label><input id="searchbox" placeholder="Filter" type="text">
-      </searchdiv>
+      <img id="filterFunnel" src="media/filter-funnel.svg" height="50%" alt="filterFunnel">
       <img id="settingscog" src="media/settings-cogwheel.svg" height="100%" alt="settingscog">
     </topbar>
+
+    <filter-box id="filterBox">
+      <border-bar>
+        <popup-title>Filter by: </popup-title>
+        <popup-close onclick="filterBox.classList.toggle('animate')" >&times</popup-close>
+      </border-bar>
+      <popup-content id="filterContent">
+        <div class="popup-section">
+          NAME:
+          <div class="section-content">
+            <label for="searchbox"></label><input id="searchbox" placeholder="Title" type="text">
+          </div>
+        </div>
+        <div class = "popup-section">
+          CONNECTOR:
+          <div class="section-content" id="connectorFilterBox">
+          </div>
+        </div>
+        <div class = "popup-section">
+          STATUS:
+          <div class="section-content" id="statusFilterBox">
+          </div>
+        </div>
+      </popup-content>
+      <border-bar-button onclick="ClearFilter()" class="clearFilter">Clear Filter</border-bar-button>
+    </filter-box>
+
+
     <viewport>
       <div id="loaderdiv">
         <blur-background></blur-background>
@@ -53,65 +81,150 @@
       </popup>
       
       <popup id="settingsPopup">
-        <blur-background id="blurBackgroundSettingsPopup" onclick="
-    settingsPopup.style.display = 'none';"></blur-background>
+        <blur-background id="blurBackgroundSettingsPopup" onclick="settingsPopup.style.display = 'none';"></blur-background>
         <popup-window>
-          <popup-title>Settings</popup-title>
+          <border-bar>
+            <popup-title>Settings</popup-title>
+            <popup-close onclick="settingsPopup.style.display = 'none'">&times</popup-close>
+          </border-bar>
           <popup-content>
-            <div>
-              <p class="title">Download Location:</p>
-              <span id="downloadLocation"></span>
+
+            <div class="popup-section">
+              TRANGA
+              <div class="section-content">
+                <div class="section-item dyn-height">
+                  <span class="title">API Settings</span>
+                  <row><label for="settingApiUri">API URI:</label><input placeholder="https://" type="text" id="settingApiUri"></row>
+                  <row><label for="userAgent">User Agent:</label><input placeholder="UserAgent" id="userAgent" type="text"></row>
+                  <row>
+                    <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
+                    <border-bar-button class="section" onclick="DownloadLogs()">Download Logs</border-bar-button>
+                  </row>
+                </div>
+                <div class="section-item dyn-height">
+                  <span class="title">Rate Limits</span>
+                  <row><label for="DefaultRL">Default:</label><input id="defaultRL" type="text" ></row>
+                  <row><label for="CoverRL">Manga Covers:</label><input id="coverRL" type="text"></row>
+                  <row><label for="ImageRL">Manga Images:</label><input id="imageRL" type="text"></row>
+                  <row><label for="InfoRL">Manga Info:</label><input id="infoRL" type="text"></row>
+                </div>
+                <div class="section-item dyn-height">
+                  <span class="title">Appearance</span>
+                  <row><label for="cssStyle">Library Style:</label><select id="cssStyle">
+                    <option id="card_compact" value="card_compact">Cards (Compact)</option>
+                    <option id="card_hover" value="card_hover">Cards (Hover)</option>
+                  </select></row>
+                </div>
+              </div>
             </div>
-            <div>
-              <p class="title">API-URI</p>
-              <label for="settingApiUri"></label><input placeholder="https://" type="text" id="settingApiUri">
+
+            <div class="popup-section">
+              MANGA SOURCES
+              <div class="section-content">
+                <!-- <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/manganato.png"><a href="https://manganato.com">MangaNato</a></span>
+
+                </div> -->
+                <!-- <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/mangasee.png"><a href="https://mangasee123.com">MangaSee</a></span>
+                  
+                </div> -->
+                <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/mangadex-logo.svg"><a href="https://mangadex.org">MangaDex</a></span>
+                  <row><label for="mDexAuthorRL">Author Rate Limit:</label><input id="mDexAuthorRL" type="text"></row>
+                  <row><label for="mDexFeedRL">Feed Rate Limit:</label><input id="mDexFeedRL" type="text"></row>
+                  <row><label for="mDexImageRL">Image Rate Limit:</label><input id="mDexImageRL" type="text"></row>
+                </div>
+                <!-- <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/mangakatana.png"><a href="https://mangakatana.com">MangaKatana</a></span>
+                  
+                </div> -->
+                <!-- <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/mangaworld.png"><a href="https://www.mangaworld.ac">MangaWorld</a></span>
+                  
+                </div> -->
+                <!-- <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/bato.ico"><a href="https://bato.to">Bato</a></span>
+                  
+                </div> -->
+                <!-- <div class="section-item dyn-height">
+                  <span class="title"><img src="connector-icons/mangalife.png"><a href="https://www.manga4life.com">MangaLife</a></span>
+                  
+                </div> -->
+              </div>
+              
             </div>
-            <div>
-              <span class="title">Komga</span>
-              <div>Configured: <span id="komgaConfigured">✅❌</span></div>
-              <label for="komgaUrl"></label><input placeholder="URL" id="komgaUrl" type="text">
-              <label for="komgaUsername"></label><input placeholder="Username" id="komgaUsername" type="text">
-              <label for="komgaPassword"></label><input placeholder="Password" id="komgaPassword" type="password">
+
+            <div class="popup-section">
+              LIBRARY CONNECTORS
+              <div class="section-content">
+                <div class="section-item">
+                  <span class="title"><img src='connector-icons/komga.svg'>Komga<connector-configured id="komgaConfigured"></connector-configured></span>
+                  <label for="komgaUrl"></label><input placeholder="URL" id="komgaUrl" type="text">
+                  <label for="komgaUsername"></label><input placeholder="Username" id="komgaUsername" type="text">
+                  <label for="komgaPassword"></label><input placeholder="Password" id="komgaPassword" type="password">
+                  <div class="section-buttons-container">
+                      <span onclick="TestKomga(komgaUrl.value, utf8_to_b64(`${komgaUsername.value}:${komgaPassword.value}`))" class='section-button' id="test-connector">Test</span>
+                      <span onclick="ClearKomga()" class='section-button' id="reset">Reset</span>
+                      <span onclick="UpdateKomga(komgaUrl.value, utf8_to_b64(`${komgaUsername.value}:${komgaPassword.value}`))" class='section-button'>Apply</span>
+                  </div>
+                </div>
+                <div class="section-item">
+                  <span class="title"><img src='connector-icons/kavita.png'>Kavita<connector-configured id="kavitaConfigured"></connector-configured></span>
+                  <label for="kavitaUrl"></label><input placeholder="URL" id="kavitaUrl" type="text">
+                  <label for="kavitaUsername"></label><input placeholder="Username" id="kavitaUsername" type="text">
+                  <label for="kavitaPassword"></label><input placeholder="Password" id="kavitaPassword" type="password">
+                  <div class="section-buttons-container">
+                    <span onclick="TestKavita(kavitaUrl.value, kavitaUsername.value, kavitaPassword.value)" class='section-button' id="test-connector">Test</span>
+                    <span onclick="ClearKavita()" class='section-button' id="reset">Reset</span>
+                    <span onclick="UpdateKavita(kavitaUrl.value, kavitaUsername.value, kavitaPassword.value)" class='section-button'>Apply</span>
+                </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <span class="title">Kavita</span>
-              <div>Configured: <span id="kavitaConfigured">✅❌</span></div>
-              <label for="kavitaUrl"></label><input placeholder="URL" id="kavitaUrl" type="text">
-              <label for="kavitaUsername"></label><input placeholder="Username" id="kavitaUsername" type="text">
-              <label for="kavitaPassword"></label><input placeholder="Password" id="kavitaPassword" type="password">
-            </div>
-            <div>
-              <span class="title">Gotify</span>
-              <div>Configured: <span id="gotifyConfigured">✅❌</span></div>
-              <label for="gotifyUrl"></label><input placeholder="URL" id="gotifyUrl" type="text">
-              <label for="gotifyAppToken"></label><input placeholder="App-Token" id="gotifyAppToken" type="text">
-            </div>
-            <div>
-              <span class="title">LunaSea</span>
-              <div>Configured: <span id="lunaseaConfigured">✅❌</span></div>
-              <label for="lunaseaWebhook"></label><input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
-            </div>
-            <div>
-              <span class="title">Ntfy</span>
-              <div>Configured: <span id="ntfyConfigured">✅❌</span></div>
-              <label for="ntfyEndpoint"></label><input placeholder="URL" id="ntfyEndpoint" type="text">
-              <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
-            </div>
-            <div>
-              <span class="title">UserAgent</span><br />
-              <label for="userAgent"></label><input style="width: 400px" placeholder="UserAgent" id="userAgent" type="text">
-            </div>
-            <div>
-              <input type="checkbox" id="mangaHoverCheckbox" name="css-style" value="style_mangahover.css" onclick="updateCSS()">
-              <label for="css-style"> Show manga titles and sources on hover</label><br>
-            </div>
-            <div>
-              <input type="submit" value="Update" onclick="UpdateSettings()">
-            </div>
-            <div>
-              <input type="submit" value="Refresh Library Metadata" style="width: fit-content;"onclick="RefreshLibraryMetadata()">
-            </div>
+
+            <div class="popup-section">
+              NOTIFICATION CONNECTORS
+                <div class="section-content">
+                  <div class="section-item">
+                    <span class="title"><img src='connector-icons/gotify-logo.png'>Gotify<connector-configured id="gotifyConfigured"></connector-configured></span>
+                    <label for="gotifyUrl"></label><input placeholder="URL" id="gotifyUrl" type="text">
+                    <label for="gotifyAppToken"></label><input placeholder="App-Token" id="gotifyAppToken" type="text">
+                    <div class="section-buttons-container">
+                      <span onclick="TestGotify(gotifyUrl.value, gotifyAppToken.value)" class='section-button' id="test-connector">Test</span>
+                      <span onclick="ClearGotify()" class='section-button' id="reset">Reset</span>
+                      <span onclick="UpdateGotify(gotifyUrl.value, gotifyAppToken.value)" class='section-button'>Apply</span>
+                  </div>
+                  </div>
+                  <div class="section-item">
+                    <span class="title"><img src='connector-icons/lunasea.png'>LunaSea<connector-configured id="lunaseaConfigured"></connector-configured></span>
+                    <label for="lunaseaWebhook"></label><input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
+                    <div class="section-buttons-container">
+                      <span onclick="TestLunaSea(lunaseaWebhook.value);" class='section-button' id="test-connector">Test</span>
+                      <span onclick="ClearLunasea()" class='section-button' id="reset">Reset</span>
+                      <span onclick="UpdateLunaSea(lunaseaWebhook.value);" class='section-button'>Apply</span>
+                  </div>
+                  </div>
+                  <div class="section-item">
+                    <span class="title"><img src='connector-icons/ntfy.svg'>Ntfy<connector-configured id="ntfyConfigured"></connector-configured></span>
+                    <label for="ntfyEndpoint"></label><input placeholder="URL" id="ntfyEndpoint" type="text">
+                    <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
+                    <div class="section-buttons-container">
+                      <span onclick="TestNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button' id="test-connector">Test</span>
+                      <span onclick="ClearNtfy()" class='section-button' id="reset">Reset</span>
+                      <span onclick="UpdateNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button'>Apply</span>
+                  </div>
+                  </div>
+                </div>
+            </div> 
           </popup-content>
+
+          <border-bar>
+            <div class="button-container">
+              <border-bar-button class="primary" onclick="UpdateSettings()">Apply Settings</border-bar-button>
+            </div>
+          </border-bar>
+
         </popup-window>
       </popup>
 		
@@ -136,18 +249,39 @@
           </publication-details>
         </publication-viewer>
       </popup>
-      
+
       <popup id="jobStatusView">
-        <blur-background id="blurBackgroundJobStatus" onclick="jobStatusView.style.display= 'none';"></blur-background>
+        <blur-background id="blurBackgroundSettingsPopup" onclick="jobStatusView.style.display = 'none';"></blur-background>
         <popup-window>
-          <div>
-            <div id="jobStatusRunning" style="border-right: 1px solid gray;"></div>
-          </div>
-          <div>
-            <div id="jobStatusWaiting" style="border-left: 1px solid gray;"></div>
-          </div>
+          <border-bar>
+            <popup-title>Jobs</popup-title>
+            <popup-close onclick="jobStatusView.style.display = 'none'">&times</popup-close>
+          </border-bar>
+          <popup-content>
+
+            <div class="popup-section">
+              RUNNING JOBS
+              <div class="section-content" id="jobStatusRunning">
+                
+              </div>
+            </div>
+
+            <div class="popup-section">
+              QUEUED JOBS
+              <div class="section-content" id="jobStatusWaiting">
+                
+              </div>
+            </div>
+
+          </popup-content>
+
+          <border-bar>
+            <!-- <div class="button-container">
+              <border-bar-button class="primary" onclick="UpdateSettings()">Apply Settings</border-bar-button>
+            </div> -->
+          </border-bar>
+
         </popup-window>
-      </popup>
     </viewport>
 	  
     <footer>
