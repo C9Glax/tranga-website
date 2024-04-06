@@ -32,23 +32,27 @@ async function GetData(uri){
     let request = await fetch(uri, {
         method: 'GET',
         headers: {
-            'Accept': 'application/json'
-        }
+            'Accept': 'application/json',
+        },
     });
     let json = await request.json();
     return json;
 }
 
-async function PostData(uri){
+async function PostData(uri, data = null){
     let request = await fetch(uri, {
-        method: 'POST'
+        method: 'POST',
+		headers: { "Content-Type": "application/json" },	
+		body: JSON.stringify(data)
     });
     //console.log(request);
 }
 
-function DeleteData(uri){
+function DeleteData(uri, data = null){
     fetch(uri, {
-        method: 'DELETE'
+        method: 'DELETE',
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(data)
     });
 }
 
@@ -150,24 +154,41 @@ async function GetRateLimits() {
     return json;
 }
 
-function CreateMonitorJob(connector, internalId, language){
-    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00&translatedLanguage=${language}`;
-    PostData(uri);
+function CreateMonitorJob(connector, id, language, interval = `03:00:00`){
+    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}`;
+	const body = {
+		"connector":connector,
+		"internalId": id,
+		"interval":interval,
+		"translatedLanguage":language
+	};
+    PostData(uri, body);
 }
 
-function CreateDownloadNewChaptersJob(connector, internalId, language){
-    var uri = `${apiUri}/Jobs/DownloadNewChapters?connector=${connector}&internalId=${internalId}&translatedLanguage=${language}`;
-    PostData(uri);
+function CreateDownloadNewChaptersJob(connector, id, language){
+    var uri = `${apiUri}/Jobs/DownloadNewChapters`;
+	const body = {
+		"connector": connector,
+		"internalId":id,
+		"translatedLanguage":language
+	};
+    PostData(uri, body);
 }
 
-function StartJob(jobId){
-    var uri = `${apiUri}/Jobs/StartNow?jobId=${jobId}`;
-    PostData(uri);
+function StartJob(id){
+    var uri = `${apiUri}/Jobs/StartNow`;
+	const body = {
+		"jobId":id
+	};
+    PostData(uri, body);
 }
 
 function UpdateDownloadLocation(downloadLocation){
-    var uri = `${apiUri}/Settings/UpdateDownloadLocation?downloadLocation=${downloadLocation}`;
-    PostData(uri);	
+    var uri = `${apiUri}/Settings/UpdateDownloadLocation`;
+	const body = {
+		"downloadLocation": downloadLocation
+	};
+    PostData(uri, body);	
 }
 
 function RefreshLibraryMetadata() {
@@ -237,100 +258,155 @@ Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +"_"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"_"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
 
-//Komga
-function UpdateKomga(komgaUrl, komgaAuth){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
-    PostData(uri);
+//Connectors
+function UpdateConnector(connector, url = null, auth1 = null, auth2 = null){
+	switch (connector) {
+		case 'Komga':
+			var uri = `${apiUri}/LibraryConnectors/Update`
+			const body = {
+				"libraryConnector":"Komga",
+				"komgaUrl":url,
+				"komgaAuth":auth1
+			};
+			break;
+		case 'Kavita':
+			var uri = `${apiUri}/LibraryConnectors/Update`
+			const body = {
+				"libraryConnector":"Kavita",
+				"kavitaUrl":url,
+				"kavitaUsername":auth1,
+				"kavitaPassword":auth2
+			};
+			break;
+		case 'Gotify':
+			var uri = `${apiUri}/NotificationConnectors/Update`
+			const body = {
+				"notificationConnector":"Gotify",
+				"gotifyUrl":url,
+				"gotifyAppToken":auth1
+			};
+		case 'LunaSea':
+			var uri = `${apiUri}/NotificationConnectors/Update`
+			const body = {
+				"notificationConnector":"LunaSea",
+				"lunaseaWebhook":lunaseaWebhook
+			};
+		case 'Ntfy':
+			var uri = `${apiUri}/NotificationConnectors/Update`
+			const body = {
+				"notificationConnector":"Ntfy",
+				"ntfyUrl":url,
+				"ntfyAuth":auth1
+			};
+		default:
+			console.log("Error, unknown connector: ${connector}");
+	};
+	PostData(uri, body);
 }
 
-function ResetKomga(){
-    var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Komga`;
-    PostData(uri);
+function TestConnector(connector, url = null, auth1 = null, auth2 = null){
+	switch (connector) {
+		case 'Komga':
+			var uri = `${apiUri}/LibraryConnectors/Test`
+			const body = {
+				"libraryConnector":"Komga",
+				"komgaUrl":url,
+				"komgaAuth":auth1
+			};
+			break;
+		case 'Kavita':
+			var uri = `${apiUri}/LibraryConnectors/Test`
+			const body = {
+				"libraryConnector":"Kavita",
+				"kavitaUrl":url,
+				"kavitaUsername":auth1,
+				"kavitaPassword":auth2
+			};
+			break;
+		case 'Gotify':
+			var uri = `${apiUri}/NotificationConnectors/Test`
+			const body = {
+				"notificationConnector":"Gotify",
+				"gotifyUrl":url,
+				"gotifyAppToken":auth1
+			};
+		case 'LunaSea':
+			var uri = `${apiUri}/NotificationConnectors/Test`
+			const body = {
+				"notificationConnector":"LunaSea",
+				"lunaseaWebhook":lunaseaWebhook
+			};
+		case 'Ntfy':
+			var uri = `${apiUri}/NotificationConnectors/Test`
+			const body = {
+				"notificationConnector":"Ntfy",
+				"ntfyUrl":url,
+				"ntfyAuth":auth1
+			};
+		default:
+			console.log("Error, unknown connector: ${connector}");
+	};
+	PostData(uri, body);
 }
 
-function TestKomga(komgaUrl, komgaAuth){
-    var uri = `${apiUri}/LibraryConnectors/Test?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
-    PostData(uri);
+function ResetConnector(connector){
+	switch (connector) {
+		case 'Komga':
+			var uri = `${apiUri}/LibraryConnectors/Reset`
+			const body = {
+				"libraryConnector":"Komga"
+			};
+			break;
+		case 'Kavita':
+			var uri = `${apiUri}/LibraryConnectors/Reset`
+			const body = {
+				"libraryConnector":"Kavita"
+			};
+			break;
+		case 'Gotify':
+			var uri = `${apiUri}/NotificationConnectors/Reset`
+			const body = {
+				"notificationConnector":"Gotify"
+			};
+		case 'LunaSea':
+			var uri = `${apiUri}/NotificationConnectors/Reset`
+			const body = {
+				"notificationConnector":"LunaSea"
+			};
+		case 'Ntfy':
+			var uri = `${apiUri}/NotificationConnectors/Reset`
+			const body = {
+				"notificationConnector":"Ntfy"
+			};
+		default:
+			console.log("Error, unknown connector: ${connector}");
+	};
+	DeleteData(uri, body);
 }
 
-
-//Kavita
-function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
-    PostData(uri);
-}
-
-function ResetKavita(){
-    var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Kavita`;
-    PostData(uri);
-}
-
-function TestKavita(kavitaUrl, kavitaUsername, kavitaPassword){
-    var uri = `${apiUri}/LibraryConnectors/Test?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
-    PostData(uri);
-}
-
-//Gotify
-function UpdateGotify(gotifyUrl, gotifyAppToken){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
-    PostData(uri);
-}
-
-function ResetGotify(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=Gotify`;
-    PostData(uri);
-}
-
-function TestGotify(gotifyUrl, gotifyAppToken){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
-    PostData(uri);
-}
-
-//LunaSea
-function UpdateLunaSea(lunaseaWebhook){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
-    PostData(uri);
-}
-
-function ResetLunaSea(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=LunaSea`;
-    PostData(uri);
-}
-
-function TestLunaSea(lunaseaWebhook){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
-    PostData(uri);
-}
-
-//Ntfy
-function UpdateNtfy(ntfyEndpoint, ntfyAuth){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
-    PostData(uri);
-}
-
-function ResetNtfy(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=Ntfy`;
-    PostData(uri);
-}
-
-function TestNtfy(ntfyEndpoint, ntfyAuth){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
-    PostData(uri);
-}
-
-function UpdateUserAgent(userAgent){
-    var uri = `${apiUri}/Settings/userAgent?userAgent=${userAgent}`;
-    PostData(uri);
+function UpdateUserAgent(agent){
+    var uri = `${apiUri}/Settings/userAgent`;
+	const body = {
+		"userAgent": agent
+	};
+    PostData(uri, body);
 }
 
 function UpdateRateLimit(byteValue, rateLimit) {
-    var uri = `${apiUri}/Settings/customRequestLimit?requestType=${byteValue}&requestsPerMinute=${rateLimit}`;
-    PostData(uri);
+    var uri = `${apiUri}/Settings/customRequestLimit`;
+	const body = {
+		"requestType": byteValue,
+		"requestsPerMinute": rateLimit
+	};
+    PostData(uri, body);
 }
 
-function RemoveJob(jobId){
-    var uri = `${apiUri}/Jobs?jobId=${jobId}`;
-    DeleteData(uri);
+function RemoveJob(id){
+    var uri = `${apiUri}/Jobs`;
+	const body = {
+		"jobId": id
+	};
+    DeleteData(uri, body);
 }
 
 function CancelJob(jobId){

@@ -164,9 +164,9 @@
                   <label for="komgaUsername"></label><input placeholder="Username" id="komgaUsername" type="text">
                   <label for="komgaPassword"></label><input placeholder="Password" id="komgaPassword" type="password">
                   <div class="section-buttons-container">
-                      <span onclick="TestKomga(komgaUrl.value, utf8_to_b64(`${komgaUsername.value}:${komgaPassword.value}`))" class='section-button' id="test-connector">Test</span>
+                      <span onclick="TestConnector('Komga', komgaUrl.value, utf8_to_b64(`${komgaUsername.value}:${komgaPassword.value}`))" class='section-button' id="test-connector">Test</span>
                       <span onclick="ClearKomga()" class='section-button' id="reset">Reset</span>
-                      <span onclick="UpdateKomga(komgaUrl.value, utf8_to_b64(`${komgaUsername.value}:${komgaPassword.value}`))" class='section-button'>Apply</span>
+                      <span onclick="UpdateConnector('Komga', komgaUrl.value, utf8_to_b64(`${komgaUsername.value}:${komgaPassword.value}`))" class='section-button'>Apply</span>
                   </div>
                 </div>
                 <div class="section-item">
@@ -175,9 +175,9 @@
                   <label for="kavitaUsername"></label><input placeholder="Username" id="kavitaUsername" type="text">
                   <label for="kavitaPassword"></label><input placeholder="Password" id="kavitaPassword" type="password">
                   <div class="section-buttons-container">
-                    <span onclick="TestKavita(kavitaUrl.value, kavitaUsername.value, kavitaPassword.value)" class='section-button' id="test-connector">Test</span>
+                    <span onclick="TestConnector('Kavita', kavitaUrl.value, kavitaUsername.value, kavitaPassword.value)" class='section-button' id="test-connector">Test</span>
                     <span onclick="ClearKavita()" class='section-button' id="reset">Reset</span>
-                    <span onclick="UpdateKavita(kavitaUrl.value, kavitaUsername.value, kavitaPassword.value)" class='section-button'>Apply</span>
+                    <span onclick="UpdateConnector('Kavita', kavitaUrl.value, kavitaUsername.value, kavitaPassword.value)" class='section-button'>Apply</span>
                 </div>
                 </div>
               </div>
@@ -191,18 +191,18 @@
                     <label for="gotifyUrl"></label><input placeholder="URL" id="gotifyUrl" type="text">
                     <label for="gotifyAppToken"></label><input placeholder="App-Token" id="gotifyAppToken" type="text">
                     <div class="section-buttons-container">
-                      <span onclick="TestGotify(gotifyUrl.value, gotifyAppToken.value)" class='section-button' id="test-connector">Test</span>
+                      <span onclick="TestConnector('Gotify', gotifyUrl.value, gotifyAppToken.value)" class='section-button' id="test-connector">Test</span>
                       <span onclick="ClearGotify()" class='section-button' id="reset">Reset</span>
-                      <span onclick="UpdateGotify(gotifyUrl.value, gotifyAppToken.value)" class='section-button'>Apply</span>
+                      <span onclick="UpdateConnector('Gotify', gotifyUrl.value, gotifyAppToken.value)" class='section-button'>Apply</span>
                   </div>
                   </div>
                   <div class="section-item">
                     <span class="title"><img src='connector-icons/lunasea.png'>LunaSea<connector-configured id="lunaseaConfigured"></connector-configured></span>
                     <label for="lunaseaWebhook"></label><input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text">
                     <div class="section-buttons-container">
-                      <span onclick="TestLunaSea(lunaseaWebhook.value);" class='section-button' id="test-connector">Test</span>
+                      <span onclick="TestConnector('LunaSea', lunaseaWebhook.value);" class='section-button' id="test-connector">Test</span>
                       <span onclick="ClearLunasea()" class='section-button' id="reset">Reset</span>
-                      <span onclick="UpdateLunaSea(lunaseaWebhook.value);" class='section-button'>Apply</span>
+                      <span onclick="UpdateConnector('LunaSea', lunaseaWebhook.value);" class='section-button'>Apply</span>
                   </div>
                   </div>
                   <div class="section-item">
@@ -210,9 +210,9 @@
                     <label for="ntfyEndpoint"></label><input placeholder="URL" id="ntfyEndpoint" type="text">
                     <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
                     <div class="section-buttons-container">
-                      <span onclick="TestNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button' id="test-connector">Test</span>
+                      <span onclick="TestConnector('Ntfy', ntfyEndpoint.value, ntfyAuth.value);" class='section-button' id="test-connector">Test</span>
                       <span onclick="ClearNtfy()" class='section-button' id="reset">Reset</span>
-                      <span onclick="UpdateNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button'>Apply</span>
+                      <span onclick="UpdateConnector('Ntfy', ntfyEndpoint.value, ntfyAuth.value);" class='section-button'>Apply</span>
                   </div>
                   </div>
                 </div>

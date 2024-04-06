@@ -632,7 +632,7 @@ function ClearKomga(){
   settingKomgaUser.value = "";
   settingKomgaPass.value = "";
   settingKomgaConfigured.setAttribute("configuration", "Not Configured");
-  ResetKomga();
+  ResetConnector('Komga');
 }
 
 function ClearKavita(){
@@ -640,27 +640,27 @@ function ClearKavita(){
   settingKavitaUser.value = "";
   settingKavitaPass.value = "";
   settingKavitaConfigured.setAttribute("configuration", "Not Configured");
-  ResetKavita();
+  ResetConnector('Kavita');
 }
 
 function ClearGotify(){
   settingGotifyUrl.value = "";
   settingGotifyAppToken.value = ""
   settingGotifyConfigured.setAttribute("configuration", "Not Configured");
-  ResetGotify();
+  ResetConnector('Gotify');
 }
 
 function ClearLunasea(){
   settingLunaseaWebhook.value = "";
   settingLunaseaConfigured.setAttribute("configuration", "Not Configured");
-  ResetLunaSea();
+  ResetConnector('LunaSea');
 }
 
 function ClearNtfy(){
   settingNtfyEndpoint.value = "";
   settingNtfyAuth.value = "";
   settingNtfyConfigured.setAttribute("configuration", "Not Configured");
-  ResetNtfy();
+  ResetConnector('Ntfy');
 }
 
 function UpdateSettings(){
@@ -673,27 +673,27 @@ function UpdateSettings(){
   if(settingKomgaUrl.value != "" &&
      settingKomgaUser.value != "" &&
      settingKomgaPass.value != ""){
-    UpdateKomga(settingKomgaUrl.value, utf8_to_b64(`${settingKomgaUser.value}:${settingKomgaPass.value}`));
+    UpdateConnector('Komga', settingKomgaUrl.value, utf8_to_b64(`${settingKomgaUser.value}:${settingKomgaPass.value}`));
   }
   
   if(settingKavitaUrl.value != "" &&
     settingKavitaUser.value != "" &&
     settingKavitaPass.value != ""){
-    UpdateKavita(settingKavitaUrl.value, settingKavitaUser.value, settingKavitaPass.value);
+    UpdateConnector('Kavita', settingKavitaUrl.value, settingKavitaUser.value, settingKavitaPass.value);
   }
   
   if(settingGotifyUrl.value != "" &&
     settingGotifyAppToken.value != ""){
-    UpdateGotify(settingGotifyUrl.value, settingGotifyAppToken.value);
+    UpdateConnector('Gotify', settingGotifyUrl.value, settingGotifyAppToken.value);
   }
   
   if(settingLunaseaWebhook.value != ""){
-    UpdateLunaSea(settingLunaseaWebhook.value);
+    UpdateConnector('LunaSea', settingLunaseaWebhook.value);
   }
   
   if(settingNtfyEndpoint.value != "" &&
     settingNtfyAuth.value != ""){
-    UpdateNtfy(settingNtfyEndpoint.value, settingNtfyAuth.value);
+    UpdateConnector('Ntfy', settingNtfyEndpoint.value, settingNtfyAuth.value);
   }
   
   if(settingUserAgent.value != ""){
