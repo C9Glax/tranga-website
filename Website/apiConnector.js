@@ -45,7 +45,7 @@ async function PostData(uri, data = null){
 		headers: { "Content-Type": "application/json" },	
 		body: JSON.stringify(data)
     });
-    //console.log(request);
+    console.log(request);
 }
 
 function DeleteData(uri, data = null){
@@ -156,7 +156,7 @@ async function GetRateLimits() {
 
 function CreateMonitorJob(connector, id, language, interval = `03:00:00`){
     var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}`;
-	const body = {
+	var body = {
 		"connector":connector,
 		"internalId": id,
 		"interval":interval,
@@ -167,7 +167,7 @@ function CreateMonitorJob(connector, id, language, interval = `03:00:00`){
 
 function CreateDownloadNewChaptersJob(connector, id, language){
     var uri = `${apiUri}/Jobs/DownloadNewChapters`;
-	const body = {
+	var body = {
 		"connector": connector,
 		"internalId":id,
 		"translatedLanguage":language
@@ -177,7 +177,7 @@ function CreateDownloadNewChaptersJob(connector, id, language){
 
 function StartJob(id){
     var uri = `${apiUri}/Jobs/StartNow`;
-	const body = {
+	var body = {
 		"jobId":id
 	};
     PostData(uri, body);
@@ -185,7 +185,7 @@ function StartJob(id){
 
 function UpdateDownloadLocation(downloadLocation){
     var uri = `${apiUri}/Settings/UpdateDownloadLocation`;
-	const body = {
+	var body = {
 		"downloadLocation": downloadLocation
 	};
     PostData(uri, body);	
@@ -263,7 +263,7 @@ function UpdateConnector(connector, url = null, auth1 = null, auth2 = null){
 	switch (connector) {
 		case 'Komga':
 			var uri = `${apiUri}/LibraryConnectors/Update`
-			const body = {
+			var body = {
 				"libraryConnector":"Komga",
 				"komgaUrl":url,
 				"komgaAuth":auth1
@@ -271,7 +271,7 @@ function UpdateConnector(connector, url = null, auth1 = null, auth2 = null){
 			break;
 		case 'Kavita':
 			var uri = `${apiUri}/LibraryConnectors/Update`
-			const body = {
+			var body = {
 				"libraryConnector":"Kavita",
 				"kavitaUrl":url,
 				"kavitaUsername":auth1,
@@ -280,20 +280,20 @@ function UpdateConnector(connector, url = null, auth1 = null, auth2 = null){
 			break;
 		case 'Gotify':
 			var uri = `${apiUri}/NotificationConnectors/Update`
-			const body = {
+			var body = {
 				"notificationConnector":"Gotify",
 				"gotifyUrl":url,
 				"gotifyAppToken":auth1
 			};
 		case 'LunaSea':
 			var uri = `${apiUri}/NotificationConnectors/Update`
-			const body = {
+			var body = {
 				"notificationConnector":"LunaSea",
 				"lunaseaWebhook":lunaseaWebhook
 			};
 		case 'Ntfy':
 			var uri = `${apiUri}/NotificationConnectors/Update`
-			const body = {
+			var body = {
 				"notificationConnector":"Ntfy",
 				"ntfyUrl":url,
 				"ntfyAuth":auth1
@@ -308,7 +308,7 @@ function TestConnector(connector, url = null, auth1 = null, auth2 = null){
 	switch (connector) {
 		case 'Komga':
 			var uri = `${apiUri}/LibraryConnectors/Test`
-			const body = {
+			var body = {
 				"libraryConnector":"Komga",
 				"komgaUrl":url,
 				"komgaAuth":auth1
@@ -316,7 +316,7 @@ function TestConnector(connector, url = null, auth1 = null, auth2 = null){
 			break;
 		case 'Kavita':
 			var uri = `${apiUri}/LibraryConnectors/Test`
-			const body = {
+			var body = {
 				"libraryConnector":"Kavita",
 				"kavitaUrl":url,
 				"kavitaUsername":auth1,
@@ -325,20 +325,20 @@ function TestConnector(connector, url = null, auth1 = null, auth2 = null){
 			break;
 		case 'Gotify':
 			var uri = `${apiUri}/NotificationConnectors/Test`
-			const body = {
+			var body = {
 				"notificationConnector":"Gotify",
 				"gotifyUrl":url,
 				"gotifyAppToken":auth1
 			};
 		case 'LunaSea':
 			var uri = `${apiUri}/NotificationConnectors/Test`
-			const body = {
+			var body = {
 				"notificationConnector":"LunaSea",
 				"lunaseaWebhook":lunaseaWebhook
 			};
 		case 'Ntfy':
 			var uri = `${apiUri}/NotificationConnectors/Test`
-			const body = {
+			var body = {
 				"notificationConnector":"Ntfy",
 				"ntfyUrl":url,
 				"ntfyAuth":auth1
@@ -352,30 +352,30 @@ function TestConnector(connector, url = null, auth1 = null, auth2 = null){
 function ResetConnector(connector){
 	switch (connector) {
 		case 'Komga':
-			var uri = `${apiUri}/LibraryConnectors/Reset`
-			const body = {
-				"libraryConnector":"Komga"
+			var uri = `${apiUri}/LibraryConnectors`
+			var body = {
+				"libraryConnectors":"Komga"
 			};
 			break;
 		case 'Kavita':
-			var uri = `${apiUri}/LibraryConnectors/Reset`
-			const body = {
+			var uri = `${apiUri}/LibraryConnectors`
+			var body = {
 				"libraryConnector":"Kavita"
 			};
 			break;
 		case 'Gotify':
-			var uri = `${apiUri}/NotificationConnectors/Reset`
-			const body = {
+			var uri = `${apiUri}/NotificationConnectors`
+			var body = {
 				"notificationConnector":"Gotify"
 			};
 		case 'LunaSea':
-			var uri = `${apiUri}/NotificationConnectors/Reset`
-			const body = {
+			var uri = `${apiUri}/NotificationConnectors`
+			var body = {
 				"notificationConnector":"LunaSea"
 			};
 		case 'Ntfy':
-			var uri = `${apiUri}/NotificationConnectors/Reset`
-			const body = {
+			var uri = `${apiUri}/NotificationConnectors`
+			var body = {
 				"notificationConnector":"Ntfy"
 			};
 		default:
@@ -386,7 +386,7 @@ function ResetConnector(connector){
 
 function UpdateUserAgent(agent){
     var uri = `${apiUri}/Settings/userAgent`;
-	const body = {
+	var body = {
 		"userAgent": agent
 	};
     PostData(uri, body);
@@ -394,7 +394,7 @@ function UpdateUserAgent(agent){
 
 function UpdateRateLimit(byteValue, rateLimit) {
     var uri = `${apiUri}/Settings/customRequestLimit`;
-	const body = {
+	var body = {
 		"requestType": byteValue,
 		"requestsPerMinute": rateLimit
 	};
@@ -403,7 +403,7 @@ function UpdateRateLimit(byteValue, rateLimit) {
 
 function RemoveJob(id){
     var uri = `${apiUri}/Jobs`;
-	const body = {
+	var body = {
 		"jobId": id
 	};
     DeleteData(uri, body);

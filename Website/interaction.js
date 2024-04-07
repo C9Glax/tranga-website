@@ -701,31 +701,31 @@ function UpdateSettings(){
   }
 
   if (defaultRL.value != "") {
-    UpdateRateLimit(0, defaultRL.value);
+    UpdateRateLimit("0", defaultRL.value);
   }
 
   if (coverRL.value != "") {
-    UpdateRateLimit(3, coverRL.value);
+    UpdateRateLimit("3", coverRL.value);
   }
 
   if (imageRL.value != "") {
-    UpdateRateLimit(2, imageRL.value);
+    UpdateRateLimit("2", imageRL.value);
   }
 
   if (infoRL.value != "") {
-    UpdateRateLimit(6, infoRL.value);
+    UpdateRateLimit("6", infoRL.value);
   }
 
   if (mDexAuthorRL.value != "") {
-    UpdateRateLimit(5, mDexAuthorRL.value);
+    UpdateRateLimit("5", mDexAuthorRL.value);
   }
 
   if (mDexFeedRL.value != "") {
-    UpdateRateLimit(1, mDexFeedRL.value);
+    UpdateRateLimit("1", mDexFeedRL.value);
   }
 
   if (mDexImageRL.value != "") {
-    UpdateRateLimit(5, mDexImageRL.value);
+    UpdateRateLimit("5", mDexImageRL.value);
   }
   
   setTimeout(() => {
