@@ -40,7 +40,6 @@ const imageRL = document.querySelector("#imageRL");
 const infoRL = document.querySelector("#infoRL");
 
 //MangaDex Rate Limits
-const mDexAuthorRL = document.querySelector("#mDexAuthorRL");
 const mDexFeedRL = document.querySelector("#mDexFeedRL");
 const mDexImageRL = document.querySelector("#mDexImageRL");
 
@@ -158,7 +157,6 @@ function Setup(){
       coverRL.placeholder = json.MangaCover + ' Requests/Minute';
       imageRL.placeholder = json.MangaImage + ' Requests/Minute';
       infoRL.placeholder = json.MangaInfo + ' Requests/Minute';
-      mDexAuthorRL.placeholder = json.MangaDexAuthor + ' Requests/Minute';
       mDexFeedRL.placeholder = json.MangaDexFeed + ' Requests/Minute';
       mDexImageRL.placeholder = json.MangaDexImage + ' Requests/Minute';
     });
@@ -530,7 +528,6 @@ defaultRL.addEventListener("keypress", (event) => { if(event.key === "Enter") Up
 coverRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 imageRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 infoRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
-mDexAuthorRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 mDexFeedRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 mDexImageRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 
@@ -558,7 +555,6 @@ function OpenSettings(){
   coverRL.value = "";
   imageRL.value = "";
   infoRL.value = "";
-  mDexAuthorRL.value = "";
   mDexFeedRL.value = "";
   mDexImageRL.value = "";
   
@@ -573,7 +569,6 @@ function OpenSettings(){
     coverRL.placeholder = json.MangaCover + ' Requests/Minute';
     imageRL.placeholder = json.MangaImage + ' Requests/Minute';
     infoRL.placeholder = json.MangaInfo + ' Requests/Minute';
-    mDexAuthorRL.placeholder = json.MangaDexAuthor + ' Requests/Minute';
     mDexFeedRL.placeholder = json.MangaDexFeed + ' Requests/Minute';
     mDexImageRL.placeholder = json.MangaDexImage + ' Requests/Minute';
   });
@@ -714,10 +709,6 @@ function UpdateSettings(){
 
   if (infoRL.value != "") {
     UpdateRateLimit(6, infoRL.value);
-  }
-
-  if (mDexAuthorRL.value != "") {
-    UpdateRateLimit(5, mDexAuthorRL.value);
   }
 
   if (mDexFeedRL.value != "") {
