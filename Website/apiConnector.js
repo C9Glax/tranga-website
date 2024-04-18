@@ -285,12 +285,14 @@ function UpdateConnector(connector, url = null, auth1 = null, auth2 = null){
 				"gotifyUrl":url,
 				"gotifyAppToken":auth1
 			};
+			break;
 		case 'LunaSea':
 			var uri = `${apiUri}/NotificationConnectors/Update`
 			var body = {
 				"notificationConnector":"LunaSea",
 				"lunaseaWebhook":lunaseaWebhook
 			};
+			break;
 		case 'Ntfy':
 			var uri = `${apiUri}/NotificationConnectors/Update`
 			var body = {
@@ -298,6 +300,7 @@ function UpdateConnector(connector, url = null, auth1 = null, auth2 = null){
 				"ntfyUrl":url,
 				"ntfyAuth":auth1
 			};
+			break;
 		default:
 			console.log("Error, unknown connector: ${connector}");
 	};
@@ -330,12 +333,14 @@ function TestConnector(connector, url = null, auth1 = null, auth2 = null){
 				"gotifyUrl":url,
 				"gotifyAppToken":auth1
 			};
+			break;
 		case 'LunaSea':
 			var uri = `${apiUri}/NotificationConnectors/Test`
 			var body = {
 				"notificationConnector":"LunaSea",
 				"lunaseaWebhook":lunaseaWebhook
 			};
+			break;
 		case 'Ntfy':
 			var uri = `${apiUri}/NotificationConnectors/Test`
 			var body = {
@@ -343,6 +348,7 @@ function TestConnector(connector, url = null, auth1 = null, auth2 = null){
 				"ntfyUrl":url,
 				"ntfyAuth":auth1
 			};
+			break;
 		default:
 			console.log("Error, unknown connector: ${connector}");
 	};
@@ -368,16 +374,19 @@ function ResetConnector(connector){
 			var body = {
 				"notificationConnector":"Gotify"
 			};
+			break;
 		case 'LunaSea':
 			var uri = `${apiUri}/NotificationConnectors`
 			var body = {
 				"notificationConnector":"LunaSea"
 			};
+			break;
 		case 'Ntfy':
 			var uri = `${apiUri}/NotificationConnectors`
 			var body = {
 				"notificationConnector":"Ntfy"
 			};
+			break;
 		default:
 			console.log("Error, unknown connector: ${connector}");
 	};
