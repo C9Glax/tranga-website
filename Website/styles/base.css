@@ -95,10 +95,6 @@ filter-box {
     height: 600px;
 }
 
-filter-box.animate {
-    display: flex;
-}
-
 filter-box border-bar popup-title{
     font-size: 12pt;
 }
