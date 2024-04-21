@@ -240,8 +240,19 @@ Date.prototype.timeNow = function () {
 function UpdateAprilFoolsMode() { 
 	checkBox = document.getElementById("aprilFoolsMode");
 	var uri = `${apiUri}/Settings/AprilFoolsMode?enabled=${checkBox.checked}`;
-	console.log(uri);
 	PostData(uri);
+}
+
+function ResetRateLimits() {
+	var uri = `${apiUri}/Settings/customRequestLimit/Reset`;
+	PostData(uri);
+	OpenSettings();
+}
+
+function ResetUserAgent() {
+	var uri = `${apiUri}/Settings/userAgent/Reset`;
+	PostData(uri);
+	OpenSettings();
 }
 
 //Komga

@@ -104,7 +104,7 @@
                     </label>
                   </row>
                   <row>
-                    <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
+                    <border-bar-button class="section" onclick="ResetUserAgent()">Reset User Agent</border-bar-button>
                     <border-bar-button class="section" onclick="DownloadLogs()">Download Logs</border-bar-button>
                   </row>
                 </div>
@@ -114,13 +114,19 @@
                   <row><label for="CoverRL">Manga Covers:</label><input id="coverRL" type="text"></row>
                   <row><label for="ImageRL">Manga Images:</label><input id="imageRL" type="text"></row>
                   <row><label for="InfoRL">Manga Info:</label><input id="infoRL" type="text"></row>
+                  <row>
+                    <border-bar-button class="section" onclick="ResetRateLimits()">Reset All Rate Limits</border-bar-button>
+                  </row>
                 </div>
                 <div class="section-item dyn-height">
-                  <span class="title">Appearance</span>
-                  <row><label for="cssStyle">Library Style:</label><select id="cssStyle">
+                  <span class="title">Library</span>
+                  <row><label for="cssStyle">Appearance Style:</label><select id="cssStyle">
                     <option id="card_compact" value="card_compact">Cards (Compact)</option>
                     <option id="card_hover" value="card_hover">Cards (Hover)</option>
                   </select></row>
+                  <row> 
+                    <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
+                  </row>
                 </div>
               </div>
             </div>
