@@ -73,6 +73,7 @@ const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
 
 const settingUserAgent = document.querySelector("#userAgent");
 const settingApiUri = document.querySelector("#settingApiUri");
+const settingAprilFoolsMode = document.querySelector("#aprilFoolsMode");
 const settingCSSStyle = document.querySelector('#cssStyle');
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
@@ -562,6 +563,7 @@ function OpenSettings(){
     //console.log(json);
     settingApiUri.value = apiUri;
     settingUserAgent.value = json.userAgent;
+    settingAprilFoolsMode.checked = json.aprilFoolsMode;
     //console.log(json.styleSheet);
   });
   GetRateLimits().then((json) => {

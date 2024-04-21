@@ -97,6 +97,13 @@
                   <row><label for="settingApiUri">API URI:</label><input placeholder="https://" type="text" id="settingApiUri"></row>
                   <row><label for="userAgent">User Agent:</label><input placeholder="UserAgent" id="userAgent" type="text"></row>
                   <row>
+                    <label for="aprilFoolsMode">Skip Chapters on April 1st:</label>
+                    <label class="switch-toggle">
+                      <input type="checkbox" onclick="UpdateAprilFoolsMode()" id="aprilFoolsMode">
+                      <span class="slider"></span>
+                    </label>
+                  </row>
+                  <row>
                     <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
                     <border-bar-button class="section" onclick="DownloadLogs()">Download Logs</border-bar-button>
                   </row>

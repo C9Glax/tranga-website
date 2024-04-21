@@ -237,6 +237,13 @@ Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +"_"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"_"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
 
+function UpdateAprilFoolsMode() { 
+	checkBox = document.getElementById("aprilFoolsMode");
+	var uri = `${apiUri}/Settings/AprilFoolsMode?enabled=${checkBox.checked}`;
+	console.log(uri);
+	PostData(uri);
+}
+
 //Komga
 function UpdateKomga(komgaUrl, komgaAuth){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
