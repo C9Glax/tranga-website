@@ -15,6 +15,7 @@ let statusNameMatch = [];
 const searchBox = document.querySelector("#searchbox");
 const settingsPopup = document.querySelector("#settingsPopup");
 const filterBox = document.querySelector("#filterBox");
+const filterContent = document.querySelector("#filterContent");
 const settingsCog = document.querySelector("#settingscog");
 const filterFunnel = document.querySelector("#filterFunnel");
 const tasksContent = document.querySelector("content");
@@ -73,6 +74,7 @@ const settingNtfyConfigured = document.querySelector("#ntfyConfigured");
 
 const settingUserAgent = document.querySelector("#userAgent");
 const settingApiUri = document.querySelector("#settingApiUri");
+const settingAprilFoolsMode = document.querySelector("#aprilFoolsMode");
 const settingCSSStyle = document.querySelector('#cssStyle');
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
@@ -182,6 +184,15 @@ function Setup(){
   statusMatch.length = 0;
 }
 Setup();
+
+function ToggleFilterBox() {
+  if (filterBox.style.display == 'none') {
+    filterBox.style.display = 'flex';
+  } else {
+    filterBox.style.display = 'none';
+  }
+  filterContent.scrollTop = 0;
+}
 
 function ToggleFilterConnector(connector, event) {
   //console.log("Initial Array:");
@@ -507,7 +518,7 @@ settingsCog.addEventListener("click", () => {
 });
 
 filterFunnel.addEventListener("click", () => {
-  filterBox.classList.toggle("animate");
+  ToggleFilterBox();
 });
 
 settingKomgaUrl.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
@@ -562,6 +573,7 @@ function OpenSettings(){
     //console.log(json);
     settingApiUri.value = apiUri;
     settingUserAgent.value = json.userAgent;
+    settingAprilFoolsMode.checked = json.aprilFoolsMode;
     //console.log(json.styleSheet);
   });
   GetRateLimits().then((json) => {

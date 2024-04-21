@@ -237,6 +237,24 @@ Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +"_"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"_"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
 
+function UpdateAprilFoolsMode() { 
+	checkBox = document.getElementById("aprilFoolsMode");
+	var uri = `${apiUri}/Settings/AprilFoolsMode?enabled=${checkBox.checked}`;
+	PostData(uri);
+}
+
+function ResetRateLimits() {
+	var uri = `${apiUri}/Settings/customRequestLimit/Reset`;
+	PostData(uri);
+	OpenSettings();
+}
+
+function ResetUserAgent() {
+	var uri = `${apiUri}/Settings/userAgent/Reset`;
+	PostData(uri);
+	OpenSettings();
+}
+
 //Komga
 function UpdateKomga(komgaUrl, komgaAuth){
     var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
