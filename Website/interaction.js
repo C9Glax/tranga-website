@@ -1,4 +1,4 @@
-﻿let monitoringJobsCount = 0;
+let monitoringJobsCount = 0;
 let runningJobs = [];
 let waitingJobs = [];
 let notificationConnectorTypes = [];
@@ -161,7 +161,6 @@ function Setup() {
       statusFilterBox.appendChild(releaseStatus);
     });
 
-    ResetContent();
     UpdateJobs();
     GetSettings().then((json) => {
       //console.log(json);
@@ -275,7 +274,7 @@ settingCSSStyle.addEventListener("change", (event) => {
     );
 });
 
-function ResetContent() {
+function resetView() {
   //Delete everything
   tasksContent.replaceChildren();
 
@@ -287,19 +286,28 @@ function ResetContent() {
   add.appendChild(plus);
   add.addEventListener("click", () => ShowNewMangaSearch());
   tasksContent.appendChild(add);
+}
 
-  //Populate with the monitored mangas
-  GetMonitorJobs().then((json) => {
-    //console.log(json);
-    json.forEach((job) => {
-      var mangaView = CreateManga(job.manga, job.mangaConnector.name);
-      mangaView.addEventListener("click", (event) => {
-        ShowMangaWindow(job, job.manga, event, false);
-      });
-      tasksContent.appendChild(mangaView);
+async function fetchAndUpdateMangasView() {
+  let json = await GetMonitorJobs();
+
+  if (monitoringJobsCount === json.length) {
+    return;
+  }
+
+  resetView();
+  updateMangasView(json);
+}
+
+function updateMangasView(json) {
+  json.forEach((job) => {
+    var mangaView = CreateManga(job.manga, job.mangaConnector.name);
+    mangaView.addEventListener("click", (event) => {
+      ShowMangaWindow(job, job.manga, event, false);
     });
-    monitoringJobsCount = json.length;
+    tasksContent.appendChild(mangaView);
   });
+  monitoringJobsCount = json.length;
 }
 
 function ShowNewMangaSearch() {
@@ -814,12 +822,7 @@ function utf8_to_b64(str) {
 }
 
 function UpdateJobs() {
-  GetMonitorJobs().then((json) => {
-    if (monitoringJobsCount != json.length) {
-      ResetContent();
-      monitoringJobsCount = json.length;
-    }
-  });
+  fetchAndUpdateMangasView();
 
   //Get the jobs that are waiting in the queue
   GetWaitingJobs().then((json) => {
@@ -945,7 +948,7 @@ function GetValidSelector(str) {
   return clean.join("");
 }
 
-const stringToColour = (str) => {
+function stringToColour(str) {
   let hash = 0;
   str.split("").forEach((char) => {
     hash = char.charCodeAt(0) + ((hash << 5) - hash);
@@ -956,4 +959,4 @@ const stringToColour = (str) => {
     colour += value.toString(16).padStart(2, "0");
   }
   return colour;
-};
+}
