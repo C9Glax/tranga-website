@@ -413,8 +413,9 @@ function CreateSearchResult(manga, connector) {
 
   var headerRow = document.createElement('header-row');
   
-  var mangaTitle = document.createElement('span');
+  var mangaTitle = document.createElement('a');
   mangaTitle.innerText = manga.sortName;
+  mangaTitle.href = manga.websiteUrl;
   mangaTitle.className = 'mangaTitle';
   headerRow.appendChild(mangaTitle);
 
@@ -486,10 +487,10 @@ function CreateSearchResult(manga, connector) {
   
   folderRow = document.createElement('row');
   folderLabel = document.createElement('label');
-  folderLabel.innerText = 'Download Path:';
+  folderLabel.innerText = 'Download Folder:';
   folderRow.appendChild(folderLabel);
   folderInput = document.createElement('input');
-  downloadFolder = '~/' + manga.folderName + '/';
+  downloadFolder = manga.folderName;
   folderInput.placeholder = downloadFolder.toString();
   folderInput.type = 'text';
   folderInput.id = manga.internalId.concat('-downloadfolder')
