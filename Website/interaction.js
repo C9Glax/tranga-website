@@ -76,11 +76,15 @@ const settingUserAgent = document.querySelector("#userAgent");
 const settingApiUri = document.querySelector("#settingApiUri");
 const settingAprilFoolsMode = document.querySelector("#aprilFoolsMode");
 const settingCSSStyle = document.querySelector('#cssStyle');
+const settingDownloadLocation = [];
+
+//Search and Add
 const newMangaPopup = document.querySelector("#newMangaPopup");
 const newMangaConnector = document.querySelector("#newMangaConnector");
 const newMangaTitle = document.querySelector("#newMangaTitle");
 const newMangaResult = document.querySelector("#newMangaResult");
 const newMangaTranslatedLanguage = document.querySelector("#newMangaTranslatedLanguage");
+const newMangaLoader = document.querySelector("popup-content #loaderdiv");
 
 //Jobs
 const jobsRunningTag = document.querySelector("#jobsRunningTag");
@@ -153,6 +157,9 @@ function Setup(){
     GetSettings().then((json) => {
       //console.log(json);
       settingApiUri.placeholder = apiUri;
+      settingDownloadLocation.value = json.downloadLocation;
+      settingUserAgent.value = json.userAgent;
+      settingAprilFoolsMode.checked = json.aprilFoolsMode;
     });
     GetRateLimits().then((json) => {
       defaultRL.placeholder = json.Default + ' Requests/Minute';
@@ -290,31 +297,30 @@ function ShowNewMangaSearch(){
   newMangaTitle.value = "";
   newMangaPopup.style.display = "block";
   newMangaResult.replaceChildren();
+  newMangaLoader.style.display = 'none';
 }
 
 newMangaTitle.addEventListener("keypress", (event) => { if(event.key === "Enter") GetNewMangaItems();});
 
-
-
-
 function GetNewMangaItems(){
-  if(newMangaTitle.value.length < 4)
-    return;
   
+  if(newMangaTitle.value.length < 4) {
+    return;
+  }
   newMangaResult.replaceChildren();
   newMangaConnector.disabled = true;
   newMangaTitle.disabled = true;
   newMangaTranslatedLanguage.disabled = true;
+  newMangaLoader.style.display = 'block';
   GetPublicationFromConnector(newMangaConnector.value, newMangaTitle.value).then((json) => {
     //console.log(json);
+    newMangaLoader.style.display = 'none';
+    newMangaResult.scrollTop = 0;
     if(json.length > 0)
       newMangaResult.style.display = "flex";
     json.forEach(result => {
-      var mangaElement = CreateManga(result, newMangaConnector.value)
-      newMangaResult.appendChild(mangaElement);
-      mangaElement.addEventListener("click", (event) => {
-        ShowMangaWindow(null, result, event, true);
-      });
+      var searchResult = CreateSearchResult(result, newMangaConnector.value)
+      newMangaResult.appendChild(searchResult);
     });
     
     newMangaConnector.disabled = false;
@@ -374,6 +380,203 @@ function CreateManga(manga, connector){
     mangaElement.appendChild(info);
     mangaElement.appendChild(releaseStatus);                  //Append the release status indicator to the publication element
     return mangaElement;
+}
+
+//Returns a new "Search Result" item to display in the search window
+function CreateSearchResult(manga, connector) {
+  //Create a new publication and set an internal ID
+  var searchResult = document.createElement('div');
+  searchResult.id = GetValidSelector(manga.internalId);
+  searchResult.className = "section-item";
+  
+//Append the cover image to the publication
+  var imageCont = document.createElement('img-container');
+
+  var mangaImage = document.createElement('img');
+  mangaImage.src = GetCoverUrl(manga.internalId);
+  imageCont.appendChild(mangaImage);
+
+  var connectorName = document.createElement('manga-connector');
+  connectorName.innerText = connector.toUpperCase();
+  connectorName.style.backgroundColor = stringToColour(connector);
+  imageCont.appendChild(connectorName);
+
+  var chapterNo = document.createElement('span');
+  chapterNo.className = 'latest-chapter-no';
+  chapterNo.innerText = manga.latestChapterAvailable.toString();
+  imageCont.appendChild(chapterNo);
+
+  searchResult.appendChild(imageCont);
+
+  var mangaDetails = document.createElement('div');
+  mangaDetails.className = 'jobDetails';
+
+  var headerRow = document.createElement('header-row');
+  
+  var mangaTitle = document.createElement('span');
+  mangaTitle.innerText = manga.sortName;
+  mangaTitle.className = 'mangaTitle';
+  headerRow.appendChild(mangaTitle);
+
+  //Create the publication status indicator
+  var releaseStatus = document.createElement('status-filter');
+  switch(manga.releaseStatus){
+    case 0:
+      releaseStatus.setAttribute("release-status", "Ongoing");
+      releaseStatus.innerText = "Ongoing";
+      break;
+    case 1:
+      releaseStatus.setAttribute("release-status", "Completed");
+      releaseStatus.innerText = "Completed";
+      break;
+    case 2:
+      releaseStatus.setAttribute("release-status", "On Hiatus");
+      releaseStatus.innerText = "On Hiatus";
+      break;
+    case 3:
+      releaseStatus.setAttribute("release-status", "Cancelled");
+      releaseStatus.innerText = "Cancelled";
+      break;
+    case 4:
+      releaseStatus.setAttribute("release-status", "Upcoming");
+      releaseStatus.innerText = "Upcoming";
+      break;
+    default:
+      releaseStatus.setAttribute("release-status", "Status Unavailable");
+      releaseStatus.innerText = "Status Unavailable";
+      break;
+  }
+  headerRow.appendChild(releaseStatus);
+
+  mangaDetails.appendChild(headerRow);
+
+  //Genres
+  var tagCloud = document.createElement('tag-cloud');
+  manga.authors.forEach(author => {
+    var authorCard = document.createElement('author-tag');
+
+    var personImg = document.createElement('img');
+    personImg.src = 'media/person.svg';
+    authorCard.appendChild(personImg);
+
+    var authorName = document.createElement('span');
+    authorName.innerText = author;
+    authorCard.appendChild(authorName);
+
+    tagCloud.appendChild(authorCard);
+  });
+  manga.tags.forEach(tag => {
+    var tagElement = document.createElement('manga-tag');
+    tagElement.innerText = tag;
+    tagCloud.appendChild(tagElement);
+  });
+  mangaDetails.appendChild(tagCloud);
+
+  //Description
+  var description = document.createElement('div');
+  description.className = 'mangaDescription';
+  description.innerText = manga.description;
+  mangaDetails.appendChild(description);
+
+  searchResult.appendChild(mangaDetails);
+
+  //Download Settings
+  var dlSett = document.createElement('div');
+  dlSett.className = 'new-manga-download-settings'
+  
+  folderRow = document.createElement('row');
+  folderLabel = document.createElement('label');
+  folderLabel.innerText = 'Download Path:';
+  folderRow.appendChild(folderLabel);
+  folderInput = document.createElement('input');
+  downloadFolder = '~/' + manga.folderName + '/';
+  folderInput.placeholder = downloadFolder.toString();
+  folderInput.type = 'text';
+  folderInput.id = manga.internalId.concat('-downloadfolder')
+  folderRow.appendChild(folderInput);
+  dlSett.appendChild(folderRow);
+
+  intervalRow = document.createElement('row');
+  intervalLabel = document.createElement('label');
+  intervalLabel.innerText = 'Job Interval:';
+  intervalRow.appendChild(intervalLabel);
+  intervalInput = document.createElement('input');
+  intervalInput.placeholder = '03:00:00 (HH:MM:SS)';
+  intervalInput.type = 'text';
+  intervalInput.id = manga.internalId.concat('-downloadinterval')
+  intervalRow.appendChild(intervalInput);
+  dlSett.appendChild(intervalRow);
+
+  chapterRow = document.createElement('row');
+  chapterLabel = document.createElement('label');
+  chapterLabel.innerText = 'Download from Chapter:';
+  chapterRow.appendChild(chapterLabel);
+  chapterInput = document.createElement('input');
+  chapterInput.placeholder = (manga.ignoreChaptersBelow + 1).toString();
+  chapterInput.type = 'number';
+  chapterInput.id = manga.internalId.concat('-downloadchapter')
+  chapterRow.appendChild(chapterInput);
+  dlSett.appendChild(chapterRow);
+
+  dlButton = document.createElement('border-bar-button');
+  if (IsInLibrary(manga.internalId)) {
+    dlButton.className = 'section in-library';
+    dlButton.innerText = 'In Library';
+  } else {
+    dlButton.className = 'section downloadManga';
+    dlButton.innerText = 'Monitor Manga';
+    dlButton.addEventListener('click', function() { AddManga(manga.internalId, connector) });
+  }
+  
+
+  dlSett.appendChild(dlButton);
+
+  mangaDetails.appendChild(dlSett);
+
+//Append the publication information to the publication
+  //console.log(manga);
+  return searchResult;
+}
+
+function IsInLibrary(id) {
+  matchFound = false;
+  tasksContent.childNodes.forEach(publication => {
+    if (id.toLowerCase().includes(publication.id.toLowerCase())) {
+      console.log('Match found');
+      matchFound = true;
+    }
+  });
+  return matchFound;
+}
+
+function AddManga(id, connector) {
+  //console.log('Adding Manga');
+  mangaID = id;
+  mangaConnector = connector; 
+  mangaLanguage = document.getElementById('newMangaTranslatedLanguage').value.toLowerCase();
+
+  folderInput = document.getElementById(id.concat('-downloadfolder')).value;
+  if (folderInput == null || folderInput == '') {
+    mangaFolder = document.getElementById(id.concat('-downloadfolder')).placeholder;
+  } else {
+    mangaFolder = folderInput;
+  }
+  
+  intervalInput = document.getElementById(id.concat('-downloadinterval')).value;
+  if (intervalInput == null || intervalInput == '') {
+    mangaInterval = '03:00:00';
+  } else {
+    mangaInterval = intervalInput;
+  }
+
+  chapterInput = document.getElementById(id.concat('-downloadchapter')).value;
+  if (chapterInput == null || chapterInput == '') {
+    mangaChapter = 0;
+  } else {
+    mangaChapter = chapterInput;
+  }
+
+  CreateMonitorJob(mangaConnector, mangaID, mangaLanguage, mangaInterval, mangaFolder, mangaChapter);
 }
 
 createMonitorJobButton.addEventListener("click", () => {
@@ -574,6 +777,7 @@ function OpenSettings(){
     settingApiUri.value = apiUri;
     settingUserAgent.value = json.userAgent;
     settingAprilFoolsMode.checked = json.aprilFoolsMode;
+    settingDownloadLocation.value = json.downloadLocation;
     //console.log(json.styleSheet);
   });
   GetRateLimits().then((json) => {

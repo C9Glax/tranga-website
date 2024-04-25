@@ -1,4 +1,6 @@
-﻿let apiUri = `${window.location.protocol}//${window.location.host}/api`
+﻿//let apiUri = `${window.location.protocol}//${window.location.host}/api`
+
+let apiUri = `http://192.168.1.79:6531`;
 
 // if(getCookie("apiUri") != ""){
 //     apiUri = getCookie("apiUri");
@@ -150,9 +152,10 @@ async function GetRateLimits() {
     return json;
 }
 
-function CreateMonitorJob(connector, internalId, language){
-    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00&translatedLanguage=${language}`;
-    PostData(uri);
+function CreateMonitorJob(connector, internalId, language, interval, folder, chapterNo){
+    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}&ignoreBelowChapterNum=${chapterNo}&customFolderName=${folder}`;
+    //console.log(uri);
+	PostData(uri);
 }
 
 function CreateDownloadNewChaptersJob(connector, internalId, language){

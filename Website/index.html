@@ -68,16 +68,27 @@
       
       <popup id="newMangaPopup">
         <blur-background id="blurBackgroundNewMangaPopup" onclick="newMangaPopup.style.display = 'none';"></blur-background>
-        <div id="newMangaPopupSelector">
-          <select id="newMangaConnector" />
-          <input type="text" placeholder="Title" id="newMangaTitle" />
-          <select id="newMangaTranslatedLanguage">
-            <option selected="selected">en</option>
-            <option>it</option>
-            <option>de</option>
-          </select>
-        </div>
-        <div id="newMangaResult"></div>
+        <popup-window>
+          <border-bar>
+            <popup-title>Search</popup-title>
+            <popup-close onclick="newMangaPopup.style.display = 'none'">&times</popup-close>
+          </border-bar>
+          <popup-content>
+            <div id="loaderdiv">
+              <div id="loader"></div>
+            </div>
+            <div id="newMangaPopupSelector">
+              <select id="newMangaConnector">
+              <input type="text" placeholder="Title" id="newMangaTitle" />
+              <select id="newMangaTranslatedLanguage">
+                <option selected="selected">EN</option>
+                <option>IT</option>
+                <option>DE</option>
+              </select>
+            </div>
+            <div id="newMangaResult"></div>
+          </popup-content>
+        </popup-window>
       </popup>
       
       <popup id="settingsPopup">
@@ -294,6 +305,7 @@
           </border-bar>
 
         </popup-window>
+      </popup>
     </viewport>
 	  
     <footer>
