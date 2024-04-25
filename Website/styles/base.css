@@ -1166,16 +1166,48 @@ border-bar-button.in-library:hover {
     color: #fff;
 }
 
-.section-item > .jobDetails > .jobProgressBar {
+.section-item > .jobDetails > .progress-container {
   margin: 5px;
-  height: 10px;
-  border-radius: 7px;
+  height: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #999999;
+  position: relative;
 }
 
-.section-item > .jobDetails > .jobProgressSpan {
-    margin: 5px;
-    margin-left: auto;
-    margin-right: 5px;
+.progress-container > .jobProgressBar {
+    margin: 0px;
+    display: block;
+    height: 15px;
+    padding-left: 5px;
+    border-radius: 12px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #0075fa;
+    color: white;
+    justify-content: left;
+    font-size: 8pt;
+    line-height: 15px;
+}
+
+.progress-container > .pending { 
+    width: 50%;
+    display: block;
+    height: 15px;
+    top: 0%;
+    position: absolute;
+    border-radius: 12px;
+    background-color: #0075fa;
+    animation: bounce;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes bounce {
+    0%      {width: 10%; transform: translateX(0);};
+    50%     {width: 50%; transform: translateX(100%);};
+    100%    {width: 10%; transform: translateX(0);};
 }
 
 .section-item > .jobDetails > .jobCancel {

@@ -152,9 +152,12 @@ async function GetRateLimits() {
     return json;
 }
 
-function CreateMonitorJob(connector, internalId, language, interval, folder, chapterNo){
-    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}&ignoreBelowChapterNum=${chapterNo}&customFolderName=${folder}`;
-    //console.log(uri);
+function CreateMonitorJob(connector, internalId, language, interval, folder = null, chapterNo){
+    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}&ignoreBelowChapterNum=${chapterNo}`;
+	if (folder != '') {
+		uri = uri.concat(`&customFolderName=${folder}`);
+	}
+    console.log(uri);
 	PostData(uri);
 }
 

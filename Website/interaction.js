@@ -551,15 +551,13 @@ function IsInLibrary(id) {
 }
 
 function AddManga(id, connector) {
-  //console.log('Adding Manga');
+  console.log('Adding Manga');
   mangaID = id;
   mangaConnector = connector; 
   mangaLanguage = document.getElementById('newMangaTranslatedLanguage').value.toLowerCase();
 
   folderInput = document.getElementById(id.concat('-downloadfolder')).value;
-  if (folderInput == null || folderInput == '') {
-    mangaFolder = document.getElementById(id.concat('-downloadfolder')).placeholder;
-  } else {
+  if (folderInput != null || folderInput != '') {
     mangaFolder = folderInput;
   }
   
@@ -580,11 +578,6 @@ function AddManga(id, connector) {
   CreateMonitorJob(mangaConnector, mangaID, mangaLanguage, mangaInterval, mangaFolder, mangaChapter);
 }
 
-createMonitorJobButton.addEventListener("click", () => {
-  CreateMonitorJob(newMangaConnector.value, selectedManga.internalId, newMangaTranslatedLanguage.value);
-  UpdateJobs();
-  mangaViewerPopup.style.display = "none";
-});
 startJobButton.addEventListener("click", () => {
   StartJob(selectedJob.id);
   mangaViewerPopup.style.display = "none";
@@ -1029,16 +1022,14 @@ function createJob(jobjson){
     title.innerText = manga.sortName;
   details.appendChild(title);
   
-  var progressBar = document.createElement("progress");
-  progressBar.className = "jobProgressBar";
+  var progressBarContainer = document.createElement('div');
+  progressBarContainer.className = 'progress-container';
+
+  var progressBar = document.createElement("div");
+  progressBar.className = "pending";
   progressBar.id = `jobProgressBar${GetValidSelector(jobjson.id)}`;
-  details.appendChild(progressBar);
-  
-  var progressSpan = document.createElement("span");
-  progressSpan.className = "jobProgressSpan";
-  progressSpan.id = `jobProgressSpan${GetValidSelector(jobjson.id)}`;
-  progressSpan.innerText = "Pending...";
-  details.appendChild(progressSpan);
+  progressBarContainer.appendChild(progressBar);
+  details.appendChild(progressBarContainer);
   
   var cancelSpan = document.createElement("span");
   cancelSpan.className = "jobCancel";
@@ -1058,18 +1049,12 @@ function ShowJobQueue(){
 function UpdateJobProgress(jobId){
   GetProgress(jobId).then((json) => {
     var progressBar = document.querySelector(`#jobProgressBar${GetValidSelector(jobId)}`);
-    var progressSpan = document.querySelector(`#jobProgressSpan${GetValidSelector(jobId)}`);
     if(progressBar != null && json.progress != 0){
-      progressBar.value = json.progress;
-    }
-    if(progressSpan != null){
-      var percentageStr = "0%";
-      var timeleftStr = "00:00:00";
-      if(json.progress != 0){
-        percentageStr = Intl.NumberFormat("en-US", { style: "percent"}).format(json.progress);
-        timeleftStr = json.timeRemaining.split('.')[0];
-      }
-      progressSpan.innerText = `${percentageStr} ${timeleftStr}`;
+      progressBar.className = 'jobProgressBar';
+      percentageStr = Intl.NumberFormat("en-US", { style: "percent"}).format(json.progress);
+      console.log(percentageStr);
+      progressBar.style.width = percentageStr;
+      progressBar.innerText = percentageStr;
     }
   });
 }
