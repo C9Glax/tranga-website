@@ -1064,7 +1064,7 @@ function GetValidSelector(str){
     return clean.join('');
 }
 
-function stringToColour = (str) => {
+function stringToColour(str) {
   let hash = 0;
   str.split('').forEach(char => {
     hash = char.charCodeAt(0) + ((hash << 5) - hash)
