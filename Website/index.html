@@ -7,6 +7,9 @@
   <link id='librarystyle' rel="stylesheet" href="styles/style_default.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap" rel="stylesheet">
 </head>
 <body>
   <wrapper>
@@ -254,24 +257,32 @@
 		
 	  <popup id="publicationViewerPopup">
         <blur-background id="blurBackgroundPublicationPopup" onclick="publicationViewerPopup.style.display= 'none';"></blur-background>
-        <publication-viewer>
-          <img id="pubviewcover" src="media/cover.jpg" alt="cover">
-          <publication-details>
-            <publication-name id="publicationViewerName">Best Manga there is</publication-name>
-            <publication-tags id="publicationViewerTags">A Manga</publication-tags>
-            <publication-author id="publicationViewerAuthor">Glax</publication-author>
-            <publication-description id="publicationViewerDescription">
-              An interesting description. The description is very intriguing, yet wholesome.
-            </publication-description>
-            <publication-interactions>
-              <publication-starttask id="startJobButton">Start Job ▶️</publication-starttask>
-              <publication-canceltask id="cancelJobButton">Cancel Job ❌</publication-canceltask>
-              <publication-delete id="deleteJobButton">Delete Job 🗑️</publication-delete>
-              <publication-add id="createMonitorJobButton">Monitor ➕</publication-add>
-              <publication-add id="createDownloadChapterJobButton">Download Chapter 📥</publication-add>
-            </publication-interactions>
-          </publication-details>
-        </publication-viewer>
+        <popup-window>
+          <border-bar>
+            <popup-title><a class="mangaTitle" id="publicationViewerName"></a></popup-title><status-filter id="publicationViewerStatus"></status-filter>
+            <popup-close onclick="publicationViewerPopup.style.display = 'none'">&times</popup-close>
+          </border-bar>
+          <manga-details>
+
+            <img-container>
+              <img id="pubviewcover">
+              <manga-connector id="publicationViewerConnector"></manga-connector>
+              <span class="latest-chapter-no" id="publicationViewerChapterNo"></span>
+            </img-container>
+            <div style="height: 100%;">
+              <tag-cloud id="publicationViewerTags"></tag-cloud>
+              <div class="mangaDescription" id="publicationViewerDescription"></div>
+            </div>
+          </manga-details>
+          <!-- <manga-chapter id="publicationViewerChapters"></manga-chapter> -->
+          <border-bar>
+            <div class="button-container">
+              <border-bar-button onclick="RefreshMangaMetadata(selectedManga.internalId)">Refresh Metadata</border-bar-button>
+              <border-bar-button id="reset" onclick="RemoveJob(selectedJob.id); UpdateJobs(); mangaViewerPopup.style.display = 'none'">Remove Manga</border-bar-button>
+              <border-bar-button class="primary" onclick="StartJob(selectedJob.id); mangaViewerPopup.style.display = 'none'">Start Job</border-bar-button>
+            </div>
+          </border-bar>
+        </popup-window>
       </popup>
 
       <popup id="jobStatusView">

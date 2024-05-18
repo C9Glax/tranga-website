@@ -152,6 +152,12 @@ async function GetRateLimits() {
     return json;
 }
 
+async function GetMangaChapters(connector, id) {
+    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${id}`
+    let json = await GetData(uri);
+    return json;
+}
+
 function CreateMonitorJob(connector, internalId, language, interval, folder = null, chapterNo){
     var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}&ignoreBelowChapterNum=${chapterNo}`;
 	if (folder != '') {
@@ -178,6 +184,11 @@ function UpdateDownloadLocation(downloadLocation){
 
 function RefreshLibraryMetadata() {
     var uri = `${apiUri}/Jobs/UpdateMetadata`;
+    PostData(uri);
+}
+
+function RefreshMangaMetadata(id) {
+    var uri = `${apiUri}/Jobs/UpdateMetadata?internalId=${id}`;
     PostData(uri);
 }
 

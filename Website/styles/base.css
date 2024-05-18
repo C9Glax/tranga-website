@@ -20,6 +20,7 @@ body{
     background-color: var(--background-color);
     font-family: "Inter", sans-serif;
     overflow-x: hidden;
+    font-weight: 400;
 }
 
 wrapper {
@@ -420,11 +421,14 @@ popup popup-window {
     overflow: hidden;
 }
 
-popup#jobStatusView popup-window {
-    left: 10%;
-    top: 10%;
-    height: 80%;
-    width: 80%;
+/*Remove below when individual chapter download is implemented*/
+#publicationViewerPopup > popup-window {
+    height: fit-content;
+    width: auto; 
+    max-width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 popup-content{
@@ -642,9 +646,9 @@ a:active {
     user-select: none; /* Standard syntax */
 }
 
-.section-button#reset:hover {
-    color: red;
-    border-color: red;
+#reset:hover {
+    color: rgb(255, 44, 29);
+    border-color: rgb(255, 44, 29);
 }
 .section-buttons-container > .section-button:hover {
     border-color: var(--secondary-color);
@@ -709,111 +713,6 @@ blur-background {
 
 #publicationViewerPopup{
     z-index: 5;
-}
-
-publication-viewer{
-    display: block;
-    width: 460px;
-    position: absolute;
-    top: 200px;
-    left: 400px;
-    background-color: var(--accent-color);
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 15px;
-}
-
-publication-viewer::after{
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-    border-radius: 5px;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(3px);
-}
-
-publication-viewer img {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-    z-index: 0;
-}
-
-publication-viewer publication-details > * {
-    margin: 5px 0;
-}
-
-publication-viewer publication-details publication-name {
-    width: initial;
-    overflow-x: scroll;
-    white-space: nowrap;
-    scrollbar-width: none;
-}
-
-publication-viewer publication-details publication-tags::before {
-    content: "Tags";
-    display: block;
-    font-weight: bolder;
-}
-
-publication-viewer publication-details publication-tags {
-    overflow-x: scroll;
-    white-space: nowrap;
-    scrollbar-width: none;
-}
-
-publication-viewer publication-details publication-author::before {
-    content: "Author: ";
-    font-weight: bolder;
-}
-
-publication-viewer publication-details publication-description::before {
-    content: "Description";
-    display: block;
-    font-weight: bolder;
-}
-
-publication-viewer publication-details publication-description {
-    font-size: 12pt;
-    margin: 5px 0;
-    height: 145px;
-    overflow-x: scroll;
-}
-
-publication-viewer publication-details publication-interactions {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: start;
-    width: 100%;
-}
-
-publication-viewer publication-details publication-interactions > * {
-    margin: 0 10px;
-    font-size: 16pt;
-    cursor: pointer;
-}
-
-publication-viewer publication-details publication-interactions publication-starttask {
-    color: var(--secondary-color);
-}
-
-publication-viewer publication-details publication-interactions publication-delete {
-    color: red;
-}
-
-publication-view publication-details publication-interactions publication-canceltask {
-  color: yellow;
-}
-
-publication-viewer publication-details publication-interactions publication-add {
-    color: limegreen;
 }
 
 footer-tag-popup {
@@ -920,12 +819,14 @@ popup-content #loaderdiv {
 
 img-container {
     height: 300px;
-    width: 200px;
+    width: 180px;
     position: relative;
     left: 0;
     top: 0;
     border-radius: 10px;
     overflow: hidden;
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 img-container > img {
@@ -952,6 +853,43 @@ manga-connector {
     font-weight:bold;
     color:white;
     text-align: center;
+}
+
+manga-details {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 2px;
+}
+
+manga-details > .mangaDescription {
+    width: 100%;
+}
+
+manga-chapter {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-style: solid;
+    border-width: 2px;
+    margin: 5px;
+    border-radius: 10px;
+    border-color: #bbb;
+    scrollbar-width: thin;
+    scrollbar-color:  var(--secondary-color) var(--second-background-color);
+}
+
+chapter-row {
+    font-size: 12pt;
+    width: 100%;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px;
+    padding-left: 50px;
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
 
 span.latest-chapter-no {
@@ -1008,11 +946,11 @@ div.new-manga-download-settings {
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
-    .section-item > img-container {
+    img-container {
       display: none;
     }
 
-    tag-cloud {
+    .section-item > tag-cloud {
         display: none !important;
     }
     .new-manga-download-settings > row, .downloadManga, border-bar-button.in-library { 
@@ -1156,6 +1094,16 @@ author-tag > img {
     padding: 4px;
     height: auto;
     margin: 2px;
+}
+
+.abbreviated {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    line-clamp: 10;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .downloadManga {
