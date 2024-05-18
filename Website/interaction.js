@@ -487,7 +487,7 @@ function CreateSearchResult(manga, connector) {
   
   folderRow = document.createElement('row');
   folderLabel = document.createElement('label');
-  folderLabel.innerText = 'Download Folder:';
+  folderLabel.innerText = 'Download Folder';
   folderRow.appendChild(folderLabel);
   folderInput = document.createElement('input');
   downloadFolder = manga.folderName;
@@ -499,7 +499,7 @@ function CreateSearchResult(manga, connector) {
 
   intervalRow = document.createElement('row');
   intervalLabel = document.createElement('label');
-  intervalLabel.innerText = 'Job Interval:';
+  intervalLabel.innerText = 'Job Interval';
   intervalRow.appendChild(intervalLabel);
   intervalInput = document.createElement('input');
   intervalInput.placeholder = '03:00:00 (HH:MM:SS)';
@@ -510,7 +510,7 @@ function CreateSearchResult(manga, connector) {
 
   chapterRow = document.createElement('row');
   chapterLabel = document.createElement('label');
-  chapterLabel.innerText = 'Download from Chapter:';
+  chapterLabel.innerText = 'Download from Chapter';
   chapterRow.appendChild(chapterLabel);
   chapterInput = document.createElement('input');
   chapterInput.placeholder = (manga.ignoreChaptersBelow + 1).toString();
