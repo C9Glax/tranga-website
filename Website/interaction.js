@@ -60,7 +60,8 @@ const settingLunaseaWebhook = document.querySelector("#lunaseaWebhook");
 
 //Ntfy
 const settingNtfyEndpoint = document.querySelector("#ntfyEndpoint");
-const settingNtfyAuth = document.querySelector("#ntfyAuth");
+const settingNtfyUser = document.querySelector("#ntfyUser");
+const settingNtfyPass = document.querySelector("#ntfyPass");
 
 //Connector Configured
 const settingKomgaConfigured = document.querySelector("#komgaConfigured");
@@ -758,7 +759,7 @@ settingGotifyUrl.addEventListener("keypress", (event) => { if(event.key === "Ent
 settingGotifyAppToken.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingLunaseaWebhook.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingNtfyEndpoint.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
-settingNtfyAuth.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
+settingNtfyPass.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingUserAgent.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 settingApiUri.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings(); });
 
@@ -785,7 +786,8 @@ function OpenSettings(){
   settingGotifyUrl.value = "";
   settingGotifyAppToken.value = "";
   settingLunaseaWebhook.value = "";
-  settingNtfyAuth.value = "";
+  settingNtfyUser.value = "";
+  settingNtfyPass.value = "";
   settingNtfyEndpoint.value = "";
   settingUserAgent.value = "";
   settingApiUri.value = "";
@@ -850,7 +852,8 @@ function OpenSettings(){
         case "Ntfy":
           settingNtfyConfigured.setAttribute("configuration", "Active");
           settingNtfyEndpoint.placeholder = connector.endpoint;
-          settingNtfyAuth.placeholder = "***";
+          settingNtfyUser.placeholder = "***"
+          settingNtfyPass.placeholder = "***";
           break;
         default:
           console.log("Unknown type");
@@ -893,7 +896,8 @@ function ClearLunasea(){
 
 function ClearNtfy(){
   settingNtfyEndpoint.value = "";
-  settingNtfyAuth.value = "";
+  settingNtfyUser.value = "";
+  settingNtfyPass.value = "";
   settingNtfyConfigured.setAttribute("configuration", "Not Configured");
   ResetNtfy();
 }
@@ -927,8 +931,8 @@ function UpdateSettings(){
   }
   
   if(settingNtfyEndpoint.value != "" &&
-    settingNtfyAuth.value != ""){
-    UpdateNtfy(settingNtfyEndpoint.value, settingNtfyAuth.value);
+    settingNtfyUser.value != ""){
+    UpdateNtfy(settingNtfyEndpoint.value, settingNtfyUser.value, settingNtfyPass.value);
   }
   
   if(settingUserAgent.value != ""){

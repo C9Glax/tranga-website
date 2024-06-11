@@ -338,8 +338,8 @@ function TestLunaSea(lunaseaWebhook){
 }
 
 //Ntfy
-function UpdateNtfy(ntfyEndpoint, ntfyAuth){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
+function UpdateNtfy(ntfyEndpoint, ntfyUser, ntfyPass){
+    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyUser=${ntfyUser}&ntfyPass=${ntfyPass}`;
     PostData(uri);
 }
 
@@ -348,8 +348,8 @@ function ResetNtfy(){
     PostData(uri);
 }
 
-function TestNtfy(ntfyEndpoint, ntfyAuth){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
+function TestNtfy(ntfyEndpoint, ntfyUser, ntfyPass){
+    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyUser=${ntfyUser}&ntfyPass=${ntfyPass}}`;
     PostData(uri);
 }
 

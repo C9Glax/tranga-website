@@ -235,11 +235,12 @@
                   <div class="section-item">
                     <span class="title"><img src='connector-icons/ntfy.svg'>Ntfy<connector-configured id="ntfyConfigured"></connector-configured></span>
                     <label for="ntfyEndpoint"></label><input placeholder="URL" id="ntfyEndpoint" type="text">
-                    <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
+                    <label for="ntfyUser"></label><input placeholder="Username" id="ntfyUser" type="text">
+                    <label for="ntfyPass"></label><input placeholder="Password" id="ntfyPass" type="password">
                     <div class="section-buttons-container">
-                      <span onclick="TestNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button' id="test-connector">Test</span>
+                      <span onclick="TestNtfy(ntfyEndpoint.value, ntfyUser.value, ntfyPass.value);" class='section-button' id="test-connector">Test</span>
                       <span onclick="ClearNtfy()" class='section-button' id="reset">Reset</span>
-                      <span onclick="UpdateNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button'>Apply</span>
+                      <span onclick="UpdateNtfy(ntfyEndpoint.value, ntfyUser.value, ntfyPass.value);" class='section-button'>Apply</span>
                   </div>
                   </div>
                 </div>
