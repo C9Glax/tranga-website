@@ -1,9 +1,11 @@
-﻿let apiUri = `${window.location.protocol}//${window.location.host.split(':')[0]}:6531`
+﻿//let apiUri = `${window.location.protocol}//${window.location.host}/api`
 
-if(getCookie("apiUri") != ""){
-    apiUri = getCookie("apiUri");
-}
-setCookie("apiUri", apiUri);
+let apiUri = `http://192.168.1.79:6531`;
+
+// if(getCookie("apiUri") != ""){
+//     apiUri = getCookie("apiUri");
+// }
+// setCookie("apiUri", apiUri);
 
 function setCookie(cname, cvalue) {
   const d = new Date();
@@ -150,9 +152,19 @@ async function GetRateLimits() {
     return json;
 }
 
-function CreateMonitorJob(connector, internalId, language){
-    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=03:00:00&translatedLanguage=${language}`;
-    PostData(uri);
+async function GetMangaChapters(connector, id) {
+    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${id}`
+    let json = await GetData(uri);
+    return json;
+}
+
+function CreateMonitorJob(connector, internalId, language, interval, folder = null, chapterNo){
+    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}&ignoreBelowChapterNum=${chapterNo}`;
+	if (folder != '') {
+		uri = uri.concat(`&customFolderName=${folder}`);
+	}
+    console.log(uri);
+	PostData(uri);
 }
 
 function CreateDownloadNewChaptersJob(connector, internalId, language){
@@ -172,6 +184,11 @@ function UpdateDownloadLocation(downloadLocation){
 
 function RefreshLibraryMetadata() {
     var uri = `${apiUri}/Jobs/UpdateMetadata`;
+    PostData(uri);
+}
+
+function RefreshMangaMetadata(id) {
+    var uri = `${apiUri}/Jobs/UpdateMetadata?internalId=${id}`;
     PostData(uri);
 }
 
@@ -235,6 +252,24 @@ Date.prototype.today = function () {
 // For the time now
 Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +"_"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +"_"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
+
+function UpdateAprilFoolsMode() { 
+	checkBox = document.getElementById("aprilFoolsMode");
+	var uri = `${apiUri}/Settings/AprilFoolsMode?enabled=${checkBox.checked}`;
+	PostData(uri);
+}
+
+function ResetRateLimits() {
+	var uri = `${apiUri}/Settings/customRequestLimit/Reset`;
+	PostData(uri);
+	OpenSettings();
+}
+
+function ResetUserAgent() {
+	var uri = `${apiUri}/Settings/userAgent/Reset`;
+	PostData(uri);
+	OpenSettings();
 }
 
 //Komga
@@ -303,8 +338,8 @@ function TestLunaSea(lunaseaWebhook){
 }
 
 //Ntfy
-function UpdateNtfy(ntfyEndpoint, ntfyAuth){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
+function UpdateNtfy(ntfyEndpoint, ntfyUser, ntfyPass){
+    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyUser=${ntfyUser}&ntfyPass=${ntfyPass}`;
     PostData(uri);
 }
 
@@ -313,8 +348,8 @@ function ResetNtfy(){
     PostData(uri);
 }
 
-function TestNtfy(ntfyEndpoint, ntfyAuth){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyAuth=${ntfyAuth}`;
+function TestNtfy(ntfyEndpoint, ntfyUser, ntfyPass){
+    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyUser=${ntfyUser}&ntfyPass=${ntfyPass}}`;
     PostData(uri);
 }
 
