@@ -41,9 +41,13 @@ async function GetData(uri){
     return json;
 }
 
-async function PostData(uri){
+async function PostData(uri, body){
     let request = await fetch(uri, {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json'
+        },
+        body: body
     });
     //console.log(request);
 }
@@ -55,145 +59,132 @@ function DeleteData(uri){
 }
 
 async function Ping(){
-  let ret = await GetData(`${apiUri}/Ping`);
+  let ret = await GetData(`${apiUri}/v2/Ping`);
   return ret;
 }
 
 async function GetAvailableControllers(){
-    var uri = apiUri + "/Connectors";
+    var uri = `${apiUri}/v2/Connector/Types`;
     let json = await GetData(uri);
     return json;
 }
 
 async function GetPublicationFromConnector(connector, title){
-  var uri;
-  if(title.includes("http")){
-    uri = `${apiUri}/Manga/FromConnector?connector=${connector}&url=${title}`;
+  var uri = `${apiUri}/v2/Connector/${connector}/GetManga`;
+  if(title.startsWith("http")){
+    uri += `?url=${title}`
   }else{
-    uri = `${apiUri}/Manga/FromConnector?connector=${connector}&title=${title}`;
+    uri += `?title=${title}`
   }
   let json = await GetData(uri);
   return json;
 }
 
-async function GetChapters(connector, internalId, language){
-    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${internalId}&translatedLanguage=${language}`;
-    let json = await GetData(uri);
-    return json;
-}
-
-function GetCoverUrl(internalId){
-  return `${apiUri}/Manga/Cover?internalId=${internalId}`;
+async function GetCoverUrl(internalId){
+    return `${apiUri}/v2/Manga/${internalId}/Cover`;
 }
 
 async function GetAllJobs(){
-	var uri = `${apiUri}/Jobs`;
+	var uri = `${apiUri}/v2/Jobs`;
 	let json = await GetData(uri);
 	return json;
 }
 
 async function GetRunningJobs(){
-    var uri = `${apiUri}/Jobs/Running`;
+    var uri = `${apiUri}/v2/Jobs/Running`;
     let json = await GetData(uri);
     return json;
 }
 
 async function GetWaitingJobs(){
-    var uri = `${apiUri}/Jobs/Waiting`;
+    var uri = `${apiUri}/v2/Jobs/Waiting`;
     let json = await GetData(uri);
     return json;
 }
 
 async function GetMonitorJobs(){
-  var uri = `${apiUri}/Jobs/MonitorJobs`;
+  var uri = `${apiUri}/v2/Jobs/Monitoring`;
   let json = await GetData(uri);
   return json;
 }
 
-async function GetProgress(jobId){
-    var uri = `${apiUri}/Jobs/Progress?jobId=${jobId}`;
+async function GetJob(jobId){
+    var uri = `${apiUri}/v2/Job/${jobId}`;
     let json = await GetData(uri);
     return json;
 }
 
 async function GetSettings(){
-    var uri = `${apiUri}/Settings`;
+    var uri = `${apiUri}/v2/Settings`;
     let json = await GetData(uri);
     return json;
 }
 
 async function GetAvailableNotificationConnectors(){
-	var uri = `${apiUri}/NotificationConnectors/Types`;
+	var uri = `${apiUri}/v2/NotificationConnector/Types`;
 	let json = await GetData(uri);
 	return json;
 }
 
 async function GetNotificationConnectors(){
-	var uri = `${apiUri}/NotificationConnectors`;
+	var uri = `${apiUri}/v2/NotificationConnector`;
 	let json = await GetData(uri);
 	return json;
 }
 
 async function GetAvailableLibraryConnectors(){
-	var uri = `${apiUri}/LibraryConnectors/Types`;
+	var uri = `${apiUri}/v2/LibraryConnector/Types`;
 	let json = await GetData(uri);
 	return json;
 }
 
 async function GetLibraryConnectors(){
-	var uri = `${apiUri}/LibraryConnectors`;
+	var uri = `${apiUri}/v2/LibraryConnector`;
 	let json = await GetData(uri);
 	return json;
 }
 
 async function GetRateLimits() {
-    var uri = `${apiUri}/Settings/customRequestLimit`
+    var uri = `${apiUri}/v2/Settings/RateLimit`
     let json = await GetData(uri);
     return json;
 }
 
-async function GetMangaChapters(connector, id) {
-    var uri = `${apiUri}/Manga/Chapters?connector=${connector}&internalId=${id}`
+async function GetMangaChapters(connector, internalId) {
+    var uri = `${apiUri}/v2/Manga/${internalId}`
     let json = await GetData(uri);
     return json;
 }
 
-function CreateMonitorJob(connector, internalId, language, interval, folder = null, chapterNo){
-    var uri = `${apiUri}/Jobs/MonitorManga?connector=${connector}&internalId=${internalId}&interval=${interval}&translatedLanguage=${language}&ignoreBelowChapterNum=${chapterNo}`;
-	if (folder != '') {
-		uri = uri.concat(`&customFolderName=${folder}`);
-	}
-    console.log(uri);
-	PostData(uri);
+function CreateMonitorJob(internalId, language, interval, folder = null, chapterNo){
+    var uri = `${apiUri}/v2/Job/Create/MonitorManga`;
+    let data = `{ "internalId": ${internalId}, "language": ${language}, "interval": ${interval}, "startChapter": ${chapterNo}, "customFolder": ${folder} }`
+    PostData(uri, data);
 }
 
-function CreateDownloadNewChaptersJob(connector, internalId, language){
-    var uri = `${apiUri}/Jobs/DownloadNewChapters?connector=${connector}&internalId=${internalId}&translatedLanguage=${language}`;
-    PostData(uri);
+function CreateDownloadNewChaptersJob(internalId, language){
+    var uri = `${apiUri}/v2/Job/Create/DownloadNewChaptersJob`;
+    let data = `{ "internalId": ${internalId}, "language": ${language} }`
+    PostData(uri, data);
 }
 
 function StartJob(jobId){
-    var uri = `${apiUri}/Jobs/StartNow?jobId=${jobId}`;
+    var uri = `${apiUri}/v2/Job/${jobId}/StartNow`;
     PostData(uri);
 }
 
 function UpdateDownloadLocation(downloadLocation){
-    var uri = `${apiUri}/Settings/UpdateDownloadLocation?downloadLocation=${downloadLocation}`;
-    PostData(uri);	
+    var uri = `${apiUri}/v2/Settings/DownloadLocation`;
+    PostData(uri, `{ "location": ${location} }`);	
 }
 
-function RefreshLibraryMetadata() {
-    var uri = `${apiUri}/Jobs/UpdateMetadata`;
-    PostData(uri);
-}
-
-function RefreshMangaMetadata(id) {
-    var uri = `${apiUri}/Jobs/UpdateMetadata?internalId=${id}`;
-    PostData(uri);
+function RefreshMangaMetadata(internalId) {
+    var uri = `${apiUri}/v2/Job/Create/UpdateMetaDataJob`;
+    PostData(uri, `{ "internalId": ${internalId} }`);
 }
 
 async function DownloadLogs() {
-    var uri = `${apiUri}/LogFile`;
+    var uri = `${apiUri}/v2/LogFile`;
 
     //Below taken from https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream
     fetch(uri)
@@ -256,126 +247,119 @@ Date.prototype.timeNow = function () {
 
 function UpdateAprilFoolsMode() { 
 	checkBox = document.getElementById("aprilFoolsMode");
-	var uri = `${apiUri}/Settings/AprilFoolsMode?enabled=${checkBox.checked}`;
-	PostData(uri);
+	var uri = `${apiUri}/v2/Settings/AprilFoolsMode`;
+	PostData(uri, `{ "value": ${checkBox.checked} }` );
 }
 
 function ResetRateLimits() {
-	var uri = `${apiUri}/Settings/customRequestLimit/Reset`;
+	var uri = `${apiUri}/v2/Settings/RateLimit`;
 	PostData(uri);
 	OpenSettings();
 }
 
 function ResetUserAgent() {
-	var uri = `${apiUri}/Settings/userAgent/Reset`;
+	var uri = `${apiUri}/v2/Settings/UserAgent`;
 	PostData(uri);
 	OpenSettings();
 }
 
 //Komga
 function UpdateKomga(komgaUrl, komgaAuth){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/LibraryConnector/Komga`;
+    PostData(uri, `{ "url": ${komgaUrl}, "auth": ${komgaAuth} }`);
 }
 
 function ResetKomga(){
-    var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Komga`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/LibraryConnector/Komga`;
+    DeleteData(uri);
 }
 
 function TestKomga(komgaUrl, komgaAuth){
-    var uri = `${apiUri}/LibraryConnectors/Test?libraryConnector=Komga&komgaUrl=${komgaUrl}&komgaAuth=${komgaAuth}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/LibraryConnector/Komga/Test`;
+    PostData(uri, `{ "url": ${komgaUrl}, "auth": ${komgaAuth} }`);
 }
 
 
 //Kavita
 function UpdateKavita(kavitaUrl, kavitaUsername, kavitaPassword){
-    var uri = `${apiUri}/LibraryConnectors/Update?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/LibraryConnector/Kavita`;
+    PostData(uri, `{ "url": ${kavitaUrl}, "uasername": ${kavitaUsername}, "password": ${kavitaPassword} }`);
 }
 
 function ResetKavita(){
-    var uri = `${apiUri}/LibraryConnectors/Reset?libraryConnector=Kavita`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/LibraryConnector/Kavita`;
+    DeleteData(uri);
 }
 
 function TestKavita(kavitaUrl, kavitaUsername, kavitaPassword){
-    var uri = `${apiUri}/LibraryConnectors/Test?libraryConnector=Kavita&kavitaUrl=${kavitaUrl}&kavitaUsername=${kavitaUsername}&kavitaPassword=${kavitaPassword}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/LibraryConnector/Kavita/Test`;
+    PostData(uri, `{ "url": ${kavitaUrl}, "uasername": ${kavitaUsername}, "password": ${kavitaPassword} }`);
 }
 
 //Gotify
 function UpdateGotify(gotifyUrl, gotifyAppToken){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/Gotify`;
+    PostData(uri, `{ "url": ${gotifyUrl}, "appToken": ${gotifyAppToken} }`);
 }
 
 function ResetGotify(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=Gotify`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/Gotify`;
+    DeleteData(uri);
 }
 
 function TestGotify(gotifyUrl, gotifyAppToken){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Gotify&gotifyUrl=${gotifyUrl}&gotifyAppToken=${gotifyAppToken}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/Gotify/Test`;
+    PostData(uri, `{ "url": ${gotifyUrl}, "appToken": ${gotifyAppToken} }`);
 }
 
 //LunaSea
 function UpdateLunaSea(lunaseaWebhook){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/LunaSea`;
+    PostData(uri, `{ "webhook": ${lunaseaWebhook} }`);
 }
 
 function ResetLunaSea(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=LunaSea`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/LunaSea`;
+    DeleteData(uri);
 }
 
 function TestLunaSea(lunaseaWebhook){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=LunaSea&lunaseaWebhook=${lunaseaWebhook}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/LunaSea/Test`;
+    PostData(uri, `{ "webhook": ${lunaseaWebhook} }`);
 }
 
 //Ntfy
 function UpdateNtfy(ntfyEndpoint, ntfyUser, ntfyPass){
-    var uri = `${apiUri}/NotificationConnectors/Update?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyUser=${ntfyUser}&ntfyPass=${ntfyPass}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/Ntfy`;
+    PostData(uri, `{ "url": ${ntfyEndpoint}, "username": ${ntfyUser}, "password": ${ntfyPass} }`);
 }
 
 function ResetNtfy(){
-    var uri = `${apiUri}/NotificationConnectors/Reset?notificationConnector=Ntfy`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/Ntfy`;
+    DeleteData(uri);
 }
 
 function TestNtfy(ntfyEndpoint, ntfyUser, ntfyPass){
-    var uri = `${apiUri}/NotificationConnectors/Test?notificationConnector=Ntfy&ntfyUrl=${ntfyEndpoint}&ntfyUser=${ntfyUser}&ntfyPass=${ntfyPass}}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/NotificationConnector/Ntfy/Test`;
+    PostData(uri, `{ "url": ${ntfyEndpoint}, "username": ${ntfyUser}, "password": ${ntfyPass} }`);
 }
 
 function UpdateUserAgent(userAgent){
-    var uri = `${apiUri}/Settings/userAgent?userAgent=${userAgent}`;
-    PostData(uri);
+    var uri = `${apiUri}/v2/Settings/UserAgent`;
+    PostData(uri, `{ "value": ${userAgent} }`);
 }
 
-function UpdateRateLimit(byteValue, rateLimit) {
-    var uri = `${apiUri}/Settings/customRequestLimit?requestType=${byteValue}&requestsPerMinute=${rateLimit}`;
-    PostData(uri);
+function UpdateRateLimit(rateLimitType, rateLimitValue) {
+    var uri = `${apiUri}/v2/Settings/RateLimit/${rateLimitType}`;
+    PostData(uri, `{ "value": ${rateLimitValue} }`);
 }
 
 function RemoveJob(jobId){
-    var uri = `${apiUri}/Jobs?jobId=${jobId}`;
+    var uri = `${apiUri}/v2/Job/${jobId}`;
     DeleteData(uri);
 }
 
 function CancelJob(jobId){
-    var uri = `${apiUri}/Jobs/Cancel?jobId=${jobId}`;
+    var uri = `${apiUri}/v2/Job/${jobId}/Cancel`;
     PostData(uri);
-}
-
-async function GetLogmessages(count){
-	var uri = `${apiUri}/LogMessages?count=${count}`;
-	let json = await GetData(uri);
-    console.log(json);
-	return json;
 }
