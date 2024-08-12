@@ -98,14 +98,14 @@ function Setup(){
     
     GetAvailableNotificationConnectors().then((json) => {
       //console.log(json);
-      json.forEach(connector => {
+      Object.keys(json).forEach(connector => {
         notificationConnectorTypes[connector.Key] = connector.Value;
       });
     });
 
     GetAvailableLibraryConnectors().then((json) => {
       //console.log(json);
-      json.forEach(connector => {
+      Object.keys(json).forEach(connector => {
         libraryConnectorTypes[connector.Key] = connector.Value;
       });
     });
@@ -280,12 +280,17 @@ function ResetContent(){
     //Populate with the monitored mangas
     GetMonitorJobs().then((json) => {
         //console.log(json);
-        json.forEach(job => {
-          var mangaView = CreateManga(job.manga, job.mangaConnector.name);
-          mangaView.addEventListener("click", (event) => {
-            ShowMangaWindow(job, job.manga, event, false);
+        json.forEach(jobID => {
+          GetJobDetails(jobID).then((job) => {
+            //console.log(job);
+            GetManga(job.mangaInternalId).then((manga) => {
+              var mangaView = CreateManga(manga, job.mangaConnector.name);
+              mangaView.addEventListener("click", (event) => {
+                ShowMangaWindow(job, manga, event, false);
+              });
+              tasksContent.appendChild(mangaView);  
+            });
           });
-          tasksContent.appendChild(mangaView);
         });
         monitoringJobsCount = json.length;
     });
@@ -311,19 +316,23 @@ function GetNewMangaItems(){
   newMangaTranslatedLanguage.disabled = true;
   newMangaLoader.style.display = 'block';
   GetPublicationFromConnector(newMangaConnector.value, newMangaTitle.value).then((json) => {
-    //console.log(json);
+    console.log(json);
     newMangaLoader.style.display = 'none';
     newMangaResult.scrollTop = 0;
-    if(json.length > 0)
+    if(json.length > 1) {
       newMangaResult.style.display = "flex";
-    json.forEach(result => {
-      var searchResult = CreateSearchResult(result, newMangaConnector.value)
+      json.forEach(result => {
+        var searchResult = CreateSearchResult(result, newMangaConnector.value)
+        newMangaResult.appendChild(searchResult);
+      });
+    } else {
+      newMangaResult.style.display = "flex";
+      var searchResult = CreateSearchResult(json, newMangaConnector.value)
       newMangaResult.appendChild(searchResult);
-    });
-    
+    }
     newMangaConnector.disabled = false;
     newMangaTitle.disabled = false;
-  newMangaTranslatedLanguage.disabled = false;
+    newMangaTranslatedLanguage.disabled = false;
   });
 }
 
@@ -335,7 +344,7 @@ function CreateManga(manga, connector){
     
   //Append the cover image to the publication
     var mangaImage = document.createElement('img');
-    mangaImage.src = GetCoverUrl(manga.internalId);
+    mangaImage.src = manga.coverUrl;
     mangaElement.appendChild(mangaImage);
   
 //Append the publication information to the publication
@@ -391,7 +400,7 @@ function CreateSearchResult(manga, connector) {
   var imageCont = document.createElement('img-container');
 
   var mangaImage = document.createElement('img');
-  mangaImage.src = GetCoverUrl(manga.internalId);
+  mangaImage.src = manga.coverUrl;
   imageCont.appendChild(mangaImage);
 
   var connectorName = document.createElement('manga-connector');
@@ -543,6 +552,7 @@ function IsInLibrary(id) {
     if (id.toLowerCase().includes(publication.id.toLowerCase())) {
       console.log('Match found');
       matchFound = true;
+      return matchFound;
     }
   });
   return matchFound;
@@ -609,7 +619,7 @@ function ShowMangaWindow(job, manga, event, add){
     mangaViewerDescription.innerText = manga.description;
 
     //Image and Connector
-    mangaViewCover.src = GetCoverUrl(manga.internalId);
+    mangaViewCover.src = manga.coverUrl;
     mangaViewConn.innerText = job.mangaConnector.name.toUpperCase();
     mangaViewConn.style.backgroundColor = stringToColour(job.mangaConnector.name);
     mangaViewChapterNo.innerText = manga.latestChapterAvailable.toString();
@@ -645,7 +655,7 @@ function ShowMangaWindow(job, manga, event, add){
     // //Individual Manga Chapters
     // chapters = document.querySelector('#publicationViewerChapters');
     // chapters.replaceChildren();
-    // var mangaChapters = GetMangaChapters(job.mangaConnector.name, manga.internalId);
+    // var mangaChapters = GetChapters(job.mangaConnector.name, manga.internalId, manga.language);
 
     // mangaChapters.then(value => {
 
@@ -987,13 +997,14 @@ function UpdateJobs(){
     jobsQueuedTag.innerText = json.length;
     
     var nowWaitingJobs = [];
-    
     json.forEach(job => {
-      if(!waitingJobs.includes(GetValidSelector(job.id))){
-        var jobDom = createJob(job);
-        jobStatusWaiting.appendChild(jobDom);
+      if(!waitingJobs.includes(GetValidSelector(job))){
+        GetJobDetails(job).then( (jobDetails) => {
+          var jobDom = createJob(jobDetails);
+          jobStatusWaiting.appendChild(jobDom);
+        });
       }
-      nowWaitingJobs.push(GetValidSelector(job.id));
+      nowWaitingJobs.push(GetValidSelector(job));
     });
     waitingJobs = nowWaitingJobs;
   });
@@ -1010,12 +1021,14 @@ function UpdateJobs(){
     var nowRunningJobs = [];
     
     json.forEach(job => {
-      if(!runningJobs.includes(GetValidSelector(job.id))){
-        var jobDom = createJob(job);
-        jobStatusRunning.appendChild(jobDom);
+      if(!runningJobs.includes(GetValidSelector(job))){
+        GetJobDetails(job).then( (jobDetails) => {
+          var jobDom = createJob(jobDetails);
+          jobStatusRunning.appendChild(jobDom);
+        });  
       }
-      nowRunningJobs.push(GetValidSelector(job.id));
-      UpdateJobProgress(job.id);
+      nowRunningJobs.push(GetValidSelector(job));
+      UpdateJobProgress(job);
     });
     
     runningJobs = nowRunningJobs;
@@ -1028,21 +1041,15 @@ function UpdateJobs(){
 }
 
 function createJob(jobjson){
-  var manga;
-  if(jobjson.chapter != null)
-    manga = jobjson.chapter.parentManga;
-  else if(jobjson.manga != null)
-    manga = jobjson.manga;
-  else return null;
-  
+  var manga = GetManga(jobjson.mangaInternalId);  
   
   var wrapper = document.createElement("div");
   wrapper.className = "section-item";
-  wrapper.id = GetValidSelector(jobjson.id);
+  wrapper.id = GetValidSelector(jobjson.mangaInternalId);
   
   var image = document.createElement("img");
   image.className = "jobImage";
-  image.src = GetCoverUrl(manga.internalId);
+  image.src = manga.coverUrl;
   wrapper.appendChild(image);
 
   var details = document.createElement("div");
@@ -1052,7 +1059,7 @@ function createJob(jobjson){
   title.className = "jobTitle";
   if(jobjson.chapter != null)
     title.innerText = `${manga.sortName} - ${jobjson.chapter.fileName}`;
-  else if(jobjson.manga != null)
+  else
     title.innerText = manga.sortName;
   details.appendChild(title);
   
@@ -1061,14 +1068,14 @@ function createJob(jobjson){
 
   var progressBar = document.createElement("div");
   progressBar.className = "pending";
-  progressBar.id = `jobProgressBar${GetValidSelector(jobjson.id)}`;
+  progressBar.id = `jobProgressBar${GetValidSelector(jobjson.mangaInternalId)}`;
   progressBarContainer.appendChild(progressBar);
   details.appendChild(progressBarContainer);
   
   var cancelSpan = document.createElement("span");
   cancelSpan.className = "jobCancel";
   cancelSpan.innerText = "Cancel";
-  cancelSpan.addEventListener("click", () => CancelJob(jobjson.id));
+  cancelSpan.addEventListener("click", () => CancelJob(jobjson.mangaInternalId));
   details.appendChild(cancelSpan);
   
   wrapper.appendChild(details);

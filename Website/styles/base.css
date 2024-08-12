@@ -959,19 +959,28 @@ div.new-manga-download-settings {
         position: relative;
     }
 
-    popup popup-window {
+    popup popup-window{
         width: 100%;
+        max-width: 100%;
         height: calc(100% - var(--topbar-height));
         top: var(--topbar-height);
         left: 0;
         border-radius: 0;
     }
 
+    #publicationViewerPopup > popup-window { 
+        width: 100%;
+        max-width: 100%;
+
+        top: var(--topbar-height);
+        left: 0;
+        transform: translate(0%, 50%);
+    }
+
     .section-item {
         width: 100% !important;
     }
 }
-
 
 .section-item > .jobImage {
   height: 100%;
