@@ -174,7 +174,7 @@ function Setup(){
     }
     setInterval(() => {
       UpdateJobs();
-    }, 1000);
+    }, 5000);
   });
   //Clear the previous values if any exist.
   searchBox.value = "";
