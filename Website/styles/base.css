@@ -1,4 +1,4 @@
-﻿:root{
+:root{
     --background-color: #030304;
     --second-background-color: white;
     --primary-color: #f5a9b8;
@@ -20,6 +20,7 @@ body{
     background-color: var(--background-color);
     font-family: "Inter", sans-serif;
     overflow-x: hidden;
+    font-weight: 400;
 }
 
 wrapper {
@@ -95,10 +96,6 @@ filter-box {
     height: 600px;
 }
 
-filter-box.animate {
-    display: flex;
-}
-
 filter-box border-bar popup-title{
     font-size: 12pt;
 }
@@ -147,6 +144,10 @@ status-filter {
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
+}
+
+row > status-filter {
+    cursor: default;
 }
 
 status-filter[release-status="Ongoing"]{
@@ -420,11 +421,14 @@ popup popup-window {
     overflow: hidden;
 }
 
-popup#jobStatusView popup-window {
-    left: 20%;
-    top: 20%;
-    height: 60%;
-    width: 60%;
+/*Remove below when individual chapter download is implemented*/
+#publicationViewerPopup > popup-window {
+    height: fit-content;
+    width: auto; 
+    max-width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 popup-content{
@@ -642,66 +646,58 @@ a:active {
     user-select: none; /* Standard syntax */
 }
 
-.section-button#reset:hover {
-    color: red;
-    border-color: red;
+#reset:hover {
+    color: rgb(255, 44, 29);
+    border-color: rgb(255, 44, 29);
 }
 .section-buttons-container > .section-button:hover {
     border-color: var(--secondary-color);
     color: var(--secondary-color);
 }
 
-#newMangaPopup > div {
-  z-index: 3;
-  position: relative;
-}
-
-#newMangaPopup > #newMangaPopupSelector {
-  width: 600px;
-  height: 40px;
-  margin: 80px auto 0;
-}
-
-#newMangaPopup > div > #newMangaConnector, #newMangaTitle, #newMangaTranslatedLanguage {
-  margin: 0;
-  display: inline-block;
-  height: 40px;
-}
+ #newMangaPopupSelector {
+    display: flex;
+    padding: 5px;
+    margin: 10px;
+    width: calc(100%-20px)
+ }
 
 #newMangaPopup #newMangaConnector {
   width: 100px;
-  padding: 0 0 0 5px;
-  border-radius: 5px 0 0 5px;
-  border: 0;
-  border-right: 1px solid darkgray;
+  padding: 5px;
+  border-radius: 10px;
+  border: 0;;
 }
 
 #newMangaPopup #newMangaTitle{
-  width: 445px;
-  padding: 0 5px 0 5px;
-  border: 0;
+    margin: 0px 10px;
+    padding: 5px;
+    height: 20px;
+    border-radius: 10px;
+    border-style: solid;
+    outline: none;
+    flex-grow: 1;
+    width: auto;
 }
 
 #newMangaPopup #newMangaTranslatedLanguage {
-  width: 45px;
-  border-radius: 0 5px 5px 0;
+  width: 60px;
+  padding: 5px;
+  border-radius: 10px;
   border: 0;
-  border-left: 1px solid darkgray;
-  margin-left: -5px;
 }
 
 #newMangaResult {
   display: none;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
-  margin: 5px auto 0;
+  margin: 5px;
   border-radius: 5px;
   padding: 5px;
-  width: min-content;
-  max-width: 98%;
-  max-height: 400px;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  width: 98%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 blur-background {
@@ -717,111 +713,6 @@ blur-background {
 
 #publicationViewerPopup{
     z-index: 5;
-}
-
-publication-viewer{
-    display: block;
-    width: 460px;
-    position: absolute;
-    top: 200px;
-    left: 400px;
-    background-color: var(--accent-color);
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 15px;
-}
-
-publication-viewer::after{
-    content: '';
-    position: absolute;
-    left: 0; top: 0;
-    border-radius: 5px;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(3px);
-}
-
-publication-viewer img {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-    z-index: 0;
-}
-
-publication-viewer publication-details > * {
-    margin: 5px 0;
-}
-
-publication-viewer publication-details publication-name {
-    width: initial;
-    overflow-x: scroll;
-    white-space: nowrap;
-    scrollbar-width: none;
-}
-
-publication-viewer publication-details publication-tags::before {
-    content: "Tags";
-    display: block;
-    font-weight: bolder;
-}
-
-publication-viewer publication-details publication-tags {
-    overflow-x: scroll;
-    white-space: nowrap;
-    scrollbar-width: none;
-}
-
-publication-viewer publication-details publication-author::before {
-    content: "Author: ";
-    font-weight: bolder;
-}
-
-publication-viewer publication-details publication-description::before {
-    content: "Description";
-    display: block;
-    font-weight: bolder;
-}
-
-publication-viewer publication-details publication-description {
-    font-size: 12pt;
-    margin: 5px 0;
-    height: 145px;
-    overflow-x: scroll;
-}
-
-publication-viewer publication-details publication-interactions {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: start;
-    width: 100%;
-}
-
-publication-viewer publication-details publication-interactions > * {
-    margin: 0 10px;
-    font-size: 16pt;
-    cursor: pointer;
-}
-
-publication-viewer publication-details publication-interactions publication-starttask {
-    color: var(--secondary-color);
-}
-
-publication-viewer publication-details publication-interactions publication-delete {
-    color: red;
-}
-
-publication-view publication-details publication-interactions publication-canceltask {
-  color: yellow;
-}
-
-publication-viewer publication-details publication-interactions publication-add {
-    color: limegreen;
 }
 
 footer-tag-popup {
@@ -886,6 +777,10 @@ footer-tag-popup::before{
   z-index: 201;
 }
 
+popup-content #loaderdiv {
+    display: none;
+}
+
 #loaderText {
   position: relative;
   margin: 0 auto;
@@ -915,6 +810,169 @@ footer-tag-popup::before{
     overflow: hidden;
 }
 
+#newMangaResult > .section-item {
+    flex-direction: row;
+    width: auto;
+    height: auto;
+    padding: 0;
+}
+
+img-container {
+    height: 300px;
+    width: 180px;
+    position: relative;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+img-container > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    border-radius: 5px;
+}
+
+manga-connector {
+    display: block;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    /*Text Properties*/
+    font-size:8pt;
+    font-weight:bold;
+    color:white;
+    text-align: center;
+}
+
+manga-details {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 2px;
+}
+
+manga-details > .mangaDescription {
+    width: 100%;
+}
+
+manga-chapter {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-style: solid;
+    border-width: 2px;
+    margin: 5px;
+    border-radius: 10px;
+    border-color: #bbb;
+    scrollbar-width: thin;
+    scrollbar-color:  var(--secondary-color) var(--second-background-color);
+}
+
+chapter-row {
+    font-size: 12pt;
+    width: 100%;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px;
+    padding-left: 50px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+span.latest-chapter-no {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+
+    font-size: 10pt;
+    font-weight: bold;
+    color: white;
+    background-color: var(--primary-color);;
+}
+
+div.new-manga-download-settings {
+    position: relative;
+    overflow: hidden;
+    width: calc(100%-20px);
+    height: auto;
+    padding: 10px;
+}
+
+.new-manga-download-settings > row {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+.new-manga-download-settings > row > label {
+    text-wrap: nowrap;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #474646;
+}
+
+.new-manga-download-settings > row > input {
+    margin-left: auto;
+    margin-right: 5px; 
+    padding: 5px;
+    height: 20px;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: lightgray;
+    outline: none;
+    float: right;
+    width: 100%;
+}
+.new-manga-download-settings > row > input:focus {
+    border-color: var(--secondary-color);
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    img-container {
+      display: none;
+    }
+
+    .section-item > tag-cloud {
+        display: none !important;
+    }
+    .new-manga-download-settings > row, .downloadManga, border-bar-button.in-library { 
+        width: calc(100% - 25px) !important;
+        align-self: center;
+        position: relative;
+    }
+
+    popup popup-window {
+        width: 100%;
+        height: calc(100% - var(--topbar-height));
+        top: var(--topbar-height);
+        left: 0;
+        border-radius: 0;
+    }
+
+    .section-item {
+        width: 100% !important;
+    }
+}
+
+
 .section-item > .jobImage {
   height: 100%;
   width: auto;
@@ -927,7 +985,9 @@ footer-tag-popup::before{
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 100%;
+    width: calc(100% - 15px);
+    margin-left: 7px;
+    position: relative;
 }
 
 .section-item > .jobDetails > .jobTitle {
@@ -937,16 +997,189 @@ footer-tag-popup::before{
   text-wrap: wrap;
 }
 
-.section-item > .jobDetails > .jobProgressBar {
-  margin: 5px;
-  height: 10px;
-  border-radius: 7px;
+header-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: center
 }
 
-.section-item > .jobDetails > .jobProgressSpan {
+.mangaTitle {
     margin: 5px;
-    margin-left: auto;
+    font-size: 14pt;
+    font-weight: bold;
+    text-wrap: wrap;
+    display: flex;
+}
+
+tag-cloud {
+    display: inline-flex;
+    flex-direction: row;
+    margin-left: 10px;
+    width: calc(100% - 30px);
+    flex-wrap: wrap;
+}
+
+manga-tag {
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    position: relative;
+    margin: 0 5px 8px 17px;
+    padding: 0 10px 0 12px;
+    background: darkslategrey;
+    -webkit-border-bottom-right-radius: 3px;    
+    border-bottom-right-radius: 3px;
+    -webkit-border-top-right-radius: 3px;    
+    border-top-right-radius: 3px;
+    color: #fff;
+    font-size: 11px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+manga-tag:before {
+    content: "";
+    position: absolute;
+    top:0;
+    left: -12px;
+    width: 0;
+    height: 0;
+    border-color: transparent darkslategrey transparent transparent;
+    border-style: solid;
+    border-width: 12px 12px 12px 0;
+}
+
+manga-tag:after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 1px;
+    float: left;
+    width: 5px;
+    height: 5px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: #fff;
+}
+
+author-tag {
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    position: relative;
+    margin-left: 0px;
     margin-right: 5px;
+    padding: 0 5px 0 5px;
+    background: #800000;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 11px;
+    text-decoration: none;
+    font-weight: bold;
+    align-items: center;
+    display: flex;
+}
+
+author-tag > img {
+    height: 18px; 
+    width: 18px;
+    float: left;
+    background: #800000;
+}
+
+.mangaDescription {
+    font-size: 10pt;
+    padding: 4px;
+    height: auto;
+    margin: 2px;
+}
+
+.abbreviated {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    line-clamp: 10;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.downloadManga {
+    position: relative;
+    float: right;
+    width: fit-content;
+    margin: 5px 5px 0 auto;
+
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 10pt;
+}
+
+border-bar-button.in-library {
+    position: relative;
+    float: right;
+    margin: 5px 5px 0 auto;
+    width: fit-content;
+
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 10pt;
+
+    background-color: #08962e;
+    color: #fff;
+    border: none;
+    cursor: default;
+}
+
+border-bar-button.in-library:hover {
+    border: none;
+    color: #fff;
+}
+
+.section-item > .jobDetails > .progress-container {
+  margin: 5px;
+  height: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #999999;
+  position: relative;
+}
+
+.progress-container > .jobProgressBar {
+    margin: 0px;
+    display: block;
+    height: 15px;
+    padding-left: 5px;
+    border-radius: 12px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #0075fa;
+    color: white;
+    justify-content: left;
+    font-size: 8pt;
+    line-height: 15px;
+}
+
+.progress-container > .pending { 
+    width: 50%;
+    display: block;
+    height: 15px;
+    top: 0%;
+    position: absolute;
+    border-radius: 12px;
+    background-color: #0075fa;
+    animation: bounce;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes bounce {
+    0%      {width: 10%; transform: translateX(0);};
+    50%     {width: 50%; transform: translateX(100%);};
+    100%    {width: 10%; transform: translateX(0);};
 }
 
 .section-item > .jobDetails > .jobCancel {
@@ -958,3 +1191,61 @@ footer-tag-popup::before{
   color: var(--secondary-color);
   cursor: pointer;
 }
+
+
+ /* The switch - the box around the slider */
+ .switch-toggle {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    margin-left: auto;
+    float: right;
+    margin-right: 2px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: var(--primary-color);
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-color);
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+  }

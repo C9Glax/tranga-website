@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +6,10 @@
   <link id='basestyle' rel="stylesheet" href="styles/base.css">
   <link id='librarystyle' rel="stylesheet" href="styles/style_default.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap" rel="stylesheet">
 </head>
 <body>
   <wrapper>
@@ -23,7 +27,7 @@
     <filter-box id="filterBox">
       <border-bar>
         <popup-title>Filter by: </popup-title>
-        <popup-close onclick="filterBox.classList.toggle('animate')" >&times</popup-close>
+        <popup-close onclick="filterBox.style.display = 'none';" >&times</popup-close>
       </border-bar>
       <popup-content id="filterContent">
         <div class="popup-section">
@@ -68,16 +72,27 @@
       
       <popup id="newMangaPopup">
         <blur-background id="blurBackgroundNewMangaPopup" onclick="newMangaPopup.style.display = 'none';"></blur-background>
-        <div id="newMangaPopupSelector">
-          <select id="newMangaConnector" />
-          <input type="text" placeholder="Title" id="newMangaTitle" />
-          <select id="newMangaTranslatedLanguage">
-            <option selected="selected">en</option>
-            <option>it</option>
-            <option>de</option>
-          </select>
-        </div>
-        <div id="newMangaResult"></div>
+        <popup-window>
+          <border-bar>
+            <popup-title>Search</popup-title>
+            <popup-close onclick="newMangaPopup.style.display = 'none'">&times</popup-close>
+          </border-bar>
+          <popup-content>
+            <div id="loaderdiv">
+              <div id="loader"></div>
+            </div>
+            <div id="newMangaPopupSelector">
+              <select id="newMangaConnector">
+              <input type="text" placeholder="Title" id="newMangaTitle" />
+              <select id="newMangaTranslatedLanguage">
+                <option selected="selected">EN</option>
+                <option>IT</option>
+                <option>DE</option>
+              </select>
+            </div>
+            <div id="newMangaResult"></div>
+          </popup-content>
+        </popup-window>
       </popup>
       
       <popup id="settingsPopup">
@@ -97,7 +112,14 @@
                   <row><label for="settingApiUri">API URI:</label><input placeholder="https://" type="text" id="settingApiUri"></row>
                   <row><label for="userAgent">User Agent:</label><input placeholder="UserAgent" id="userAgent" type="text"></row>
                   <row>
-                    <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
+                    <label for="aprilFoolsMode">Skip Chapters on April 1st:</label>
+                    <label class="switch-toggle">
+                      <input type="checkbox" onclick="UpdateAprilFoolsMode()" id="aprilFoolsMode">
+                      <span class="slider"></span>
+                    </label>
+                  </row>
+                  <row>
+                    <border-bar-button class="section" onclick="ResetUserAgent()">Reset User Agent</border-bar-button>
                     <border-bar-button class="section" onclick="DownloadLogs()">Download Logs</border-bar-button>
                   </row>
                 </div>
@@ -107,13 +129,19 @@
                   <row><label for="CoverRL">Manga Covers:</label><input id="coverRL" type="text"></row>
                   <row><label for="ImageRL">Manga Images:</label><input id="imageRL" type="text"></row>
                   <row><label for="InfoRL">Manga Info:</label><input id="infoRL" type="text"></row>
+                  <row>
+                    <border-bar-button class="section" onclick="ResetRateLimits()">Reset All Rate Limits</border-bar-button>
+                  </row>
                 </div>
                 <div class="section-item dyn-height">
-                  <span class="title">Appearance</span>
-                  <row><label for="cssStyle">Library Style:</label><select id="cssStyle">
+                  <span class="title">Library</span>
+                  <row><label for="cssStyle">Appearance Style:</label><select id="cssStyle">
                     <option id="card_compact" value="card_compact">Cards (Compact)</option>
                     <option id="card_hover" value="card_hover">Cards (Hover)</option>
                   </select></row>
+                  <row> 
+                    <border-bar-button class="section" onclick="RefreshLibraryMetadata()">Refresh Library Metadata</border-bar-button>
+                  </row>
                 </div>
               </div>
             </div>
@@ -131,7 +159,6 @@
                 </div> -->
                 <div class="section-item dyn-height">
                   <span class="title"><img src="connector-icons/mangadex-logo.svg"><a href="https://mangadex.org">MangaDex</a></span>
-                  <row><label for="mDexAuthorRL">Author Rate Limit:</label><input id="mDexAuthorRL" type="text"></row>
                   <row><label for="mDexFeedRL">Feed Rate Limit:</label><input id="mDexFeedRL" type="text"></row>
                   <row><label for="mDexImageRL">Image Rate Limit:</label><input id="mDexImageRL" type="text"></row>
                 </div>
@@ -208,11 +235,12 @@
                   <div class="section-item">
                     <span class="title"><img src='connector-icons/ntfy.svg'>Ntfy<connector-configured id="ntfyConfigured"></connector-configured></span>
                     <label for="ntfyEndpoint"></label><input placeholder="URL" id="ntfyEndpoint" type="text">
-                    <label for="ntfyAuth"></label><input placeholder="Auth" id="ntfyAuth" type="text">
+                    <label for="ntfyUser"></label><input placeholder="Username" id="ntfyUser" type="text">
+                    <label for="ntfyPass"></label><input placeholder="Password" id="ntfyPass" type="password">
                     <div class="section-buttons-container">
-                      <span onclick="TestNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button' id="test-connector">Test</span>
+                      <span onclick="TestNtfy(ntfyEndpoint.value, ntfyUser.value, ntfyPass.value);" class='section-button' id="test-connector">Test</span>
                       <span onclick="ClearNtfy()" class='section-button' id="reset">Reset</span>
-                      <span onclick="UpdateNtfy(ntfyEndpoint.value, ntfyAuth.value);" class='section-button'>Apply</span>
+                      <span onclick="UpdateNtfy(ntfyEndpoint.value, ntfyUser.value, ntfyPass.value);" class='section-button'>Apply</span>
                   </div>
                   </div>
                 </div>
@@ -230,24 +258,32 @@
 		
 	  <popup id="publicationViewerPopup">
         <blur-background id="blurBackgroundPublicationPopup" onclick="publicationViewerPopup.style.display= 'none';"></blur-background>
-        <publication-viewer>
-          <img id="pubviewcover" src="media/cover.jpg" alt="cover">
-          <publication-details>
-            <publication-name id="publicationViewerName">Best Manga there is</publication-name>
-            <publication-tags id="publicationViewerTags">A Manga</publication-tags>
-            <publication-author id="publicationViewerAuthor">Glax</publication-author>
-            <publication-description id="publicationViewerDescription">
-              An interesting description. The description is very intriguing, yet wholesome.
-            </publication-description>
-            <publication-interactions>
-              <publication-starttask id="startJobButton">Start Job ▶️</publication-starttask>
-              <publication-canceltask id="cancelJobButton">Cancel Job ❌</publication-canceltask>
-              <publication-delete id="deleteJobButton">Delete Job 🗑️</publication-delete>
-              <publication-add id="createMonitorJobButton">Monitor ➕</publication-add>
-              <publication-add id="createDownloadChapterJobButton">Download Chapter 📥</publication-add>
-            </publication-interactions>
-          </publication-details>
-        </publication-viewer>
+        <popup-window>
+          <border-bar>
+            <popup-title><a class="mangaTitle" id="publicationViewerName"></a></popup-title><status-filter id="publicationViewerStatus"></status-filter>
+            <popup-close onclick="publicationViewerPopup.style.display = 'none'">&times</popup-close>
+          </border-bar>
+          <manga-details>
+
+            <img-container>
+              <img id="pubviewcover">
+              <manga-connector id="publicationViewerConnector"></manga-connector>
+              <span class="latest-chapter-no" id="publicationViewerChapterNo"></span>
+            </img-container>
+            <div style="height: 100%;">
+              <tag-cloud id="publicationViewerTags"></tag-cloud>
+              <div class="mangaDescription" id="publicationViewerDescription"></div>
+            </div>
+          </manga-details>
+          <!-- <manga-chapter id="publicationViewerChapters"></manga-chapter> -->
+          <border-bar>
+            <div class="button-container">
+              <border-bar-button onclick="RefreshMangaMetadata(selectedManga.internalId)">Refresh Metadata</border-bar-button>
+              <border-bar-button id="reset" onclick="RemoveJob(selectedJob.id); UpdateJobs(); mangaViewerPopup.style.display = 'none'">Remove Manga</border-bar-button>
+              <border-bar-button class="primary" onclick="StartJob(selectedJob.id); mangaViewerPopup.style.display = 'none'">Start Job</border-bar-button>
+            </div>
+          </border-bar>
+        </popup-window>
       </popup>
 
       <popup id="jobStatusView">
@@ -282,6 +318,7 @@
           </border-bar>
 
         </popup-window>
+      </popup>
     </viewport>
 	  
     <footer>
