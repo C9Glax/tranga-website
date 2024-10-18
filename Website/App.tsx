@@ -1,17 +1,28 @@
-import React from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import Footer from "./modules/Footer";
 import Search from "./modules/Search";
 import Header from "./modules/Header";
 
 export default function App(){
-    // @ts-ignore
-    const content = <div>
-        <Header />
-        <Search />
-        <Footer />
-    </div>
+    const [content, setContent] = React.useState<ReactElement>();
 
-    return(content)
+    useEffect(() => {
+        setContent(<h1>Testing connection to backend...</h1>)
+        getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
+            console.log(result);
+            if(result === null){
+                setContent(<h1>No connection to backend</h1>);
+            }else{
+                setContent(<Search />)
+            }
+        })
+    }, []);
+
+    return(<div>
+        <Header />
+        {content}
+        <Footer />
+    </div>)
 }
 
 export function getData (uri: string) : Promise<object> {

@@ -20,6 +20,7 @@ body{
     background-color: var(--background-color);
     font-family: "Inter", sans-serif;
     overflow-x: hidden;
+    color: var(--primary-color);
 }
 
 header {
