@@ -1,0 +1,32 @@
+header {
+    display: flex;
+    align-items: center;
+    height: var(--topbar-height);
+    background-color: var(--secondary-color);
+    z-index: 100;
+    box-shadow: 0 0 20px black;
+}
+
+header > #titlebox {
+    position: relative;
+    display: flex;
+    margin: 0 0 0 40px;
+    height: 100%;
+    align-items:center;
+    justify-content:center;
+}
+
+header > #titlebox > span{
+    cursor: default;
+    font-size: 24pt;
+    font-weight: bold;
+    background: linear-gradient(150deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 20px;
+}
+
+header > #titlebox > img {
+    height: 100%;
+    cursor: grab;
+}

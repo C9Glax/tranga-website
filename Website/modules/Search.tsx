@@ -3,6 +3,7 @@ import {MangaConnector} from "./MangaConnector";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
 import IManga, {HTMLFromIManga} from "./interfaces/IManga";
+import '../styles/search.css';
 
 export default function Search(){
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
@@ -104,7 +105,10 @@ export default function Search(){
         <div>
             {searchResults === undefined
                 ? <p>No Results yet</p>
-                : searchResults.map(result => HTMLFromIManga(result))}
+                : searchResults.map(result => <div key={"searchResult."+result.internalId} className="searchResult">
+                    {HTMLFromIManga(result)}
+                    <button onClick={(e) => {Job.CreateJob(result.internalId, "MonitorManga", "03:00:00")}}>Monitor</button>
+                </div>)}
         </div>
     </div>)
 }

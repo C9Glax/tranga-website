@@ -1,0 +1,21 @@
+footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    align-content: center;
+    position: fixed;
+    bottom: 0;
+    color: white;
+}
+
+#madeWith {
+    flex-grow: 1;
+    text-align: right;
+    margin-right: 20px;
+    cursor: url("Website/media/blahaj.png"), grab;
+}
