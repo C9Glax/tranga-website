@@ -1,5 +1,6 @@
 import React, { ChangeEventHandler, MouseEventHandler, useEffect, useState} from 'react';
 import {MangaConnector} from "./MangaConnector";
+import {Job} from "./Job";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
 import IManga, {HTMLFromIManga} from "./interfaces/IManga";

@@ -2,6 +2,8 @@ import React, {ReactElement, useEffect} from 'react';
 import Footer from "./modules/Footer";
 import Search from "./modules/Search";
 import Header from "./modules/Header";
+import MonitorJobsList from "./modules/MonitorJobsList";
+import './styles/Manga.css'
 
 export default function App(){
     const [content, setContent] = React.useState<ReactElement>();
@@ -13,7 +15,10 @@ export default function App(){
             if(result === null){
                 setContent(<h1>No connection to backend</h1>);
             }else{
-                setContent(<Search />)
+                setContent(<>
+                    <Search />
+                    <MonitorJobsList />
+                    </>)
             }
         })
     }, []);

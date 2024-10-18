@@ -1,0 +1,11 @@
+#MonitorMangaList {
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-color: var(--accent-color) var(--primary-color);
+    scrollbar-width: thin;
+}
