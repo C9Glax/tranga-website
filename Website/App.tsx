@@ -28,6 +28,7 @@ export default function App(){
 export function getData (uri: string) : Promise<object> {
     return fetch(uri,
         {
+            method: 'GET',
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -38,8 +39,43 @@ export function getData (uri: string) : Promise<object> {
             return response.json();
         })
         .catch(function(err){
-            console.error(err);
-            return null;
+            console.error(`Error GETting Data ${uri}\n${err}`);
+            return Promise.reject();
+        });
+}
+
+export function postData(uri: string, content: object) : Promise<object> {
+    return fetch(uri,
+        {
+            method: 'POST',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(content)
+        })
+        .then(function(response){
+            if(!response.ok) throw new Error("Could not fetch data");
+            return response.json();
+        })
+        .catch(function(err){
+            console.error(`Error POSTing Data ${uri}\n${err}`);
+            return Promise.reject();
+        });
+}
+
+export function deleteData(uri: string) {
+    fetch(uri,
+        {
+            method: 'DELETE',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .catch(function(err){
+            console.error(`Error DELETEing Data ${uri}\n${err}`);
+            return Promise.reject();
         });
 }
 
