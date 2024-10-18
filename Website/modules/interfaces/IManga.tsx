@@ -25,10 +25,25 @@ export default interface IManga{
     "mangaConnector": IMangaConnector
 }
 
+function ReleaseStatusFromNumber(n: number): string {
+    switch(n) {
+        case 0: return "Ongoing";
+        case 1: return "Completed";
+        case 2: return "OnHiatus";
+        case 3: return "Cancelled";
+        case 4: return "Unreleased";
+    }
+    return "";
+}
+
 export function HTMLFromIManga(manga: IManga) : ReactElement {
-    return (<div className="Manga" key={manga.internalId}>
-        <p>{manga.sortName}</p>
-        <p>Description: {manga.description}</p>
-        <p>MangaConnector: {manga.mangaConnector.name}</p>
-    </div>)
+    return(
+    <div className="Manga" key={manga.internalId}>
+        <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
+        <div>
+            <p className="Manga-name">{manga.sortName}</p>
+            <p className="pill connector-name">{manga.mangaConnector.name}</p>
+            <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
+        </div>
+    </div>);
 }

@@ -4,7 +4,6 @@ import { getData } from '../App';
 export class Manga
 {
     static async GetAllManga(): Promise<IManga[]> {
-        let manga: IManga[] = [];
         console.debug("Getting all Manga");
         return getData("http://127.0.0.1:6531/v2/Mangas")
             .then((json) => {
@@ -40,12 +39,8 @@ export class Manga
             });
     }
 
-    static async GetMangaCoverUrl(internalId: string): Promise<string> {
+    static GetMangaCoverUrl(internalId: string): string {
         console.debug(`Getting Manga Cover-Url ${internalId}`);
-        return await getData(`http://127.0.0.1:6531/v2/Manga/${internalId}/Cover`)
-            .then((json) => {
-                console.debug(`Got Cover-Url of Manga ${internalId}`);
-                return (json.toString());
-            });
+        return `http://127.0.0.1:6531/v2/Manga/${internalId}/Cover`;
     }
 }
