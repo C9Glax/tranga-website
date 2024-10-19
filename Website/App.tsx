@@ -22,7 +22,7 @@ export default function App(){
 
             const interval = setInterval(() => {
                 setLastJobListUpdate(new Date());
-            }, 1000);
+            }, 5000);
 
             return () => clearInterval(interval);
         });
