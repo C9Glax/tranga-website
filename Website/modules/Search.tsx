@@ -55,8 +55,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
         }
     }
 
-    const ExecuteSearch : EventHandler<any> = (event) => {
-        event.preventDefault();
+    const ExecuteSearch : EventHandler<any> = () => {
         if(searchBoxValue.length < 1 || selectedConnector === undefined || selectedLanguage === ""){
             console.error("Tried initiating search while not all fields where submitted.")
             return;
