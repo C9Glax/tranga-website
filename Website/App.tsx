@@ -9,6 +9,7 @@ export default function App(){
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
     const [lastMangaListUpdate, setLastMangaListUpdate] = React.useState<Date>(new Date());
+    const [lastJobListUpdate, setLastJobListUpdate] = React.useState<Date>(new Date());
 
     useEffect(() => {
         getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
@@ -18,12 +19,19 @@ export default function App(){
             }else{
                 setConnected(true);
             }
-        })
+
+            const interval = setInterval(() => {
+                setLastJobListUpdate(new Date());
+            }, 1000);
+
+            return () => clearInterval(interval);
+        });
     }, []);
 
     const JobsChanged : EventHandler<any> = () => {
         console.log("Updating Mangalist");
         setLastMangaListUpdate(new Date());
+        setLastJobListUpdate(new Date());
     }
 
     return(<div>
@@ -36,11 +44,10 @@ export default function App(){
                         <hr/>
                     </>
                     : <></>}
-                <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={JobsChanged}
-                                 key={lastMangaListUpdate.getTime()}/>
+                <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={JobsChanged} key={lastMangaListUpdate.getTime()}/>
             </>
             : <h1>No connection to backend</h1>}
-        <Footer/>
+        <Footer key={lastJobListUpdate.getTime()} />
     </div>)
 }
 
