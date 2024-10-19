@@ -36,6 +36,7 @@ export default function Search({onJobsChanged} : {onJobsChanged: EventHandler<an
     }
 
     const searchBoxValueChanged : ChangeEventHandler<HTMLInputElement> = (event) => {
+        event.currentTarget.style.width = event.target.value.length + "ch";
         if(mangaConnectors === undefined)
             return;
         var str : string = event.target.value;
