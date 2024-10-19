@@ -1,11 +1,11 @@
-import React, {MouseEventHandler, useEffect} from 'react';
+import React, {MouseEventHandler, ReactElement, useEffect} from 'react';
 import {Job} from './Job';
 import '../styles/monitorMangaList.css';
 import IJob from "./interfaces/IJob";
 import IManga, {HTMLFromIManga} from "./interfaces/IManga";
 import {Manga} from './Manga';
 
-export default function MonitorJobsList(){
+export default function MonitorJobsList({onStartSearch} : {onStartSearch() : void}){
     const [MonitoringJobs, setMonitoringJobs] = React.useState<IJob[]>([]);
     const [AllManga, setAllManga] = React.useState<IManga[]>([]);
 
@@ -41,11 +41,24 @@ export default function MonitorJobsList(){
         Job.DeleteJob(jobId);
     }
 
+    function StartSearchMangaEntry() : ReactElement {
+        return (<div key="monitorMangaEntry.StartSearch" className="monitorMangaEntry" onClick={onStartSearch}>
+            <div className="Manga" key="StartSearch.Manga">
+                <img src="../media/blahaj.png"></img>
+                <div>
+                    <p style={{textAlign: "center", width: "100%"}} className="Manga-name">Add new Manga</p>
+                    <p style={{fontSize: "42pt", textAlign: "center"}}>+</p>
+                </div>
+            </div>
+        </div>);
+    }
+
     return (
         <div id="MonitorMangaList">
+            {StartSearchMangaEntry()}
             {AllManga.map((manga: IManga) => {
                 const job = MonitoringJobs.find(job => job.mangaInternalId == manga.internalId);
-                if(job === undefined || job == null)
+                if (job === undefined || job == null)
                     return <div>Error. Could not find matching job for {manga.internalId}</div>
                 return <div key={"monitorMangaEntry." + manga.internalId} className="monitorMangaEntry">
                     {HTMLFromIManga(manga)}

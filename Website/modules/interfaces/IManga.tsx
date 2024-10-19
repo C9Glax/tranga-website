@@ -41,9 +41,9 @@ export function HTMLFromIManga(manga: IManga) : ReactElement {
     <div className="Manga" key={manga.internalId}>
         <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
         <div>
-            <p className="Manga-name">{manga.sortName}</p>
             <p className="pill connector-name">{manga.mangaConnector.name}</p>
             <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
+            <p className="Manga-name">{manga.sortName}</p>
         </div>
     </div>);
 }

@@ -8,6 +8,13 @@ import './styles/Manga.css'
 export default function App(){
     const [content, setContent] = React.useState<ReactElement>();
 
+    function ShowSearch() {
+        setContent(<>
+            <Search />
+            <MonitorJobsList onStartSearch={ShowSearch} />
+        </>);
+    }
+
     useEffect(() => {
         setContent(<h1>Testing connection to backend...</h1>)
         getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
@@ -16,8 +23,7 @@ export default function App(){
                 setContent(<h1>No connection to backend</h1>);
             }else{
                 setContent(<>
-                    <Search />
-                    <MonitorJobsList />
+                    <MonitorJobsList onStartSearch={ShowSearch} />
                     </>)
             }
         })
