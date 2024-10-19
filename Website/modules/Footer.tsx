@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import '../styles/footer.css';
 import {Job} from './Job';
+import Icon from '@mdi/react';
+import { mdiRun, mdiCounter, mdiEyeCheck } from '@mdi/js';
 
 export default function Footer(){
     const [MonitoringJobsCount, setMonitoringJobsCount] = React.useState(0);
@@ -19,9 +21,9 @@ export default function Footer(){
 
     return (
     <footer>
-        <p>{MonitoringJobsCount}</p>
-        <p>{AllJobsCount}</p>
-        <p>{RunningJobsCount}</p>
+        <div><Icon path={mdiEyeCheck} size={1} /> <span>{MonitoringJobsCount}</span></div>
+        <div><Icon path={mdiRun} size={1} /> <span>{RunningJobsCount}</span></div>
+        <div><Icon path={mdiCounter} size={1} /> <span>{AllJobsCount}</span></div>
         <p id="madeWith">Made with Blåhaj 🦈</p>
     </footer>)
 }
