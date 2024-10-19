@@ -57,7 +57,7 @@ export function SearchResult(manga: IManga, jobsChanged: EventHandler<any>) : Re
             <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
             <p className="connector-name">{manga.mangaConnector.name}</p>
             <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
-            <p className="Manga-name">{manga.sortName}</p>
+            <p className="Manga-name"><a href={manga.websiteUrl}>{manga.sortName}<img src="../../media/link.svg" /></a></p>
             <ul className="Manga-tags">
                 {manga.authors.map(author => <li className="Manga-author" key={manga.internalId + "-author-" + author}> <Icon path={mdiAccountEdit} size={0.5} /> {author}</li>)}
                 {manga.tags.map(tag => <li className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon path={mdiTagTextOutline} size={0.5} /> {tag}</li>)}

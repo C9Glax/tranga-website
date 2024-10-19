@@ -86,3 +86,13 @@
 .SearchResult > .Manga-AddButton {
     grid-area: button;
 }
+
+.SearchResult a, .SearchResult a:visited {
+    color: initial;
+}
+
+.SearchResult a img {
+    filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(7480%) hue-rotate(141deg) brightness(111%) contrast(99%);
+    position: relative;
+    bottom: 10px;
+}
