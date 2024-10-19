@@ -12,5 +12,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "@uiw/react-markdown-preview": "^5.1.3"
   }
 }

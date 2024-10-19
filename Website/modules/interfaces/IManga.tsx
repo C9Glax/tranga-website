@@ -1,10 +1,11 @@
 import IMangaConnector from "./IMangaConnector";
 import KeyValuePair from "./KeyValuePair";
 import {Manga} from "../Manga";
-import React, {ChangeEventHandler, EventHandler, ReactElement} from "react";
+import React, {EventHandler, ReactElement} from "react";
 import {Job} from "../Job";
 import Icon from '@mdi/react';
 import { mdiTagTextOutline, mdiAccountEdit } from '@mdi/js';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export default interface IManga{
     "sortName": string,
@@ -62,7 +63,7 @@ export function SearchResult(manga: IManga, jobsChanged: EventHandler<any>) : Re
                 {manga.authors.map(author => <li className="Manga-author" key={manga.internalId + "-author-" + author}> <Icon path={mdiAccountEdit} size={0.5} /> {author}</li>)}
                 {manga.tags.map(tag => <li className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon path={mdiTagTextOutline} size={0.5} /> {tag}</li>)}
             </ul>
-            <p className="Manga-description">{manga.description}</p>
+            <MarkdownPreview className="Manga-description" source={manga.description} style={{ backgroundColor: "transparent", color: "black", padding: 16 }} />
             <button className="Manga-AddButton" onClick={(e) => {
                 Job.CreateJob(manga.internalId, "MonitorManga", "03:00:00").then(() => jobsChanged(manga.internalId));
             }}>Monitor
