@@ -1,6 +1,5 @@
-import React, {ChangeEventHandler, EventHandler, MouseEventHandler, useEffect, useState} from 'react';
+import React, {ChangeEventHandler, EventHandler, useEffect, useState} from 'react';
 import {MangaConnector} from "./MangaConnector";
-import {Job} from "./Job";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
 import IManga, {SearchResult} from "./interfaces/IManga";
@@ -48,8 +47,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
             return;
         let baseUri = match[1];
         const selectCon = mangaConnectors.find((con: IMangaConnector) => {
-            let found = con.BaseUris.find(uri => uri == baseUri);
-            return found;
+            return con.BaseUris.find(uri => uri == baseUri);
         });
         if(selectCon != undefined){
             setSelectedConnector(selectCon);
@@ -58,6 +56,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
     }
 
     const ExecuteSearch : EventHandler<any> = (event) => {
+        event.preventDefault();
         if(searchBoxValue.length < 1 || selectedConnector === undefined || selectedLanguage === ""){
             console.error("Tried initiating search while not all fields where submitted.")
             return;
@@ -105,7 +104,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
             </select>
             <button id="Searchbox-button" type="submit" onClick={ExecuteSearch}>Search</button>
         </div>
-        <img id="closeSearch" src="../media/close-x.svg" onClick={closeSearch} />
+        <img alt="Close Search" id="closeSearch" src="../media/close-x.svg" onClick={closeSearch} />
         <div id="SearchResults">
             {searchResults === undefined
                 ? <p></p>

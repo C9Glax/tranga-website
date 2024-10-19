@@ -1,4 +1,4 @@
-import React, {EventHandler, ReactElement, useEffect, useState} from 'react';
+import React, {EventHandler, useEffect} from 'react';
 import Footer from "./modules/Footer";
 import Search from "./modules/Search";
 import Header from "./modules/Header";
