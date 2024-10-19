@@ -85,6 +85,19 @@
 
 .SearchResult > .Manga-AddButton {
     grid-area: button;
+    background-color: white;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    width: fit-content;
+    height: fit-content;
+    padding: 5px 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.SearchResult > .Manga-AddButton:hover {
+    background-color: #eee;
 }
 
 .SearchResult a, .SearchResult a:visited {
