@@ -59,11 +59,11 @@ export function SearchResult(manga: IManga, jobsChanged: EventHandler<any>) : Re
             <p className="connector-name">{manga.mangaConnector.name}</p>
             <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
             <p className="Manga-name"><a href={manga.websiteUrl}>{manga.sortName}<img src="../../media/link.svg" /></a></p>
-            <ul className="Manga-tags">
-                {manga.authors.map(author => <li className="Manga-author" key={manga.internalId + "-author-" + author}> <Icon path={mdiAccountEdit} size={0.5} /> {author}</li>)}
-                {manga.tags.map(tag => <li className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon path={mdiTagTextOutline} size={0.5} /> {tag}</li>)}
-            </ul>
-            <MarkdownPreview className="Manga-description" source={manga.description} style={{ backgroundColor: "transparent", color: "black", padding: 16 }} />
+            <div className="Manga-tags">
+                {manga.authors.map(author => <p className="Manga-author" key={manga.internalId + "-author-" + author}> <Icon path={mdiAccountEdit} size={0.5} /> {author}</p>)}
+                {manga.tags.map(tag => <p className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon path={mdiTagTextOutline} size={0.5} /> {tag}</p>)}
+            </div>
+            <MarkdownPreview className="Manga-description" source={manga.description} style={{ backgroundColor: "transparent", color: "black" }} />
             <button className="Manga-AddButton" onClick={(e) => {
                 Job.CreateJob(manga.internalId, "MonitorManga", "03:00:00").then(() => jobsChanged(manga.internalId));
             }}>Monitor

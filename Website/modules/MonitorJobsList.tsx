@@ -5,6 +5,8 @@ import IJob from "./interfaces/IJob";
 import IManga, {CoverCard} from "./interfaces/IManga";
 import {Manga} from './Manga';
 import '../styles/MangaCoverCard.css'
+import Icon from '@mdi/react';
+import { mdiTrashCanOutline, mdiPlayBoxOutline } from '@mdi/js';
 
 export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStartSearch() : void, onJobsChanged: EventHandler<any>}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<IJob[]>([]);
@@ -27,11 +29,6 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
     useEffect(() => {
         UpdateMonitoringJobsList();
     }, []);
-
-    const DeleteJob : MouseEventHandler = (e) => {
-        const jobId = e.currentTarget.id;
-        Job.DeleteJob(jobId).then(() => onJobsChanged(jobId));
-    }
 
     function UpdateMonitoringJobsList(){
         console.debug("Updating MonitoringJobsList");
@@ -56,6 +53,18 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
         </div>);
     }
 
+    const DeleteJob : MouseEventHandler = (e) => {
+        const jobId = e.currentTarget.id.slice(e.currentTarget.id.indexOf("-")+1);
+        console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
+        Job.DeleteJob(jobId).then(() => onJobsChanged(jobId));
+    }
+
+    const StartJob : MouseEventHandler = (e) => {
+        const jobId = e.currentTarget.id.slice(e.currentTarget.id.indexOf("-")+1);
+        console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
+        Job.StartJob(jobId);
+    }
+
     return (
         <div id="MonitorMangaList">
             {StartSearchMangaEntry()}
@@ -63,10 +72,12 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
                 const job = MonitoringJobs.find(job => job.mangaInternalId == manga.internalId);
                 if (job === undefined || job == null)
                     return <div>Error. Could not find matching job for {manga.internalId}</div>
-                return <div key={"monitorMangaEntry." + manga.internalId} className="monitorMangaEntry">
+                return <div key={"monitorMangaEntry-" + manga.internalId} className="monitorMangaEntry">
                     {CoverCard(manga)}
-                    {job.id}
-                    <button id={job.id} onClick={DeleteJob}>Delete</button>
+                    <div className="MangaActionButtons">
+                        <button id={"Delete-"+job.id} className="DeleteJobButton" onClick={DeleteJob}><Icon path={mdiTrashCanOutline} size={1.5} /></button>
+                        <button id={"Start-"+job.id} className="StartJobNowButton" onClick={StartJob}><Icon path={mdiPlayBoxOutline} size={1.5} /></button>
+                    </div>
                 </div>;
             })}
         </div>)
