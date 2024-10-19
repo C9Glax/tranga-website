@@ -40,7 +40,7 @@ export default function App(){
             ? <>
                 {showSearch
                     ? <>
-                        <Search onJobsChanged={JobsChanged}/>
+                        <Search onJobsChanged={JobsChanged} closeSearch={() => setShowSearch(false)} />
                         <hr/>
                     </>
                     : <></>}

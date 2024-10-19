@@ -7,7 +7,7 @@ import IManga, {SearchResult} from "./interfaces/IManga";
 import '../styles/search.css';
 import '../styles/MangaSearchResult.css'
 
-export default function Search({onJobsChanged} : {onJobsChanged: EventHandler<any>}) {
+export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: EventHandler<any>, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
     const [selectedConnector, setSelectedConnector] = useState<IMangaConnector>();
     const [selectedLanguage, setSelectedLanguage] = useState<string>();
@@ -88,7 +88,7 @@ export default function Search({onJobsChanged} : {onJobsChanged: EventHandler<an
 
     const changeSelectedLanguage : ChangeEventHandler<HTMLSelectElement> = (event) => setSelectedLanguage(event.target.value);
 
-    return (<div>
+    return (<div id="Search">
         <div id="SearchBox">
             <input type="text" placeholder="Manganame" id="Searchbox-Manganame" onChange={searchBoxValueChanged}></input>
             <select id="Searchbox-Connector" value={selectedConnector === undefined ? "" : selectedConnector.name} onChange={selectedConnectorChanged}>
@@ -105,6 +105,7 @@ export default function Search({onJobsChanged} : {onJobsChanged: EventHandler<an
             </select>
             <button id="Searchbox-button" type="submit" onClick={ExecuteSearch}>Search</button>
         </div>
+        <img id="closeSearch" src="../media/close-x.svg" onClick={closeSearch} />
         <div id="SearchResults">
             {searchResults === undefined
                 ? <p></p>
