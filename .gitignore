@@ -25,3 +25,4 @@ cover.png
 .vs/tranga-website/v17/.wsuo
 .vs/VSWorkspaceState.json
 /node_modules/
+/.vite/
