@@ -1,25 +1,17 @@
-import React, {MouseEventHandler, ReactElement, useEffect} from 'react';
+import React, {EventHandler, MouseEventHandler, ReactElement, useEffect, useState} from 'react';
 import {Job} from './Job';
 import '../styles/monitorMangaList.css';
 import IJob from "./interfaces/IJob";
-import IManga, {HTMLFromIManga} from "./interfaces/IManga";
+import IManga, {CoverCard} from "./interfaces/IManga";
 import {Manga} from './Manga';
+import '../styles/MangaCoverCard.css'
 
-export default function MonitorJobsList({onStartSearch} : {onStartSearch() : void}){
-    const [MonitoringJobs, setMonitoringJobs] = React.useState<IJob[]>([]);
-    const [AllManga, setAllManga] = React.useState<IManga[]>([]);
-
-    function UpdateMonitoringJobsList(){
-        Job.GetMonitoringJobs()
-            .then((jobs) => {
-                if(jobs.length > 0)
-                    return Job.GetJobs(jobs)
-                return [];
-            })
-            .then((jobs) => setMonitoringJobs(jobs));
-    }
+export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStartSearch() : void, onJobsChanged: EventHandler<any>}) {
+    const [MonitoringJobs, setMonitoringJobs] = useState<IJob[]>([]);
+    const [AllManga, setAllManga] = useState<IManga[]>([]);
 
     useEffect(() => {
+        console.debug("Updating display list.");
         //Remove all Manga that are not associated with a Job
         setAllManga(AllManga.filter(manga => MonitoringJobs.find(job => job.mangaInternalId == manga.internalId)));
         //Fetch Manga that are missing (from Jobs)
@@ -36,9 +28,20 @@ export default function MonitorJobsList({onStartSearch} : {onStartSearch() : voi
         UpdateMonitoringJobsList();
     }, []);
 
-    const DeleteJob:MouseEventHandler = (e) => {
+    const DeleteJob : MouseEventHandler = (e) => {
         const jobId = e.currentTarget.id;
-        Job.DeleteJob(jobId);
+        Job.DeleteJob(jobId).then(() => onJobsChanged(jobId));
+    }
+
+    function UpdateMonitoringJobsList(){
+        console.debug("Updating MonitoringJobsList");
+        Job.GetMonitoringJobs()
+            .then((jobs) => {
+                if(jobs.length > 0)
+                    return Job.GetJobs(jobs)
+                return [];
+            })
+            .then((jobs) => setMonitoringJobs(jobs));
     }
 
     function StartSearchMangaEntry() : ReactElement {
@@ -61,7 +64,7 @@ export default function MonitorJobsList({onStartSearch} : {onStartSearch() : voi
                 if (job === undefined || job == null)
                     return <div>Error. Could not find matching job for {manga.internalId}</div>
                 return <div key={"monitorMangaEntry." + manga.internalId} className="monitorMangaEntry">
-                    {HTMLFromIManga(manga)}
+                    {CoverCard(manga)}
                     {job.id}
                     <button id={job.id} onClick={DeleteJob}>Delete</button>
                 </div>;

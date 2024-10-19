@@ -1,12 +1,13 @@
-import React, { ChangeEventHandler, MouseEventHandler, useEffect, useState} from 'react';
+import React, {ChangeEventHandler, EventHandler, MouseEventHandler, useEffect, useState} from 'react';
 import {MangaConnector} from "./MangaConnector";
 import {Job} from "./Job";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
-import IManga, {HTMLFromIManga} from "./interfaces/IManga";
+import IManga, {SearchResult} from "./interfaces/IManga";
 import '../styles/search.css';
+import '../styles/MangaSearchResult.css'
 
-export default function Search(){
+export default function Search({onJobsChanged} : {onJobsChanged: EventHandler<any>}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
     const [selectedConnector, setSelectedConnector] = useState<IMangaConnector>();
     const [selectedLanguage, setSelectedLanguage] = useState<string>();
@@ -88,28 +89,25 @@ export default function Search(){
 
     return (<div>
         <div id="SearchBox">
-            <input type="text" placeholder="Manganame" onChange={searchBoxValueChanged}></input>
-            <select value={selectedConnector === undefined ? "" : selectedConnector.name} onChange={selectedConnectorChanged}>
+            <input type="text" placeholder="Manganame" id="Searchbox-Manganame" onChange={searchBoxValueChanged}></input>
+            <select id="Searchbox-Connector" value={selectedConnector === undefined ? "" : selectedConnector.name} onChange={selectedConnectorChanged}>
                 <option value="" disabled hidden>Select</option>
                 {mangaConnectors === undefined
                     ? <option value="Loading">Loading</option>
                     : mangaConnectors.map(con => <option value={con.name} key={con.name}>{con.name}</option>)}
             </select>
-            <select onChange={changeSelectedLanguage} value={selectedLanguage === null ? "" : selectedLanguage}>
+            <select id="Searchbox-language" onChange={changeSelectedLanguage} value={selectedLanguage === null ? "" : selectedLanguage}>
                 {selectedConnector === undefined
                     ? <option value="" disabled hidden>Select Connector</option>
                     : selectedConnector.SupportedLanguages.map(language => <option value={language}
                                                                                    key={language}>{language}</option>)}
             </select>
-            <button type="submit" onClick={ExecuteSearch}>Search</button>
+            <button id="Searchbox-button" type="submit" onClick={ExecuteSearch}>Search</button>
         </div>
-        <div>
+        <div id="SearchResults">
             {searchResults === undefined
-                ? <p>No Results yet</p>
-                : searchResults.map(result => <div key={"searchResult."+result.internalId} className="searchResult">
-                    {HTMLFromIManga(result)}
-                    <button onClick={(e) => {Job.CreateJob(result.internalId, "MonitorManga", "03:00:00")}}>Monitor</button>
-                </div>)}
+                ? <p></p>
+                : searchResults.map(result => SearchResult(result, onJobsChanged))}
         </div>
     </div>)
 }

@@ -9,7 +9,9 @@ export class Job
         return getData("http://127.0.0.1:6531/v2/Jobs")
             .then((json) => {
                 console.debug("Got all Jobs");
-                return (json as string[]);
+                const ret = json as string[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -18,7 +20,9 @@ export class Job
         return getData("http://127.0.0.1:6531/v2/Jobs/Running")
             .then((json) => {
                 console.debug("Got all running Jobs");
-                return (json as string[]);
+                const ret = json as string[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -27,7 +31,9 @@ export class Job
         return getData("http://127.0.0.1:6531/v2/Jobs/Waiting")
             .then((json) => {
                 console.debug("Got all waiting Jobs");
-                return (json as string[]);
+                const ret = json as string[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -36,7 +42,9 @@ export class Job
         return getData("http://127.0.0.1:6531/v2/Jobs/Monitoring")
             .then((json) => {
                 console.debug("Got all monitoring Jobs");
-                return (json as string[]);
+                const ret = json as string[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -49,7 +57,9 @@ export class Job
         return getData(`http://127.0.0.1:6531/v2/Job/${jobId}`)
             .then((json) => {
                 console.debug(`Got Job ${jobId}`);
-                return (json as IJob);
+                const ret = json as IJob;
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -63,7 +73,9 @@ export class Job
         return getData(`http://127.0.0.1:6531/v2/Job?jobIds=${reqStr}`)
             .then((json) => {
                 console.debug(`Got Jobs ${reqStr}`);
-                return (json as IJob[]);
+                const ret = json as IJob[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -72,11 +84,13 @@ export class Job
         return getData(`http://127.0.0.1:6531/v2/Job/${jobId}/Progress`)
             .then((json) => {
                 console.debug(`Got Job ${jobId} Progress`);
-                return (json as IProgressToken);
+                const ret = json as IProgressToken;
+                console.debug(ret);
+                return (ret);
             });
     }
 
-    static async CreateJob(internalId: string, jobType: string, interval: string): Promise<IJob> {
+    static async CreateJob(internalId: string, jobType: string, interval: string): Promise<null> {
         console.debug(`Creating Job for Manga ${internalId} at ${interval} interval`);
         let data = {
             internalId: internalId,
@@ -85,19 +99,19 @@ export class Job
         return postData(`http://127.0.0.1:6531/v2/Job/Create/${jobType}`, data)
             .then((json) => {
                 console.debug(`Created Job for Manga ${internalId} at ${interval} interval`);
-                return (json as IJob);
+                return null;
             });
     }
 
-    static DeleteJob(jobId: string) {
-        deleteData(`http://127.0.0.1:6531/v2/Job/${jobId}`);
+    static DeleteJob(jobId: string) : Promise<void> {
+        return deleteData(`http://127.0.0.1:6531/v2/Job/${jobId}`);
     }
 
-    static StartJob(jobId: string) {
-        postData(`http://127.0.0.1:6531/v2/Job/${jobId}/StartNow`, {});
+    static StartJob(jobId: string) : Promise<object> {
+        return postData(`http://127.0.0.1:6531/v2/Job/${jobId}/StartNow`, {});
     }
 
-    static CancelJob(jobId: string) {
-        postData(`http://127.0.0.1:6531/v2/Job/${jobId}/Cancel`, {});
+    static CancelJob(jobId: string) : Promise<object> {
+        return postData(`http://127.0.0.1:6531/v2/Job/${jobId}/Cancel`, {});
     }
 }

@@ -1,42 +1,50 @@
-import React, {ReactElement, useEffect} from 'react';
+import React, {EventHandler, ReactElement, useEffect, useState} from 'react';
 import Footer from "./modules/Footer";
 import Search from "./modules/Search";
 import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
-import './styles/Manga.css'
+import './styles/index.css'
 
 export default function App(){
-    const [content, setContent] = React.useState<ReactElement>();
-
-    function ShowSearch() {
-        setContent(<>
-            <Search />
-            <MonitorJobsList onStartSearch={ShowSearch} />
-        </>);
-    }
+    const [connected, setConnected] = React.useState(false);
+    const [showSearch, setShowSearch] = React.useState(false);
+    const [lastMangaListUpdate, setLastMangaListUpdate] = React.useState<Date>(new Date());
 
     useEffect(() => {
-        setContent(<h1>Testing connection to backend...</h1>)
         getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
             console.log(result);
             if(result === null){
-                setContent(<h1>No connection to backend</h1>);
+                setConnected(false);
             }else{
-                setContent(<>
-                    <MonitorJobsList onStartSearch={ShowSearch} />
-                    </>)
+                setConnected(true);
             }
         })
     }, []);
 
+    const JobsChanged : EventHandler<any> = () => {
+        console.log("Updating Mangalist");
+        setLastMangaListUpdate(new Date());
+    }
+
     return(<div>
-        <Header />
-        {content}
-        <Footer />
+        <Header/>
+        {connected
+            ? <>
+                {showSearch
+                    ? <>
+                        <Search onJobsChanged={JobsChanged}/>
+                        <hr/>
+                    </>
+                    : <></>}
+                <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={JobsChanged}
+                                 key={lastMangaListUpdate.getTime()}/>
+            </>
+            : <h1>No connection to backend</h1>}
+        <Footer/>
     </div>)
 }
 
-export function getData (uri: string) : Promise<object> {
+export function getData(uri: string) : Promise<object> {
     return fetch(uri,
         {
             method: 'GET',
@@ -66,8 +74,10 @@ export function postData(uri: string, content: object) : Promise<object> {
             body: JSON.stringify(content)
         })
         .then(function(response){
-            if(!response.ok) throw new Error("Could not fetch data");
-            return response.json();
+            if(!response.ok)
+                throw new Error("Could not fetch data");
+            let json = response.json();
+            return json.then((json) => json).catch(() => null);
         })
         .catch(function(err){
             console.error(`Error POSTing Data ${uri}\n${err}`);
@@ -75,14 +85,17 @@ export function postData(uri: string, content: object) : Promise<object> {
         });
 }
 
-export function deleteData(uri: string) {
-    fetch(uri,
+export function deleteData(uri: string) : Promise<void> {
+    return fetch(uri,
         {
             method: 'DELETE',
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
+        })
+        .then(() =>{
+            return Promise.resolve();
         })
         .catch(function(err){
             console.error(`Error DELETEing Data ${uri}\n${err}`);

@@ -8,7 +8,9 @@ export class Manga
         return getData("http://127.0.0.1:6531/v2/Mangas")
             .then((json) => {
                 console.debug("Got all Manga");
-                return (json as IManga[]);
+                const ret = json as IManga[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -17,7 +19,9 @@ export class Manga
         return await getData(`http://127.0.0.1:6531/v2/Manga/Search?title=${name}`)
             .then((json) => {
                 console.debug(`Got Manga ${name}`);
-                return (json as IManga[]);
+                const ret = json as IManga[];
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -26,7 +30,9 @@ export class Manga
         return await getData(`http://127.0.0.1:6531/v2/Manga/${internalId}`)
             .then((json) => {
                 console.debug(`Got Manga ${internalId}`);
-                return (json as IManga);
+                const ret = json as IManga;
+                console.debug(ret);
+                return (ret);
             });
     }
 
@@ -35,7 +41,9 @@ export class Manga
         return await getData(`http://127.0.0.1:6531/v2/Manga?internalIds=${internalIds.join(",")}`)
             .then((json) => {
                 console.debug(`Got Manga ${internalIds.join(",")}`);
-                return (json as IManga[]);
+                const ret = json as IManga[];
+                console.debug(ret);
+                return (ret);
             });
     }
 

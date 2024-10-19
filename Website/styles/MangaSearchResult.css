@@ -1,0 +1,88 @@
+.SearchResult {
+    background-color: var(--second-background-color);
+    border-radius: 2px;
+    padding: 5px 5px 9px 5px;
+    position: relative;
+    max-width: 100%;
+    width: fit-content;
+    height: 328px;
+    display: grid;
+    grid-template-columns: 220px 600px 50px;
+    grid-template-rows: 40px 40px 200px auto;
+    column-gap: 10px;
+    grid-template-areas:
+    "cover header header"
+    "cover alltags alltags"
+    "cover description description"
+    "cover footer button";
+}
+
+.SearchResult p {
+    margin: 2px 0;
+}
+
+.SearchResult > img {
+    grid-area: cover;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+}
+
+.SearchResult > .connector-name {
+    grid-area: cover;
+    position: absolute;
+    z-index: 1;
+    left: 2px;
+    top: 2px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    width: 100%;
+    background-color: var(--accent-color);
+    margin: 0;
+    padding: 2px 0;
+    text-align: center;
+    color: var(--secondary-color);
+}
+
+.SearchResult > .Manga-status {
+    grid-area: header;
+}
+
+.SearchResult > .Manga-name {
+    grid-area: header;
+    color: black;
+}
+
+.SearchResult > .Manga-tags {
+    grid-area: alltags;
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+.SearchResult > ul > li {
+    display: inline;
+    margin: 0 2px;
+    padding: 5px;
+    font-size: 10pt;
+}
+
+.SearchResult .Manga-author {
+    background-color: green;
+}
+
+.SearchResult .Manga-tag {
+    background-color: blue;
+}
+
+.SearchResult > .Manga-description {
+    grid-area: description;
+    color: black;
+}
+
+.SearchResult > .Manga-AddButton {
+    grid-area: button;
+}

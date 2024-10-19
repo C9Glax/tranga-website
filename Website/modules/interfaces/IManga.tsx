@@ -1,7 +1,10 @@
 import IMangaConnector from "./IMangaConnector";
 import KeyValuePair from "./KeyValuePair";
 import {Manga} from "../Manga";
-import {ReactElement} from "react";
+import React, {ChangeEventHandler, EventHandler, ReactElement} from "react";
+import {Job} from "../Job";
+import Icon from '@mdi/react';
+import { mdiTagTextOutline, mdiAccountEdit } from '@mdi/js';
 
 export default interface IManga{
     "sortName": string,
@@ -36,7 +39,7 @@ function ReleaseStatusFromNumber(n: number): string {
     return "";
 }
 
-export function HTMLFromIManga(manga: IManga) : ReactElement {
+export function CoverCard(manga: IManga) : ReactElement {
     return(
     <div className="Manga" key={manga.internalId}>
         <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
@@ -46,4 +49,23 @@ export function HTMLFromIManga(manga: IManga) : ReactElement {
             <p className="Manga-name">{manga.sortName}</p>
         </div>
     </div>);
+}
+
+export function SearchResult(manga: IManga, jobsChanged: EventHandler<any>) : ReactElement {
+    return(
+        <div className="SearchResult" key={manga.internalId}>
+            <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
+            <p className="connector-name">{manga.mangaConnector.name}</p>
+            <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
+            <p className="Manga-name">{manga.sortName}</p>
+            <ul className="Manga-tags">
+                {manga.authors.map(author => <li className="Manga-author" key={manga.internalId + "-author-" + author}> <Icon path={mdiAccountEdit} size={0.5} /> {author}</li>)}
+                {manga.tags.map(tag => <li className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon path={mdiTagTextOutline} size={0.5} /> {tag}</li>)}
+            </ul>
+            <p className="Manga-description">{manga.description}</p>
+            <button className="Manga-AddButton" onClick={(e) => {
+                Job.CreateJob(manga.internalId, "MonitorManga", "03:00:00").then(() => jobsChanged(manga.internalId));
+            }}>Monitor
+            </button>
+        </div>);
 }
