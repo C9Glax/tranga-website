@@ -57,7 +57,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
         }
     }
 
-    const ExecuteSearch : MouseEventHandler<HTMLButtonElement> = (event) => {
+    const ExecuteSearch : EventHandler<any> = (event) => {
         if(searchBoxValue.length < 1 || selectedConnector === undefined || selectedLanguage === ""){
             console.error("Tried initiating search while not all fields where submitted.")
             return;
@@ -90,7 +90,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
 
     return (<div id="Search">
         <div id="SearchBox">
-            <input type="text" placeholder="Manganame" id="Searchbox-Manganame" onChange={searchBoxValueChanged}></input>
+            <input type="text" placeholder="Manganame" id="Searchbox-Manganame" onKeyDown={(e) => {if(e.key == "Enter") ExecuteSearch(null);}} onChange={searchBoxValueChanged}></input>
             <select id="Searchbox-Connector" value={selectedConnector === undefined ? "" : selectedConnector.name} onChange={selectedConnectorChanged}>
                 <option value="" disabled hidden>Select</option>
                 {mangaConnectors === undefined
