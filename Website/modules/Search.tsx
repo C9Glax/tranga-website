@@ -62,7 +62,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
             console.error("Tried initiating search while not all fields where submitted.")
             return;
         }
-        console.debug(`Searching Name: ${searchBoxValue} Connector: ${selectedConnector.name} Language: ${selectedLanguage}`);
+        console.info(`Searching Name: ${searchBoxValue} Connector: ${selectedConnector.name} Language: ${selectedLanguage}`);
         if(isValidUri(searchBoxValue) && !selectedConnector.BaseUris.find((uri: string) => {
                 const match = searchBoxValue.match(pattern);
                 if(match === null)

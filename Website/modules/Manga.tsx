@@ -4,10 +4,10 @@ import { getData } from '../App';
 export class Manga
 {
     static async GetAllManga(): Promise<IManga[]> {
-        console.debug("Getting all Manga");
+        console.info("Getting all Manga");
         return getData("http://127.0.0.1:6531/v2/Mangas")
             .then((json) => {
-                console.debug("Got all Manga");
+                console.info("Got all Manga");
                 const ret = json as IManga[];
                 console.debug(ret);
                 return (ret);
@@ -15,10 +15,10 @@ export class Manga
     }
 
     static async SearchManga(name: string): Promise<IManga[]> {
-        console.debug(`Getting Manga ${name} from all Connectors`);
+        console.info(`Getting Manga ${name} from all Connectors`);
         return await getData(`http://127.0.0.1:6531/v2/Manga/Search?title=${name}`)
             .then((json) => {
-                console.debug(`Got Manga ${name}`);
+                console.info(`Got Manga ${name}`);
                 const ret = json as IManga[];
                 console.debug(ret);
                 return (ret);
@@ -26,10 +26,10 @@ export class Manga
     }
 
     static async GetMangaById(internalId: string): Promise<IManga> {
-        console.debug(`Getting Manga ${internalId}`);
+        console.info(`Getting Manga ${internalId}`);
         return await getData(`http://127.0.0.1:6531/v2/Manga/${internalId}`)
             .then((json) => {
-                console.debug(`Got Manga ${internalId}`);
+                console.info(`Got Manga ${internalId}`);
                 const ret = json as IManga;
                 console.debug(ret);
                 return (ret);
