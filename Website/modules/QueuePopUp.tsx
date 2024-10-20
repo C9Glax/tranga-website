@@ -19,10 +19,11 @@ export default function QueuePopUp({closeQueue} : {closeQueue(): void}){
                     return Job.GetJobs(jobs);
                 return [];
             })
-            .then(setStandbyJobs)
-            .finally(() => {
+            .then((jobs) => {
                 console.debug("Removing Metadata Jobs");
-                setStandbyJobs(StandbyJobs.filter(job => job.jobType <= 1));
+                console.log(StandbyJobs)
+                setStandbyJobs(jobs.filter(job => job.jobType <= 1));
+                console.log(StandbyJobs)
             });
         Job.GetRunningJobs()
             .then((jobs) => {
@@ -30,10 +31,9 @@ export default function QueuePopUp({closeQueue} : {closeQueue(): void}){
                     return Job.GetJobs(jobs);
                 return [];
             })
-            .then(setRunningJobs)
-            .finally(() =>{
+            .then((jobs) =>{
                 console.debug("Removing Metadata Jobs");
-                setRunningJobs(RunningJobs.filter(job => job.jobType <= 1));
+                setRunningJobs(jobs.filter(job => job.jobType <= 1));
             });
     }, []);
 
