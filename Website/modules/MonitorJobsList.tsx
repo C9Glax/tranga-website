@@ -22,7 +22,8 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
         MonitoringJobs.forEach(job => {
             if(AllManga.find(manga => manga.internalId == job.mangaInternalId))
                 return;
-            Manga.GetMangaById(job.mangaInternalId).then((manga: IManga) => setAllManga([...AllManga, manga]));
+            Manga.GetMangaById(job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "").
+            then((manga: IManga) => setAllManga([...AllManga, manga]));
         });
     }, [MonitoringJobs]);
 

@@ -34,3 +34,7 @@ footer div > * {
     margin: 0 2px;
     padding: 3px 0;
 }
+
+footer .hoverHand {
+    cursor: pointer;
+}

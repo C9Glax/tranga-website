@@ -37,6 +37,17 @@ export class Job
             });
     }
 
+    static async GetStandbyJobs(): Promise<string[]> {
+        console.info("Getting all standby Jobs");
+        return getData("http://127.0.0.1:6531/v2/Jobs/Standby")
+            .then((json) => {
+                console.info("Got all standby Jobs");
+                const ret = json as string[];
+                console.debug(ret);
+                return (ret);
+            });
+    }
+
     static async GetMonitoringJobs(): Promise<string[]> {
         console.info("Getting all monitoring Jobs");
         return getData("http://127.0.0.1:6531/v2/Jobs/Monitoring")
