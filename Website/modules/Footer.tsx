@@ -5,7 +5,7 @@ import Icon from '@mdi/react';
 import { mdiRun, mdiCounter, mdiEyeCheck, mdiTrayFull } from '@mdi/js';
 import QueuePopUp from "./QueuePopUp";
 
-export default function Footer({connectedToBackend} : {connectedToBackend: boolean}) {
+export default function Footer({connectedToBackend, apiUri} : {connectedToBackend: boolean, apiUri: string}) {
     const [MonitoringJobsCount, setMonitoringJobsCount] = React.useState(0);
     const [AllJobsCount, setAllJobsCount] = React.useState(0);
     const [RunningJobsCount, setRunningJobsCount] = React.useState(0);
@@ -13,10 +13,10 @@ export default function Footer({connectedToBackend} : {connectedToBackend: boole
     const [countUpdateInterval, setcountUpdateInterval] = React.useState<number>();
 
     function UpdateBackendState(){
-        Job.GetMonitoringJobs().then((jobs) => setMonitoringJobsCount(jobs.length));
-        Job.GetAllJobs().then((jobs) => setAllJobsCount(jobs.length));
-        Job.GetRunningJobs().then((jobs) => setRunningJobsCount(jobs.length));
-        Job.GetStandbyJobs().then((jobs) => setStandbyJobsCount(jobs.length));
+        Job.GetMonitoringJobs(apiUri).then((jobs) => setMonitoringJobsCount(jobs.length));
+        Job.GetAllJobs(apiUri).then((jobs) => setAllJobsCount(jobs.length));
+        Job.GetRunningJobs(apiUri).then((jobs) => setRunningJobsCount(jobs.length));
+        Job.GetStandbyJobs(apiUri).then((jobs) => setStandbyJobsCount(jobs.length));
     }
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function Footer({connectedToBackend} : {connectedToBackend: boole
     return (
         <footer>
             <div className="statusBadge"><Icon path={mdiEyeCheck} size={1}/> <span>{MonitoringJobsCount}</span></div>
-            <QueuePopUp>
+            <QueuePopUp apiUri={apiUri}>
                 <div className="statusBadge hoverHand"><Icon path={mdiTrayFull} size={1}/> <span>{StandbyJobsCount}</span></div>
                 <div className="statusBadge hoverHand"><Icon path={mdiRun} size={1}/> <span>{RunningJobsCount}</span></div>
             </QueuePopUp>

@@ -1,10 +1,86 @@
-import React, {useState} from 'react';
-import IFrontendSettings from "./interfaces/IFrontendSettings";
+import React, {KeyboardEventHandler, useEffect, useState} from 'react';
+import IFrontendSettings, {FrontendSettingsWith} from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
+import IBackendSettings from "./interfaces/IBackendSettings";
+import {getData} from "../App";
+import ILibraryConnector from "./interfaces/ILibraryConnector";
+import INotificationConnector from "./interfaces/INotificationConnector";
 
-export default function Settings({settings, changeSettings} : {settings: IFrontendSettings, changeSettings(settings: IFrontendSettings): void}) {
+export default function Settings({backendConnected, apiUri, settings, changeSettings} : {backendConnected: boolean, apiUri: string, settings: IFrontendSettings, changeSettings: (settings: IFrontendSettings) => void}) {
     const [frontendSettings] = useState<IFrontendSettings>(settings);
+    const [backendSettings, setBackendSettings] = useState<IBackendSettings>();
     const [showSettings, setShowSettings] = useState<boolean>(false);
+    const [libraryConnectors, setLibraryConnectors] = useState<ILibraryConnector[]>([]);
+    const [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
+
+    useEffect(() => {
+        if(!showSettings || !backendConnected)
+            return;
+        GetSettings(apiUri).then(setBackendSettings).catch(console.error);
+        GetLibraryConnectors(apiUri).then(setLibraryConnectors).catch(console.error);
+        GetNotificationConnectors(apiUri).then(setNotificationConnectors).catch(console.error);
+    }, [showSettings]);
+
+    async function GetSettings(apiUri: string) : Promise<IBackendSettings> {
+        console.info("Getting Settings");
+        return getData(`${apiUri}/v2/Settings`)
+            .then((json) => {
+                console.info("Got Settings");
+                const ret = json as IBackendSettings;
+                //console.debug(ret);
+                return (ret);
+            })
+            .catch(Promise.reject);
+    }
+
+    async function GetLibraryConnectors(apiUri: string) : Promise<ILibraryConnector[]> {
+        console.info("Getting Library Connectors");
+        return getData(`${apiUri}/v2/LibraryConnector`)
+            .then((json) => {
+                console.info("Got Library Connectors");
+                const ret = json as ILibraryConnector[];
+                //console.debug(ret);
+                return (ret);
+            })
+            .catch(Promise.reject);
+    }
+
+    async function GetNotificationConnectors(apiUri: string) : Promise<INotificationConnector[]> {
+        console.info("Getting Notification Connectors");
+        return getData(`${apiUri}/v2/NotificationConnector`)
+            .then((json) => {
+                console.info("Got Notification Connectors");
+                const ret = json as INotificationConnector[];
+                //console.debug(ret);
+                return (ret);
+            })
+            .catch(Promise.reject);
+    }
+
+    function GetKomga() : ILibraryConnector | undefined  {
+        return libraryConnectors.find(con => con.libraryType == 0);
+    }
+
+    function GetKavita() : ILibraryConnector | undefined  {
+        return libraryConnectors.find(con => con.libraryType == 1);
+    }
+
+    function GetGotify() : INotificationConnector | undefined {
+        return notificationConnectors.find(con => con.notificationConnectorType == 0);
+    }
+
+    function GetLunasea() : INotificationConnector | undefined {
+        return notificationConnectors.find(con => con.notificationConnectorType == 1);
+    }
+
+    function GetNtfy() : INotificationConnector | undefined {
+        return notificationConnectors.find(con => con.notificationConnectorType == 2);
+    }
+
+    const SubmitApiUri : KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if(e.key == "Enter")
+            changeSettings(settings);
+    }
 
     return (
         <div id="Settings">
@@ -22,20 +98,20 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                 <div className="section-item">
                                     <span className="settings-section-title">API Settings</span>
                                     <label htmlFor="settingApiUri">API URI:</label>
-                                    <input placeholder="https://" type="text" id="settingApiUri" />
+                                    <input placeholder={frontendSettings.apiUri} type="text" id="settingApiUri" onKeyDown={SubmitApiUri} />
                                     <label htmlFor="userAgent">User Agent:</label>
-                                    <input placeholder="UserAgent" id="userAgent" type="text" />
+                                    <input id="userAgent" type="text" placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"} />
                                 </div>
                                 <div className="section-item">
                                     <span className="settings-section-title">Rate Limits</span>
                                     <label htmlFor="DefaultRL">Default:</label>
-                                    <input id="defaultRL" type="text" />
+                                    <input id="defaultRL" type="text" placeholder={backendSettings != undefined ? backendSettings.requestLimits.Default.toString() : "-1"} />
                                     <label htmlFor="CoverRL">Manga Covers:</label>
-                                    <input id="coverRL" type="text" />
+                                    <input id="coverRL" type="text" placeholder={backendSettings != undefined ? backendSettings.requestLimits.MangaCover.toString() : "-1"} />
                                     <label htmlFor="ImageRL">Manga Images:</label>
-                                    <input id="imageRL" type="text" />
+                                    <input id="imageRL" type="text" placeholder={backendSettings != undefined ? backendSettings.requestLimits.MangaImage.toString() : "-1"} />
                                     <label htmlFor="InfoRL">Manga Info:</label>
-                                    <input id="infoRL" type="text" />
+                                    <input id="infoRL" type="text" placeholder={backendSettings != undefined ? backendSettings.requestLimits.MangaInfo.toString() : "-1"} />
                                 </div>
                                 <div className="section-item">
                                     <span className="settings-section-title">Appearance</span>
@@ -57,9 +133,9 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                         <a href="https://mangadex.org">MangaDex</a>
                                     </span>
                                     <label htmlFor="mDexFeedRL">Feed Rate Limit:</label>
-                                    <input id="mDexFeedRL" type="text" />
+                                    <input id="mDexFeedRL" type="text" placeholder={backendSettings != undefined ? backendSettings.requestLimits.MangaDexFeed.toString() : "-1"} />
                                     <label htmlFor="mDexImageRL">Image Rate Limit:</label>
-                                    <input id="mDexImageRL" type="text" />
+                                    <input id="mDexImageRL" type="number" placeholder={backendSettings != undefined ? backendSettings.requestLimits.MangaDexImage.toString() : "-1"} />
                                 </div>
                             </div>
                         </div>
@@ -73,11 +149,11 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                         Komga
                                     </span>
                                     <label htmlFor="komgaUrl"></label>
-                                    <input placeholder="URL" id="komgaUrl" type="text" />
+                                    <input placeholder={GetKomga() != undefined ? GetKomga()?.baseUrl : "URL"} id="komgaUrl" type="text" />
                                     <label htmlFor="komgaUsername"></label>
-                                    <input placeholder="Username" id="komgaUsername" type="text" />
+                                    <input placeholder={GetKomga() != undefined ? "***" : "Username"} id="komgaUsername" type="text" />
                                     <label htmlFor="komgaPassword"></label>
-                                    <input placeholder="Password" id="komgaPassword" type="password" />
+                                    <input placeholder={GetKomga() != undefined ? "***" : "Password"} id="komgaPassword" type="password" />
                                     <div className="section-buttons-container">
                                         <span>Test</span>
                                         <span>Reset</span>
@@ -90,11 +166,11 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                         Kavita
                                     </span>
                                     <label htmlFor="kavitaUrl"></label>
-                                    <input placeholder="URL" id="kavitaUrl" type="text" />
+                                    <input placeholder={GetKavita() != undefined ? GetKavita()?.baseUrl : "URL"} id="kavitaUrl" type="text" />
                                     <label htmlFor="kavitaUsername"></label>
-                                    <input placeholder="Username" id="kavitaUsername" type="text" />
+                                    <input placeholder={GetKavita() != undefined ? "***" : "Username"} id="kavitaUsername" type="text" />
                                     <label htmlFor="kavitaPassword"></label>
-                                    <input placeholder="Password" id="kavitaPassword" type="password"/>
+                                    <input placeholder={GetKavita() != undefined ? "***" : "Password"} id="kavitaPassword" type="password"/>
                                     <div className="section-buttons-container">
                                         <span>Test</span>
                                         <span>Reset</span>
@@ -113,9 +189,9 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                         Gotify
                                     </span>
                                     <label htmlFor="gotifyUrl"></label>
-                                    <input placeholder="URL" id="gotifyUrl" type="text" />
+                                    <input placeholder={GetGotify() != undefined ? GetGotify()?.endpoint : "URL"} id="gotifyUrl" type="text" />
                                     <label htmlFor="gotifyAppToken"></label>
-                                    <input placeholder="App-Token" id="gotifyAppToken" type="text" />
+                                    <input placeholder={GetGotify() != undefined ? GetGotify()?.appToken : "AppToken"} id="gotifyAppToken" type="text" />
                                     <div className="section-buttons-container">
                                         <span>Test</span>
                                         <span>Reset</span>
@@ -128,7 +204,7 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                         LunaSea
                                     </span>
                                     <label htmlFor="lunaseaWebhook"></label>
-                                    <input placeholder="device/:id or user/:id" id="lunaseaWebhook" type="text"/>
+                                    <input placeholder={GetLunasea() != undefined ? GetLunasea()?.id : "device/:id or user/:id"} id="lunaseaWebhook" type="text"/>
                                     <div className="section-buttons-container">
                                         <span>Test</span>
                                         <span>Reset</span>
@@ -137,13 +213,17 @@ export default function Settings({settings, changeSettings} : {settings: IFronte
                                 </div>
                                 <div className="section-item">
                                     <span className="settings-section-title">
-                                        <img src='../media/connector-icons/ntfy.svg' alt="ntfy Logo" />
+                                        <img src='../media/connector-icons/ntfy.svg' alt="ntfy Logo"/>
                                         Ntfy
                                     </span>
                                     <label htmlFor="ntfyEndpoint"></label>
-                                    <input placeholder="URL" id="ntfyEndpoint" type="text" />
-                                    <label htmlFor="ntfyAuth"></label>
-                                    <input placeholder="Auth" id="ntfyAuth" type="text" />
+                                    <input placeholder={GetNtfy() != undefined ? GetNtfy()?.endpoint : "URL"} id="ntfyEndpoint" type="text"/>
+                                    <label htmlFor="ntfyUsername">Username</label>
+                                    <input placeholder={GetNtfy() != undefined ? "***" : "Username"} id="ntfyUsername" type="text"/>
+                                    <label htmlFor="ntfyPassword">Password</label>
+                                    <input placeholder={GetNtfy() != undefined ? "***" : "Password"} id="ntfyPassword" type="password"/>
+                                    <label htmlFor="ntfyTopic">Topic</label>
+                                    <input placeholder={GetNtfy() != undefined ? GetNtfy()?.topic : "Topic"} id="ntfyTopic" type="text"/>
                                     <div className="section-buttons-container">
                                         <span>Test</span>
                                         <span>Reset</span>

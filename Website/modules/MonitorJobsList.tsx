@@ -8,7 +8,7 @@ import '../styles/MangaCoverCard.css'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline, mdiPlayBoxOutline } from '@mdi/js';
 
-export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean}) {
+export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend, apiUri} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean, apiUri: string}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<IJob[]>([]);
     const [AllManga, setAllManga] = useState<IManga[]>([]);
     const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
@@ -23,7 +23,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
         MonitoringJobs.forEach(job => {
             if(AllManga.find(manga => manga.internalId == job.mangaInternalId))
                 return;
-            Manga.GetMangaById(job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "").
+            Manga.GetMangaById(apiUri, job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "").
             then((manga: IManga) => setAllManga([...AllManga, manga]));
         });
     }, [MonitoringJobs]);
@@ -42,10 +42,10 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
 
     function UpdateMonitoringJobsList(){
         console.debug("Updating MonitoringJobsList");
-        Job.GetMonitoringJobs()
+        Job.GetMonitoringJobs(apiUri)
             .then((jobs) => {
                 if(jobs.length > 0)
-                    return Job.GetJobs(jobs)
+                    return Job.GetJobs(apiUri, jobs)
                 return [];
             })
             .then((jobs) => setMonitoringJobs(jobs));
@@ -66,13 +66,13 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
     const DeleteJob : MouseEventHandler = (e) => {
         const jobId = e.currentTarget.id.slice(e.currentTarget.id.indexOf("-")+1);
         console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
-        Job.DeleteJob(jobId).then(() => onJobsChanged(jobId));
+        Job.DeleteJob(apiUri, jobId).then(() => onJobsChanged(jobId));
     }
 
     const StartJob : MouseEventHandler = (e) => {
         const jobId = e.currentTarget.id.slice(e.currentTarget.id.indexOf("-")+1);
         console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
-        Job.StartJob(jobId);
+        Job.StartJob(apiUri, jobId);
     }
 
     return (

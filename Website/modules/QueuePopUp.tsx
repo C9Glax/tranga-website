@@ -6,7 +6,7 @@ import {Job} from "./Job";
 import IManga from "./interfaces/IManga";
 import {Manga} from "./Manga";
 
-export default function QueuePopUp({children} : {children: JSX.Element[]}) {
+export default function QueuePopUp({children, apiUri} : {children: JSX.Element[], apiUri: string}) {
 
     const [StandbyJobs, setStandbyJobs] = React.useState<IJob[]>([]);
     const [StandbyJobsManga, setStandbyJobsManga] = React.useState<IManga[]>([]);
@@ -15,10 +15,10 @@ export default function QueuePopUp({children} : {children: JSX.Element[]}) {
     const [showQueuePopup, setShowQueuePopup] = useState<boolean>(false);
 
     useEffect(() => {
-        Job.GetStandbyJobs()
+        Job.GetStandbyJobs(apiUri)
             .then((jobs) => {
                 if(jobs.length > 0)
-                    return Job.GetJobs(jobs);
+                    return Job.GetJobs(apiUri, jobs);
                 return [];
             })
             .then((jobs) => {
@@ -27,10 +27,10 @@ export default function QueuePopUp({children} : {children: JSX.Element[]}) {
                 setStandbyJobs(jobs.filter(job => job.jobType <= 1));
                 console.log(StandbyJobs)
             });
-        Job.GetRunningJobs()
+        Job.GetRunningJobs(apiUri)
             .then((jobs) => {
                 if(jobs.length > 0)
-                    return Job.GetJobs(jobs);
+                    return Job.GetJobs(apiUri, jobs);
                 return [];
             })
             .then((jobs) =>{
@@ -44,7 +44,7 @@ export default function QueuePopUp({children} : {children: JSX.Element[]}) {
             return;
         const mangaIds = StandbyJobs.filter(job => job.jobType<=2).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
         console.debug(`Waiting mangaIds: ${mangaIds.join(",")}`);
-        Manga.GetMangaByIds(mangaIds)
+        Manga.GetMangaByIds(apiUri, mangaIds)
             .then(setStandbyJobsManga);
     }, [StandbyJobs]);
 
@@ -54,7 +54,7 @@ export default function QueuePopUp({children} : {children: JSX.Element[]}) {
         console.log(RunningJobs);
         const mangaIds = RunningJobs.filter(job => job.jobType<=2).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
         console.debug(`Running mangaIds: ${mangaIds.join(",")}`);
-        Manga.GetMangaByIds(mangaIds)
+        Manga.GetMangaByIds(apiUri, mangaIds)
             .then(setRunningJobsManga);
     }, [RunningJobs]);
 
@@ -79,7 +79,7 @@ export default function QueuePopUp({children} : {children: JSX.Element[]}) {
                                         return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga
                                             for {job.id}</div>
                                     return <div className="QueueJob" key={"QueueJob-" + job.id}>
-                                        <img src={Manga.GetMangaCoverUrl(manga.internalId)}/>
+                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)}/>
                                         <p>{JobTypeFromNumber(job.jobType)}</p>
                                     </div>;
                                 })}
@@ -94,7 +94,7 @@ export default function QueuePopUp({children} : {children: JSX.Element[]}) {
                                         return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga
                                             for {job.id}</div>
                                     return <div className="QueueJob" key={"QueueJob-" + job.id}>
-                                        <img src={Manga.GetMangaCoverUrl(manga.internalId)}/>
+                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)}/>
                                         <p className="QueueJob-Name">{manga.sortName}</p>
                                         <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
                                         <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>

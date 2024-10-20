@@ -5,26 +5,42 @@ import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
 import {Job} from "./modules/Job";
-import IFrontendSettings from "./modules/interfaces/IFrontendSettings";
+import IFrontendSettings, {FrontendSettingsWith} from "./modules/interfaces/IFrontendSettings";
+import {useCookies} from "react-cookie";
 
 export default function App(){
+    const [, setCookie] = useCookies(['apiUri', 'jobInterval']);
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
-    const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>({jobInterval: new Date(0,0,0,3)});
+    const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(FrontendSettingsWith(undefined, undefined, undefined));
+    const [updateInterval, setUpdateInterval] = React.useState<number>();
+
+    const apiUri =  frontendSettings.apiUri;
 
     useEffect(() => {
-        checkConnection().then(res => setConnected(res)).catch(() => setConnected(false));
-        setInterval(() => {
-            checkConnection().then(res => setConnected(res)).catch(() => setConnected(false));
-        }, 500);
-    }, []);
+        checkConnection(apiUri).then(res => setConnected(res)).catch(() => setConnected(false));
+        if(updateInterval === undefined){
+            setUpdateInterval(setInterval(() => {
+                checkConnection(apiUri).then(res => setConnected(res)).catch(() => setConnected(false));
+            }, 500));
+        }else{
+            clearInterval(updateInterval);
+            setUpdateInterval(undefined);
+        }
+    }, [frontendSettings]);
+
+    function ChangeSettings(settings: IFrontendSettings) {
+        setFrontendSettings(settings);
+        setCookie('apiUri', settings.apiUri);
+        setCookie('jobInterval', settings.jobInterval);
+    }
 
     function CreateJob(internalId: string, jobType: string){
-        Job.CreateJobDateInterval(internalId, jobType, frontendSettings.jobInterval);
+        Job.CreateJobDateInterval(apiUri, internalId, jobType, frontendSettings.jobInterval);
     }
 
     return(<div>
-        <Header settings={frontendSettings} changeSettings={setFrontendSettings}/>
+        <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} changeSettings={ChangeSettings}/>
         {connected
             ? <>
                 {showSearch
@@ -33,10 +49,10 @@ export default function App(){
                         <hr/>
                     </>
                     : <></>}
-                <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={() => console.info("jobsChanged")} connectedToBackend={connected} />
+                <MonitorJobsList apiUri={apiUri} onStartSearch={() => setShowSearch(true)} onJobsChanged={() => console.info("jobsChanged")} connectedToBackend={connected} />
             </>
             : <h1>No connection to backend</h1>}
-        <Footer connectedToBackend={connected} />
+        <Footer apiUri={apiUri} connectedToBackend={connected} />
     </div>)
 }
 
@@ -108,8 +124,8 @@ export function isValidUri(uri: string) : boolean{
     }
 }
 
-export const checkConnection  = async (): Promise<boolean> =>{
-    return getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
+export const checkConnection  = async (apiUri: string): Promise<boolean> =>{
+    return getData(`${apiUri}/v2/Ping`).then((result) => {
         return result != null;
     }).catch(() => Promise.reject());
 }
