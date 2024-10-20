@@ -4,10 +4,12 @@ import Search from "./modules/Search";
 import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
+import QueuePopUp from "./modules/QueuePopUp";
 
 export default function App(){
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
+    const [showQueue, setShowQueue] = React.useState(true);
     const [lastMangaListUpdate, setLastMangaListUpdate] = React.useState<Date>(new Date());
     const [lastJobListUpdate, setLastJobListUpdate] = React.useState<Date>(new Date());
 
@@ -29,7 +31,6 @@ export default function App(){
     }, []);
 
     const JobsChanged : EventHandler<any> = () => {
-        console.log("Updating Mangalist");
         setLastMangaListUpdate(new Date());
         setLastJobListUpdate(new Date());
     }
@@ -44,10 +45,14 @@ export default function App(){
                         <hr/>
                     </>
                     : <></>}
+                {showQueue
+                    ? <QueuePopUp closeQueue={() => setShowQueue(false)} />
+                    : <></>
+                }
                 <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={JobsChanged} key={lastMangaListUpdate.getTime()}/>
             </>
             : <h1>No connection to backend</h1>}
-        <Footer key={lastJobListUpdate.getTime()} />
+        <Footer key={lastJobListUpdate.getTime()} showQueue={() => setShowQueue(true)}/>
     </div>)
 }
 
