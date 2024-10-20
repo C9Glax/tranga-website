@@ -116,30 +116,3 @@
 .monitorMangaEntry {
     position: relative;
 }
-
-.MangaActionButtons  {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.MangaActionButtons > button {
-    position: absolute;
-    margin: 10px;
-    border: 0;
-    background: none;
-}
-
-.DeleteJobButton {
-    bottom: 0;
-    left: 0;
-    filter: invert(21%) sepia(63%) saturate(7443%) hue-rotate(355deg) brightness(93%) contrast(118%);
-}
-
-.StartJobNowButton {
-    bottom: 0;
-    right: 0;
-    filter: invert(58%) sepia(16%) saturate(4393%) hue-rotate(103deg) brightness(102%) contrast(103%);
-}

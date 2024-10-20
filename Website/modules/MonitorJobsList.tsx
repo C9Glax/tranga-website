@@ -45,7 +45,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
     function StartSearchMangaEntry() : ReactElement {
         return (<div key="monitorMangaEntry.StartSearch" className="monitorMangaEntry" onClick={onStartSearch}>
             <div className="Manga" key="StartSearch.Manga">
-                <img src="../media/blahaj.png"></img>
+                <img src="../media/blahaj.png" alt="Blahaj"></img>
                 <div>
                     <p style={{textAlign: "center", width: "100%"}} className="Manga-name">Add new Manga</p>
                     <p style={{fontSize: "42pt", textAlign: "center"}}>+</p>
@@ -76,8 +76,8 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
                 return <div key={"monitorMangaEntry-" + manga.internalId} className="monitorMangaEntry">
                     {CoverCard(manga)}
                     <div className="MangaActionButtons">
-                        <button id={"Delete-"+job.id} className="DeleteJobButton" onClick={DeleteJob}><Icon path={mdiTrashCanOutline} size={1.5} /></button>
-                        <button id={"Start-"+job.id} className="StartJobNowButton" onClick={StartJob}><Icon path={mdiPlayBoxOutline} size={1.5} /></button>
+                        <div id={"Delete-"+job.id} className="DeleteJobButton" onClick={DeleteJob}><Icon path={mdiTrashCanOutline} size={1.5} /></div>
+                        <div id={"Start-"+job.id} className="StartJobNowButton" onClick={StartJob}><Icon path={mdiPlayBoxOutline} size={1.5} /></div>
                     </div>
                 </div>;
             })}
