@@ -1,0 +1,24 @@
+:root{
+    --background-color: #030304;
+    --second-background-color: white;
+    --primary-color: #f5a9b8;
+    --secondary-color:  #5bcefa;
+    --blur-background: rgba(245, 169, 184, 0.58);
+    --accent-color: #fff;
+    /* --primary-color: green;
+    --secondary-color: gold;
+    --blur-background: rgba(86, 131, 36, 0.8);
+    --accent-color: olive; */
+    --topbar-height: 60px;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    background-color: var(--background-color);
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+    color: var(--primary-color);
+}
