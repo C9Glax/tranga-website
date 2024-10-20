@@ -1,0 +1,66 @@
+#Settings {
+    position: relative;
+    height: 100%;
+}
+
+#SettingsIcon {
+    height: calc(100% - 20px);
+    margin: 10px;
+}
+
+#settingsPopupBody {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.settings-section {
+    margin: 5px 5px 10px;
+    font-size: 10pt;
+    font-weight: 100;
+    display: block;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: lightgray;
+    width: calc(100% - 10px);
+    padding: 10px;
+}
+
+.settings-section-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+
+}
+
+.section-item {
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    min-width: 300px;
+    height: auto;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    margin: 7px;
+    padding: 5px;
+}
+
+.section-item > .settings-section-title {
+    font-weight: bold;
+    vertical-align: bottom;
+    line-height: 32px;
+    font-size: 12pt;
+    width: 100%;
+}
+
+.section-item > .settings-section-title > img {
+    width: auto;
+    height: 32px;
+    margin: 5px;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+

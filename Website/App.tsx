@@ -10,10 +10,7 @@ import IFrontendSettings from "./modules/interfaces/IFrontendSettings";
 export default function App(){
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
-    const [showQueue, setShowQueue] = React.useState(false);
-    const [lastMangaListUpdate, setLastMangaListUpdate] = React.useState<Date>(new Date());
-    const [lastJobListUpdate, setLastJobListUpdate] = React.useState<Date>(new Date());
-    const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
+    const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>({jobInterval: new Date(0,0,0,3)});
 
     useEffect(() => {
         checkConnection().then(res => setConnected(res)).catch(() => setConnected(false));
@@ -27,7 +24,7 @@ export default function App(){
     }
 
     return(<div>
-        <Header/>
+        <Header settings={frontendSettings} changeSettings={setFrontendSettings}/>
         {connected
             ? <>
                 {showSearch
