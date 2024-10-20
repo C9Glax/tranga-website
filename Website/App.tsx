@@ -12,23 +12,34 @@ export default function App(){
     const [showQueue, setShowQueue] = React.useState(false);
     const [lastMangaListUpdate, setLastMangaListUpdate] = React.useState<Date>(new Date());
     const [lastJobListUpdate, setLastJobListUpdate] = React.useState<Date>(new Date());
+    const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
 
     useEffect(() => {
-        getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
-            console.log(result);
-            if(result === null){
-                setConnected(false);
-            }else{
-                setConnected(true);
-            }
-
-            const interval = setInterval(() => {
-                setLastJobListUpdate(new Date());
-            }, 5000);
-
-            return () => clearInterval(interval);
-        });
+        checkConnection();
+        setInterval(() => {
+            checkConnection();
+        }, 500);
     }, []);
+
+    const checkConnection = () =>{
+        getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
+            setConnected(result != null);
+        }).catch(() => setConnected(false));
+    }
+
+    useEffect(() => {
+        if(connected){
+            setLastJobListUpdate(new Date());
+            setJoblistUpdateInterval(setInterval(() => {
+                setLastJobListUpdate(new Date());
+            }, 5000));
+        }else{
+            clearInterval(joblistUpdateInterval);
+            setJoblistUpdateInterval(undefined);
+        }
+    }, [connected]);
+
+
 
     const JobsChanged : EventHandler<any> = () => {
         setLastMangaListUpdate(new Date());
