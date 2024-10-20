@@ -81,6 +81,7 @@
 .QueueJob img{
     grid-area: cover;
     height: 100%;
+    max-width: 100%;
 }
 
 .QueueJob .QueueJob-Name{
