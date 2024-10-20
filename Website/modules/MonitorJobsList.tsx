@@ -83,7 +83,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
                 if (job === undefined || job == null)
                     return <div>Error. Could not find matching job for {manga.internalId}</div>
                 return <div key={"monitorMangaEntry-" + manga.internalId} className="monitorMangaEntry">
-                    {CoverCard(manga)}
+                    {CoverCard(apiUri, manga)}
                     <div className="MangaActionButtons">
                         <div id={"Delete-"+job.id} className="DeleteJobButton" onClick={DeleteJob}><Icon path={mdiTrashCanOutline} size={1.5} /></div>
                         <div id={"Start-"+job.id} className="StartJobNowButton" onClick={StartJob}><Icon path={mdiPlayBoxOutline} size={1.5} /></div>

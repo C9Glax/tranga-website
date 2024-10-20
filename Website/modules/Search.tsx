@@ -6,7 +6,7 @@ import IManga, {SearchResult} from "./interfaces/IManga";
 import '../styles/search.css';
 import '../styles/MangaSearchResult.css'
 
-export default function Search({createJob, closeSearch} : {createJob: (internalId: string, type: string) => void, closeSearch(): void}) {
+export default function Search({apiUri, createJob, closeSearch} : {apiUri: string, createJob: (internalId: string, type: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
     const [selectedConnector, setSelectedConnector] = useState<IMangaConnector>();
     const [selectedLanguage, setSelectedLanguage] = useState<string>();
@@ -106,7 +106,7 @@ export default function Search({createJob, closeSearch} : {createJob: (internalI
         <div id="SearchResults">
             {searchResults === undefined
                 ? <p></p>
-                : searchResults.map(result => SearchResult(result, createJob))}
+                : searchResults.map(result => SearchResult(apiUri, result, createJob))}
         </div>
     </div>)
 }

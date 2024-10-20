@@ -45,7 +45,7 @@ export default function App(){
             ? <>
                 {showSearch
                     ? <>
-                        <Search createJob={CreateJob} closeSearch={() => setShowSearch(false)} />
+                        <Search apiUri={apiUri} createJob={CreateJob} closeSearch={() => setShowSearch(false)} />
                         <hr/>
                     </>
                     : <></>}

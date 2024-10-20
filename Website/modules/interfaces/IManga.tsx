@@ -40,10 +40,10 @@ export function ReleaseStatusFromNumber(n: number): string {
     return "";
 }
 
-export function CoverCard(manga: IManga) : ReactElement {
+export function CoverCard(apiUri: string, manga: IManga) : ReactElement {
     return(
     <div className="Manga" key={manga.internalId}>
-        <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
+        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)}></img>
         <div>
             <p className="pill connector-name">{manga.mangaConnector.name}</p>
             <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
@@ -52,10 +52,10 @@ export function CoverCard(manga: IManga) : ReactElement {
     </div>);
 }
 
-export function SearchResult(manga: IManga, createJob: (internalId: string, type: string) => void) : ReactElement {
+export function SearchResult(apiUri: string, manga: IManga, createJob: (internalId: string, type: string) => void) : ReactElement {
     return(
         <div className="SearchResult" key={manga.internalId}>
-            <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
+            <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)}></img>
             <p className="connector-name">{manga.mangaConnector.name}</p>
             <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
             <p className="Manga-name"><a href={manga.websiteUrl}>{manga.sortName}<img src="../../media/link.svg" /></a></p>
