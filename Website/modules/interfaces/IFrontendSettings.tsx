@@ -27,7 +27,5 @@ export function FrontendSettingsWith(settings: IFrontendSettings | undefined, jo
             jobInterval: jobInterval === undefined ? settings.jobInterval : jobInterval,
         }
     }
-    console.debug(settings);
-    console.debug(transform);
     return transform;
 }
