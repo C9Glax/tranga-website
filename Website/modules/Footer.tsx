@@ -10,7 +10,7 @@ export default function Footer({connectedToBackend, apiUri} : {connectedToBacken
     const [AllJobsCount, setAllJobsCount] = React.useState(0);
     const [RunningJobsCount, setRunningJobsCount] = React.useState(0);
     const [StandbyJobsCount, setStandbyJobsCount] = React.useState(0);
-    const [countUpdateInterval, setcountUpdateInterval] = React.useState<number>();
+    const [countUpdateInterval, setCountUpdateInterval] = React.useState<number>();
 
     function UpdateBackendState(){
         Job.GetMonitoringJobs(apiUri).then((jobs) => setMonitoringJobsCount(jobs.length));
@@ -22,19 +22,19 @@ export default function Footer({connectedToBackend, apiUri} : {connectedToBacken
     useEffect(() => {
         if(connectedToBackend){
             UpdateBackendState();
-            setcountUpdateInterval(setInterval(() => {
+            setCountUpdateInterval(setInterval(() => {
                 UpdateBackendState();
             }, 2000));
         }else{
             clearInterval(countUpdateInterval);
-            setcountUpdateInterval(undefined);
+            setCountUpdateInterval(undefined);
         }
     }, [connectedToBackend]);
 
     return (
         <footer>
             <div className="statusBadge"><Icon path={mdiEyeCheck} size={1}/> <span>{MonitoringJobsCount}</span></div>
-            <QueuePopUp apiUri={apiUri}>
+            <QueuePopUp connectedToBackend={connectedToBackend} apiUri={apiUri}>
                 <div className="statusBadge hoverHand"><Icon path={mdiTrayFull} size={1}/> <span>{StandbyJobsCount}</span></div>
                 <div className="statusBadge hoverHand"><Icon path={mdiRun} size={1}/> <span>{RunningJobsCount}</span></div>
             </QueuePopUp>

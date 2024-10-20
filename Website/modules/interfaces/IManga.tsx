@@ -5,6 +5,9 @@ import React, {ReactElement} from "react";
 import Icon from '@mdi/react';
 import { mdiTagTextOutline, mdiAccountEdit } from '@mdi/js';
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import IJob, {JobTypeFromNumber} from "./IJob";
+import {Job} from "../Job";
+import ProgressBar from "@ramonak/react-progress-bar";
 
 export default interface IManga{
     "sortName": string,
@@ -68,4 +71,33 @@ export function SearchResult(apiUri: string, manga: IManga, createJob: (internal
             }}>Monitor
             </button>
         </div>);
+}
+
+function ProgressbarStr(job: IJob): string {
+    return job.progressToken.timeRemaining.substring(0,job.progressToken.timeRemaining.indexOf(".")).concat(" ", ToPercentString(job.progressToken.progress));
+}
+
+function ToPercentString(n: number): string {
+    return n.toString().substring(2,4).concat("%");
+}
+
+export function QueueItem(apiUri: string, manga: IManga, job: IJob, triggerUpdate: () => void){
+    return (
+        <div className="QueueJob" key={"QueueJob-" + job.id}>
+            <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover"/>
+            <p className="QueueJob-Name">{manga.sortName}</p>
+            <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
+            <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>
+            {job.progressToken.state === 0
+            ? <ProgressBar labelColor={"#000"} height={"10px"} labelAlignment={"outside"} className="QueueJob-Progressbar" completed={job.progressToken.progress} maxCompleted={1} customLabel={ProgressbarStr(job)}/>
+            : <div className="QueueJob-Progressbar"></div>}
+            <div className="QueueJob-actions">
+                <button className="QueueJob-Cancel" onClick={() => Job.CancelJob(apiUri, job.id).then(triggerUpdate)}>Cancel</button>
+                {job.parentJobId != null
+                    ? <button className="QueueJob-Cancel" onClick={() => Job.CancelJob(apiUri, job.parentJobId!).then(triggerUpdate)}>Cancel all related</button>
+                    : <></>
+                }
+            </div>
+        </div>
+    );
 }

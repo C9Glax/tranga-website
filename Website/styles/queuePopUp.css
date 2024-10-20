@@ -12,6 +12,7 @@
 #QueuePopUp #QueuePopUpBody h1 {
     padding: 0;
     margin: 0 0 5px 0;
+    color: var(--primary-color);
 }
 
 #QueuePopUp #QueuePopUpBody > *:first-child {
@@ -30,12 +31,18 @@
     height: 200px;
     display: grid;
     grid-template-columns: 150px auto;
-    grid-template-rows: 30% 30% auto;
+    grid-template-rows: 25% 20% auto 15% 12%;
     column-gap: 10px;
     grid-template-areas:
     "cover name"
     "cover jobType"
-    "cover additional"
+    "cover additionalInfo"
+    "cover progress"
+    "cover actions"
+}
+
+.QueueJob p {
+    margin: 2px 0;
 }
 
 .QueueJob img{
@@ -54,6 +61,21 @@
     grid-area: jobType;
 }
 
-.QueueJob .QueueJob-additional {
-    grid-area: additional;
+.QueueJob .QueueJob-additionalInfo {
+    grid-area: additionalInfo;
+}
+
+.QueueJob .QueueJob-actions {
+    grid-area: actions;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.QueueJob .QueueJob-Cancel {
+    grid-area: actions;
+    width: 150px;
+}
+
+.QueueJob .QueueJob-Progressbar {
+    grid-area: progress;
 }

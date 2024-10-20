@@ -1,20 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import IJob, {JobTypeFromNumber} from "./interfaces/IJob";
+import IJob from "./interfaces/IJob";
 import '../styles/queuePopUp.css';
 import '../styles/popup.css';
 import {Job} from "./Job";
-import IManga from "./interfaces/IManga";
+import IManga, {QueueItem} from "./interfaces/IManga";
 import {Manga} from "./Manga";
 
-export default function QueuePopUp({children, apiUri} : {children: JSX.Element[], apiUri: string}) {
+export default function QueuePopUp({connectedToBackend, children, apiUri} : {connectedToBackend: boolean, children: JSX.Element[], apiUri: string}) {
 
     const [StandbyJobs, setStandbyJobs] = React.useState<IJob[]>([]);
     const [StandbyJobsManga, setStandbyJobsManga] = React.useState<IManga[]>([]);
     const [RunningJobs, setRunningJobs] = React.useState<IJob[]>([]);
     const [RunningJobsManga, setRunningJobsManga] = React.useState<IManga[]>([]);
     const [showQueuePopup, setShowQueuePopup] = useState<boolean>(false);
+    const [queueListInterval, setQueueListInterval] = React.useState<number>();
 
     useEffect(() => {
+        if(!showQueuePopup)
+            return;
+        UpdateMonitoringJobsList();
+    }, [showQueuePopup]);
+
+    useEffect(() => {
+        if(connectedToBackend){
+            UpdateMonitoringJobsList();
+            setQueueListInterval(setInterval(() => {
+                UpdateMonitoringJobsList();
+            }, 2000));
+        }else{
+            clearInterval(queueListInterval);
+            setQueueListInterval(undefined);
+        }
+    }, [connectedToBackend]);
+
+    function UpdateMonitoringJobsList(){
         Job.GetStandbyJobs(apiUri)
             .then((jobs) => {
                 if(jobs.length > 0)
@@ -37,7 +56,7 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                 //console.debug("Removing Metadata Jobs");
                 setRunningJobs(jobs.filter(job => job.jobType <= 1));
             });
-    }, []);
+    }
 
     useEffect(() => {
         if(StandbyJobs.length < 1)
@@ -65,7 +84,7 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
             {showQueuePopup
                 ? <div className="popup" id="QueuePopUp">
                     <div className="popupHeader">
-                        <h1>Queue Status {showQueuePopup ? "true" : "false"}</h1>
+                        <h1>Queue Status</h1>
                         <img alt="Close Search" className="close" src="../media/close-x.svg"
                              onClick={() => setShowQueuePopup(false)}/>
                     </div>
@@ -76,12 +95,8 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                                 {RunningJobs.map((job: IJob) => {
                                     const manga = RunningJobsManga.find(manga => manga.internalId == job.mangaInternalId || manga.internalId == job.chapter?.parentManga.internalId);
                                     if (manga === undefined || manga === null)
-                                        return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga
-                                            for {job.id}</div>
-                                    return <div className="QueueJob" key={"QueueJob-" + job.id}>
-                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover" />
-                                        <p>{JobTypeFromNumber(job.jobType)}</p>
-                                    </div>;
+                                        return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga for {job.id}</div>
+                                    return QueueItem(apiUri, manga, job, UpdateMonitoringJobsList);
                                 })}
                             </div>
                         </div>
@@ -91,14 +106,8 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                                 {StandbyJobs.map((job: IJob) => {
                                     const manga = StandbyJobsManga.find(manga => manga.internalId == job.mangaInternalId || manga.internalId == job.chapter?.parentManga.internalId);
                                     if (manga === undefined || manga === null)
-                                        return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga
-                                            for {job.id}</div>
-                                    return <div className="QueueJob" key={"QueueJob-" + job.id}>
-                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover" />
-                                        <p className="QueueJob-Name">{manga.sortName}</p>
-                                        <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
-                                        <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>
-                                    </div>;
+                                        return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga for {job.id}</div>
+                                    return QueueItem(apiUri, manga, job, UpdateMonitoringJobsList);
                                 })}
                             </div>
                         </div>

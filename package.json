@@ -15,6 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ramonak/react-progress-bar": "^5.3.0",
     "@uiw/react-markdown-preview": "^5.1.3"
   }
 }
