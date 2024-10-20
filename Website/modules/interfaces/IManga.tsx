@@ -29,7 +29,7 @@ export default interface IManga{
     "mangaConnector": IMangaConnector
 }
 
-function ReleaseStatusFromNumber(n: number): string {
+export function ReleaseStatusFromNumber(n: number): string {
     switch(n) {
         case 0: return "Ongoing";
         case 1: return "Completed";
