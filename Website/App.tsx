@@ -4,7 +4,6 @@ import Search from "./modules/Search";
 import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
-import {Job} from "./modules/Job";
 import IFrontendSettings, {FrontendSettingsWith} from "./modules/interfaces/IFrontendSettings";
 import {useCookies} from "react-cookie";
 
@@ -14,6 +13,7 @@ export default function App(){
     const [showSearch, setShowSearch] = React.useState(false);
     const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(FrontendSettingsWith(undefined, undefined, undefined));
     const [updateInterval, setUpdateInterval] = React.useState<number>();
+    const [updateMonitorList, setUpdateMonitorList] = React.useState<Date>(new Date());
 
     const apiUri =  frontendSettings.apiUri;
 
@@ -35,9 +35,7 @@ export default function App(){
         setCookie('jobInterval', settings.jobInterval);
     }
 
-    function CreateJob(internalId: string, jobType: string){
-        Job.CreateJobDateInterval(apiUri, internalId, jobType, frontendSettings.jobInterval);
-    }
+    const UpdateList = () => {setUpdateMonitorList(new Date())}
 
     return(<div>
         <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} changeSettings={ChangeSettings}/>
@@ -45,11 +43,11 @@ export default function App(){
             ? <>
                 {showSearch
                     ? <>
-                        <Search apiUri={apiUri} createJob={CreateJob} closeSearch={() => setShowSearch(false)} />
+                        <Search apiUri={apiUri} jobInterval={frontendSettings.jobInterval} onJobsChanged={UpdateList} closeSearch={() => setShowSearch(false)} />
                         <hr/>
                     </>
                     : <></>}
-                <MonitorJobsList apiUri={apiUri} onStartSearch={() => setShowSearch(true)} onJobsChanged={() => console.debug("jobsChanged")} connectedToBackend={connected} />
+                <MonitorJobsList updateList={updateMonitorList} apiUri={apiUri} onStartSearch={() => setShowSearch(true)} onJobsChanged={UpdateList} connectedToBackend={connected} />
             </>
             : <h1>No connection to backend</h1>}
         <Footer apiUri={apiUri} connectedToBackend={connected} />

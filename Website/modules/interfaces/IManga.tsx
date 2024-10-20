@@ -54,7 +54,7 @@ export function CoverCard(apiUri: string, manga: IManga) : ReactElement {
     </div>);
 }
 
-export function SearchResult(apiUri: string, manga: IManga, createJob: (internalId: string, type: string) => void) : ReactElement {
+export function SearchResult(apiUri: string, manga: IManga, interval: Date, onJobsChanged: (internalId: string) => void) : ReactElement {
     return(
         <div className="SearchResult" key={manga.internalId}>
             <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover"></img>
@@ -67,7 +67,7 @@ export function SearchResult(apiUri: string, manga: IManga, createJob: (internal
             </div>
             <MarkdownPreview className="Manga-description" source={manga.description} style={{ backgroundColor: "transparent", color: "black" }} />
             <button className="Manga-AddButton" onClick={() => {
-                createJob(manga.internalId, "MonitorManga")
+                Job.CreateJobDateInterval(apiUri, manga.internalId, "MonitorManga", interval).then(()=> onJobsChanged(manga.internalId));
             }}>Monitor
             </button>
         </div>);

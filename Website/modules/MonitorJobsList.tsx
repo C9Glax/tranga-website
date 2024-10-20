@@ -8,7 +8,7 @@ import '../styles/MangaCoverCard.css'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline, mdiPlayBoxOutline } from '@mdi/js';
 
-export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend, apiUri} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean, apiUri: string}) {
+export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend, apiUri, updateList} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean, apiUri: string, updateList: Date}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<IJob[]>([]);
     const [AllManga, setAllManga] = useState<IManga[]>([]);
     const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
@@ -40,7 +40,13 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
         }
     }, [connectedToBackend]);
 
+    useEffect(() => {
+        UpdateMonitoringJobsList();
+    }, [updateList]);
+
     function UpdateMonitoringJobsList(){
+        if(!connectedToBackend)
+            return;
         //console.debug("Updating MonitoringJobsList");
         Job.GetMonitoringJobs(apiUri)
             .then((jobs) => {

@@ -6,13 +6,12 @@ import IManga, {SearchResult} from "./interfaces/IManga";
 import '../styles/search.css';
 import '../styles/MangaSearchResult.css'
 
-export default function Search({apiUri, createJob, closeSearch} : {apiUri: string, createJob: (internalId: string, type: string) => void, closeSearch(): void}) {
+export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch} : {apiUri: string, jobInterval: Date, onJobsChanged: (internalId: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
     const [selectedConnector, setSelectedConnector] = useState<IMangaConnector>();
     const [selectedLanguage, setSelectedLanguage] = useState<string>();
     const [searchBoxValue, setSearchBoxValue] = useState("");
     const [searchResults, setSearchResults] = useState<IManga[]>();
-
 
     const pattern = /https:\/\/([a-z0-9.]+\.[a-z0-9]{2,})(?:\/.*)?/i
 
@@ -106,7 +105,7 @@ export default function Search({apiUri, createJob, closeSearch} : {apiUri: strin
         <div id="SearchResults">
             {searchResults === undefined
                 ? <p></p>
-                : searchResults.map(result => SearchResult(apiUri, result, createJob))}
+                : searchResults.map(result => SearchResult(apiUri, result, jobInterval, onJobsChanged))}
         </div>
     </div>)
 }
