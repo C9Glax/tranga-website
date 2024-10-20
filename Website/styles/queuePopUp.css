@@ -1,44 +1,4 @@
-#QueuePopUp {
-    position: absolute;
-    left: 10%;
-    top: 7.5%;
-    width: 80%;
-    height: 80%;
-    margin: auto;
-    z-index: 100;
-    background-color: var(--second-background-color);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-#QueuePopUp #QueuePopUpHeader {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 40px;
-    width: 100%;
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-}
-
-#QueuePopUp #QueuePopUpHeader h1 {
-    margin: 4px 10px;
-    font-size: 20pt;
-}
-
-#QueuePopUp #closeSearch {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-}
-
 #QueuePopUp #QueuePopUpBody {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 40px);
     display: flex;
 }
 

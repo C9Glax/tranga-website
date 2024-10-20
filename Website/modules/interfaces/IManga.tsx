@@ -52,7 +52,7 @@ export function CoverCard(manga: IManga) : ReactElement {
     </div>);
 }
 
-export function SearchResult(manga: IManga, jobsChanged: EventHandler<any>) : ReactElement {
+export function SearchResult(manga: IManga, createJob: (internalId: string, type: string) => void) : ReactElement {
     return(
         <div className="SearchResult" key={manga.internalId}>
             <img src={Manga.GetMangaCoverUrl(manga.internalId)}></img>
@@ -65,7 +65,7 @@ export function SearchResult(manga: IManga, jobsChanged: EventHandler<any>) : Re
             </div>
             <MarkdownPreview className="Manga-description" source={manga.description} style={{ backgroundColor: "transparent", color: "black" }} />
             <button className="Manga-AddButton" onClick={(e) => {
-                Job.CreateJob(manga.internalId, "MonitorManga", "03:00:00").then(() => jobsChanged(manga.internalId));
+                createJob(manga.internalId, "MonitorManga")
             }}>Monitor
             </button>
         </div>);

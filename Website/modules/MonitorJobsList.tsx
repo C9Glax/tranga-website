@@ -8,9 +8,10 @@ import '../styles/MangaCoverCard.css'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline, mdiPlayBoxOutline } from '@mdi/js';
 
-export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStartSearch() : void, onJobsChanged: EventHandler<any>}) {
+export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<IJob[]>([]);
     const [AllManga, setAllManga] = useState<IManga[]>([]);
+    const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
 
     useEffect(() => {
         console.debug("Updating display list.");
@@ -28,8 +29,16 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged} : {onStar
     }, [MonitoringJobs]);
 
     useEffect(() => {
-        UpdateMonitoringJobsList();
-    }, []);
+        if(connectedToBackend){
+            UpdateMonitoringJobsList();
+            setJoblistUpdateInterval(setInterval(() => {
+                UpdateMonitoringJobsList();
+            }, 1000));
+        }else{
+            clearInterval(joblistUpdateInterval);
+            setJoblistUpdateInterval(undefined);
+        }
+    }, [connectedToBackend]);
 
     function UpdateMonitoringJobsList(){
         console.debug("Updating MonitoringJobsList");

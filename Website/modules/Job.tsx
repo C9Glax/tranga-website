@@ -4,6 +4,10 @@ import IProgressToken from "./interfaces/IProgressToken";
 
 export class Job
 {
+    static IntervalStringFromDate(date: Date) : string {
+        return `${date.getDay()}.${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    }
+
     static async GetAllJobs(): Promise<string[]> {
         console.info("Getting all Jobs");
         return getData("http://127.0.0.1:6531/v2/Jobs")
@@ -101,9 +105,18 @@ export class Job
             });
     }
 
+    static async CreateJobDateInterval(internalId: string, jobType: string, interval: Date) : Promise<null> {
+        return this.CreateJob(internalId, jobType, this.IntervalStringFromDate(interval));
+    }
+
     static async CreateJob(internalId: string, jobType: string, interval: string): Promise<null> {
+        const validate = /(?:[0-9]{1,2}\.)?[0-9]{1,2}:[0-9]{1,2}(?::[0-9]{1,2})?/
         console.info(`Creating Job for Manga ${internalId} at ${interval} interval`);
-        let data = {
+        if(!validate.test(interval)){
+            console.error("Interval was in incorrect format.");
+            return Promise.reject();
+        }
+        const data = {
             internalId: internalId,
             interval: interval
         };

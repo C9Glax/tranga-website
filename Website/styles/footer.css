@@ -11,6 +11,7 @@ footer {
     position: fixed;
     bottom: 0;
     color: white;
+    z-index: 10;
 }
 
 #madeWith {
@@ -20,19 +21,20 @@ footer {
     cursor: url("Website/media/blahaj.png"), grab;
 }
 
-footer div {
+footer .statusBadge {
     margin: 0 10px;
     display: flex;
     align-items: center;
     justify-items: center;
     background-color: rgba(255,255,255, 0.3);
     border-radius: 10px;
-    padding: 0 5px;
+    padding: 2px 5px;
 }
 
-footer div > * {
-    margin: 0 2px;
-    padding: 3px 0;
+footer > div {
+    display: flex;
+    align-items: center;
+    justify-items: center;
 }
 
 footer .hoverHand {

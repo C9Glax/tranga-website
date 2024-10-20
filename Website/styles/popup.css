@@ -1,0 +1,43 @@
+.popup {
+    position: fixed;
+    left: 10%;
+    top: 7.5%;
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    z-index: 100;
+    background-color: var(--second-background-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.popup .popupHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+}
+
+.popup .popupHeader h1 {
+    margin: 4px 10px;
+    font-size: 20pt;
+}
+
+.popup .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    cursor: pointer;
+}
+
+.popup .popupBody {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 40px);
+}

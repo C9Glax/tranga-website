@@ -6,7 +6,7 @@ import IManga, {SearchResult} from "./interfaces/IManga";
 import '../styles/search.css';
 import '../styles/MangaSearchResult.css'
 
-export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: EventHandler<any>, closeSearch(): void}) {
+export default function Search({createJob, closeSearch} : {createJob: (internalId: string, type: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
     const [selectedConnector, setSelectedConnector] = useState<IMangaConnector>();
     const [selectedLanguage, setSelectedLanguage] = useState<string>();
@@ -98,8 +98,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
             <select id="Searchbox-language" onChange={changeSelectedLanguage} value={selectedLanguage === null ? "" : selectedLanguage}>
                 {selectedConnector === undefined
                     ? <option value="" disabled hidden>Select Connector</option>
-                    : selectedConnector.SupportedLanguages.map(language => <option value={language}
-                                                                                   key={language}>{language}</option>)}
+                    : selectedConnector.SupportedLanguages.map(language => <option value={language} key={language}>{language}</option>)}
             </select>
             <button id="Searchbox-button" type="submit" onClick={ExecuteSearch}>Search</button>
         </div>
@@ -107,7 +106,7 @@ export default function Search({onJobsChanged, closeSearch} : {onJobsChanged: Ev
         <div id="SearchResults">
             {searchResults === undefined
                 ? <p></p>
-                : searchResults.map(result => SearchResult(result, onJobsChanged))}
+                : searchResults.map(result => SearchResult(result, createJob))}
         </div>
     </div>)
 }

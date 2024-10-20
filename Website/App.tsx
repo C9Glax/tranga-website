@@ -1,10 +1,11 @@
-import React, {EventHandler, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Footer from "./modules/Footer";
 import Search from "./modules/Search";
 import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
-import QueuePopUp from "./modules/QueuePopUp";
+import {Job} from "./modules/Job";
+import IFrontendSettings from "./modules/interfaces/IFrontendSettings";
 
 export default function App(){
     const [connected, setConnected] = React.useState(false);
@@ -15,35 +16,14 @@ export default function App(){
     const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
 
     useEffect(() => {
-        checkConnection();
+        checkConnection().then(res => setConnected(res)).catch(() => setConnected(false));
         setInterval(() => {
-            checkConnection();
+            checkConnection().then(res => setConnected(res)).catch(() => setConnected(false));
         }, 500);
     }, []);
 
-    const checkConnection = () =>{
-        getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
-            setConnected(result != null);
-        }).catch(() => setConnected(false));
-    }
-
-    useEffect(() => {
-        if(connected){
-            setLastJobListUpdate(new Date());
-            setJoblistUpdateInterval(setInterval(() => {
-                setLastJobListUpdate(new Date());
-            }, 5000));
-        }else{
-            clearInterval(joblistUpdateInterval);
-            setJoblistUpdateInterval(undefined);
-        }
-    }, [connected]);
-
-
-
-    const JobsChanged : EventHandler<any> = () => {
-        setLastMangaListUpdate(new Date());
-        setLastJobListUpdate(new Date());
+    function CreateJob(internalId: string, jobType: string){
+        Job.CreateJobDateInterval(internalId, jobType, frontendSettings.jobInterval);
     }
 
     return(<div>
@@ -52,18 +32,14 @@ export default function App(){
             ? <>
                 {showSearch
                     ? <>
-                        <Search onJobsChanged={JobsChanged} closeSearch={() => setShowSearch(false)} />
+                        <Search createJob={CreateJob} closeSearch={() => setShowSearch(false)} />
                         <hr/>
                     </>
                     : <></>}
-                {showQueue
-                    ? <QueuePopUp closeQueue={() => setShowQueue(false)} />
-                    : <></>
-                }
-                <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={JobsChanged} key={lastMangaListUpdate.getTime()}/>
+                <MonitorJobsList onStartSearch={() => setShowSearch(true)} onJobsChanged={() => console.info("jobsChanged")} connectedToBackend={connected} />
             </>
             : <h1>No connection to backend</h1>}
-        <Footer key={lastJobListUpdate.getTime()} showQueue={() => setShowQueue(true)}/>
+        <Footer connectedToBackend={connected} />
     </div>)
 }
 
@@ -133,4 +109,10 @@ export function isValidUri(uri: string) : boolean{
     } catch (err) {
         return false;
     }
+}
+
+export const checkConnection  = async (): Promise<boolean> =>{
+    return getData('http://127.0.0.1:6531/v2/Ping').then((result) => {
+        return result != null;
+    }).catch(() => Promise.reject());
 }
