@@ -60,6 +60,7 @@
 .SearchResult > .Manga-tags {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     grid-area: alltags;
     color: white;
     padding: 0;
