@@ -4,8 +4,9 @@
 }
 
 #SettingsIcon {
-    height: calc(100% - 20px);
-    margin: 10px;
+    height: calc(100% - 26px);
+    margin: 13px;
+    filter: invert(100%) sepia(65%) saturate(2%) hue-rotate(215deg) brightness(113%) contrast(101%);
 }
 
 #settingsPopupBody {
