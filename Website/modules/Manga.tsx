@@ -38,7 +38,7 @@ export class Manga
 
     static async GetMangaByIds(internalIds: string[]): Promise<IManga[]> {
         console.debug(`Getting Mangas ${internalIds.join(",")}`);
-        return await getData(`http://127.0.0.1:6531/v2/Manga?internalIds=${internalIds.join(",")}`)
+        return await getData(`http://127.0.0.1:6531/v2/Manga?mangaIds=${internalIds.join(",")}`)
             .then((json) => {
                 console.debug(`Got Manga ${internalIds.join(",")}`);
                 const ret = json as IManga[];
