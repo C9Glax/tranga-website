@@ -60,7 +60,7 @@ export default function Search({createJob, closeSearch} : {createJob: (internalI
             console.error("Tried initiating search while not all fields where submitted.")
             return;
         }
-        console.info(`Searching Name: ${searchBoxValue} Connector: ${selectedConnector.name} Language: ${selectedLanguage}`);
+        //console.info(`Searching Name: ${searchBoxValue} Connector: ${selectedConnector.name} Language: ${selectedLanguage}`);
         if(isValidUri(searchBoxValue) && !selectedConnector.BaseUris.find((uri: string) => {
                 const match = searchBoxValue.match(pattern);
                 if(match === null)

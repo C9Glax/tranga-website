@@ -22,10 +22,10 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                 return [];
             })
             .then((jobs) => {
-                console.debug("Removing Metadata Jobs");
-                console.log(StandbyJobs)
+                //console.debug("Removing Metadata Jobs");
+                //console.log(StandbyJobs)
                 setStandbyJobs(jobs.filter(job => job.jobType <= 1));
-                console.log(StandbyJobs)
+                //console.log(StandbyJobs)
             });
         Job.GetRunningJobs(apiUri)
             .then((jobs) => {
@@ -34,7 +34,7 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                 return [];
             })
             .then((jobs) =>{
-                console.debug("Removing Metadata Jobs");
+                //console.debug("Removing Metadata Jobs");
                 setRunningJobs(jobs.filter(job => job.jobType <= 1));
             });
     }, []);
@@ -43,7 +43,7 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
         if(StandbyJobs.length < 1)
             return;
         const mangaIds = StandbyJobs.filter(job => job.jobType<=2).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
-        console.debug(`Waiting mangaIds: ${mangaIds.join(",")}`);
+        //console.debug(`Waiting mangaIds: ${mangaIds.join(",")}`);
         Manga.GetMangaByIds(apiUri, mangaIds)
             .then(setStandbyJobsManga);
     }, [StandbyJobs]);
@@ -51,9 +51,9 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
     useEffect(() => {
         if(RunningJobs.length < 1)
             return;
-        console.log(RunningJobs);
+        //console.log(RunningJobs);
         const mangaIds = RunningJobs.filter(job => job.jobType<=2).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
-        console.debug(`Running mangaIds: ${mangaIds.join(",")}`);
+        //console.debug(`Running mangaIds: ${mangaIds.join(",")}`);
         Manga.GetMangaByIds(apiUri, mangaIds)
             .then(setRunningJobsManga);
     }, [RunningJobs]);
@@ -79,7 +79,7 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                                         return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga
                                             for {job.id}</div>
                                     return <div className="QueueJob" key={"QueueJob-" + job.id}>
-                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)}/>
+                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover" />
                                         <p>{JobTypeFromNumber(job.jobType)}</p>
                                     </div>;
                                 })}
@@ -94,7 +94,7 @@ export default function QueuePopUp({children, apiUri} : {children: JSX.Element[]
                                         return <div key={"QueueJob-" + job.id}>Error. Could not find matching manga
                                             for {job.id}</div>
                                     return <div className="QueueJob" key={"QueueJob-" + job.id}>
-                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)}/>
+                                        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover" />
                                         <p className="QueueJob-Name">{manga.sortName}</p>
                                         <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
                                         <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>

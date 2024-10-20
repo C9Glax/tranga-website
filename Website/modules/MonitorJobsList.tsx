@@ -14,7 +14,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
     const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
 
     useEffect(() => {
-        console.debug("Updating display list.");
+        //console.debug("Updating display list.");
         //Remove all Manga that are not associated with a Job
         setAllManga(AllManga.filter(manga => MonitoringJobs.find(job => job.mangaInternalId == manga.internalId)));
         //Fetch Manga that are missing (from Jobs)
@@ -41,7 +41,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
     }, [connectedToBackend]);
 
     function UpdateMonitoringJobsList(){
-        console.debug("Updating MonitoringJobsList");
+        //console.debug("Updating MonitoringJobsList");
         Job.GetMonitoringJobs(apiUri)
             .then((jobs) => {
                 if(jobs.length > 0)
@@ -65,13 +65,13 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
 
     const DeleteJob : MouseEventHandler = (e) => {
         const jobId = e.currentTarget.id.slice(e.currentTarget.id.indexOf("-")+1);
-        console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
+        //console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
         Job.DeleteJob(apiUri, jobId).then(() => onJobsChanged(jobId));
     }
 
     const StartJob : MouseEventHandler = (e) => {
         const jobId = e.currentTarget.id.slice(e.currentTarget.id.indexOf("-")+1);
-        console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
+        //console.info(`Pressed ${e.currentTarget.id} => ${jobId}`);
         Job.StartJob(apiUri, jobId);
     }
 

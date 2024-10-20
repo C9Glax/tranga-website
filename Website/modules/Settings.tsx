@@ -1,5 +1,5 @@
 import React, {KeyboardEventHandler, useEffect, useState} from 'react';
-import IFrontendSettings, {FrontendSettingsWith} from "./interfaces/IFrontendSettings";
+import IFrontendSettings from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import IBackendSettings from "./interfaces/IBackendSettings";
 import {getData} from "../App";
@@ -22,10 +22,10 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     }, [showSettings]);
 
     async function GetSettings(apiUri: string) : Promise<IBackendSettings> {
-        console.info("Getting Settings");
+        //console.info("Getting Settings");
         return getData(`${apiUri}/v2/Settings`)
             .then((json) => {
-                console.info("Got Settings");
+                //console.info("Got Settings");
                 const ret = json as IBackendSettings;
                 //console.debug(ret);
                 return (ret);
@@ -34,10 +34,10 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     }
 
     async function GetLibraryConnectors(apiUri: string) : Promise<ILibraryConnector[]> {
-        console.info("Getting Library Connectors");
+        //console.info("Getting Library Connectors");
         return getData(`${apiUri}/v2/LibraryConnector`)
             .then((json) => {
-                console.info("Got Library Connectors");
+                //console.info("Got Library Connectors");
                 const ret = json as ILibraryConnector[];
                 //console.debug(ret);
                 return (ret);
@@ -46,10 +46,10 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     }
 
     async function GetNotificationConnectors(apiUri: string) : Promise<INotificationConnector[]> {
-        console.info("Getting Notification Connectors");
+        //console.info("Getting Notification Connectors");
         return getData(`${apiUri}/v2/NotificationConnector`)
             .then((json) => {
-                console.info("Got Notification Connectors");
+                //console.info("Got Notification Connectors");
                 const ret = json as INotificationConnector[];
                 //console.debug(ret);
                 return (ret);
