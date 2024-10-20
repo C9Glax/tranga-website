@@ -21,6 +21,11 @@
     color: var(--accent-color);
 }
 
+#QueuePopUp #QueuePopUpHeader h1 {
+    margin: 4px 10px;
+    font-size: 20pt;
+}
+
 #QueuePopUp #closeSearch {
     position: absolute;
     top: 0;
@@ -38,8 +43,10 @@
 }
 
 #QueuePopUp #QueuePopUpBody > * {
-    width: 50%;
     padding: 20px;
+    width: calc(50% - 40px);
+    height: calc(100% - 40px);
+    overflow-y: scroll;
 }
 
 #QueuePopUp #QueuePopUpBody h1 {
@@ -57,14 +64,35 @@
 }
 
 .QueueJob {
+    color: black;
+    margin: 5px 0;
     position: relative;
     height: 200px;
+    display: grid;
+    grid-template-columns: 150px auto;
+    grid-template-rows: 20% 20% auto;
+    column-gap: 10px;
+    grid-template-areas:
+    "cover name"
+    "cover jobType"
+    "cover additional"
 }
 
 .QueueJob img{
+    grid-area: cover;
     height: 100%;
 }
 
-.QueueJob {
+.QueueJob .QueueJob-Name{
+    grid-area: name;
+    font-weight: bold;
+    font-size: 14pt;
+}
 
+.QueueJob .JobType{
+    grid-area: jobType;
+}
+
+.QueueJob .QueueJob-additional {
+    grid-area: additional;
 }

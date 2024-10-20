@@ -9,7 +9,7 @@ import QueuePopUp from "./modules/QueuePopUp";
 export default function App(){
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
-    const [showQueue, setShowQueue] = React.useState(true);
+    const [showQueue, setShowQueue] = React.useState(false);
     const [lastMangaListUpdate, setLastMangaListUpdate] = React.useState<Date>(new Date());
     const [lastJobListUpdate, setLastJobListUpdate] = React.useState<Date>(new Date());
 

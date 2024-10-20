@@ -14,19 +14,33 @@ export default function QueuePopUp({closeQueue} : {closeQueue(): void}){
 
     useEffect(() => {
         Job.GetStandbyJobs()
-            .then(Job.GetJobs)
+            .then((jobs) => {
+                if(jobs.length > 0)
+                    return Job.GetJobs(jobs);
+                return [];
+            })
             .then(setStandbyJobs)
-            .finally(() => console.debug(StandbyJobs));
+            .finally(() => {
+                console.debug("Removing Metadata Jobs");
+                setStandbyJobs(StandbyJobs.filter(job => job.jobType <= 1));
+            });
         Job.GetRunningJobs()
-            .then(Job.GetJobs)
+            .then((jobs) => {
+                if(jobs.length > 0)
+                    return Job.GetJobs(jobs);
+                return [];
+            })
             .then(setRunningJobs)
-            .finally(() => console.debug(RunningJobs));
+            .finally(() =>{
+                console.debug("Removing Metadata Jobs");
+                setRunningJobs(RunningJobs.filter(job => job.jobType <= 1));
+            });
     }, []);
 
     useEffect(() => {
         if(StandbyJobs.length < 1)
             return;
-        const mangaIds = StandbyJobs.filter(job => job.jobType<=1).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
+        const mangaIds = StandbyJobs.filter(job => job.jobType<=2).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
         console.debug(`Waiting mangaIds: ${mangaIds.join(",")}`);
         Manga.GetMangaByIds(mangaIds)
             .then(setStandbyJobsManga);
@@ -36,7 +50,7 @@ export default function QueuePopUp({closeQueue} : {closeQueue(): void}){
         if(RunningJobs.length < 1)
             return;
         console.log(RunningJobs);
-        const mangaIds = RunningJobs.filter(job => job.jobType<=1).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
+        const mangaIds = RunningJobs.filter(job => job.jobType<=2).map((job) => job.mangaInternalId != undefined ? job.mangaInternalId : job.chapter != undefined ? job.chapter.parentManga.internalId : "");
         console.debug(`Running mangaIds: ${mangaIds.join(",")}`);
         Manga.GetMangaByIds(mangaIds)
             .then(setRunningJobsManga);
@@ -45,7 +59,7 @@ export default function QueuePopUp({closeQueue} : {closeQueue(): void}){
     return (
         <div id="QueuePopUp">
             <div id="QueuePopUpHeader">
-                <p>Queue Status</p>
+                <h1>Queue Status</h1>
                 <img alt="Close Search" id="closeSearch" src="../media/close-x.svg" onClick={closeQueue}/>
             </div>
             <div id="QueuePopUpBody">
@@ -73,7 +87,9 @@ export default function QueuePopUp({closeQueue} : {closeQueue(): void}){
                                     for {job.id}</div>
                             return <div className="QueueJob" key={"QueueJob-" + job.id}>
                                 <img src={Manga.GetMangaCoverUrl(manga.internalId)}/>
-                                <p>{JobTypeFromNumber(job.jobType)}</p>
+                                <p className="QueueJob-Name">{manga.sortName}</p>
+                                <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
+                                <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>
                             </div>;
                         })}
                     </div>
