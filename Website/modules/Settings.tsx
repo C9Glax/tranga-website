@@ -7,7 +7,7 @@ import ILibraryConnector from "./interfaces/ILibraryConnector";
 import INotificationConnector from "./interfaces/INotificationConnector";
 
 export default function Settings({backendConnected, apiUri, settings, changeSettings} : {backendConnected: boolean, apiUri: string, settings: IFrontendSettings, changeSettings: (settings: IFrontendSettings) => void}) {
-    const [frontendSettings] = useState<IFrontendSettings>(settings);
+    const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(settings);
     const [backendSettings, setBackendSettings] = useState<IBackendSettings>();
     const [showSettings, setShowSettings] = useState<boolean>(false);
     const [libraryConnectors, setLibraryConnectors] = useState<ILibraryConnector[]>([]);
@@ -20,6 +20,10 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
         GetLibraryConnectors(apiUri).then(setLibraryConnectors).catch(console.error);
         GetNotificationConnectors(apiUri).then(setNotificationConnectors).catch(console.error);
     }, [showSettings]);
+
+    useEffect(() => {
+        changeSettings(frontendSettings);
+    }, [frontendSettings]);
 
     async function GetSettings(apiUri: string) : Promise<IBackendSettings> {
         //console.info("Getting Settings");
@@ -78,9 +82,18 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     }
 
     const SubmitApiUri : KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if(e.currentTarget.value.length < 1)
+            return;
         const newSettings = FrontendSettingsWith(frontendSettings, undefined, e.currentTarget.value);
-        if(e.key == "Enter")
-            changeSettings(newSettings);
+        if(e.key == "Enter"){
+            setFrontendSettings(newSettings);
+            ClearInputs();
+        }
+    }
+
+    function ClearInputs(){
+        setShowSettings(false);
+        setShowSettings(true);
     }
 
     return (
