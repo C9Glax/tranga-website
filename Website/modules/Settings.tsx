@@ -154,38 +154,38 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                             </div>
                         </div>
 
-                        <div className="settings-section">
+                        <div className="settings-section" >
                         LIBRARY CONNECTORS
                             <div className="settings-section-content">
-                                <div className="section-item">
+                                <div className="section-item" connector-status={GetKomga() === undefined ? "Not Configured" : "Configured"}>
                                     <span className="settings-section-title">
-                                        <img src='../media/connector-icons/komga.svg' alt="Komga Logo" />
+                                        <img src='../media/connector-icons/komga.svg' alt="Komga Logo"/>
                                         Komga
                                     </span>
-                                    <label htmlFor="komgaUrl"></label>
+                                    <label htmlFor="komgaUrl">URL</label>
                                     <input placeholder={GetKomga() != undefined ? GetKomga()?.baseUrl : "URL"} id="komgaUrl" type="text" />
-                                    <label htmlFor="komgaUsername"></label>
+                                    <label htmlFor="komgaUsername">Username</label>
                                     <input placeholder={GetKomga() != undefined ? "***" : "Username"} id="komgaUsername" type="text" />
-                                    <label htmlFor="komgaPassword"></label>
+                                    <label htmlFor="komgaPassword">Password</label>
                                     <input placeholder={GetKomga() != undefined ? "***" : "Password"} id="komgaPassword" type="password" />
-                                    <div className="section-buttons-container">
+                                    <div className="section-actions">
                                         <span>Test</span>
                                         <span>Reset</span>
                                         <span>Apply</span>
                                     </div>
                                 </div>
-                                <div className="section-item">
+                                <div className="section-item" connector-status={GetKavita() === undefined ? "Not Configured" : "Configured"}>
                                     <span className="settings-section-title">
-                                        <img src='../media/connector-icons/kavita.png' alt="Kavita Logo" />
+                                        <img src='../media/connector-icons/kavita.png' alt="Kavita Logo"/>
                                         Kavita
                                     </span>
-                                    <label htmlFor="kavitaUrl"></label>
+                                    <label htmlFor="kavitaUrl">URL</label>
                                     <input placeholder={GetKavita() != undefined ? GetKavita()?.baseUrl : "URL"} id="kavitaUrl" type="text" />
-                                    <label htmlFor="kavitaUsername"></label>
+                                    <label htmlFor="kavitaUsername">Username</label>
                                     <input placeholder={GetKavita() != undefined ? "***" : "Username"} id="kavitaUsername" type="text" />
-                                    <label htmlFor="kavitaPassword"></label>
+                                    <label htmlFor="kavitaPassword">Password</label>
                                     <input placeholder={GetKavita() != undefined ? "***" : "Password"} id="kavitaPassword" type="password"/>
-                                    <div className="section-buttons-container">
+                                    <div className="section-actions">
                                         <span>Test</span>
                                         <span>Reset</span>
                                         <span>Apply</span>
@@ -197,40 +197,40 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                         <div className="settings-section">
                             NOTIFICATION CONNECTORS
                             <div className="settings-section-content">
-                                <div className="section-item">
+                                <div className="section-item" connector-status={GetGotify() === undefined ? "Not Configured" : "Configured"}>
                                     <span className="settings-section-title">
-                                        <img src='../media/connector-icons/gotify-logo.png' alt="Gotify Logo" />
+                                        <img src='../media/connector-icons/gotify-logo.png' alt="Gotify Logo"/>
                                         Gotify
                                     </span>
-                                    <label htmlFor="gotifyUrl"></label>
+                                    <label htmlFor="gotifyUrl">URL</label>
                                     <input placeholder={GetGotify() != undefined ? GetGotify()?.endpoint : "URL"} id="gotifyUrl" type="text" />
-                                    <label htmlFor="gotifyAppToken"></label>
+                                    <label htmlFor="gotifyAppToken">AppToken</label>
                                     <input placeholder={GetGotify() != undefined ? GetGotify()?.appToken : "AppToken"} id="gotifyAppToken" type="text" />
-                                    <div className="section-buttons-container">
+                                    <div className="section-actions">
                                         <span>Test</span>
                                         <span>Reset</span>
                                         <span>Apply</span>
                                     </div>
                                 </div>
-                                <div className="section-item">
+                                <div className="section-item" connector-status={GetLunasea() === undefined ? "Not Configured" : "Configured"}>
                                     <span className="settings-section-title">
-                                        <img src='../media/connector-icons/lunasea.png' alt="Lunasea Logo" />
+                                        <img src='../media/connector-icons/lunasea.png' alt="Lunasea Logo"/>
                                         LunaSea
                                     </span>
-                                    <label htmlFor="lunaseaWebhook"></label>
+                                    <label htmlFor="lunaseaWebhook">Webhook id</label>
                                     <input placeholder={GetLunasea() != undefined ? GetLunasea()?.id : "device/:id or user/:id"} id="lunaseaWebhook" type="text"/>
-                                    <div className="section-buttons-container">
+                                    <div className="section-actions">
                                         <span>Test</span>
                                         <span>Reset</span>
                                         <span>Apply</span>
                                     </div>
                                 </div>
-                                <div className="section-item">
+                                <div className="section-item" connector-status={GetNtfy() === undefined ? "Not Configured" : "Configured"}>
                                     <span className="settings-section-title">
                                         <img src='../media/connector-icons/ntfy.svg' alt="ntfy Logo"/>
                                         Ntfy
                                     </span>
-                                    <label htmlFor="ntfyEndpoint"></label>
+                                    <label htmlFor="ntfyEndpoint">URL</label>
                                     <input placeholder={GetNtfy() != undefined ? GetNtfy()?.endpoint : "URL"} id="ntfyEndpoint" type="text"/>
                                     <label htmlFor="ntfyUsername">Username</label>
                                     <input placeholder={GetNtfy() != undefined ? "***" : "Username"} id="ntfyUsername" type="text"/>
@@ -238,7 +238,7 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                                     <input placeholder={GetNtfy() != undefined ? "***" : "Password"} id="ntfyPassword" type="password"/>
                                     <label htmlFor="ntfyTopic">Topic</label>
                                     <input placeholder={GetNtfy() != undefined ? GetNtfy()?.topic : "Topic"} id="ntfyTopic" type="text"/>
-                                    <div className="section-buttons-container">
+                                    <div className="section-actions">
                                         <span>Test</span>
                                         <span>Reset</span>
                                         <span>Apply</span>
