@@ -1,9 +1,9 @@
 import React, {EventHandler, MouseEventHandler, ReactElement, useEffect, useState} from 'react';
-import {Job} from './Job';
+import Job from './Job';
 import '../styles/monitorMangaList.css';
 import IJob from "./interfaces/IJob";
 import IManga, {CoverCard} from "./interfaces/IManga";
-import {Manga} from './Manga';
+import Manga from './Manga';
 import '../styles/MangaCoverCard.css'
 import Icon from '@mdi/react';
 import { mdiTrashCanOutline, mdiPlayBoxOutline } from '@mdi/js';

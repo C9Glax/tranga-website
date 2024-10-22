@@ -1,7 +1,7 @@
 import IManga from './interfaces/IManga';
 import { getData } from '../App';
 
-export class Manga
+export default class Manga
 {
     static async GetAllManga(apiUri: string): Promise<IManga[]> {
         //console.info("Getting all Manga");

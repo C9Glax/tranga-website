@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import '../styles/footer.css';
-import {Job} from './Job';
+import Job from './Job';
 import Icon from '@mdi/react';
 import { mdiRun, mdiCounter, mdiEyeCheck, mdiTrayFull } from '@mdi/js';
 import QueuePopUp from "./QueuePopUp";

@@ -2,7 +2,7 @@ import {deleteData, getData, postData} from '../App';
 import IJob from "./interfaces/IJob";
 import IProgressToken from "./interfaces/IProgressToken";
 
-export class Job
+export default class Job
 {
     static IntervalStringFromDate(date: Date) : string {
         return `${date.getDay()}.${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;

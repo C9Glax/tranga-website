@@ -1,12 +1,12 @@
 import IMangaConnector from "./IMangaConnector";
 import KeyValuePair from "./KeyValuePair";
-import {Manga} from "../Manga";
+import Manga from "../Manga";
 import React, {ReactElement} from "react";
 import Icon from '@mdi/react';
 import { mdiTagTextOutline, mdiAccountEdit } from '@mdi/js';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import IJob, {JobTypeFromNumber} from "./IJob";
-import {Job} from "../Job";
+import Job from "../Job";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 export default interface IManga{

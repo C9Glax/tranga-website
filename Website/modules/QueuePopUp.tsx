@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import IJob from "./interfaces/IJob";
 import '../styles/queuePopUp.css';
 import '../styles/popup.css';
-import {Job} from "./Job";
+import Job from "./Job";
 import IManga, {QueueItem} from "./interfaces/IManga";
-import {Manga} from "./Manga";
+import Manga from "./Manga";
 
 export default function QueuePopUp({connectedToBackend, children, apiUri} : {connectedToBackend: boolean, children: JSX.Element[], apiUri: string}) {
 
@@ -35,24 +35,24 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
 
     function UpdateMonitoringJobsList(){
         Job.GetStandbyJobs(apiUri)
-            .then((jobs) => {
+            .then((jobs:string[]) => {
                 if(jobs.length > 0)
                     return Job.GetJobs(apiUri, jobs);
                 return [];
             })
-            .then((jobs) => {
+            .then((jobs:IJob[]) => {
                 //console.debug("Removing Metadata Jobs");
                 //console.log(StandbyJobs)
                 setStandbyJobs(jobs.filter(job => job.jobType <= 1));
                 //console.log(StandbyJobs)
             });
         Job.GetRunningJobs(apiUri)
-            .then((jobs) => {
+            .then((jobs:string[]) => {
                 if(jobs.length > 0)
                     return Job.GetJobs(apiUri, jobs);
                 return [];
             })
-            .then((jobs) =>{
+            .then((jobs:IJob[]) =>{
                 //console.debug("Removing Metadata Jobs");
                 setRunningJobs(jobs.filter(job => job.jobType <= 1));
             });
