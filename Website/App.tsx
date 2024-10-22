@@ -49,7 +49,10 @@ export default function App(){
                     : <></>}
                 <MonitorJobsList updateList={updateMonitorList} apiUri={apiUri} onStartSearch={() => setShowSearch(true)} onJobsChanged={UpdateList} connectedToBackend={connected} />
             </>
-            : <h1>No connection to backend</h1>}
+            : <>
+                <h1>No connection to the Backend.</h1>
+                <h3>Check the Settings ApiUri.</h3>
+            </>}
         <Footer apiUri={apiUri} connectedToBackend={connected} />
     </div>)
 }

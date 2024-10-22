@@ -1,5 +1,5 @@
 import React, {KeyboardEventHandler, useEffect, useState} from 'react';
-import IFrontendSettings from "./interfaces/IFrontendSettings";
+import IFrontendSettings, {FrontendSettingsWith} from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import IBackendSettings from "./interfaces/IBackendSettings";
 import {getData} from "../App";
@@ -78,8 +78,9 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     }
 
     const SubmitApiUri : KeyboardEventHandler<HTMLInputElement> = (e) => {
+        const newSettings = FrontendSettingsWith(frontendSettings, undefined, e.currentTarget.value);
         if(e.key == "Enter")
-            changeSettings(settings);
+            changeSettings(newSettings);
     }
 
     return (
