@@ -23,7 +23,7 @@
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: lightgray;
-    width: calc(100% - 10px);
+    width: calc(100% - 30px);
     padding: 10px;
 }
 
@@ -80,7 +80,7 @@
     display: flex;
     justify-content: space-around;
     margin: 5px;
-    width: 100%;
+    width: calc(100% - 20px);
 }
 
 .section-actions > span {
