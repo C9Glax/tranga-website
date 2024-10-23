@@ -1,8 +1,8 @@
-import React, {KeyboardEventHandler, useEffect, useState} from 'react';
-import IFrontendSettings, {FrontendSettingsWith} from "./interfaces/IFrontendSettings";
+import React, {KeyboardEventHandler, MouseEventHandler, useEffect, useState} from 'react';
+import IFrontendSettings from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import IBackendSettings from "./interfaces/IBackendSettings";
-import {getData} from "../App";
+import {getData, postData} from "../App";
 import LibraryConnector, {Kavita, Komga} from "./LibraryConnector";
 import NotificationConnector, {Gotify, Lunasea, Ntfy} from "./NotificationConnector";
 import ILibraryConnector from "./interfaces/ILibraryConnector";
@@ -24,7 +24,7 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
         console.debug(`${showSettings ? "Showing" : "Not showing"} settings.`);
         if(!showSettings || !backendConnected)
             return;
-        GetSettings(apiUri).then(setBackendSettings).catch(console.error);
+        UpdateBackendSettings();
         LibraryConnector.GetLibraryConnectors(apiUri).then(setLibraryConnectors).catch(console.error);
         NotificationConnector.GetNotificationConnectors(apiUri).then(setNotificationConnectors).catch(console.error);
     }, [showSettings]);
@@ -43,6 +43,10 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                 return (ret);
             })
             .catch(Promise.reject);
+    }
+
+    function UpdateBackendSettings() {
+        GetSettings(apiUri).then(setBackendSettings).catch(console.error);
     }
 
     const GetKomga = () : ILibraryConnector | undefined =>
@@ -73,13 +77,36 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     const SubmitApiUri : KeyboardEventHandler<HTMLInputElement> = (e) => {
         if(e.currentTarget.value.length < 1)
             return;
-        const newSettings = FrontendSettingsWith(frontendSettings, undefined, e.currentTarget.value);
         if(e.key == "Enter"){
-            setFrontendSettings(newSettings);
+            setFrontendSettings({...frontendSettings, apiUri: e.currentTarget.value});
             RefreshInputs();
         }
     }
-1
+
+    const SubmitUserAgent: KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if(e.currentTarget.value.length < 1 || backendSettings === undefined)
+            return;
+        if(e.key == "Enter"){
+            //console.info(`Updating Useragent ${e.currentTarget.value}`);
+            postData(`${apiUri}/v2/Settings/UserAgent`, {value: e.currentTarget.value})
+                .then((json) => {
+                    //console.info(`Successfully updated Useragent ${e.currentTarget.value}`);
+                    UpdateBackendSettings();
+                    RefreshInputs();
+                })
+                .catch(() => alert("Failed to update Useragent."));
+        }
+    }
+    const ResetUserAgent: MouseEventHandler<HTMLSpanElement>  = () => {
+        postData(`${apiUri}/v2/Settings/UserAgent`, {value: undefined})
+            .then((json) => {
+                //console.info(`Successfully updated Useragent ${e.currentTarget.value}`);
+                UpdateBackendSettings();
+                RefreshInputs();
+            })
+            .catch(() => alert("Failed to update Useragent."));
+    }
+
     function RefreshInputs(){
         alert("Saved.");
         setShowSettings(false);
@@ -103,7 +130,8 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                                     <label htmlFor="settingApiUri">API URI:</label>
                                     <input placeholder={frontendSettings.apiUri} type="text" id="settingApiUri" onKeyDown={SubmitApiUri} />
                                     <label htmlFor="userAgent">User Agent:</label>
-                                    <input id="userAgent" type="text" placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"} />
+                                    <input id="userAgent" type="text" placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"} onKeyDown={SubmitUserAgent} />
+                                    <span id="resetUserAgent" onClick={ResetUserAgent}>Reset</span>
                                 </div>
                                 <div className="section-item">
                                     <span className="settings-section-title">Rate Limits</span>

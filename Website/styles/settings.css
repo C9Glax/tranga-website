@@ -83,10 +83,15 @@
     width: calc(100% - 20px);
 }
 
-.section-actions > span {
+.section-actions > span, #resetUserAgent {
     border: 1px solid lightgray;
     padding: 3px 5px 2px;
     width: 10ch;
     text-align: center;
     border-radius: 3px;
+}
+
+#resetUserAgent{
+    align-self: flex-end;
+    margin-top: 3px;
 }

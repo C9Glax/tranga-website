@@ -4,14 +4,14 @@ import Search from "./modules/Search";
 import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
-import IFrontendSettings, {FrontendSettingsWith} from "./modules/interfaces/IFrontendSettings";
+import IFrontendSettings, {LoadFrontendSettings} from "./modules/interfaces/IFrontendSettings";
 import {useCookies} from "react-cookie";
 
 export default function App(){
     const [, setCookie] = useCookies(['apiUri', 'jobInterval']);
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
-    const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(FrontendSettingsWith(undefined, undefined, undefined));
+    const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(LoadFrontendSettings());
     const [updateInterval, setUpdateInterval] = React.useState<number>();
     const [updateMonitorList, setUpdateMonitorList] = React.useState<Date>(new Date());
 
