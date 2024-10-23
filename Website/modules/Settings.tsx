@@ -1,4 +1,4 @@
-import React, {KeyboardEventHandler, MouseEventHandler, useEffect, useState} from 'react';
+import React, {ChangeEventHandler, KeyboardEventHandler, MouseEventHandler, useEffect, useState} from 'react';
 import IFrontendSettings from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import IBackendSettings from "./interfaces/IBackendSettings";
@@ -7,6 +7,8 @@ import LibraryConnector, {Kavita, Komga} from "./LibraryConnector";
 import NotificationConnector, {Gotify, Lunasea, Ntfy} from "./NotificationConnector";
 import ILibraryConnector from "./interfaces/ILibraryConnector";
 import INotificationConnector from "./interfaces/INotificationConnector";
+import Toggle from 'react-toggle';
+import '../styles/react-toggle.css';
 
 export default function Settings({backendConnected, apiUri, settings, changeSettings} : {backendConnected: boolean, apiUri: string, settings: IFrontendSettings, changeSettings: (settings: IFrontendSettings) => void}) {
     const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(settings);
@@ -97,14 +99,25 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                 .catch(() => alert("Failed to update Useragent."));
         }
     }
+
     const ResetUserAgent: MouseEventHandler<HTMLSpanElement>  = () => {
+        //console.info(`Resetting Useragent`);
         postData(`${apiUri}/v2/Settings/UserAgent`, {value: undefined})
             .then((json) => {
-                //console.info(`Successfully updated Useragent ${e.currentTarget.value}`);
+                //console.info(`Successfully reset Useragent`);
                 UpdateBackendSettings();
                 RefreshInputs();
             })
             .catch(() => alert("Failed to update Useragent."));
+    }
+
+    const SetAprilFoolsMode : ChangeEventHandler<HTMLInputElement> = (e) => {
+        //console.info(`Updating AprilFoolsMode ${e.currentTarget.value}`);
+        postData(`${apiUri}/v2/Settings/AprilFoolsMode`, {value: e.currentTarget.value == "on"})
+            .then((json) => {
+                //console.info(`Successfully updated AprilFoolsMode ${e.currentTarget.value}`);
+                UpdateBackendSettings();
+            })
     }
 
     function RefreshInputs(){
@@ -132,6 +145,10 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                                     <label htmlFor="userAgent">User Agent:</label>
                                     <input id="userAgent" type="text" placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"} onKeyDown={SubmitUserAgent} />
                                     <span id="resetUserAgent" onClick={ResetUserAgent}>Reset</span>
+                                    <label htmlFor="aprilFoolsMode">April Fools Mode</label>
+                                    <Toggle id="aprilFoolsMode"
+                                            defaultChecked={backendSettings?.aprilFoolsMode ?? false}
+                                            onChange={SetAprilFoolsMode} />
                                 </div>
                                 <div className="section-item">
                                     <span className="settings-section-title">Rate Limits</span>
