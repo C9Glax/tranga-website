@@ -3,6 +3,8 @@ import IFrontendSettings, {FrontendSettingsWith} from "./interfaces/IFrontendSet
 import '../styles/settings.css';
 import IBackendSettings from "./interfaces/IBackendSettings";
 import {getData} from "../App";
+import LibraryConnector, {Kavita, Komga} from "./LibraryConnector";
+import NotificationConnector, {Gotify, Lunasea, Ntfy} from "./NotificationConnector";
 import ILibraryConnector from "./interfaces/ILibraryConnector";
 import INotificationConnector from "./interfaces/INotificationConnector";
 
@@ -10,15 +12,21 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(settings);
     const [backendSettings, setBackendSettings] = useState<IBackendSettings>();
     const [showSettings, setShowSettings] = useState<boolean>(false);
-    const [libraryConnectors, setLibraryConnectors] = useState<ILibraryConnector[]>([]);
-    const [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
+    const [libraryConnectors, setLibraryConnectors] = useState<ILibraryConnector[]>();
+    const [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>();
+    const [komgaSettings, setKomgaSettings] = useState<{url: string, username: string, password: string}>({url: "", username: "", password: ""});
+    const [kavitaSettings, setKavitaSettings] = useState<{url: string, username: string, password: string}>({url: "", username: "", password: ""});
+    const [gotifySettings, setGotifySettings] = useState<{url: string, appToken: string}>({url: "", appToken: ""});
+    const [lunaseaSettings, setLunaseaSettings] = useState<{webhook: string}>({webhook: ""});
+    const [ntfySettings, setNtfySettings] = useState<{url: string, username: string, password: string, topic: string | undefined}>({url: "", username: "", password: "", topic: undefined});
 
     useEffect(() => {
+        console.debug(`${showSettings ? "Showing" : "Not showing"} settings.`);
         if(!showSettings || !backendConnected)
             return;
         GetSettings(apiUri).then(setBackendSettings).catch(console.error);
-        GetLibraryConnectors(apiUri).then(setLibraryConnectors).catch(console.error);
-        GetNotificationConnectors(apiUri).then(setNotificationConnectors).catch(console.error);
+        LibraryConnector.GetLibraryConnectors(apiUri).then(setLibraryConnectors).catch(console.error);
+        NotificationConnector.GetNotificationConnectors(apiUri).then(setNotificationConnectors).catch(console.error);
     }, [showSettings]);
 
     useEffect(() => {
@@ -37,49 +45,30 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
             .catch(Promise.reject);
     }
 
-    async function GetLibraryConnectors(apiUri: string) : Promise<ILibraryConnector[]> {
-        //console.info("Getting Library Connectors");
-        return getData(`${apiUri}/v2/LibraryConnector`)
-            .then((json) => {
-                //console.info("Got Library Connectors");
-                const ret = json as ILibraryConnector[];
-                //console.debug(ret);
-                return (ret);
-            })
-            .catch(Promise.reject);
-    }
+    const GetKomga = () : ILibraryConnector | undefined =>
+        libraryConnectors?.find(con => con.libraryType == 0);
 
-    async function GetNotificationConnectors(apiUri: string) : Promise<INotificationConnector[]> {
-        //console.info("Getting Notification Connectors");
-        return getData(`${apiUri}/v2/NotificationConnector`)
-            .then((json) => {
-                //console.info("Got Notification Connectors");
-                const ret = json as INotificationConnector[];
-                //console.debug(ret);
-                return (ret);
-            })
-            .catch(Promise.reject);
-    }
+    const KomgaConnected = () : boolean => GetKomga() != undefined;
 
-    function GetKomga() : ILibraryConnector | undefined  {
-        return libraryConnectors.find(con => con.libraryType == 0);
-    }
+    const GetKavita = () : ILibraryConnector | undefined =>
+        libraryConnectors?.find(con => con.libraryType == 1);
 
-    function GetKavita() : ILibraryConnector | undefined  {
-        return libraryConnectors.find(con => con.libraryType == 1);
-    }
+    const KavitaConnected = () : boolean => GetKavita() != undefined;
 
-    function GetGotify() : INotificationConnector | undefined {
-        return notificationConnectors.find(con => con.notificationConnectorType == 0);
-    }
+    const GetGotify = () : INotificationConnector | undefined =>
+        notificationConnectors?.find(con => con.notificationConnectorType == 0);
 
-    function GetLunasea() : INotificationConnector | undefined {
-        return notificationConnectors.find(con => con.notificationConnectorType == 1);
-    }
+    const GotifyConnected = () : boolean => GetGotify() != undefined;
 
-    function GetNtfy() : INotificationConnector | undefined {
-        return notificationConnectors.find(con => con.notificationConnectorType == 2);
-    }
+    const GetLunasea = () : INotificationConnector | undefined =>
+        notificationConnectors?.find(con => con.notificationConnectorType == 1);
+
+    const LunaseaConnected = () : boolean => GetLunasea() != undefined;
+
+    const GetNtfy = () : INotificationConnector | undefined =>
+        notificationConnectors?.find(con => con.notificationConnectorType == 2);
+
+    const NtfyConnected = () : boolean => GetNtfy() != undefined;
 
     const SubmitApiUri : KeyboardEventHandler<HTMLInputElement> = (e) => {
         if(e.currentTarget.value.length < 1)
@@ -87,13 +76,13 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
         const newSettings = FrontendSettingsWith(frontendSettings, undefined, e.currentTarget.value);
         if(e.key == "Enter"){
             setFrontendSettings(newSettings);
-            ClearInputs();
+            RefreshInputs();
         }
     }
-
-    function ClearInputs(){
+1
+    function RefreshInputs(){
+        alert("Saved.");
         setShowSettings(false);
-        setShowSettings(true);
     }
 
     return (
@@ -157,38 +146,38 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                         <div className="settings-section" >
                         LIBRARY CONNECTORS
                             <div className="settings-section-content">
-                                <div className="section-item" connector-status={GetKomga() === undefined ? "Not Configured" : "Configured"}>
+                                <div className="section-item" connector-status={KomgaConnected() ? "Configured" : "Not Configured"}>
                                     <span className="settings-section-title">
                                         <img src='../media/connector-icons/komga.svg' alt="Komga Logo"/>
                                         Komga
                                     </span>
                                     <label htmlFor="komgaUrl">URL</label>
-                                    <input placeholder={GetKomga() != undefined ? GetKomga()?.baseUrl : "URL"} id="komgaUrl" type="text" />
+                                    <input placeholder={GetKomga()?.baseUrl ?? "URL"} id="komgaUrl" type="text" onChange={(e) => setKomgaSettings(s => ({...s, url: e.target.value}))} />
                                     <label htmlFor="komgaUsername">Username</label>
-                                    <input placeholder={GetKomga() != undefined ? "***" : "Username"} id="komgaUsername" type="text" />
+                                    <input placeholder={KomgaConnected() ?  "***" : "Username"} id="komgaUsername" type="text" onChange={(e) => setKomgaSettings(s => ({...s, username: e.target.value}))} />
                                     <label htmlFor="komgaPassword">Password</label>
-                                    <input placeholder={GetKomga() != undefined ? "***" : "Password"} id="komgaPassword" type="password" />
+                                    <input placeholder={KomgaConnected() ? "***" : "Password"} id="komgaPassword" type="password" onChange={(e) => setKomgaSettings(s => ({...s, password: e.target.value}))} />
                                     <div className="section-actions">
-                                        <span>Test</span>
-                                        <span>Reset</span>
-                                        <span>Apply</span>
+                                        <span onClick={() => new Komga(komgaSettings).Test(apiUri).then(()=>alert("Test successful"))}>Test</span>
+                                        <span onClick={() => new Komga(komgaSettings).Reset(apiUri).then(RefreshInputs)}>Reset</span>
+                                        <span onClick={() => new Komga(komgaSettings).Create(apiUri).then(RefreshInputs)}>Apply</span>
                                     </div>
                                 </div>
-                                <div className="section-item" connector-status={GetKavita() === undefined ? "Not Configured" : "Configured"}>
+                                <div className="section-item" connector-status={KavitaConnected() ? "Configured" : "Not Configured" }>
                                     <span className="settings-section-title">
                                         <img src='../media/connector-icons/kavita.png' alt="Kavita Logo"/>
                                         Kavita
                                     </span>
                                     <label htmlFor="kavitaUrl">URL</label>
-                                    <input placeholder={GetKavita() != undefined ? GetKavita()?.baseUrl : "URL"} id="kavitaUrl" type="text" />
+                                    <input placeholder={GetKavita()?.baseUrl ?? "URL"} id="kavitaUrl" type="text" onChange={(e) => setKavitaSettings(s => ({...s, url: e.target.value}))} />
                                     <label htmlFor="kavitaUsername">Username</label>
-                                    <input placeholder={GetKavita() != undefined ? "***" : "Username"} id="kavitaUsername" type="text" />
+                                    <input placeholder={KavitaConnected() ? "***" : "Username"} id="kavitaUsername" type="text" onChange={(e) => setKavitaSettings(s => ({...s, username: e.target.value}))} />
                                     <label htmlFor="kavitaPassword">Password</label>
-                                    <input placeholder={GetKavita() != undefined ? "***" : "Password"} id="kavitaPassword" type="password"/>
+                                    <input placeholder={KavitaConnected() ? "***" : "Password"} id="kavitaPassword" type="password" onChange={(e) => setKavitaSettings(s => ({...s, password: e.target.value}))} />
                                     <div className="section-actions">
-                                        <span>Test</span>
-                                        <span>Reset</span>
-                                        <span>Apply</span>
+                                        <span onClick={() => new Kavita(kavitaSettings).Test(apiUri).then(()=>alert("Test successful"))}>Test</span>
+                                        <span onClick={() => new Kavita(kavitaSettings).Reset(apiUri).then(RefreshInputs)}>Reset</span>
+                                        <span onClick={() => new Kavita(kavitaSettings).Create(apiUri).then(RefreshInputs)}>Apply</span>
                                     </div>
                                 </div>
                             </div>
@@ -197,51 +186,53 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                         <div className="settings-section">
                             NOTIFICATION CONNECTORS
                             <div className="settings-section-content">
-                                <div className="section-item" connector-status={GetGotify() === undefined ? "Not Configured" : "Configured"}>
+                            <div className="section-item" connector-status={GotifyConnected() ? "Configured" : "Not Configured"}>
                                     <span className="settings-section-title">
                                         <img src='../media/connector-icons/gotify-logo.png' alt="Gotify Logo"/>
                                         Gotify
                                     </span>
                                     <label htmlFor="gotifyUrl">URL</label>
-                                    <input placeholder={GetGotify() != undefined ? GetGotify()?.endpoint : "URL"} id="gotifyUrl" type="text" />
+                                    <input placeholder={GetGotify()?.endpoint ?? "URL"} id="gotifyUrl" type="text" onChange={(e) => setGotifySettings(s => ({...s, url: e.target.value}))} />
                                     <label htmlFor="gotifyAppToken">AppToken</label>
-                                    <input placeholder={GetGotify() != undefined ? GetGotify()?.appToken : "AppToken"} id="gotifyAppToken" type="text" />
+                                    <input placeholder={GotifyConnected() ? "***" : "AppToken"} id="gotifyAppToken" type="text" onChange={(e) => setGotifySettings(s => ({...s, appToken: e.target.value}))} />
                                     <div className="section-actions">
-                                        <span>Test</span>
-                                        <span>Reset</span>
-                                        <span>Apply</span>
+                                        <span onClick={() => new Gotify(gotifySettings).Test(apiUri).then(()=>alert("Test successful"))}>Test</span>
+                                        <span onClick={() => new Gotify(gotifySettings).Reset(apiUri).then(RefreshInputs)}>Reset</span>
+                                        <span onClick={() => new Gotify(gotifySettings).Create(apiUri).then(RefreshInputs)}>Apply</span>
                                     </div>
-                                </div>
-                                <div className="section-item" connector-status={GetLunasea() === undefined ? "Not Configured" : "Configured"}>
+                            </div>
+                                <div className="section-item"
+                                     connector-status={LunaseaConnected() ? "Configured" : "Not Configured"}>
                                     <span className="settings-section-title">
                                         <img src='../media/connector-icons/lunasea.png' alt="Lunasea Logo"/>
                                         LunaSea
                                     </span>
                                     <label htmlFor="lunaseaWebhook">Webhook id</label>
-                                    <input placeholder={GetLunasea() != undefined ? GetLunasea()?.id : "device/:id or user/:id"} id="lunaseaWebhook" type="text"/>
+                                    <input placeholder={GetLunasea() != undefined ? "***" : "device/:id or user/:id"} id="lunaseaWebhook" type="text" onChange={(e) => setLunaseaSettings(s => ({...s, webhook: e.target.value}))} />
                                     <div className="section-actions">
-                                        <span>Test</span>
-                                        <span>Reset</span>
-                                        <span>Apply</span>
+                                        <span onClick={() => new Lunasea(lunaseaSettings).Test(apiUri).then(()=>alert("Test successful"))}>Test</span>
+                                        <span onClick={() => new Lunasea(lunaseaSettings).Reset(apiUri).then(RefreshInputs)}>Reset</span>
+                                        <span onClick={() => new Lunasea(lunaseaSettings).Create(apiUri).then(RefreshInputs)}>Apply</span>
                                     </div>
                                 </div>
-                                <div className="section-item" connector-status={GetNtfy() === undefined ? "Not Configured" : "Configured"}>
+                                <div className="section-item"
+                                     connector-status={NtfyConnected() ? "Configured" : "Not Configured"}>
                                     <span className="settings-section-title">
                                         <img src='../media/connector-icons/ntfy.svg' alt="ntfy Logo"/>
                                         Ntfy
                                     </span>
                                     <label htmlFor="ntfyEndpoint">URL</label>
-                                    <input placeholder={GetNtfy() != undefined ? GetNtfy()?.endpoint : "URL"} id="ntfyEndpoint" type="text"/>
+                                    <input placeholder={GetNtfy()?.endpoint ?? "URL"} id="ntfyEndpoint" type="text" onChange={(e) => setNtfySettings(s => ({...s, url: e.target.value}))} />
                                     <label htmlFor="ntfyUsername">Username</label>
-                                    <input placeholder={GetNtfy() != undefined ? "***" : "Username"} id="ntfyUsername" type="text"/>
+                                    <input placeholder={NtfyConnected() ? "***" : "Username"} id="ntfyUsername" type="text" onChange={(e) => setNtfySettings(s => ({...s, username: e.target.value}))} />
                                     <label htmlFor="ntfyPassword">Password</label>
-                                    <input placeholder={GetNtfy() != undefined ? "***" : "Password"} id="ntfyPassword" type="password"/>
+                                    <input placeholder={NtfyConnected() ? "***" : "Password"} id="ntfyPassword" type="password" onChange={(e) => setNtfySettings(s => ({...s, password: e.target.value}))} />
                                     <label htmlFor="ntfyTopic">Topic</label>
-                                    <input placeholder={GetNtfy() != undefined ? GetNtfy()?.topic : "Topic"} id="ntfyTopic" type="text"/>
+                                    <input placeholder={GetNtfy()?.topic ?? "Topic"} id="ntfyTopic" type="text" onChange={(e) => setNtfySettings(s => ({...s, topic: e.target.value}))} />
                                     <div className="section-actions">
-                                        <span>Test</span>
-                                        <span>Reset</span>
-                                        <span>Apply</span>
+                                        <span onClick={() => new Ntfy(ntfySettings).Test(apiUri).then(()=>alert("Test successful"))}>Test</span>
+                                        <span onClick={() => new Ntfy(ntfySettings).Reset(apiUri).then(RefreshInputs)}>Reset</span>
+                                        <span onClick={() => new Ntfy(ntfySettings).Create(apiUri).then(RefreshInputs)}>Apply</span>
                                     </div>
                                 </div>
                             </div>
