@@ -5,7 +5,8 @@ import IProgressToken from "./interfaces/IProgressToken";
 export default class Job
 {
     static IntervalStringFromDate(date: Date) : string {
-        return `${date.getDay()}.${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        let x = new Date(date);
+        return `${x.getDay()}.${x.getHours()}:${x.getMinutes()}:${x.getSeconds()}`;
     }
 
     static async GetAllJobs(apiUri: string): Promise<string[]> {
