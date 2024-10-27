@@ -120,6 +120,24 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
             })
     }
 
+    const SetCompressImages : ChangeEventHandler<HTMLInputElement> = (e) => {
+        console.info(`Updating ImageCompression ${e.target.checked}`);
+        postData(`${apiUri}/v2/Settings/CompressImages`, {value: e.target.checked})
+            .then((json) => {
+                //console.info(`Successfully updated ImageCompression ${e.target.checked}`);
+                UpdateBackendSettings();
+            })
+    }
+
+    const SetBWImages : ChangeEventHandler<HTMLInputElement> = (e) => {
+        console.info(`Updating B/W Images ${e.target.checked}`);
+        postData(`${apiUri}/v2/Settings/BWImages`, {value: e.target.checked})
+            .then((json) => {
+                //console.info(`Successfully updated B/W Images ${e.target.checked}`);
+                UpdateBackendSettings();
+            })
+    }
+
     function RefreshInputs(){
         alert("Saved.");
         setShowSettings(false);
@@ -141,14 +159,25 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                                 <div className="section-item">
                                     <span className="settings-section-title">API Settings</span>
                                     <label htmlFor="settingApiUri">API URI:</label>
-                                    <input placeholder={frontendSettings.apiUri} type="text" id="settingApiUri" onKeyDown={SubmitApiUri} />
+                                    <input placeholder={frontendSettings.apiUri} type="text" id="settingApiUri"
+                                           onKeyDown={SubmitApiUri}/>
                                     <label htmlFor="userAgent">User Agent:</label>
-                                    <input id="userAgent" type="text" placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"} onKeyDown={SubmitUserAgent} />
+                                    <input id="userAgent" type="text"
+                                           placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"}
+                                           onKeyDown={SubmitUserAgent}/>
                                     <span id="resetUserAgent" onClick={ResetUserAgent}>Reset</span>
                                     <label htmlFor="aprilFoolsMode">April Fools Mode</label>
                                     <Toggle id="aprilFoolsMode"
-                                            defaultChecked={backendSettings?.aprilFoolsMode ?? false}
-                                            onChange={SetAprilFoolsMode} />
+                                            checked={backendSettings?.aprilFoolsMode ?? false}
+                                            onChange={SetAprilFoolsMode}/>
+                                    <label htmlFor="compressImages">Image Compression</label>
+                                    <Toggle id="compressImages"
+                                            checked={backendSettings?.compressImages ?? false}
+                                            onChange={SetCompressImages}/>
+                                    <label htmlFor="bwImages">B/W Images</label>
+                                    <Toggle id="bwImages"
+                                            checked={backendSettings?.bwImages ?? false}
+                                            onChange={SetBWImages}/>
                                 </div>
                                 <div className="section-item">
                                     <span className="settings-section-title">Rate Limits</span>

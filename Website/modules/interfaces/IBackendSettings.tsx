@@ -7,6 +7,8 @@ export default interface IBackendSettings {
     "bufferNotifications": boolean;
     "version": number;
     "aprilFoolsMode": boolean;
+    "compressImages": boolean;
+    "bwImages": boolean;
     "requestLimits": {
         "MangaInfo": number;
         "MangaDexFeed": number;
