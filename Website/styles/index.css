@@ -22,3 +22,21 @@ body{
     overflow-x: hidden;
     color: var(--primary-color);
 }
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip:hover:before {
+    display: block;
+    content: attr(data-tooltip, "tooltip");
+    background-color: var(--second-background-color);
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 6px;
+    bottom: 1em;
+    max-width: 90%;
+    position: absolute;
+    padding: 3px 7px 1px;
+    z-index: 999;
+}

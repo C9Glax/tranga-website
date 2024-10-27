@@ -158,19 +158,19 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                             <div className="settings-section-content">
                                 <div className="section-item">
                                     <span className="settings-section-title">API Settings</span>
-                                    <label htmlFor="settingApiUri">API URI:</label>
+                                    <label className="tooltip" data-tooltip="Set the URI of the Backend. Include https:// and if necessary port." htmlFor="settingApiUri">API URI:</label>
                                     <input placeholder={frontendSettings.apiUri} type="text" id="settingApiUri"
                                            onKeyDown={SubmitApiUri}/>
-                                    <label htmlFor="userAgent">User Agent:</label>
+                                    <label htmlFor="userAgent" className="tooltip" data-tooltip="Set a custom User-Agent. This will allow more frequent requests to sites.">User Agent:</label>
                                     <input id="userAgent" type="text"
                                            placeholder={backendSettings != undefined ? backendSettings.userAgent : "UserAgent"}
                                            onKeyDown={SubmitUserAgent}/>
                                     <span id="resetUserAgent" onClick={ResetUserAgent}>Reset</span>
-                                    <label htmlFor="aprilFoolsMode">April Fools Mode</label>
+                                    <label htmlFor="aprilFoolsMode" className="tooltip" data-tooltip="Disable all downloads on April 1st">April Fools Mode</label>
                                     <Toggle id="aprilFoolsMode"
                                             checked={backendSettings?.aprilFoolsMode ?? false}
                                             onChange={SetAprilFoolsMode}/>
-                                    <label htmlFor="compression">Image Compression</label>
+                                    <label htmlFor="compression" className="tooltip" data-tooltip="JPEG Compression Quality">Image Compression</label>
                                     <input type="range" min="1" max="100" defaultValue={backendSettings?.compression ?? 50} className="slider" id="compression" onMouseUp={SetCompressImages}/>
                                     <label htmlFor="bwImages">B/W Images</label>
                                     <Toggle id="bwImages"

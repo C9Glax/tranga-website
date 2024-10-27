@@ -50,6 +50,10 @@
     padding: 5px 5px 35px;
 }
 
+.section-item > * {
+    margin: 2px 0;
+}
+
 .section-item[connector-status="Not Configured"]{
     border-color: var(--primary-color);
 }
