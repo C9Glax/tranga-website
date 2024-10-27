@@ -33,11 +33,15 @@ export default function Footer({connectedToBackend, apiUri} : {connectedToBacken
 
     return (
         <footer>
-            <div className="statusBadge"><Icon path={mdiEyeCheck} size={1}/> <span>{MonitoringJobsCount}</span></div>
+            <div className="statusBadge" ><Icon path={mdiEyeCheck} size={1}/> <span>{MonitoringJobsCount}</span></div>
+            <span>+</span>
             <QueuePopUp connectedToBackend={connectedToBackend} apiUri={apiUri}>
-                <div className="statusBadge hoverHand"><Icon path={mdiTrayFull} size={1}/> <span>{StandbyJobsCount}</span></div>
-                <div className="statusBadge hoverHand"><Icon path={mdiRun} size={1}/> <span>{RunningJobsCount}</span></div>
+                <div className="statusBadge hoverHand"><Icon path={mdiRun} size={1}/> <span>{RunningJobsCount}</span>
+                </div>
+                <span>+</span>
+                <div className="statusBadge hoverHand"><Icon path={mdiTrayFull} size={1}/><span>{StandbyJobsCount}</span></div>
             </QueuePopUp>
+            <span>=</span>
             <div className="statusBadge"><Icon path={mdiCounter} size={1}/> <span>{AllJobsCount}</span></div>
             <p id="madeWith">Made with Blåhaj 🦈</p>
         </footer>)
