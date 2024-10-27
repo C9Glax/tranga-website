@@ -76,9 +76,7 @@ The `docker-compose` also includes [Tranga](https://github.com/C9Glax/tranga) as
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] ❓
-
-See the [open issues](https://github.com/C9Glax/tranga-website/issues) for a full list of proposed features (and known issues).
+- [ ] [React + Typescript](https://github.com/C9Glax/tranga-website/pull/130) Rewrite for [Server-V2 API](https://github.com/C9Glax/tranga/pull/167)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
