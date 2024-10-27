@@ -120,17 +120,17 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
             })
     }
 
-    const SetCompressImages : ChangeEventHandler<HTMLInputElement> = (e) => {
-        console.info(`Updating ImageCompression ${e.target.checked}`);
-        postData(`${apiUri}/v2/Settings/CompressImages`, {value: e.target.checked})
+    const SetCompressImages : MouseEventHandler<HTMLInputElement> = (e) => {
+        //console.info(`Updating ImageCompression ${e.currentTarget.value}`);
+        postData(`${apiUri}/v2/Settings/CompressImages`, {value: e.currentTarget.value})
             .then((json) => {
-                //console.info(`Successfully updated ImageCompression ${e.target.checked}`);
+                //console.info(`Successfully updated ImageCompression ${e.currentTarget.value}`);
                 UpdateBackendSettings();
             })
     }
 
     const SetBWImages : ChangeEventHandler<HTMLInputElement> = (e) => {
-        console.info(`Updating B/W Images ${e.target.checked}`);
+        //console.info(`Updating B/W Images ${e.target.checked}`);
         postData(`${apiUri}/v2/Settings/BWImages`, {value: e.target.checked})
             .then((json) => {
                 //console.info(`Successfully updated B/W Images ${e.target.checked}`);
@@ -170,17 +170,15 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
                                     <Toggle id="aprilFoolsMode"
                                             checked={backendSettings?.aprilFoolsMode ?? false}
                                             onChange={SetAprilFoolsMode}/>
-                                    <label htmlFor="compressImages">Image Compression</label>
-                                    <Toggle id="compressImages"
-                                            checked={backendSettings?.compressImages ?? false}
-                                            onChange={SetCompressImages}/>
+                                    <label htmlFor="compression">Image Compression</label>
+                                    <input type="range" min="1" max="100" defaultValue={backendSettings?.compression ?? 50} className="slider" id="compression" onMouseUp={SetCompressImages}/>
                                     <label htmlFor="bwImages">B/W Images</label>
                                     <Toggle id="bwImages"
                                             checked={backendSettings?.bwImages ?? false}
                                             onChange={SetBWImages}/>
                                 </div>
                                 <div className="section-item">
-                                    <span className="settings-section-title">Rate Limits</span>
+                                <span className="settings-section-title">Rate Limits</span>
                                     <label htmlFor="DefaultRL">Default:</label>
                                     <input id="defaultRL" type="text" placeholder={backendSettings != undefined ? backendSettings.requestLimits.Default.toString() : "-1"} />
                                     <label htmlFor="CoverRL">Manga Covers:</label>
