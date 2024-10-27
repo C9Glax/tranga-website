@@ -112,8 +112,8 @@ export default function Settings({backendConnected, apiUri, settings, changeSett
     }
 
     const SetAprilFoolsMode : ChangeEventHandler<HTMLInputElement> = (e) => {
-        //console.info(`Updating AprilFoolsMode ${e.currentTarget.value}`);
-        postData(`${apiUri}/v2/Settings/AprilFoolsMode`, {value: e.currentTarget.value == "on"})
+        //console.info(`Updating AprilFoolsMode ${e.target.checked}`);
+        postData(`${apiUri}/v2/Settings/AprilFoolsMode`, {value: e.target.checked})
             .then((json) => {
                 //console.info(`Successfully updated AprilFoolsMode ${e.currentTarget.value}`);
                 UpdateBackendSettings();
