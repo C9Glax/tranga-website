@@ -43,7 +43,7 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
             .then((jobs:IJob[]) => {
                 //console.debug("Removing Metadata Jobs");
                 //console.log(StandbyJobs)
-                setStandbyJobs(jobs.filter(job => job.jobType <= 1));
+                setStandbyJobs(jobs.filter(job => job.jobType <= 2));
                 //console.log(StandbyJobs)
             });
         Job.GetRunningJobs(apiUri)
@@ -54,7 +54,7 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
             })
             .then((jobs:IJob[]) =>{
                 //console.debug("Removing Metadata Jobs");
-                setRunningJobs(jobs.filter(job => job.jobType <= 1));
+                setRunningJobs(jobs.filter(job => job.jobType <= 2));
             });
     }
 
