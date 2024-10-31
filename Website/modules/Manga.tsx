@@ -49,6 +49,6 @@ export default class Manga
 
     static GetMangaCoverUrl(apiUri: string, internalId: string, ref: HTMLElement): string {
         //console.debug(`Getting Manga Cover-Url ${internalId}`);
-        return `${apiUri}/v2/Manga/${internalId}/Cover?dimensions=${ref.clientWidth}x${ref.clientHeight}`;
+        return `${apiUri}/v2/Manga/${internalId}/Cover?dimensions=${ref.clientWidth*1.5}x${ref.clientHeight*1.5}`;
     }
 }
