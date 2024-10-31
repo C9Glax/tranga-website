@@ -1,7 +1,7 @@
 import IMangaConnector from "./IMangaConnector";
 import KeyValuePair from "./KeyValuePair";
 import Manga from "../Manga";
-import React, {ReactElement} from "react";
+import React, {EventHandler, ReactElement, ReactEventHandler} from "react";
 import Icon from '@mdi/react';
 import { mdiTagTextOutline, mdiAccountEdit } from '@mdi/js';
 import MarkdownPreview from '@uiw/react-markdown-preview';
@@ -42,32 +42,48 @@ export function ReleaseStatusFromNumber(n: number): string {
     return "";
 }
 
+
+
 export function CoverCard(apiUri: string, manga: IManga) : ReactElement {
+    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
+        if(e.currentTarget.src != Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget))
+            e.currentTarget.src = Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget);
+    }
+
     return(
-    <div className="Manga" key={manga.internalId}>
-        <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover"></img>
-        <div>
-            <p className="pill connector-name">{manga.mangaConnector.name}</p>
-            <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
-            <p className="Manga-name">{manga.sortName}</p>
-        </div>
-    </div>);
+        <div className="Manga" key={manga.internalId}>
+            <img src="../../media/blahaj.png" onLoad={MangaCover} alt="Manga Cover"></img>
+            <div>
+                <p className="pill connector-name">{manga.mangaConnector.name}</p>
+                <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
+                <p className="Manga-name">{manga.sortName}</p>
+            </div>
+        </div>);
 }
 
 export function SearchResult(apiUri: string, manga: IManga, interval: Date, onJobsChanged: (internalId: string) => void) : ReactElement {
+    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
+        if(e.currentTarget.src != Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget))
+            e.currentTarget.src = Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget);
+    }
+
     return(
         <div className="SearchResult" key={manga.internalId}>
-            <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover"></img>
+            <img src="../../media/blahaj.png" onLoad={MangaCover} alt="Manga Cover"></img>
             <p className="connector-name">{manga.mangaConnector.name}</p>
             <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
-            <p className="Manga-name"><a href={manga.websiteUrl}>{manga.sortName}<img src="../../media/link.svg" alt=""/></a></p>
+            <p className="Manga-name"><a href={manga.websiteUrl}>{manga.sortName}<img src="../../media/link.svg"
+                                                                                      alt=""/></a></p>
             <div className="Manga-tags">
-                {manga.authors.map(author => <p className="Manga-author" key={manga.internalId + "-author-" + author}> <Icon path={mdiAccountEdit} size={0.5} /> {author}</p>)}
-                {manga.tags.map(tag => <p className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon path={mdiTagTextOutline} size={0.5} /> {tag}</p>)}
+                {manga.authors.map(author => <p className="Manga-author" key={manga.internalId + "-author-" + author}>
+                    <Icon path={mdiAccountEdit} size={0.5}/> {author}</p>)}
+                {manga.tags.map(tag => <p className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon
+                    path={mdiTagTextOutline} size={0.5}/> {tag}</p>)}
             </div>
-            <MarkdownPreview className="Manga-description" source={manga.description} style={{ backgroundColor: "transparent", color: "black" }} />
+            <MarkdownPreview className="Manga-description" source={manga.description}
+                             style={{backgroundColor: "transparent", color: "black"}}/>
             <button className="Manga-AddButton" onClick={() => {
-                Job.CreateJobDateInterval(apiUri, manga.internalId, "MonitorManga", interval).then(()=> onJobsChanged(manga.internalId));
+                Job.CreateJobDateInterval(apiUri, manga.internalId, "MonitorManga", interval).then(() => onJobsChanged(manga.internalId));
             }}>Monitor
             </button>
         </div>);
@@ -82,19 +98,30 @@ function ToPercentString(n: number): string {
 }
 
 export function QueueItem(apiUri: string, manga: IManga, job: IJob, triggerUpdate: () => void){
+    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
+        if(e.currentTarget.src != Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget))
+            e.currentTarget.src = Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget);
+    }
+
     return (
         <div className="QueueJob" key={"QueueJob-" + job.id}>
-            <img src={Manga.GetMangaCoverUrl(apiUri, manga.internalId)} alt="Manga Cover"/>
+            <img src="../../media/blahaj.png" onLoad={MangaCover} alt="Manga Cover"></img>
             <p className="QueueJob-Name">{manga.sortName}</p>
             <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
             <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>
             {job.progressToken.state === 0
-            ? <ProgressBar labelColor={"#000"} height={"10px"} labelAlignment={"outside"} className="QueueJob-Progressbar" completed={job.progressToken.progress} maxCompleted={1} customLabel={ProgressbarStr(job)}/>
-            : <div className="QueueJob-Progressbar"></div>}
+                ? <ProgressBar labelColor={"#000"} height={"10px"} labelAlignment={"outside"}
+                               className="QueueJob-Progressbar" completed={job.progressToken.progress} maxCompleted={1}
+                               customLabel={ProgressbarStr(job)}/>
+                : <div className="QueueJob-Progressbar"></div>}
             <div className="QueueJob-actions">
-                <button className="QueueJob-Cancel" onClick={() => Job.CancelJob(apiUri, job.id).then(triggerUpdate)}>Cancel</button>
+                <button className="QueueJob-Cancel"
+                        onClick={() => Job.CancelJob(apiUri, job.id).then(triggerUpdate)}>Cancel
+                </button>
                 {job.parentJobId != null
-                    ? <button className="QueueJob-Cancel" onClick={() => Job.CancelJob(apiUri, job.parentJobId!).then(triggerUpdate)}>Cancel all related</button>
+                    ? <button className="QueueJob-Cancel"
+                              onClick={() => Job.CancelJob(apiUri, job.parentJobId!).then(triggerUpdate)}>Cancel all
+                        related</button>
                     : <></>
                 }
             </div>

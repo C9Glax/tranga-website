@@ -47,8 +47,8 @@ export default class Manga
             });
     }
 
-    static GetMangaCoverUrl(apiUri: string, internalId: string): string {
+    static GetMangaCoverUrl(apiUri: string, internalId: string, ref: HTMLElement): string {
         //console.debug(`Getting Manga Cover-Url ${internalId}`);
-        return `${apiUri}/v2/Manga/${internalId}/Cover`;
+        return `${apiUri}/v2/Manga/${internalId}/Cover?dimensions=${ref.clientWidth}x${ref.clientHeight}`;
     }
 }
