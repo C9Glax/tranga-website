@@ -40,7 +40,6 @@ const imageRL = document.querySelector("#imageRL");
 const infoRL = document.querySelector("#infoRL");
 
 //MangaDex Rate Limits
-const mDexAuthorRL = document.querySelector("#mDexAuthorRL");
 const mDexFeedRL = document.querySelector("#mDexFeedRL");
 const mDexImageRL = document.querySelector("#mDexImageRL");
 
@@ -158,7 +157,6 @@ function Setup(){
       coverRL.placeholder = json.MangaCover + ' Requests/Minute';
       imageRL.placeholder = json.MangaImage + ' Requests/Minute';
       infoRL.placeholder = json.MangaInfo + ' Requests/Minute';
-      mDexAuthorRL.placeholder = json.MangaDexAuthor + ' Requests/Minute';
       mDexFeedRL.placeholder = json.MangaDexFeed + ' Requests/Minute';
       mDexImageRL.placeholder = json.MangaDexImage + ' Requests/Minute';
     });
@@ -176,7 +174,7 @@ function Setup(){
     }
     setInterval(() => {
       UpdateJobs();
-    }, 1000);
+    }, 5000);
   });
   //Clear the previous values if any exist.
   searchBox.value = "";
@@ -530,7 +528,6 @@ defaultRL.addEventListener("keypress", (event) => { if(event.key === "Enter") Up
 coverRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 imageRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 infoRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
-mDexAuthorRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 mDexFeedRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 mDexImageRL.addEventListener("keypress", (event) => { if(event.key === "Enter") UpdateSettings();}); 
 
@@ -558,14 +555,13 @@ function OpenSettings(){
   coverRL.value = "";
   imageRL.value = "";
   infoRL.value = "";
-  mDexAuthorRL.value = "";
   mDexFeedRL.value = "";
   mDexImageRL.value = "";
   
   GetSettings().then((json) => {
     //console.log(json);
-    settingApiUri.value = apiUri;
-    settingUserAgent.value = json.userAgent;
+    settingApiUri.placeholder = apiUri;
+    settingUserAgent.placeholder = json.userAgent;
     //console.log(json.styleSheet);
   });
   GetRateLimits().then((json) => {
@@ -573,7 +569,6 @@ function OpenSettings(){
     coverRL.placeholder = json.MangaCover + ' Requests/Minute';
     imageRL.placeholder = json.MangaImage + ' Requests/Minute';
     infoRL.placeholder = json.MangaInfo + ' Requests/Minute';
-    mDexAuthorRL.placeholder = json.MangaDexAuthor + ' Requests/Minute';
     mDexFeedRL.placeholder = json.MangaDexFeed + ' Requests/Minute';
     mDexImageRL.placeholder = json.MangaDexImage + ' Requests/Minute';
   });
@@ -583,15 +578,15 @@ function OpenSettings(){
       switch(libraryConnectorTypes[connector.libraryType]){
         case "Kavita":
           settingKavitaConfigured.setAttribute("configuration", "Active");
-          settingKavitaUrl.value = connector.baseUrl;
-          settingKavitaUser.value = "***";
-          settingKavitaPass.value = "***";
+          settingKavitaUrl.placeholder = connector.baseUrl;
+          settingKavitaUser.placeholder = "***";
+          settingKavitaPass.placeholder = "***";
           break;
         case "Komga":
           settingKomgaConfigured.setAttribute("configuration", "Active");
-          settingKomgaUrl.value = connector.baseUrl;
-          settingKomgaUser.value = "***";
-          settingKomgaPass.value = "***";
+          settingKomgaUrl.placeholder = connector.baseUrl;
+          settingKomgaUser.placeholder = "***";
+          settingKomgaPass.placeholder = "***";
           break;
         default:
           console.log("Unknown type");
@@ -604,18 +599,18 @@ function OpenSettings(){
     json.forEach(connector => {
       switch(notificationConnectorTypes[connector.notificationConnectorType]){
         case "Gotify":
-          settingGotifyUrl.value = connector.endpoint;
-          settingGotifyAppToken.value = "***";
+          settingGotifyUrl.placeholder = connector.endpoint;
+          settingGotifyAppToken.placeholder = "***";
           settingGotifyConfigured.setAttribute("configuration", "Active");
           break;
         case "LunaSea":
           settingLunaseaConfigured.setAttribute("configuration", "Active");
-          settingLunaseaWebhook.value = connector.id;
+          settingLunaseaWebhook.placeholder = connector.id;
           break;
         case "Ntfy":
           settingNtfyConfigured.setAttribute("configuration", "Active");
-          settingNtfyEndpoint.value = connector.endpoint;
-          settingNtfyAuth.value = "***";
+          settingNtfyEndpoint.placeholder = connector.endpoint;
+          settingNtfyAuth.placeholder = "***";
           break;
         default:
           console.log("Unknown type");
@@ -714,10 +709,6 @@ function UpdateSettings(){
 
   if (infoRL.value != "") {
     UpdateRateLimit(6, infoRL.value);
-  }
-
-  if (mDexAuthorRL.value != "") {
-    UpdateRateLimit(5, mDexAuthorRL.value);
   }
 
   if (mDexFeedRL.value != "") {
