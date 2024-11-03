@@ -1,9 +1,7 @@
-﻿let apiUri = `${window.location.protocol}//${window.location.host}/api`
-
-// if(getCookie("apiUri") != ""){
-//     apiUri = getCookie("apiUri");
-// }
-// setCookie("apiUri", apiUri);
+﻿if(getCookie("apiUri") != ""){
+    apiUri = getCookie("apiUri");
+}
+setCookie("apiUri", apiUri);
 
 function setCookie(cname, cvalue) {
   const d = new Date();
