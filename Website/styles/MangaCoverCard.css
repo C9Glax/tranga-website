@@ -1,24 +1,3 @@
-#addPublication {
-    cursor: pointer;
-    background-color: var(--secondary-color);
-    width: 180px;
-    height: 300px;
-    border-radius: 5px;
-    margin: 10px 10px;
-    padding: 15px 20px;
-    position: relative;
-}
-
-#addPublication p{
-    width: 100%;
-    text-align: center;
-    font-size: 150pt;
-    vertical-align: middle;
-    line-height: 300px;
-    margin: 0;
-    color: var(--accent-color);
-}
-
 .pill {
     flex-grow: 0;
     height: 14pt;
@@ -27,64 +6,40 @@
     background-color: var(--primary-color);
     padding: 2pt 17px;
     color: black;
+    width: fit-content;
+    margin: 10px 0;
 }
 
-publication{
+.Manga{
     cursor: pointer;
     background-color: var(--secondary-color);
     width: 180px;
     height: 300px;
     border-radius: 5px;
     margin: 10px 10px;
-    padding: 15px 19px;
+    padding: 14px 20px;
     position: relative;
     flex-shrink: 0;
 }
 
-publication::after{
+.Manga::after{
     content: '';
     position: absolute;
     left: 0; top: 0;
     border-radius: 5px;
     width: 100%; height: 100%;
     background: linear-gradient(rgba(0,0,0,0.8), rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.2));
+    z-index: 0;
 }
 
-publication-information {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-}
-
-publication-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-}
-
-publication-information * {
-    z-index: 1;
-    color: var(--accent-color);
-}
-
-publication-details * {
-    z-index: 1;
-    color: var(--accent-color);
-}
-
-connector-name{
-    width: fit-content;
-    margin: 10px 0;
-}
-
-publication-name{
+.Manga-name{
     width: fit-content;
     font-size: 16pt;
     font-weight: bold;
     color: white;
 }
 
-publication-status {
+.Manga-status {
     display:block;
     height: 10px;
     width: 10px;
@@ -97,7 +52,7 @@ publication-status {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 10px, rgb(51, 51, 51) 0px 0px 10px 3px;
 }
 
-publication-status::after {
+.Manga-status::after {
     content: attr(release-status);
     position: absolute;
     top: 0;
@@ -118,42 +73,55 @@ publication-status::after {
     background-color: inherit;
 }
 
-publication-status:hover::after{
+.Manga-status:hover::after{
     visibility:visible;
 }
 
 
-publication-status[release-status="Ongoing"]{
+.Manga-status[release-status="Ongoing"]{
     background-color: limegreen;
 }
 
-publication-status[release-status="Completed"]{
+.Manga-status[release-status="Completed"]{
     background-color: blueviolet;
 }
 
-publication-status[release-status="On Hiatus"]{
+.Manga-status[release-status="On Hiatus"]{
     background-color: darkorange;
 }
 
-publication-status[release-status="Cancelled"]{
+.Manga-status[release-status="Cancelled"]{
     background-color: firebrick;
 }
 
-publication-status[release-status="Upcoming"]{
+.Manga-status[release-status="Upcoming"]{
     background-color: aqua;
 }
 
-publication-status[release-status="Status Unavailable"]{
+.Manga-status[release-status="Status Unavailable"]{
     background-color: gray;
 }
 
-publication img {
+.Manga img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
     border-radius: 5px;
+    z-index: 0;
+}
+
+.Manga p {
+    margin: 2px 0;
+}
+
+.Manga > div {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
 }
