@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "cuttingedge" ]
+    branches: [ "vite-react-ts" ]
   workflow_dispatch:
 
 jobs:
@@ -42,4 +42,4 @@ jobs:
           pull: true
           push: true
           tags: |
-            glax/tranga-website:dev
+            glax/tranga-website:Server-V2
