@@ -76,12 +76,24 @@
     width: min-content;
 }
 
+.SearchResult > .Manga-tags p > * {
+    margin: 0 2px;
+}
+
 .SearchResult .Manga-author {
     background-color: green;
 }
 
 .SearchResult .Manga-tag {
     background-color: blue;
+}
+
+.SearchResult .Manga-link{
+    background-color: brown;
+}
+
+.SearchResult .Manga-link > a, .Manga-link > a:visited {
+    color: white;
 }
 
 .SearchResult > .Manga-description {

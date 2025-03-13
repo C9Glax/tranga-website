@@ -1,11 +1,6 @@
 export default interface IBackendSettings {
     "downloadLocation": string;
-    "workingDirectory": string;
-    "apiPortNumber": number;
     "userAgent": string;
-    "bufferLibraryUpdates": boolean;
-    "bufferNotifications": boolean;
-    "version": number;
     "aprilFoolsMode": boolean;
     "compression": number;
     "bwImages": boolean;

@@ -1,6 +1,6 @@
-import {deleteData, getData, postData} from '../App';
-import IJob from "./interfaces/IJob";
-import IProgressToken from "./interfaces/IProgressToken";
+import {deleteData, getData, patchData, postData, putData} from '../App';
+import IJob, {JobState, JobType} from "./interfaces/IJob";
+import IModifyJobRecord from "./interfaces/records/IModifyJobRecord";
 
 export default class Job
 {
@@ -9,56 +9,68 @@ export default class Job
         return `${x.getDay()}.${x.getHours()}:${x.getMinutes()}:${x.getSeconds()}`;
     }
 
-    static async GetAllJobs(apiUri: string): Promise<string[]> {
+    static async GetAllJobs(apiUri: string): Promise<IJob[]> {
         //console.info("Getting all Jobs");
-        return getData(`${apiUri}/v2/Jobs`)
+        return getData(`${apiUri}/v2/Job`)
             .then((json) => {
                 //console.info("Got all Jobs");
-                const ret = json as string[];
+                const ret = json as IJob[];
                 //console.debug(ret);
                 return (ret);
             });
     }
 
-    static async GetRunningJobs(apiUri: string): Promise<string[]> {
-        //console.info("Getting all running Jobs");
-        return getData(`${apiUri}/v2/Jobs/Running`)
+    static async GetJobsWithIds(apiUri: string, jobIds: string[]): Promise<IJob[]> {
+        return postData(`${apiUri}/v2/Job/WithIDs`, jobIds)
             .then((json) => {
-                //console.info("Got all running Jobs");
-                const ret = json as string[];
+                //console.info("Got all Jobs");
+               const ret = json as IJob[];
+                //console.debug(ret);
+               return (ret);
+            });
+    }
+
+    static async GetJobsInState(apiUri: string, state: JobState): Promise<IJob[]> {
+        if(state == null || state == undefined) {
+            console.error(`state was not provided`);
+            return Promise.reject();
+        }
+        return getData(`${apiUri}/v2/Job/State/${state}`)
+            .then((json) => {
+                //console.info("Got all Jobs");
+                const ret = json as IJob[];
                 //console.debug(ret);
                 return (ret);
             });
     }
 
-    static async GetWaitingJobs(apiUri: string): Promise<string[]> {
-        //console.info("Getting all waiting Jobs");
-        return getData(`${apiUri}/v2/Jobs/Waiting`)
+    static async GetJobsWithType(apiUri: string, jobType: JobType): Promise<IJob[]> {
+        if(jobType == null || jobType == undefined) {
+            console.error(`jobType was not provided`);
+            return Promise.reject();
+        }
+        return getData(`${apiUri}/v2/Job/Type/${jobType}`)
             .then((json) => {
-                //console.info("Got all waiting Jobs");
-                const ret = json as string[];
+                //console.info("Got all Jobs");
+                const ret = json as IJob[];
                 //console.debug(ret);
                 return (ret);
             });
     }
 
-    static async GetStandbyJobs(apiUri: string): Promise<string[]> {
-        //console.info("Getting all standby Jobs");
-        return getData(`${apiUri}/v2/Jobs/Standby`)
+    static async GetJobsOfTypeAndWithState(apiUri: string, jobType: JobType, state: JobState): Promise<IJob[]> {
+        if(jobType == null || jobType == undefined) {
+            console.error(`jobType was not provided`);
+            return Promise.reject();
+        }
+        if(state == null || state == undefined) {
+            console.error(`state was not provided`);
+            return Promise.reject();
+        }
+        return getData(`${apiUri}/v2/Job/TypeAndState/${jobType}/${state}`)
             .then((json) => {
-                //console.info("Got all standby Jobs");
-                const ret = json as string[];
-                //console.debug(ret);
-                return (ret);
-            });
-    }
-
-    static async GetMonitoringJobs(apiUri: string): Promise<string[]> {
-        //console.info("Getting all monitoring Jobs");
-        return getData(`${apiUri}/v2/Jobs/Monitoring`)
-            .then((json) => {
-                //console.info("Got all monitoring Jobs");
-                const ret = json as string[];
+                //console.info("Got all Jobs");
+                const ret = json as IJob[];
                 //console.debug(ret);
                 return (ret);
             });
@@ -79,64 +91,117 @@ export default class Job
             });
     }
 
-    static async GetJobs(apiUri: string, jobIds: string[]): Promise<IJob[]> {
-        if(jobIds === undefined || jobIds === null || jobIds.length < 1) {
-            console.error(`JobIds was not provided`);
-            return Promise.reject();
-        }
-        let reqStr = jobIds.join(",");
-        //console.info(`Getting Jobs ${reqStr}`);
-        return getData(`${apiUri}/v2/Job?jobIds=${reqStr}`)
-            .then((json) => {
-                //console.info(`Got Jobs ${reqStr}`);
-                const ret = json as IJob[];
-                //console.debug(ret);
-                return (ret);
-            });
-    }
-
-    static async GetJobProgress(apiUri: string, jobId: string): Promise<IProgressToken> {
-        //console.info(`Getting Job ${jobId} Progress`);
-        return getData(`${apiUri}/v2/Job/${jobId}/Progress`)
-            .then((json) => {
-                //console.info(`Got Job ${jobId} Progress`);
-                const ret = json as IProgressToken;
-                //console.debug(ret);
-                return (ret);
-            });
-    }
-
-    static async CreateJobDateInterval(apiUri: string, internalId: string, jobType: string, interval: Date) : Promise<null> {
-        return this.CreateJob(apiUri, internalId, jobType, this.IntervalStringFromDate(interval));
-    }
-
-    static async CreateJob(apiUri: string, internalId: string, jobType: string, interval: string): Promise<null> {
-        const validate = /(?:[0-9]{1,2}\.)?[0-9]{1,2}:[0-9]{1,2}(?::[0-9]{1,2})?/
-        //console.info(`Creating Job for Manga ${internalId} at ${interval} interval`);
-        if(!validate.test(interval)){
-            console.error("Interval was in incorrect format.");
-            return Promise.reject();
-        }
-        const data = {
-            internalId: internalId,
-            interval: interval
-        };
-        return postData(`${apiUri}/v2/Job/Create/${jobType}`, data)
-            .then((json) => {
-                //console.info(`Created Job for Manga ${internalId} at ${interval} interval`);
-                return null;
-            });
-    }
-
     static DeleteJob(apiUri: string, jobId: string) : Promise<void> {
+        if(jobId === undefined || jobId === null || jobId.length < 1) {
+            console.error(`JobId was not provided`);
+            return Promise.reject();
+        }
         return deleteData(`${apiUri}/v2/Job/${jobId}`);
     }
 
-    static StartJob(apiUri: string, jobId: string) : Promise<object> {
-        return postData(`${apiUri}/v2/Job/${jobId}/StartNow`, {});
+    static async ModifyJob(apiUri: string, jobId: string, modifyData: IModifyJobRecord): Promise<IJob> {
+        if(jobId === undefined || jobId === null || jobId.length < 1) {
+            console.error(`JobId was not provided`);
+            return Promise.reject();
+        }
+        if(modifyData === undefined || modifyData === null) {
+            console.error(`modifyData was not provided`);
+            return Promise.reject();
+        }
+        return patchData(`${apiUri}/v2/Job/${jobId}`, modifyData)
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as IJob;
+                //console.debug(ret);
+                return (ret);
+            });
     }
 
-    static CancelJob(apiUri: string, jobId: string) : Promise<object> {
-        return postData(`${apiUri}/v2/Job/${jobId}/Cancel`, {});
+    static async CreateDownloadAvailableChaptersJob(apiUri: string, mangaId: string, recurrenceMs: number): Promise<string[]> {
+        if(mangaId === undefined || mangaId === null || mangaId.length < 1) {
+            console.error(`mangaId was not provided`);
+            return Promise.reject();
+        }
+        if(recurrenceMs === undefined || recurrenceMs === null || recurrenceMs < 0) {
+            console.error(`recurrenceMs was not provided`);
+            return Promise.reject();
+        }
+        return putData(`${apiUri}/v2/Job/DownloadAvailableChaptersJob/${mangaId}`, recurrenceMs)
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as string[];
+                //console.debug(ret);
+                return (ret);
+            });
+    }
+
+    static async CreateDownloadSingleChapterJob(apiUri: string, chapterId: string): Promise<string[]> {
+        if(chapterId === undefined || chapterId === null || chapterId.length < 1) {
+            console.error(`mangaId was not provided`);
+            return Promise.reject();
+        }
+        return putData(`${apiUri}/v2/Job/DownloadSingleChapterJob/${chapterId}`, {})
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as string[];
+                //console.debug(ret);
+                return (ret);
+            });
+    }
+
+    static async CreateUpdateFilesJob(apiUri: string, mangaId: string): Promise<string[]> {
+        if(mangaId === undefined || mangaId === null || mangaId.length < 1) {
+            console.error(`mangaId was not provided`);
+            return Promise.reject();
+        }
+        return putData(`${apiUri}/v2/Job/UpdateFilesJob/${mangaId}`, {})
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as string[];
+                //console.debug(ret);
+                return (ret);
+            });
+    }
+
+    static async CreateUpdateAllFilesJob(apiUri: string): Promise<string[]> {
+        return putData(`${apiUri}/v2/Job/UpdateAllFilesJob`, {})
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as string[];
+                //console.debug(ret);
+                return (ret);
+            });
+    }
+
+    static async CreateUpdateMetadataJob(apiUri: string, mangaId: string): Promise<string[]> {
+        if(mangaId === undefined || mangaId === null || mangaId.length < 1) {
+            console.error(`mangaId was not provided`);
+            return Promise.reject();
+        }
+        return putData(`${apiUri}/v2/Job/UpdateMetadataJob/${mangaId}`, {})
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as string[];
+                //console.debug(ret);
+                return (ret);
+            });
+    }
+
+    static async CreateUpdateAllMetadataJob(apiUri: string): Promise<string[]> {
+        return putData(`${apiUri}/v2/Job/UpdateAllMetadataJob`, {})
+            .then((json) => {
+                //console.info(`Got Job ${jobId}`);
+                const ret = json as string[];
+                //console.debug(ret);
+                return (ret);
+            });
+    }
+
+    static StartJob(apiUri: string, jobId: string) : Promise<object> {
+        return postData(`${apiUri}/v2/Job/${jobId}/Start`, {});
+    }
+
+    static StopJob(apiUri: string, jobId: string) : Promise<object> {
+        return postData(`${apiUri}/v2/Job/${jobId}/Stop`, {});
     }
 }

@@ -5,6 +5,7 @@ import {isValidUri} from "../App";
 import IManga, {SearchResult} from "./interfaces/IManga";
 import '../styles/search.css';
 import '../styles/MangaSearchResult.css'
+import SearchFunctions from "./SearchFunctions";
 
 export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch} : {apiUri: string, jobInterval: Date, onJobsChanged: (internalId: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
@@ -17,7 +18,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
 
     useEffect(() => {
         if(mangaConnectors === undefined) {
-            MangaConnector.GetAllConnectors().then(setConnectors);
+            MangaConnector.GetAllConnectors(apiUri).then(setConnectors)
             return;
         }
     }, [mangaConnectors]);
@@ -30,7 +31,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
         if(selectedConnector === undefined)
             return;
         setSelectedConnector(selectedConnector);
-        setSelectedLanguage(selectedConnector.SupportedLanguages[0]);
+        setSelectedLanguage(selectedConnector.supportedLanguages[0]);
     }
 
     const searchBoxValueChanged : ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -46,11 +47,11 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
             return;
         let baseUri = match[1];
         const selectCon = mangaConnectors.find((con: IMangaConnector) => {
-            return con.BaseUris.find(uri => uri == baseUri);
+            return con.baseUris.find(uri => uri == baseUri);
         });
         if(selectCon != undefined){
             setSelectedConnector(selectCon);
-            setSelectedLanguage(selectCon.SupportedLanguages[0]);
+            setSelectedLanguage(selectCon.supportedLanguages[0]);
         }
     }
 
@@ -60,7 +61,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
             return;
         }
         //console.info(`Searching Name: ${searchBoxValue} Connector: ${selectedConnector.name} Language: ${selectedLanguage}`);
-        if(isValidUri(searchBoxValue) && !selectedConnector.BaseUris.find((uri: string) => {
+        if(isValidUri(searchBoxValue) && !selectedConnector.baseUris.find((uri: string) => {
                 const match = searchBoxValue.match(pattern);
                 if(match === null)
                     return false;
@@ -71,12 +72,12 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
             return;
         }
         if(!isValidUri(searchBoxValue)){
-            MangaConnector.GetMangaFromConnectorByTitle(selectedConnector, searchBoxValue)
+            SearchFunctions.SearchNameOnConnector(apiUri, selectedConnector.name, searchBoxValue)
                 .then((mangas: IManga[]) => {
                     setSearchResults(mangas);
                 });
         }else{
-            MangaConnector.GetMangaFromConnectorByUrl(selectedConnector, searchBoxValue)
+            SearchFunctions.SearchUrl(apiUri, searchBoxValue)
                 .then((manga: IManga) => {
                     setSearchResults([manga]);
                 });
@@ -97,7 +98,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
             <select id="Searchbox-language" onChange={changeSelectedLanguage} value={selectedLanguage === null ? "" : selectedLanguage}>
                 {selectedConnector === undefined
                     ? <option value="" disabled hidden>Select Connector</option>
-                    : selectedConnector.SupportedLanguages.map(language => <option value={language} key={language}>{language}</option>)}
+                    : selectedConnector.supportedLanguages.map(language => <option value={language} key={language}>{language}</option>)}
             </select>
             <button id="Searchbox-button" type="submit" onClick={ExecuteSearch}>Search</button>
         </div>
@@ -107,5 +108,5 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
                 ? <p></p>
                 : searchResults.map(result => SearchResult(apiUri, result, jobInterval, onJobsChanged))}
         </div>
-    </div>)
+    </div>);
 }

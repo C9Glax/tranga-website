@@ -14,6 +14,7 @@ export default function App(){
     const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(LoadFrontendSettings());
     const [updateInterval, setUpdateInterval] = React.useState<number>();
     const [updateMonitorList, setUpdateMonitorList] = React.useState<Date>(new Date());
+    const checkConnectedInterval = 1000;
 
     const apiUri =  frontendSettings.apiUri;
 
@@ -22,7 +23,7 @@ export default function App(){
         if(updateInterval === undefined){
             setUpdateInterval(setInterval(() => {
                 checkConnection(apiUri).then(res => setConnected(res)).catch(() => setConnected(false));
-            }, 500));
+            }, checkConnectedInterval));
         }else{
             clearInterval(updateInterval);
             setUpdateInterval(undefined);
@@ -76,7 +77,7 @@ export function getData(uri: string) : Promise<object> {
         });
 }
 
-export function postData(uri: string, content: object) : Promise<object> {
+export function postData(uri: string, content: object | string | number) : Promise<object> {
     return fetch(uri,
         {
             method: 'POST',
@@ -116,6 +117,50 @@ export function deleteData(uri: string) : Promise<void> {
         });
 }
 
+export function patchData(uri: string, content: object | string | number) : Promise<object> {
+    return fetch(uri,
+        {
+            method: 'PATCH',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(content)
+        })
+        .then(function(response){
+            if(!response.ok)
+                throw new Error("Could not fetch data");
+            let json = response.json();
+            return json.then((json) => json).catch(() => null);
+        })
+        .catch(function(err){
+            console.error(`Error PATCHing Data ${uri}\n${err}`);
+            return Promise.reject();
+        });
+}
+
+export function putData(uri: string, content: object | string | number) : Promise<object> {
+    return fetch(uri,
+        {
+            method: 'PUT',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(content)
+        })
+        .then(function(response){
+            if(!response.ok)
+                throw new Error("Could not fetch data");
+            let json = response.json();
+            return json.then((json) => json).catch(() => null);
+        })
+        .catch(function(err){
+            console.error(`Error PUTting Data ${uri}\n${err}`);
+            return Promise.reject();
+        });
+}
+
 export function isValidUri(uri: string) : boolean{
     try {
         new URL(uri);
@@ -126,7 +171,14 @@ export function isValidUri(uri: string) : boolean{
 }
 
 export const checkConnection  = async (apiUri: string): Promise<boolean> =>{
-    return getData(`${apiUri}/v2/Ping`).then((result) => {
-        return result != null;
-    }).catch(() => Promise.reject());
+    return fetch(`${apiUri}/swagger`,
+        {
+            method: 'GET',
+        })
+        .then((response) =>{
+            return response.type != "error";
+        })
+        .catch(() => {
+            return Promise.reject();
+        });
 }

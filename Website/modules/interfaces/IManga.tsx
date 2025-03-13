@@ -1,126 +1,104 @@
-import IMangaConnector from "./IMangaConnector";
-import KeyValuePair from "./KeyValuePair";
 import Manga from "../Manga";
-import React, {EventHandler, ReactElement, ReactEventHandler} from "react";
+import React, {ReactElement, ReactEventHandler} from "react";
 import Icon from '@mdi/react';
-import { mdiTagTextOutline, mdiAccountEdit } from '@mdi/js';
+import { mdiTagTextOutline, mdiAccountEdit, mdiLinkVariant } from '@mdi/js';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import IJob, {JobTypeFromNumber} from "./IJob";
+import IJob from "./IJob";
+import {AuthorElement} from "./IAuthor";
 import Job from "../Job";
-import ProgressBar from "@ramonak/react-progress-bar";
+import {LinkElement} from "./ILink";
 
 export default interface IManga{
-    "sortName": string,
-    "authors": string[],
-    "altTitles": KeyValuePair[],
-    "description": string,
-    "tags": string[],
-    "coverUrl": string,
-    "coverFileNameInCache": string,
-    "links": KeyValuePair[],
-    "year": number,
-    "originalLanguage": string,
-    "releaseStatus": number,
-    "folderName": string,
-    "publicationId": string,
-    "internalId": string,
-    "ignoreChaptersBelow": number,
-    "latestChapterDownloaded": number,
-    "latestChapterAvailable": number,
-    "websiteUrl": string,
-    "mangaConnector": IMangaConnector
+    mangaId: string;
+    connectorId: string;
+    name: string;
+    description: string;
+    websiteUrl: string;
+    year: number;
+    originalLanguage: string;
+    releaseStatus: MangaReleaseStatus;
+    folderName: string;
+    ignoreChapterBefore: number;
+    mangaConnectorId: string;
+    authorIds: string[];
+    tags: string[];
+    linkIds: string[];
+    altTitleIds: string[];
 }
 
-export function ReleaseStatusFromNumber(n: number): string {
-    switch(n) {
-        case 0: return "Ongoing";
-        case 1: return "Completed";
-        case 2: return "OnHiatus";
-        case 3: return "Cancelled";
-        case 4: return "Unreleased";
-    }
-    return "";
+export enum MangaReleaseStatus {
+    Continuing = "Continuing",
+    Completed = "Completed",
+    OnHiatus = "OnHiatus",
+    Cancelled = "Cancelled",
+    Unreleased = "Unreleased",
 }
-
-
 
 export function CoverCard(apiUri: string, manga: IManga) : ReactElement {
-    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
-        if(e.currentTarget.src != Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget))
-            e.currentTarget.src = Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget);
-    }
-
     return(
-        <div className="Manga" key={manga.internalId}>
-            <img src="../../media/blahaj.png" onLoad={MangaCover} alt="Manga Cover"></img>
+        <div className="Manga" key={manga.mangaId}>
+            <img src="../../media/blahaj.png" alt="Manga Cover"></img>
             <div>
-                <p className="pill connector-name">{manga.mangaConnector.name}</p>
-                <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
-                <p className="Manga-name">{manga.sortName}</p>
+                <p className="pill connector-name">{manga.mangaConnectorId}</p>
+                <div className="Manga-status" release-status={manga.releaseStatus}></div>
+                <p className="Manga-name">{manga.name}</p>
             </div>
         </div>);
 }
 
 export function SearchResult(apiUri: string, manga: IManga, interval: Date, onJobsChanged: (internalId: string) => void) : ReactElement {
     const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
-        if(e.currentTarget.src != Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget))
-            e.currentTarget.src = Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget);
+        console.log(manga.mangaId);
+        if(e.currentTarget.src != Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget))
+            e.currentTarget.src = Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget);
     }
 
     return(
-        <div className="SearchResult" key={manga.internalId}>
-            <img src="../../media/blahaj.png" onLoad={MangaCover} alt="Manga Cover"></img>
-            <p className="connector-name">{manga.mangaConnector.name}</p>
-            <div className="Manga-status" release-status={ReleaseStatusFromNumber(manga.releaseStatus)}></div>
-            <p className="Manga-name"><a href={manga.websiteUrl}>{manga.sortName}<img src="../../media/link.svg"
+        <div className="SearchResult" key={manga.mangaId}>
+            <img src={Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, undefined)} alt="Manga Cover" onLoad={MangaCover}></img>
+            <p className="connector-name">{manga.mangaConnectorId}</p>
+            <div className="Manga-status" release-status={manga.releaseStatus}></div>
+            <p className="Manga-name"><a href={manga.websiteUrl}>{manga.name}<img src="../../media/link.svg"
                                                                                       alt=""/></a></p>
             <div className="Manga-tags">
-                {manga.authors.map(author => <p className="Manga-author" key={manga.internalId + "-author-" + author}>
-                    <Icon path={mdiAccountEdit} size={0.5}/> {author}</p>)}
-                {manga.tags.map(tag => <p className="Manga-tag" key={manga.internalId + "-tag-" + tag}><Icon
-                    path={mdiTagTextOutline} size={0.5}/> {tag}</p>)}
+                {manga.authorIds.map(authorId =>
+                    <p className="Manga-author" key={manga.mangaId + "-author-" + authorId} >
+                        <Icon path={mdiAccountEdit} size={0.5} />
+                        <AuthorElement apiUri={apiUri} authorId={authorId}></AuthorElement>
+                    </p>)}
+                {manga.tags.map(tag =>
+                    <p className="Manga-tag" key={manga.mangaId + "-tag-" + tag}>
+                        <Icon path={mdiTagTextOutline} size={0.5}/>
+                        {tag}
+                    </p>)}
+                {manga.linkIds.map(linkId =>
+                    <p className="Manga-link" key={manga.mangaId + "-link-" + linkId}>
+                        <Icon path={mdiLinkVariant} size={0.5}/>
+                        <LinkElement apiUri={apiUri} linkId={linkId}></LinkElement>
+                    </p>)}
             </div>
             <MarkdownPreview className="Manga-description" source={manga.description}
                              style={{backgroundColor: "transparent", color: "black"}}/>
             <button className="Manga-AddButton" onClick={() => {
-                Job.CreateJobDateInterval(apiUri, manga.internalId, "MonitorManga", interval).then(() => onJobsChanged(manga.internalId));
+                Job.CreateDownloadAvailableChaptersJob(apiUri, manga.mangaId, interval.getMilliseconds()).then(() => onJobsChanged(manga.mangaId));
             }}>Monitor
             </button>
         </div>);
 }
 
-function ProgressbarStr(job: IJob): string {
-    return job.progressToken.timeRemaining.substring(0,job.progressToken.timeRemaining.indexOf(".")).concat(" ", ToPercentString(job.progressToken.progress));
-}
-
-function ToPercentString(n: number): string {
-    return n.toString().substring(2,4).concat("%");
-}
-
 export function QueueItem(apiUri: string, manga: IManga, job: IJob, triggerUpdate: () => void){
-    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
-        if(e.currentTarget.src != Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget))
-            e.currentTarget.src = Manga.GetMangaCoverUrl(apiUri, manga.internalId, e.currentTarget);
-    }
-
     return (
-        <div className="QueueJob" key={"QueueJob-" + job.id}>
-            <img src="../../media/blahaj.png" onLoad={MangaCover} alt="Manga Cover"></img>
-            <p className="QueueJob-Name">{manga.sortName}</p>
-            <p className="QueueJob-JobType">{JobTypeFromNumber(job.jobType)}</p>
-            <p className="QueueJob-additional">{job.jobType == 0 ? `Vol.${job.chapter?.volumeNumber} Ch.${job.chapter?.chapterNumber}` : ""}</p>
-            {job.progressToken.state === 0
-                ? <ProgressBar labelColor={"#000"} height={"10px"} labelAlignment={"outside"}
-                               className="QueueJob-Progressbar" completed={job.progressToken.progress} maxCompleted={1}
-                               customLabel={ProgressbarStr(job)}/>
-                : <div className="QueueJob-Progressbar"></div>}
+        <div className="QueueJob" key={"QueueJob-" + job.jobId}>
+            <img src="../../media/blahaj.png" alt="Manga Cover"></img>
+            <p className="QueueJob-Name">{manga.name}</p>
+            <p className="QueueJob-JobType">{job.jobType}</p>
             <div className="QueueJob-actions">
                 <button className="QueueJob-Cancel"
-                        onClick={() => Job.CancelJob(apiUri, job.id).then(triggerUpdate)}>Cancel
+                        onClick={() => Job.StopJob(apiUri, job.jobId).then(triggerUpdate)}>Cancel
                 </button>
                 {job.parentJobId != null
                     ? <button className="QueueJob-Cancel"
-                              onClick={() => Job.CancelJob(apiUri, job.parentJobId!).then(triggerUpdate)}>Cancel all
+                              onClick={() => Job.StopJob(apiUri, job.parentJobId!).then(triggerUpdate)}>Cancel all
                         related</button>
                     : <></>
                 }
