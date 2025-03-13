@@ -57,7 +57,9 @@ This repo makes HTTP-requests to the [Tranga-API](https://github.com/C9Glax/tran
 ### Built With
 
 - nginx
-- HTML, CSS, and barebones Javascript
+- vite
+- react
+- typescript
 - 💙 Blåhaj 🦈
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -72,16 +74,6 @@ There is a single release:
 
 Download [docker-compose.yaml](https://github.com/C9Glax/tranga-website/blob/cuttingedge/docker-compose.yaml) and configure to your needs. 
 The `docker-compose` also includes [Tranga](https://github.com/C9Glax/tranga) as backend. For its configuration refer to the repo README.
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] ❓
-
-See the [open issues](https://github.com/C9Glax/tranga-website/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
