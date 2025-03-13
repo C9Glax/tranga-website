@@ -4,7 +4,7 @@ import Job from './Job';
 import Icon from '@mdi/react';
 import {mdiCounter, mdiEyeCheck, mdiRun, mdiTrayFull} from '@mdi/js';
 import QueuePopUp from "./QueuePopUp";
-import {JobState, JobType} from "./interfaces/IJob";
+import {JobState, JobType} from "./interfaces/Jobs/IJob";
 
 export default function Footer({connectedToBackend, apiUri} : {connectedToBackend: boolean, apiUri: string}) {
     const [MonitoringJobsCount, setMonitoringJobsCount] = React.useState(0);

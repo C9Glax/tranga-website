@@ -2,10 +2,11 @@ import React, {ChangeEventHandler, EventHandler, useEffect, useState} from 'reac
 import {MangaConnector} from "./MangaConnector";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
-import IManga, {SearchResult} from "./interfaces/IManga";
+import IManga, {ExtendedInfo} from "./interfaces/IManga";
 import '../styles/search.css';
-import '../styles/MangaSearchResult.css'
+import '../styles/ExtendedInfo.css'
 import SearchFunctions from "./SearchFunctions";
+import Job from "./Job";
 
 export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch} : {apiUri: string, jobInterval: Date, onJobsChanged: (internalId: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
@@ -90,14 +91,15 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
         <div id="SearchBox">
             <input type="text" placeholder="Manganame" id="Searchbox-Manganame" onKeyDown={(e) => {if(e.key == "Enter") ExecuteSearch(null);}} onChange={searchBoxValueChanged}></input>
             <select id="Searchbox-Connector" value={selectedConnector === undefined ? "" : selectedConnector.name} onChange={selectedConnectorChanged}>
-                <option value="" disabled hidden>Select</option>
+                {mangaConnectors === undefined ? <option value="Loading">Loading</option> : <option value="" disabled hidden>Select</option>}
                 {mangaConnectors === undefined
-                    ? <option value="Loading">Loading</option>
+                    ? null
                     : mangaConnectors.map(con => <option value={con.name} key={con.name}>{con.name}</option>)}
             </select>
             <select id="Searchbox-language" onChange={changeSelectedLanguage} value={selectedLanguage === null ? "" : selectedLanguage}>
+                {mangaConnectors === undefined ? <option value="Loading">Loading</option> : <option value="" disabled hidden>Select Connector</option>}
                 {selectedConnector === undefined
-                    ? <option value="" disabled hidden>Select Connector</option>
+                    ? null
                     : selectedConnector.supportedLanguages.map(language => <option value={language} key={language}>{language}</option>)}
             </select>
             <button id="Searchbox-button" type="submit" onClick={ExecuteSearch}>Search</button>
@@ -106,7 +108,14 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
         <div id="SearchResults">
             {searchResults === undefined
                 ? <p></p>
-                : searchResults.map(result => SearchResult(apiUri, result, jobInterval, onJobsChanged))}
+                : searchResults.map(result =>
+                    <ExtendedInfo key={"Searchresult-"+result.mangaId} apiUri={apiUri} manga={result} actions={[
+                        <button className="Manga-AddButton" onClick={() => {
+                            Job.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, jobInterval.getTime()).then(() => onJobsChanged(result.mangaId));
+                        }}>Monitor</button>
+                    ]}/>
+                )
+            }
         </div>
     </div>);
 }

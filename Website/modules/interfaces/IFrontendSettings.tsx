@@ -9,7 +9,7 @@ export function LoadFrontendSettings(): IFrontendSettings {
     const cookies = new Cookies();
     return {
         jobInterval: cookies.get('jobInterval') === undefined
-            ? new Date(0,0,0,3)
+            ? new Date(Date.parse("1970-01-01T03:00:00.000Z"))
             : cookies.get('jobInterval'),
         apiUri: cookies.get('apiUri') === undefined
             ? `${window.location.protocol}//${window.location.host}/api`

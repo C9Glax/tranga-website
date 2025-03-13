@@ -66,10 +66,12 @@
     padding: 0;
     margin: 0;
     white-space: nowrap;
+    max-height: 100%;
+    overflow-y: scroll;
 }
 
 .SearchResult > .Manga-tags p {
-    margin: 0 2px;
+    margin: 2px;
     padding: 5px;
     font-size: 10pt;
     height: fit-content;
@@ -102,14 +104,19 @@
     overflow-y: scroll;
 }
 
-.SearchResult > .Manga-AddButton {
-    grid-area: button;
+.SearchResult > .Manga-actions  button {
     background-color: white;
     border: 1px solid var(--primary-color);
     border-radius: 4px;
     width: fit-content;
     height: fit-content;
     padding: 5px 10px;
+}
+
+.SearchResult > .Manga-actions {
+    grid-area: button;
+    padding: 0;
+    margin: 5px 0 0 0;
 }
 
 .SearchResult > .Manga-AddButton:hover {
@@ -126,6 +133,6 @@
     bottom: 7px;
 }
 
-.monitorMangaEntry {
+.startSearchEntry {
     position: relative;
 }

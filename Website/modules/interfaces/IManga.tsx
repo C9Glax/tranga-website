@@ -1,12 +1,13 @@
 import Manga from "../Manga";
-import React, {ReactElement, ReactEventHandler} from "react";
+import React, {ReactElement, ReactEventHandler, useEffect} from "react";
 import Icon from '@mdi/react';
 import { mdiTagTextOutline, mdiAccountEdit, mdiLinkVariant } from '@mdi/js';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import IJob from "./IJob";
 import {AuthorElement} from "./IAuthor";
-import Job from "../Job";
 import {LinkElement} from "./ILink";
+import DownloadSingleChapterJob from "./Jobs/DownloadSingleChapterJob";
+import IChapter from "./IChapter";
+import Chapter from "../Chapter";
 
 export default interface IManga{
     mangaId: string;
@@ -34,28 +35,66 @@ export enum MangaReleaseStatus {
     Unreleased = "Unreleased",
 }
 
-export function CoverCard(apiUri: string, manga: IManga) : ReactElement {
-    return(
-        <div className="Manga" key={manga.mangaId}>
-            <img src="../../media/blahaj.png" alt="Manga Cover"></img>
-            <div>
+export const defaultManga: IManga = {
+    altTitleIds: [],
+    authorIds: [],
+    connectorId: "",
+    description: "",
+    folderName: "",
+    ignoreChapterBefore: 0,
+    linkIds: [],
+    mangaConnectorId: "",
+    name: "",
+    originalLanguage: "",
+    releaseStatus: MangaReleaseStatus.Unreleased,
+    tags: [],
+    websiteUrl: "",
+    year: 0,
+    mangaId: ""
+}
+
+export function CoverCard({apiUri, mangaId} : {apiUri: string, mangaId: string}) : ReactElement {
+    let [manga, setContent] = React.useState<IManga>(defaultManga);
+    let [extendedInfo, setExtendedInfo] = React.useState(false);
+
+    useEffect(() => {
+        Manga.GetMangaById(apiUri, mangaId).then(setContent);
+    }, []);
+
+    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
+        if(e.currentTarget.src != Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget))
+            e.currentTarget.src = Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget);
+    }
+
+    return (
+        <div className="Manga" key={manga.mangaId} onClick={(e) => {
+            setExtendedInfo(!extendedInfo);
+        }}>
+            <img src={Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, undefined)} alt="Manga Cover" onLoad={MangaCover} onResize={MangaCover}></img>
+            <div className="SimpleCover">
                 <p className="pill connector-name">{manga.mangaConnectorId}</p>
                 <div className="Manga-status" release-status={manga.releaseStatus}></div>
                 <p className="Manga-name">{manga.name}</p>
             </div>
+            {extendedInfo ? <div extended-info={extendedInfo ? "yes" : "no"}>
+                <ExtendedInfo apiUri={apiUri} manga={manga} actions={[
+                    <button className="Manga-DeleteButton" onClick={() => {
+                        Manga.DeleteManga(apiUri, manga.mangaId);
+                    }}>Delete</button>
+                ]} />
+            </div> : null}
         </div>);
 }
 
-export function SearchResult(apiUri: string, manga: IManga, interval: Date, onJobsChanged: (internalId: string) => void) : ReactElement {
+export function ExtendedInfo({apiUri, manga, actions} : {apiUri: string, manga: IManga, actions: ReactElement[]}) : ReactElement {
     const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
-        console.log(manga.mangaId);
         if(e.currentTarget.src != Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget))
             e.currentTarget.src = Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget);
     }
 
     return(
         <div className="SearchResult" key={manga.mangaId}>
-            <img src={Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, undefined)} alt="Manga Cover" onLoad={MangaCover}></img>
+            <img src={Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, undefined)} alt="Manga Cover" onLoad={MangaCover} onResize={MangaCover}></img>
             <p className="connector-name">{manga.mangaConnectorId}</p>
             <div className="Manga-status" release-status={manga.releaseStatus}></div>
             <p className="Manga-name"><a href={manga.websiteUrl}>{manga.name}<img src="../../media/link.svg"
@@ -79,30 +118,45 @@ export function SearchResult(apiUri: string, manga: IManga, interval: Date, onJo
             </div>
             <MarkdownPreview className="Manga-description" source={manga.description}
                              style={{backgroundColor: "transparent", color: "black"}}/>
-            <button className="Manga-AddButton" onClick={() => {
-                Job.CreateDownloadAvailableChaptersJob(apiUri, manga.mangaId, interval.getMilliseconds()).then(() => onJobsChanged(manga.mangaId));
-            }}>Monitor
-            </button>
+            <div className="Manga-actions">
+                {actions.map((p, i) => <div key={i}>{p}</div>)}
+            </div>
         </div>);
 }
 
-export function QueueItem(apiUri: string, manga: IManga, job: IJob, triggerUpdate: () => void){
+export function ItemDownloadSingleChapterJob({apiUri, job} : {apiUri: string, job: DownloadSingleChapterJob}){
+    const MangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
+        if(manga === null)
+            return;
+        if(e.currentTarget.src != Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget))
+            e.currentTarget.src = Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, e.currentTarget);
+    }
+
+    let [chapter, setChapter] = React.useState<IChapter|null>(null);
+    let [manga, setManga] = React.useState<IManga|null>(null);
+
+    useEffect(() => {
+        Chapter.GetChapterFromId(apiUri, job.chapterId).then(setChapter);
+    }, []);
+
+    useEffect(() => {
+        if(chapter === null){
+            setManga(null);
+            return;
+        }
+        Manga.GetMangaById(apiUri, chapter.parentMangaId).then(setManga);
+    }, [chapter]);
+
     return (
-        <div className="QueueJob" key={"QueueJob-" + job.jobId}>
-            <img src="../../media/blahaj.png" alt="Manga Cover"></img>
-            <p className="QueueJob-Name">{manga.name}</p>
-            <p className="QueueJob-JobType">{job.jobType}</p>
-            <div className="QueueJob-actions">
-                <button className="QueueJob-Cancel"
-                        onClick={() => Job.StopJob(apiUri, job.jobId).then(triggerUpdate)}>Cancel
-                </button>
-                {job.parentJobId != null
-                    ? <button className="QueueJob-Cancel"
-                              onClick={() => Job.StopJob(apiUri, job.parentJobId!).then(triggerUpdate)}>Cancel all
-                        related</button>
-                    : <></>
-                }
-            </div>
+        <div className="DownloadSingleChapterJob" key={"DownloadSingleChapterJob-" + job.jobId}>
+            <img src={manga ? Manga.GetMangaCoverImageUrl(apiUri, manga.mangaId, undefined) : ""} alt="Manga Cover" onLoad={MangaCover} onResize={MangaCover}></img>
+            <p className="DownloadSingleChapterJob-Name">{manga ? manga.name : job.chapterId}</p>
+            <p className="DownloadSingleChapterJob-Title">
+                {chapter ? "Vol." + chapter.volumeNumber + " Ch." + chapter.chapterNumber + ": " + chapter.title : "loading"}
+                <a href={chapter ? chapter.url : ""}>
+                    <img src="../../media/link.svg" alt=""/>
+                </a>
+            </p>
         </div>
     );
 }

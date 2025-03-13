@@ -1,5 +1,5 @@
 import {deleteData, getData, patchData, postData, putData} from '../App';
-import IJob, {JobState, JobType} from "./interfaces/IJob";
+import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
 import IModifyJobRecord from "./interfaces/records/IModifyJobRecord";
 
 export default class Job

@@ -1,6 +1,5 @@
 import IManga from './interfaces/IManga';
 import {deleteData, getData, patchData, postData} from '../App';
-import {RefObject} from "react";
 import IChapter from "./interfaces/IChapter";
 
 export default class Manga

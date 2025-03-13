@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import IJob, {JobState} from "./interfaces/IJob";
+import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
 import '../styles/queuePopUp.css';
 import '../styles/popup.css';
 import Job from "./Job";
-import IManga, {QueueItem} from "./interfaces/IManga";
-import Manga from "./Manga";
+import DownloadSingleChapterJob from "./interfaces/Jobs/DownloadSingleChapterJob";
+import { ItemDownloadSingleChapterJob } from "./interfaces/IManga";
 
 export default function QueuePopUp({connectedToBackend, children, apiUri} : {connectedToBackend: boolean, children: JSX.Element[], apiUri: string}) {
 
@@ -33,17 +33,17 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
 
     function UpdateMonitoringJobsList(){
         Job.GetJobsInState(apiUri, JobState.Waiting)
-            .then((jobs:IJob[]) => {
-                //console.log(StandbyJobs)
-                setWaitingJobs(jobs);
-                //console.log(StandbyJobs)
-            });
+            .then((jobs: IJob[]) => {
+                //console.log(jobs);
+                return jobs;
+            })
+            .then(setWaitingJobs);
         Job.GetJobsInState(apiUri, JobState.Running)
-            .then((jobs:IJob[]) =>{
-                //console.log(StandbyJobs)
-                setRunningJobs(jobs);
-                //console.log(StandbyJobs)
-            });
+            .then((jobs: IJob[]) => {
+                //console.log(jobs);
+                return jobs;
+            })
+            .then(setRunningJobs);
     }
 
     return (<>
@@ -58,6 +58,12 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
                              onClick={() => setShowQueuePopup(false)}/>
                     </div>
                     <div id="QueuePopUpBody" className="popupBody">
+                        <div>
+                            {RunningJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j => <ItemDownloadSingleChapterJob apiUri={apiUri} job={j as DownloadSingleChapterJob} key={j.jobId} />)}
+                        </div>
+                        <div>
+                            {WaitingJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j => <ItemDownloadSingleChapterJob apiUri={apiUri} job={j as DownloadSingleChapterJob} key={j.jobId} />)}
+                        </div>
                     </div>
                 </div>
                 : <></>
