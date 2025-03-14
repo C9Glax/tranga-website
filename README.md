@@ -41,6 +41,14 @@
 
 
 <!-- ABOUT THE PROJECT -->
+## Screenshots
+
+| Search                                                                     | SearchResults                                                                   | Default-View                                                               |
+|----------------------------------------------------------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-53-15%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-54-59%20Tranga.png)      | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-55-13%20Tranga.png) |
+| Search opens with click on "Add new Manga"                                 | When selecting different connectors, available languages automatically update   | Clicking on an Item here will bring up a view with more information        |
+
+
 ## About The Project
 
 Tranga-Website is the Web-frontend to [Tranga](https://github.com/C9Glax/tranga) (the API).
@@ -49,7 +57,7 @@ Tranga-Website is the Web-frontend to [Tranga](https://github.com/C9Glax/tranga)
 
 This project makes HTTP-requests to the [Tranga-API](https://github.com/C9Glax/tranga) to display and modify the present configuration.
 
-### Built With
+## Built With
 
 - nginx
 - vite
