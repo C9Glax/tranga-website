@@ -7,6 +7,8 @@ import '../styles/search.css';
 import '../styles/ExtendedInfo.css'
 import SearchFunctions from "./SearchFunctions";
 import Job from "./Job";
+import ILocalLibrary from "./interfaces/ILocalLibrary";
+import LocalLibrary from "./interfaces/LocalLibrary";
 
 export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch} : {apiUri: string, jobInterval: Date, onJobsChanged: (internalId: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
@@ -86,6 +88,27 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
     }
 
     const changeSelectedLanguage : ChangeEventHandler<HTMLSelectElement> = (event) => setSelectedLanguage(event.target.value);
+    let [selectedLibrary, setSelectedLibrary] = useState<ILocalLibrary | null>(null);
+    let [libraries, setLibraries] = useState<ILocalLibrary[] | null>(null);
+    useEffect(() => {
+        LocalLibrary.GetLibraries(apiUri).then(setLibraries);
+    }, []);
+    useEffect(() => {
+        if(libraries === null || libraries.length < 1)
+            setSelectedLibrary(null);
+        else
+            setSelectedLibrary(libraries[0]);
+    }, [libraries]);
+
+    const selectedLibraryChanged : ChangeEventHandler<HTMLSelectElement> = (event) => {
+        event.preventDefault();
+        if(libraries === null)
+            return;
+        const selectedLibrary = libraries.find((lib:ILocalLibrary) => lib.localLibraryId == event.target.value);
+        if(selectedLibrary === undefined)
+            return;
+        setSelectedLibrary(selectedLibrary);
+    }
 
     return (<div id="Search">
         <div id="SearchBox">
@@ -110,8 +133,12 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
                 ? <p></p>
                 : searchResults.map(result =>
                     <ExtendedInfo key={"Searchresult-"+result.mangaId} apiUri={apiUri} manga={result} actions={[
+                        <select defaultValue={selectedLibrary === null ? "" : selectedLibrary.localLibraryId} onChange={selectedLibraryChanged}>
+                            {selectedLibrary === null || libraries === null ? <option value="">Loading</option>
+                                : libraries.map(library => <option key={library.localLibraryId} value={library.localLibraryId}>{library.libraryName} ({library.basePath})</option>)}
+                        </select>,
                         <button className="Manga-AddButton" onClick={() => {
-                            Job.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, jobInterval.getTime()).then(() => onJobsChanged(result.mangaId));
+                            Job.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: jobInterval.getTime(), localLibraryId: selectedLibrary!.localLibraryId}).then(() => onJobsChanged(result.mangaId));
                         }}>Monitor</button>
                     ]}/>
                 )

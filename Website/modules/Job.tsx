@@ -1,6 +1,7 @@
 import {deleteData, getData, patchData, postData, putData} from '../App';
 import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
 import IModifyJobRecord from "./interfaces/records/IModifyJobRecord";
+import IDownloadAvailableJobsRecord from "./interfaces/records/IDownloadAvailableJobsRecord";
 
 export default class Job
 {
@@ -117,16 +118,16 @@ export default class Job
             });
     }
 
-    static async CreateDownloadAvailableChaptersJob(apiUri: string, mangaId: string, recurrenceMs: number): Promise<string[]> {
+    static async CreateDownloadAvailableChaptersJob(apiUri: string, mangaId: string, data: IDownloadAvailableJobsRecord): Promise<string[]> {
         if(mangaId === undefined || mangaId === null || mangaId.length < 1) {
             console.error(`mangaId was not provided`);
             return Promise.reject();
         }
-        if(recurrenceMs === undefined || recurrenceMs === null || recurrenceMs < 0) {
+        if(data === undefined || data === null) {
             console.error(`recurrenceMs was not provided`);
             return Promise.reject();
         }
-        return putData(`${apiUri}/v2/Job/DownloadAvailableChaptersJob/${mangaId}`, recurrenceMs)
+        return putData(`${apiUri}/v2/Job/DownloadAvailableChaptersJob/${mangaId}`, data)
             .then((json) => {
                 //console.info(`Got Job ${jobId}`);
                 const ret = json as string[];
