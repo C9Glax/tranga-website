@@ -2,9 +2,8 @@ import React, {ChangeEventHandler, EventHandler, useEffect, useState} from 'reac
 import {MangaConnector} from "./MangaConnector";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
-import IManga, {ExtendedInfo} from "./interfaces/IManga";
+import IManga, {MangaItem} from "./interfaces/IManga";
 import '../styles/search.css';
-import '../styles/ExtendedInfo.css'
 import SearchFunctions from "./SearchFunctions";
 import Job from "./Job";
 import ILocalLibrary from "./interfaces/ILocalLibrary";
@@ -132,15 +131,15 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
             {searchResults === undefined
                 ? <p></p>
                 : searchResults.map(result =>
-                    <ExtendedInfo key={"Searchresult-"+result.mangaId} apiUri={apiUri} manga={result} actions={[
+                    <MangaItem apiUri={apiUri} mangaId={result.mangaId}>
                         <select defaultValue={selectedLibrary === null ? "" : selectedLibrary.localLibraryId} onChange={selectedLibraryChanged}>
                             {selectedLibrary === null || libraries === null ? <option value="">Loading</option>
                                 : libraries.map(library => <option key={library.localLibraryId} value={library.localLibraryId}>{library.libraryName} ({library.basePath})</option>)}
-                        </select>,
+                        </select>
                         <button className="Manga-AddButton" onClick={() => {
                             Job.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: jobInterval.getTime(), localLibraryId: selectedLibrary!.localLibraryId}).then(() => onJobsChanged(result.mangaId));
                         }}>Monitor</button>
-                    ]}/>
+                    </MangaItem>
                 )
             }
         </div>

@@ -6,7 +6,10 @@ export default interface IAuthor {
     authorName: string;
 }
 
-export function AuthorElement({apiUri, authorId} : {apiUri: string, authorId: string}) : ReactElement{
+export function AuthorElement({apiUri, authorId} : {apiUri: string, authorId: string | null}) : ReactElement{
+    if(authorId === null)
+        return (<p className="Manga-Author-Name">Author</p>);
+
     let [name, setName] = React.useState<string>(authorId);
 
     useEffect(()=> {
@@ -17,5 +20,5 @@ export function AuthorElement({apiUri, authorId} : {apiUri: string, authorId: st
             });
     }, [])
 
-    return (<span>{name}</span>);
+    return (<p className="Manga-Author-Name">{name}</p>);
 }

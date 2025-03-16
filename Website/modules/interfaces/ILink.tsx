@@ -1,6 +1,5 @@
 import React, {ReactElement, useEffect} from "react";
 import {getData} from "../../App";
-import IAuthor from "./IAuthor";
 
 export default interface ILink {
     linkId: string;
@@ -8,7 +7,10 @@ export default interface ILink {
     linkUrl: string;
 }
 
-export function LinkElement({apiUri, linkId} : {apiUri: string, linkId: string}) : ReactElement{
+export function LinkElement({apiUri, linkId} : {apiUri: string, linkId: string | null}) : ReactElement{
+    if(linkId === null)
+        return (<a className="Manga-Link-Value" href="#">Link</a>);
+
     let [provider, setProvider] = React.useState<string>(linkId);
     let [linkUrl, setLinkUrl] = React.useState<string>("");
 
@@ -21,5 +23,5 @@ export function LinkElement({apiUri, linkId} : {apiUri: string, linkId: string})
             });
     }, [])
 
-    return (<a href={linkUrl}>{provider}</a>);
+    return (<a className="Manga-Link-Value" href={linkUrl}>{provider}</a>);
 }

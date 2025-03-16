@@ -1,5 +1,5 @@
 import IManga from "./interfaces/IManga";
-import {getData, postData} from "../App";
+import {postData} from "../App";
 
 export default class SearchFunctions {
 

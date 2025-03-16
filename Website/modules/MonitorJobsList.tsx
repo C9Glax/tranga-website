@@ -4,7 +4,8 @@ import '../styles/monitorMangaList.css';
 import {JobType} from "./interfaces/Jobs/IJob";
 import '../styles/MangaCoverCard.css'
 import DownloadAvailableChaptersJob from "./interfaces/Jobs/DownloadAvailableChaptersJob";
-import {CoverCard} from "./interfaces/IManga";
+import {MangaItem} from "./interfaces/IManga";
+import Manga from "./Manga";
 
 export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend, apiUri, updateList} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean, apiUri: string, updateList: Date}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<DownloadAvailableChaptersJob[]>([]);
@@ -35,10 +36,10 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
     }
 
     function StartSearchMangaEntry() : ReactElement {
-        return (<div key="monitorMangaEntry.StartSearch" className="startSearchEntry Manga" onClick={onStartSearch}>
-            <img src="../media/blahaj.png" alt="Blahaj"></img>
+        return (<div key="monitorMangaEntry.StartSearch" className="startSearchEntry MangaItem" onClick={onStartSearch}>
+            <img className="MangaItem-Cover" src="../media/blahaj.png" alt="Blahaj"></img>
             <div>
-                <p style={{textAlign: "center", width: "100%"}} className="Manga-name">Add new Manga</p>
+                <p style={{textAlign: "center", width: "100%"}} className="MangaItem-Name">Add new Manga</p>
                 <p style={{fontSize: "42pt", textAlign: "center"}}>+</p>
             </div>
         </div>);
@@ -48,7 +49,12 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
         <div id="MonitorMangaList">
             <StartSearchMangaEntry />
             {MonitoringJobs.map((MonitoringJob) =>
-                <CoverCard apiUri={apiUri} mangaId={MonitoringJob.mangaId} key={MonitoringJob.mangaId} />
+                <MangaItem apiUri={apiUri} mangaId={MonitoringJob.mangaId} key={MonitoringJob.mangaId}>
+                    <></>
+                    <button className="Manga-DeleteButton" onClick={() => {
+                        Manga.DeleteManga(apiUri, MonitoringJob.mangaId);
+                    }}>Delete</button>
+                </MangaItem>
             )}
         </div>);
 }

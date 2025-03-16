@@ -4,7 +4,8 @@ import '../styles/queuePopUp.css';
 import '../styles/popup.css';
 import Job from "./Job";
 import DownloadSingleChapterJob from "./interfaces/Jobs/DownloadSingleChapterJob";
-import { ItemDownloadSingleChapterJob } from "./interfaces/IManga";
+import { MangaItem } from "./interfaces/IManga";
+import {ChapterItem} from "./interfaces/IChapter";
 
 export default function QueuePopUp({connectedToBackend, children, apiUri} : {connectedToBackend: boolean, children: JSX.Element[], apiUri: string}) {
 
@@ -59,10 +60,16 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
                     </div>
                     <div id="QueuePopUpBody" className="popupBody">
                         <div>
-                            {RunningJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j => <ItemDownloadSingleChapterJob apiUri={apiUri} job={j as DownloadSingleChapterJob} key={j.jobId} />)}
+                            {RunningJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j => {
+                                let job = j as DownloadSingleChapterJob;
+                                return <ChapterItem apiUri={apiUri} chapterId={job.chapterId} />
+                            })}
                         </div>
                         <div>
-                            {WaitingJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j => <ItemDownloadSingleChapterJob apiUri={apiUri} job={j as DownloadSingleChapterJob} key={j.jobId} />)}
+                            {WaitingJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j =>{
+                                let job = j as DownloadSingleChapterJob;
+                                return <ChapterItem apiUri={apiUri} chapterId={job.chapterId} />
+                            })}
                         </div>
                     </div>
                 </div>
