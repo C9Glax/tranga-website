@@ -1,8 +1,8 @@
-import ILocalLibrary from "./ILocalLibrary";
-import {deleteData, getData, patchData, putData} from "../../App";
-import INewLibraryRecord from "./records/INewLibraryRecord";
+import ILocalLibrary from "./interfaces/ILocalLibrary";
+import {deleteData, getData, patchData, putData} from "../App";
+import INewLibraryRecord from "./interfaces/records/INewLibraryRecord";
 
-export default class LocalLibrary
+export default class LocalLibraryFunctions
 {
     static async GetLibraries(apiUri: string): Promise<ILocalLibrary[]> {
         return getData(`${apiUri}/v2/LocalLibraries`)

@@ -3,7 +3,7 @@ import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
 import IModifyJobRecord from "./interfaces/records/IModifyJobRecord";
 import IDownloadAvailableJobsRecord from "./interfaces/records/IDownloadAvailableJobsRecord";
 
-export default class Job
+export default class JobFunctions
 {
     static IntervalStringFromDate(date: Date) : string {
         let x = new Date(date);
@@ -82,10 +82,10 @@ export default class Job
             console.error(`JobId was not provided`);
             return Promise.reject();
         }
-        //console.info(`Getting Job ${jobId}`);
+        //console.info(`Getting JobFunctions ${jobId}`);
         return getData(`${apiUri}/v2/Job/${jobId}`)
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as IJob;
                 //console.debug(ret);
                 return (ret);
@@ -111,7 +111,7 @@ export default class Job
         }
         return patchData(`${apiUri}/v2/Job/${jobId}`, modifyData)
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as IJob;
                 //console.debug(ret);
                 return (ret);
@@ -129,7 +129,7 @@ export default class Job
         }
         return putData(`${apiUri}/v2/Job/DownloadAvailableChaptersJob/${mangaId}`, data)
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as string[];
                 //console.debug(ret);
                 return (ret);
@@ -143,7 +143,7 @@ export default class Job
         }
         return putData(`${apiUri}/v2/Job/DownloadSingleChapterJob/${chapterId}`, {})
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as string[];
                 //console.debug(ret);
                 return (ret);
@@ -157,7 +157,7 @@ export default class Job
         }
         return putData(`${apiUri}/v2/Job/UpdateFilesJob/${mangaId}`, {})
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as string[];
                 //console.debug(ret);
                 return (ret);
@@ -167,7 +167,7 @@ export default class Job
     static async CreateUpdateAllFilesJob(apiUri: string): Promise<string[]> {
         return putData(`${apiUri}/v2/Job/UpdateAllFilesJob`, {})
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as string[];
                 //console.debug(ret);
                 return (ret);
@@ -181,7 +181,7 @@ export default class Job
         }
         return putData(`${apiUri}/v2/Job/UpdateMetadataJob/${mangaId}`, {})
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as string[];
                 //console.debug(ret);
                 return (ret);
@@ -191,7 +191,7 @@ export default class Job
     static async CreateUpdateAllMetadataJob(apiUri: string): Promise<string[]> {
         return putData(`${apiUri}/v2/Job/UpdateAllMetadataJob`, {})
             .then((json) => {
-                //console.info(`Got Job ${jobId}`);
+                //console.info(`Got JobFunctions ${jobId}`);
                 const ret = json as string[];
                 //console.debug(ret);
                 return (ret);

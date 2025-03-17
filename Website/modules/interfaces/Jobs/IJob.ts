@@ -17,7 +17,8 @@ export enum JobType {
     MoveFileOrFolderJob = "MoveFileOrFolderJob",
     DownloadMangaCoverJob = "DownloadMangaCoverJob",
     RetrieveChaptersJob = "RetrieveChaptersJob",
-    UpdateFilesDownloadedJob = "UpdateFilesDownloadedJob"
+    UpdateFilesDownloadedJob = "UpdateFilesDownloadedJob",
+    MoveMangaLibraryJob = "MoveMangaLibraryJob"
 }
 
 export enum JobState {

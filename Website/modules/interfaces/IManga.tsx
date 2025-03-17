@@ -1,4 +1,4 @@
-import Manga from "../Manga";
+import MangaFunctions from "../MangaFunctions";
 import React, {Children, ReactElement, ReactEventHandler, useEffect, useState} from "react";
 import Icon from '@mdi/react';
 import { mdiTagTextOutline, mdiAccountEdit, mdiLinkVariant } from '@mdi/js';
@@ -34,18 +34,18 @@ export enum MangaReleaseStatus {
 
 export function MangaItem({apiUri, mangaId, children} : {apiUri: string, mangaId: string, children?: (string | ReactElement)[]}) : ReactElement {
     const LoadMangaCover : ReactEventHandler<HTMLImageElement> = (e) => {
-        if(e.currentTarget.src != Manga.GetMangaCoverImageUrl(apiUri, mangaId, e.currentTarget))
-            e.currentTarget.src = Manga.GetMangaCoverImageUrl(apiUri, mangaId, e.currentTarget);
+        if(e.currentTarget.src != MangaFunctions.GetMangaCoverImageUrl(apiUri, mangaId, e.currentTarget))
+            e.currentTarget.src = MangaFunctions.GetMangaCoverImageUrl(apiUri, mangaId, e.currentTarget);
     }
 
     let [manga, setManga] = useState<IManga | null>(null);
     let [clicked, setClicked] = useState<boolean>(false);
     useEffect(() => {
-        Manga.GetMangaById(apiUri, mangaId).then(setManga);
+        MangaFunctions.GetMangaById(apiUri, mangaId).then(setManga);
     }, []);
 
     return (<div className="MangaItem" key={mangaId} is-clicked={clicked ? "clicked" : "not-clicked"} onClick={()=>setClicked(!clicked)}>
-        <img className="MangaItem-Cover" src={Manga.GetMangaCoverImageUrl(apiUri, mangaId, undefined)} alt="Manga Cover" onLoad={LoadMangaCover} onResize={LoadMangaCover}></img>
+        <img className="MangaItem-Cover" src={MangaFunctions.GetMangaCoverImageUrl(apiUri, mangaId, undefined)} alt="MangaFunctions Cover" onLoad={LoadMangaCover} onResize={LoadMangaCover}></img>
         <p className="MangaItem-Connector">{manga ? manga.mangaConnectorId : "Connector"}</p>
         <p className="MangaItem-Status" release-status={manga?.releaseStatus}></p>
         <p className="MangaItem-Name">{manga ? manga.name : "Name"}</p>

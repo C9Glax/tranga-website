@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import '../styles/footer.css';
-import Job from './Job';
+import JobFunctions from './JobFunctions';
 import Icon from '@mdi/react';
 import {mdiCounter, mdiEyeCheck, mdiRun, mdiTrayFull} from '@mdi/js';
 import QueuePopUp from "./QueuePopUp";
@@ -14,10 +14,10 @@ export default function Footer({connectedToBackend, apiUri} : {connectedToBacken
     const [countUpdateInterval, setCountUpdateInterval] = React.useState<number>();
 
     function UpdateBackendState(){
-        Job.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob).then((jobs) => setMonitoringJobsCount(jobs.length));
-        Job.GetAllJobs(apiUri).then((jobs) => setAllJobsCount(jobs.length));
-        Job.GetJobsInState(apiUri, JobState.Running).then((jobs) => setRunningJobsCount(jobs.length));
-        Job.GetJobsInState(apiUri, JobState.Waiting).then((jobs) => setWaitingJobs(jobs.length));
+        JobFunctions.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob).then((jobs) => setMonitoringJobsCount(jobs.length));
+        JobFunctions.GetAllJobs(apiUri).then((jobs) => setAllJobsCount(jobs.length));
+        JobFunctions.GetJobsInState(apiUri, JobState.Running).then((jobs) => setRunningJobsCount(jobs.length));
+        JobFunctions.GetJobsInState(apiUri, JobState.Waiting).then((jobs) => setWaitingJobs(jobs.length));
     }
 
     useEffect(() => {

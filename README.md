@@ -14,7 +14,7 @@
 <h3 align="center">Tranga-Website</h3>
 
   <p align="center">
-    Automatic Manga and Metadata downloader 
+    Automatic MangaFunctions and Metadata downloader 
   </p>
   <p align="center">
     This is the Website for <a href="https://github.com/C9Glax/tranga">Tranga</a> (API)  
@@ -46,7 +46,7 @@
 | Search                                                                     | SearchResults                                                                   | Default-View                                                               |
 |----------------------------------------------------------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-53-15%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-54-59%20Tranga.png)      | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-55-13%20Tranga.png) |
-| Search opens with click on "Add new Manga"                                 | When selecting different connectors, available languages automatically update   | Clicking on an Item here will bring up a view with more information        |
+| Search opens with click on "Add new MangaFunctions"                                 | When selecting different connectors, available languages automatically update   | Clicking on an Item here will bring up a view with more information        |
 
 
 ## About The Project

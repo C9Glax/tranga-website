@@ -1,7 +1,7 @@
 import IMangaConnector from './interfaces/IMangaConnector';
 import {getData, patchData} from '../App';
 
-export class MangaConnector
+export class MangaConnectorFunctions
 {
     static async GetAllConnectors(apiUri: string): Promise<IMangaConnector[]> {
         //console.info("Getting all MangaConnectors");

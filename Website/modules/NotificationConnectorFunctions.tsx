@@ -2,9 +2,9 @@ import INotificationConnector from "./interfaces/INotificationConnector";
 import {deleteData, getData, putData} from "../App";
 import IGotifyRecord from "./interfaces/records/IGotifyRecord";
 import INtfyRecord from "./interfaces/records/INtfyRecord";
-import IlunaseaRecord from "./interfaces/records/IlunaseaRecord";
+import ILunaseaRecord from "./interfaces/records/ILunaseaRecord";
 
-export default class NotificationConnector {
+export default class NotificationConnectorFunctions {
 
     static async GetNotificationConnectors(apiUri: string) : Promise<INotificationConnector[]> {
         //console.info("Getting Notification Connectors");
@@ -81,7 +81,7 @@ export default class NotificationConnector {
             });
     }
 
-    static async CreateLunasea(apiUri: string, lunasea: IlunaseaRecord) : Promise<string> {
+    static async CreateLunasea(apiUri: string, lunasea: ILunaseaRecord) : Promise<string> {
         if(lunasea === undefined || lunasea === null) {
             console.error(`ntfy was not provided`);
             return Promise.reject();

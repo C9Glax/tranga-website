@@ -8,7 +8,7 @@ export default interface ILocalLibrary {
 
 export function LocalLibrary(library: ILocalLibrary) : ReactElement {
     return (<div key={library.localLibraryId}>
-        <p className={"LocalLibrary-Name"}>{library.libraryName}</p>
-        <p className={"LocalLibrary-Path"}>{library.basePath}</p>
+        <p className={"LocalLibraryFunctions-Name"}>{library.libraryName}</p>
+        <p className={"LocalLibraryFunctions-Path"}>{library.basePath}</p>
     </div>);
 }

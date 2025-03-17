@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
 import '../styles/queuePopUp.css';
 import '../styles/popup.css';
-import Job from "./Job";
-import DownloadSingleChapterJob from "./interfaces/Jobs/DownloadSingleChapterJob";
+import JobFunctions from "./JobFunctions";
+import IDownloadSingleChapterJob from "./interfaces/Jobs/IDownloadSingleChapterJob";
 import { MangaItem } from "./interfaces/IManga";
 import {ChapterItem} from "./interfaces/IChapter";
 
@@ -33,13 +33,13 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
     }, [connectedToBackend]);
 
     function UpdateMonitoringJobsList(){
-        Job.GetJobsInState(apiUri, JobState.Waiting)
+        JobFunctions.GetJobsInState(apiUri, JobState.Waiting)
             .then((jobs: IJob[]) => {
                 //console.log(jobs);
                 return jobs;
             })
             .then(setWaitingJobs);
-        Job.GetJobsInState(apiUri, JobState.Running)
+        JobFunctions.GetJobsInState(apiUri, JobState.Running)
             .then((jobs: IJob[]) => {
                 //console.log(jobs);
                 return jobs;
@@ -61,13 +61,13 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
                     <div id="QueuePopUpBody" className="popupBody">
                         <div>
                             {RunningJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j => {
-                                let job = j as DownloadSingleChapterJob;
+                                let job = j as IDownloadSingleChapterJob;
                                 return <ChapterItem apiUri={apiUri} chapterId={job.chapterId} />
                             })}
                         </div>
                         <div>
                             {WaitingJobs.filter(j => j.jobType == JobType.DownloadSingleChapterJob).map(j =>{
-                                let job = j as DownloadSingleChapterJob;
+                                let job = j as IDownloadSingleChapterJob;
                                 return <ChapterItem apiUri={apiUri} chapterId={job.chapterId} />
                             })}
                         </div>

@@ -1,13 +1,13 @@
 import React, {ChangeEventHandler, EventHandler, useEffect, useState} from 'react';
-import {MangaConnector} from "./MangaConnector";
+import {MangaConnectorFunctions} from "./MangaConnectorFunctions";
 import IMangaConnector from "./interfaces/IMangaConnector";
 import {isValidUri} from "../App";
 import IManga, {MangaItem} from "./interfaces/IManga";
 import '../styles/search.css';
 import SearchFunctions from "./SearchFunctions";
-import Job from "./Job";
+import JobFunctions from "./JobFunctions";
 import ILocalLibrary from "./interfaces/ILocalLibrary";
-import LocalLibrary from "./interfaces/LocalLibrary";
+import LocalLibraryFunctions from "./LocalLibraryFunctions";
 
 export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch} : {apiUri: string, jobInterval: Date, onJobsChanged: (internalId: string) => void, closeSearch(): void}) {
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
@@ -20,7 +20,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
 
     useEffect(() => {
         if(mangaConnectors === undefined) {
-            MangaConnector.GetAllConnectors(apiUri).then(setConnectors)
+            MangaConnectorFunctions.GetAllConnectors(apiUri).then(setConnectors)
             return;
         }
     }, [mangaConnectors]);
@@ -90,7 +90,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
     let [selectedLibrary, setSelectedLibrary] = useState<ILocalLibrary | null>(null);
     let [libraries, setLibraries] = useState<ILocalLibrary[] | null>(null);
     useEffect(() => {
-        LocalLibrary.GetLibraries(apiUri).then(setLibraries);
+        LocalLibraryFunctions.GetLibraries(apiUri).then(setLibraries);
     }, []);
     useEffect(() => {
         if(libraries === null || libraries.length < 1)
@@ -137,7 +137,7 @@ export default function Search({apiUri, jobInterval, onJobsChanged, closeSearch}
                                 : libraries.map(library => <option key={library.localLibraryId} value={library.localLibraryId}>{library.libraryName} ({library.basePath})</option>)}
                         </select>
                         <button className="Manga-AddButton" onClick={() => {
-                            Job.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: jobInterval.getTime(), localLibraryId: selectedLibrary!.localLibraryId}).then(() => onJobsChanged(result.mangaId));
+                            JobFunctions.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: jobInterval.getTime(), localLibraryId: selectedLibrary!.localLibraryId}).then(() => onJobsChanged(result.mangaId));
                         }}>Monitor</button>
                     </MangaItem>
                 )

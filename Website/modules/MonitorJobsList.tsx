@@ -1,14 +1,14 @@
 import React, {EventHandler, ReactElement, useEffect, useState} from 'react';
-import Job from './Job';
+import JobFunctions from './JobFunctions';
 import '../styles/monitorMangaList.css';
 import {JobType} from "./interfaces/Jobs/IJob";
-import '../styles/MangaCoverCard.css'
-import DownloadAvailableChaptersJob from "./interfaces/Jobs/DownloadAvailableChaptersJob";
+import '../styles/mangaCover.css'
+import IDownloadAvailableChaptersJob from "./interfaces/Jobs/IDownloadAvailableChaptersJob";
 import {MangaItem} from "./interfaces/IManga";
-import Manga from "./Manga";
+import MangaFunctions from "./MangaFunctions";
 
 export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend, apiUri, updateList} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean, apiUri: string, updateList: Date}) {
-    const [MonitoringJobs, setMonitoringJobs] = useState<DownloadAvailableChaptersJob[]>([]);
+    const [MonitoringJobs, setMonitoringJobs] = useState<IDownloadAvailableChaptersJob[]>([]);
     const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
 
     useEffect(() => {
@@ -31,15 +31,15 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
         if(!connectedToBackend)
             return;
         //console.debug("Updating MonitoringJobsList");
-        Job.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob)
-            .then((jobs) => setMonitoringJobs(jobs as DownloadAvailableChaptersJob[]));
+        JobFunctions.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob)
+            .then((jobs) => setMonitoringJobs(jobs as IDownloadAvailableChaptersJob[]));
     }
 
     function StartSearchMangaEntry() : ReactElement {
         return (<div key="monitorMangaEntry.StartSearch" className="startSearchEntry MangaItem" onClick={onStartSearch}>
             <img className="MangaItem-Cover" src="../media/blahaj.png" alt="Blahaj"></img>
             <div>
-                <p style={{textAlign: "center", width: "100%"}} className="MangaItem-Name">Add new Manga</p>
+                <p style={{textAlign: "center", width: "100%"}} className="MangaItem-Name">Add new MangaFunctions</p>
                 <p style={{fontSize: "42pt", textAlign: "center"}}>+</p>
             </div>
         </div>);
@@ -52,7 +52,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
                 <MangaItem apiUri={apiUri} mangaId={MonitoringJob.mangaId} key={MonitoringJob.mangaId}>
                     <></>
                     <button className="Manga-DeleteButton" onClick={() => {
-                        Manga.DeleteManga(apiUri, MonitoringJob.mangaId);
+                        MangaFunctions.DeleteManga(apiUri, MonitoringJob.mangaId);
                     }}>Delete</button>
                 </MangaItem>
             )}
