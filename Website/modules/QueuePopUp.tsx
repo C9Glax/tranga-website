@@ -4,7 +4,6 @@ import '../styles/queuePopUp.css';
 import '../styles/popup.css';
 import JobFunctions from "./JobFunctions";
 import IDownloadSingleChapterJob from "./interfaces/Jobs/IDownloadSingleChapterJob";
-import { MangaItem } from "./interfaces/IManga";
 import {ChapterItem} from "./interfaces/IChapter";
 
 export default function QueuePopUp({connectedToBackend, children, apiUri} : {connectedToBackend: boolean, children: JSX.Element[], apiUri: string}) {
@@ -55,7 +54,7 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
                 ? <div className="popup" id="QueuePopUp">
                     <div className="popupHeader">
                         <h1>Queue Status</h1>
-                        <img alt="Close Search" className="close" src="../media/close-x.svg"
+                        <img alt="Close Queue" className="close" src="../media/close-x.svg"
                              onClick={() => setShowQueuePopup(false)}/>
                     </div>
                     <div id="QueuePopUpBody" className="popupBody">
@@ -73,7 +72,7 @@ export default function QueuePopUp({connectedToBackend, children, apiUri} : {con
                         </div>
                     </div>
                 </div>
-                : <></>
+                : null
             }
         </>
     );

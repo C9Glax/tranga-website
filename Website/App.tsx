@@ -39,7 +39,7 @@ export default function App(){
     const UpdateList = () => {setUpdateMonitorList(new Date())}
 
     return(<div>
-        <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} changeSettings={ChangeSettings}/>
+        <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} />
         {connected
             ? <>
                 {showSearch

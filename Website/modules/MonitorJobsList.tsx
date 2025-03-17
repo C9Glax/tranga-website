@@ -39,7 +39,7 @@ export default function MonitorJobsList({onStartSearch, onJobsChanged, connected
         return (<div key="monitorMangaEntry.StartSearch" className="startSearchEntry MangaItem" onClick={onStartSearch}>
             <img className="MangaItem-Cover" src="../media/blahaj.png" alt="Blahaj"></img>
             <div>
-                <p style={{textAlign: "center", width: "100%"}} className="MangaItem-Name">Add new MangaFunctions</p>
+                <p style={{textAlign: "center", width: "100%"}} className="MangaItem-Name">Add new Manga</p>
                 <p style={{fontSize: "42pt", textAlign: "center"}}>+</p>
             </div>
         </div>);

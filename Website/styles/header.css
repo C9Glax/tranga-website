@@ -31,3 +31,7 @@ header > #titlebox > img {
     height: 100%;
     cursor: grab;
 }
+
+header > * {
+    height: 100%;
+}

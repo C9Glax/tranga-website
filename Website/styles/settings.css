@@ -1,0 +1,15 @@
+#Settings {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#Settings > * {
+    height: 80%;
+}
+
+#Settings > div > img {
+    height: calc(100% - 10px);
+    margin: 5px;
+    filter: invert(100%) sepia(20%) saturate(7480%) hue-rotate(179deg) brightness(121%) contrast(102%);
+}
