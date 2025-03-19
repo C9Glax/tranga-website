@@ -43,10 +43,18 @@
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
 
-| Search                                                                     | SearchResults                                                                   | Default-View                                                               |
-|----------------------------------------------------------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-53-15%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-54-59%20Tranga.png)      | ![Image](Screenshots/Screenshot%202025-03-14%20at%2000-55-13%20Tranga.png) |
-| Search opens with click on "Add new MangaFunctions"                                 | When selecting different connectors, available languages automatically update   | Clicking on an Item here will bring up a view with more information        |
+| Default View                                                                  | Search Window                                                                                                                             | Search Results                                                                                                                            |
+|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Image](Screenshots/Screenshot 2025-03-19 at 02-38-47 Tranga.png)            | ![Image](Screenshots/Screenshot 2025-03-19 at 02-39-05 Tranga.png)<br/>![Image](Screenshots/Screenshot 2025-03-19 at 02-39-45 Tranga.png) | ![Image](Screenshots/Screenshot 2025-03-19 at 02-39-52 Tranga.png)<br/>![Image](Screenshots/Screenshot 2025-03-19 at 02-39-58 Tranga.png) |
+| Search opens with click on "Add new Manga".<br/>Settings are on the top right | When selecting different connectors, available languages automatically update.<br/>Spinners to indicate action being performed            | Clicking on an Item here will bring up a view with more information                                                                       |
+
+|                                                                    | Different Views for Manga                                          |                                                                    |
+|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|
+| ![Image](Screenshots/Screenshot 2025-03-19 at 02-41-51 Tranga.png) | ![Image](Screenshots/Screenshot 2025-03-19 at 02-42-02 Tranga.png) | ![Image](Screenshots/Screenshot 2025-03-19 at 02-42-12 Tranga.png) |
+
+| | Rudimentary Settings                                               | |
+|-|--------------------------------------------------------------------|-|
+| | ![Image](Screenshots/Screenshot 2025-03-19 at 02-42-21 Tranga.png) | |
 
 
 ## About The Project
