@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
 import '../styles/queuePopUp.css';
 import '../styles/popup.css';
@@ -6,25 +6,21 @@ import JobFunctions from "./JobFunctions";
 import IDownloadSingleChapterJob from "./interfaces/Jobs/IDownloadSingleChapterJob";
 import {ChapterItem} from "./interfaces/IChapter";
 
-export default function QueuePopUp({connectedToBackend, children, apiUri} : {connectedToBackend: boolean, children: JSX.Element[], apiUri: string}) {
+export default function QueuePopUp({connectedToBackend, children, apiUri, checkConnectedInterval} : {connectedToBackend: boolean, children: ReactElement[], apiUri: string, checkConnectedInterval: number}) {
 
     const [WaitingJobs, setWaitingJobs] = React.useState<IJob[]>([]);
     const [RunningJobs, setRunningJobs] = React.useState<IJob[]>([]);
     const [showQueuePopup, setShowQueuePopup] = useState<boolean>(false);
-    const [queueListInterval, setQueueListInterval] = React.useState<number>();
+    const [queueListInterval, setQueueListInterval] = React.useState<number | undefined>(undefined);
 
     useEffect(() => {
-        if(!showQueuePopup)
-            return;
-        UpdateMonitoringJobsList();
-    }, [showQueuePopup]);
-
-    useEffect(() => {
-        if(connectedToBackend){
+        if(connectedToBackend) {
             UpdateMonitoringJobsList();
-            setQueueListInterval(setInterval(() => {
-                UpdateMonitoringJobsList();
-            }, 2000));
+            if(queueListInterval === undefined){
+                setQueueListInterval(setInterval(() => {
+                    UpdateMonitoringJobsList();
+                }, checkConnectedInterval));
+            }
         }else{
             clearInterval(queueListInterval);
             setQueueListInterval(undefined);

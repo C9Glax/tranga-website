@@ -6,157 +6,114 @@ import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
 import IFrontendSettings, {LoadFrontendSettings} from "./modules/interfaces/IFrontendSettings";
 import {useCookies} from "react-cookie";
+import Loader from "./modules/Loader";
 
 export default function App(){
     const [, setCookie] = useCookies(['apiUri', 'jobInterval']);
     const [connected, setConnected] = React.useState(false);
     const [showSearch, setShowSearch] = React.useState(false);
     const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(LoadFrontendSettings());
-    const [updateInterval, setUpdateInterval] = React.useState<number>();
-    const [updateMonitorList, setUpdateMonitorList] = React.useState<Date>(new Date());
-    const checkConnectedInterval = 1000;
+    const [updateInterval, setUpdateInterval] = React.useState<number | undefined>(undefined);
+    const checkConnectedInterval = 5000;
 
     const apiUri =  frontendSettings.apiUri;
 
     useEffect(() => {
-        checkConnection(apiUri).then(res => setConnected(res)).catch(() => setConnected(false));
+        setCookie('apiUri', frontendSettings.apiUri);
+        setCookie('jobInterval', frontendSettings.jobInterval);
+        updateConnected(apiUri, connected, setConnected);
+    }, [frontendSettings]);
+
+    useEffect(() => {
         if(updateInterval === undefined){
             setUpdateInterval(setInterval(() => {
-                checkConnection(apiUri).then(res => setConnected(res)).catch(() => setConnected(false));
+                updateConnected(apiUri, connected, setConnected);
             }, checkConnectedInterval));
         }else{
             clearInterval(updateInterval);
             setUpdateInterval(undefined);
         }
-    }, [frontendSettings]);
-
-    function ChangeSettings(settings: IFrontendSettings) {
-        setFrontendSettings(settings);
-        setCookie('apiUri', settings.apiUri);
-        setCookie('jobInterval', settings.jobInterval);
-    }
-
-    const UpdateList = () => {setUpdateMonitorList(new Date())}
+    }, [connected]);
 
     return(<div>
-        <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} />
+        <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} setFrontendSettings={setFrontendSettings} />
         {connected
             ? <>
                 {showSearch
                     ? <>
-                        <Search apiUri={apiUri} jobInterval={frontendSettings.jobInterval} onJobsChanged={UpdateList} closeSearch={() => setShowSearch(false)} />
+                        <Search apiUri={apiUri} jobInterval={frontendSettings.jobInterval} closeSearch={() => setShowSearch(false)} />
                         <hr/>
                     </>
                     : <></>}
-                <MonitorJobsList updateList={updateMonitorList} apiUri={apiUri} onStartSearch={() => setShowSearch(true)} onJobsChanged={UpdateList} connectedToBackend={connected} />
+                <MonitorJobsList apiUri={apiUri} onStartSearch={() => setShowSearch(true)} connectedToBackend={connected} checkConnectedInterval={checkConnectedInterval} />
             </>
             : <>
                 <h1>No connection to the Backend.</h1>
                 <h3>Check the Settings ApiUri.</h3>
+                <Loader loading={true} />
             </>}
-        <Footer apiUri={apiUri} connectedToBackend={connected} />
+        <Footer apiUri={apiUri} connectedToBackend={connected} checkConnectedInterval={checkConnectedInterval} />
     </div>)
 }
 
 export function getData(uri: string) : Promise<object> {
-    return fetch(uri,
-        {
-            method: 'GET',
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(function(response){
-            if(!response.ok) throw new Error("Could not fetch data");
-            return response.json();
-        })
-        .catch(function(err){
-            console.error(`Error GETting Data ${uri}\n${err}`);
-            return Promise.reject();
-        });
+    return makeRequest("GET", uri, null) as Promise<object>;
 }
 
 export function postData(uri: string, content: object | string | number) : Promise<object> {
-    return fetch(uri,
-        {
-            method: 'POST',
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(content)
-        })
-        .then(function(response){
-            if(!response.ok)
-                throw new Error("Could not fetch data");
-            let json = response.json();
-            return json.then((json) => json).catch(() => null);
-        })
-        .catch(function(err){
-            console.error(`Error POSTing Data ${uri}\n${err}`);
-            return Promise.reject();
-        });
+    return makeRequest("POST", uri, content) as Promise<object>;
 }
 
 export function deleteData(uri: string) : Promise<void> {
-    return fetch(uri,
-        {
-            method: 'DELETE',
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(() =>{
-            return Promise.resolve();
-        })
-        .catch(function(err){
-            console.error(`Error DELETEing Data ${uri}\n${err}`);
-            return Promise.reject();
-        });
+    return makeRequest("PUT", uri, null) as Promise<void>;
 }
 
 export function patchData(uri: string, content: object | string | number) : Promise<object> {
-    return fetch(uri,
-        {
-            method: 'PATCH',
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(content)
-        })
-        .then(function(response){
-            if(!response.ok)
-                throw new Error("Could not fetch data");
-            let json = response.json();
-            return json.then((json) => json).catch(() => null);
-        })
-        .catch(function(err){
-            console.error(`Error PATCHing Data ${uri}\n${err}`);
-            return Promise.reject();
-        });
+    return makeRequest("patch", uri, content) as Promise<object>;
 }
 
 export function putData(uri: string, content: object | string | number) : Promise<object> {
+    return makeRequest("PUT", uri, content) as Promise<object>;
+}
+
+function makeRequest(method: string, uri: string, content: object | string | number | null) : Promise<object | void> {
     return fetch(uri,
         {
-            method: 'PUT',
+            method: method,
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify(content)
+            body: content ? JSON.stringify(content) : null
         })
         .then(function(response){
-            if(!response.ok)
-                throw new Error("Could not fetch data");
+            if(!response.ok){
+                if(response.status === 503){
+                    let retryHeaderVal = response.headers.get("Retry-After");
+                    let seconds = 10;
+                    if(!retryHeaderVal){
+                        return response.text().then(text => {
+                            seconds = parseInt(text);
+                            return new Promise(resolve => setTimeout(resolve, seconds * 1000))
+                                .then(() => {
+                                    return makeRequest(method, uri, content);
+                                });
+                        });
+                    }else {
+                        seconds = parseInt(retryHeaderVal);
+                        return new Promise(resolve => setTimeout(resolve, seconds * 1000))
+                            .then(() => {
+                                return makeRequest(method, uri, content);
+                            });
+                    }
+                }else
+                    throw new Error(response.statusText);
+            }
             let json = response.json();
             return json.then((json) => json).catch(() => null);
         })
-        .catch(function(err){
-            console.error(`Error PUTting Data ${uri}\n${err}`);
+        .catch(function(err : Error){
+            console.error(`Error ${method}ing Data ${uri}\n${err}`);
             return Promise.reject();
         });
 }
@@ -168,6 +125,15 @@ export function isValidUri(uri: string) : boolean{
     } catch (err) {
         return false;
     }
+}
+
+const updateConnected = (apiUri: string, connected: boolean, setConnected: (c: boolean) => void) => {
+    checkConnection(apiUri)
+        .then(res => {
+            if(connected != res)
+                setConnected(res);
+        })
+        .catch(() => setConnected(false));
 }
 
 export const checkConnection  = async (apiUri: string): Promise<boolean> =>{

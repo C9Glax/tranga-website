@@ -1,25 +1,24 @@
-.MangaItem-Connector {
-    flex-grow: 0;
-    height: 14pt;
-    font-size: 12pt;
-    border-radius: 9pt;
-    background-color: var(--primary-color);
-    padding: 2pt 17px;
-    color: black;
-    width: fit-content;
-    margin: 10px 0;
-}
-
 .MangaItem{
     cursor: pointer;
     background-color: var(--secondary-color);
-    width: 180px;
+    width: 200px;
     height: 300px;
     border-radius: 5px;
-    margin: 10px 10px;
-    padding: 14px 20px;
+    overflow: hidden;
     position: relative;
     flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 200px 600px;
+    grid-template-rows: 80px 190px 30px;
+    grid-template-areas:
+        "cover tags"
+        "cover description"
+        "cover footer";
+    margin: 5px;
+}
+
+.MangaItem[is-clicked="clicked"]{
+    width: 800px;
 }
 
 .MangaItem::after{
@@ -33,7 +32,7 @@
 }
 
 .MangaItem > * {
-    z-index: 1;
+    z-index: 2;
     position: relative;
 }
 
@@ -41,40 +40,62 @@
     background: initial !important;
 }
 
+.MangaItem-Connector {
+    grid-area: cover;
+    top: 10px;
+    left: 10px;
+    flex-grow: 0;
+    height: 14pt;
+    font-size: 12pt;
+    border-radius: 9pt;
+    background-color: var(--primary-color);
+    padding: 2pt 17px;
+    color: black;
+    width: fit-content;
+    z-index: 1;
+}
+
 .MangaItem-Name{
+    grid-area: cover;
     width: fit-content;
     font-size: 16pt;
     font-weight: bold;
     color: white;
-    margin: 5px 0 !important;
+    top: 50px;
+    left: 10px;
+    margin: 0;
+    max-width: calc(100% - 20px);
+    z-index: 1;
 }
 
 .MangaItem-Website {
+    grid-area: cover;
     display: block;
     height: 13px;
     width: 13px;
-    position: absolute;
+    margin: 0px 0px auto auto;
     top: 12px;
     right: 10px;
-    z-index: 2;
+    z-index: 1;
 }
 
 .MangaItem-Status {
+    grid-area: cover;
     display:block;
     height: 15px;
     width: 15px;
     border-radius: 50%;
     position: absolute;
-    top: 15px;
+    top: 14px;
     right: 35px;
-    z-index: 2;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 10px, rgb(51, 51, 51) 0px 0px 10px 3px;
+    z-index: 1;
 }
 
 .MangaItem-Status::after {
     content: attr(release-status);
     position: absolute;
-    top: 0;
+    top: -2.5pt;
     right: 0;
 
     visibility: hidden;
@@ -96,7 +117,7 @@
     visibility:visible;
 }
 
-.MangaItem-Status[release-status="Ongoing"]{
+.MangaItem-Status[release-status="Continuing"]{
     background-color: limegreen;
 }
 
@@ -112,7 +133,7 @@
     background-color: firebrick;
 }
 
-.MangaItem-Status[release-status="Upcoming"]{
+.MangaItem-Status[release-status="Unreleased"]{
     background-color: aqua;
 }
 
@@ -124,15 +145,12 @@
     position: absolute;
     top: 0;
     left: 0;
+    grid-area: cover;
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 5px;
     z-index: 0;
-}
-
-.MangaItem p {
-    margin: 0;
 }
 
 .MangaItem[is-clicked="not-clicked"] .MangaItem-Description, .MangaItem[is-clicked="not-clicked"] .MangaItem-Tags, .MangaItem[is-clicked="not-clicked"] .MangaItem-Props{
@@ -141,25 +159,32 @@
 
 .MangaItem[is-clicked="clicked"] .MangaItem-Description, .MangaItem[is-clicked="clicked"] .MangaItem-Tags, .MangaItem[is-clicked="clicked"] .MangaItem-Props{
     display: block;
-    width: 80vw;
+    width: calc(100% - 6px);
     background-color: white;
-    padding: 3px;
+    padding: 0 3px;
+    overflow-y: auto;
 }
 
 .MangaItem-Tags {
+    grid-area: tags;
     display: flex !important;
     flex-direction: row;
     flex-wrap: wrap;
+    scrollbar-width: thin;
+    border-bottom: 1px solid var(--secondary-color);
+    justify-content: start;
+    align-content: start;
 }
 
 .MangaItem-Tags > * {
     display: flex;
     flex-direction: row;
     width: max-content;
-    margin: 2px 1px !important;
+    margin: 1px 2px !important;
     white-space: nowrap;
     color: white;
-    padding: 2px;
+    padding: 3px 2px 4px 2px;
+    position: relative;
 }
 
 .MangaItem-Tags > * > * {
@@ -167,8 +192,13 @@
     align-items: center;
 }
 
+.MangaItem-Tags > * > svg {
+    margin: auto 2px !important;
+}
+
 .MangaItem-Tags a, .MangaItem-Tags a:visited {
-    color: blue;
+    color: var(--primary-color);
+    text-decoration: none;
 }
 
 .MangaItem-Author {
@@ -184,12 +214,40 @@
 }
 
 .MangaItem-Description {
+    grid-area: description;
     color: black;
     max-height: 40vh;
+    scrollbar-width: thin;
+    border-bottom: 1px solid var(--secondary-color);
 }
 
 .MangaItem-Props {
+    grid-area: footer;
     display: flex !important;
     flex-direction: row;
     justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+.MangaItem-Props > * {
+    margin: 3px;
+    border: 1px solid var(--primary-color);
+    border-radius: 3px;
+    background-color: transparent;
+    width: fit-content;
+}
+
+.MangaItem-Props-Threshold {
+    color: black;
+    padding: 0 3px;
+}
+
+.MangaItem-Props-Threshold > input {
+    margin: 0 3px;
+    width: 50px;
+}
+
+.MangaItem-Props-Threshold-Available{
+    text-decoration: underline;
 }

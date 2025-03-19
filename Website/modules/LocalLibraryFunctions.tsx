@@ -8,7 +8,6 @@ export default class LocalLibraryFunctions
         return getData(`${apiUri}/v2/LocalLibraries`)
             .then((json) => {
                 const ret = json as ILocalLibrary[];
-                console.debug(ret);
                 return (ret);
             });
     }

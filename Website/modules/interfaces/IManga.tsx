@@ -5,6 +5,8 @@ import { mdiTagTextOutline, mdiAccountEdit, mdiLinkVariant } from '@mdi/js';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import {AuthorElement} from "./IAuthor";
 import {LinkElement} from "./ILink";
+import IChapter from "./IChapter";
+import Loader from "../Loader";
 
 export default interface IManga{
     mangaId: string;
@@ -40,56 +42,87 @@ export function MangaItem({apiUri, mangaId, children} : {apiUri: string, mangaId
 
     let [manga, setManga] = useState<IManga | null>(null);
     let [clicked, setClicked] = useState<boolean>(false);
+    let [latestChapterDownloaded, setLatestChapterDownloaded] = useState<IChapter | null>(null);
+    let [latestChapterAvailable, setLatestChapterAvailable] = useState<IChapter | null>(null);
+    let [loadingChapterStats, setLoadingChapterStats] = useState<boolean>(true);
+    let [settingThreshold, setSettingThreshold] = useState<boolean>(false);
+    const invalidTargets = ["input", "textarea", "button", "select", "a"];
     useEffect(() => {
         MangaFunctions.GetMangaById(apiUri, mangaId).then(setManga);
+        MangaFunctions.GetLatestChapterDownloaded(apiUri, mangaId)
+            .then(setLatestChapterDownloaded)
+            .finally(() => {
+                if(latestChapterDownloaded && latestChapterAvailable)
+                    setLoadingChapterStats(false);
+            });
+        MangaFunctions.GetLatestChapterAvailable(apiUri, mangaId)
+            .then(setLatestChapterAvailable)
+            .finally(() => {
+                if(latestChapterDownloaded && latestChapterAvailable)
+                    setLoadingChapterStats(false);
+            });
     }, []);
 
-    return (<div className="MangaItem" key={mangaId} is-clicked={clicked ? "clicked" : "not-clicked"} onClick={()=>setClicked(!clicked)}>
-        <img className="MangaItem-Cover" src={MangaFunctions.GetMangaCoverImageUrl(apiUri, mangaId, undefined)} alt="MangaFunctions Cover" onLoad={LoadMangaCover} onResize={LoadMangaCover}></img>
-        <p className="MangaItem-Connector">{manga ? manga.mangaConnectorId : "Connector"}</p>
-        <p className="MangaItem-Status" release-status={manga?.releaseStatus}></p>
-        <p className="MangaItem-Name">{manga ? manga.name : "Name"}</p>
+    return (<div className="MangaItem" key={mangaId} is-clicked={clicked ? "clicked" : "not-clicked"} onClick={(e)=> {
+        e.preventDefault();
+        const target = e.target as HTMLElement;
+        if(invalidTargets.find(x => x == target.localName) === undefined )
+            setClicked(!clicked)
+    }}>
+        <img className="MangaItem-Cover" src="../../media/blahaj.png" alt="MangaFunctions Cover" onLoad={LoadMangaCover} onResize={LoadMangaCover}></img>
+        <div className="MangaItem-Connector">{manga ? manga.mangaConnectorId : "Connector"}</div>
+        <div className="MangaItem-Status" release-status={manga?.releaseStatus}></div>
+        <div className="MangaItem-Name">{manga ? manga.name : "Name"}</div>
         <a className="MangaItem-Website" href={manga ? manga.websiteUrl : "#"}><img src="../../media/link.svg" alt="Link"/></a>
         <div className="MangaItem-Tags">
             {manga ? manga.authorIds.map(authorId =>
-                <p className="MangaItem-Author" key={authorId} >
+                <div className="MangaItem-Author" key={authorId} >
                     <Icon path={mdiAccountEdit} size={0.5} />
                     <AuthorElement apiUri={apiUri} authorId={authorId}></AuthorElement>
-                </p>)
+                </div>)
                 :
-                <p className="MangaItem-Author">
+                <div className="MangaItem-Author" key="null-Author">
                     <Icon path={mdiAccountEdit} size={0.5} />
                     <AuthorElement apiUri={apiUri} authorId={null}></AuthorElement>
-                </p>}
+                </div>}
             {manga ? manga.tags.map(tag =>
-                <p className="MangaItem-Tag" key={tag}>
+                <div className="MangaItem-Tag" key={tag}>
                     <Icon path={mdiTagTextOutline} size={0.5}/>
-                    <p className="MangaItem-Tag-Value">{tag}</p>
-                </p>)
+                    <span className="MangaItem-Tag-Value">{tag}</span>
+                </div>)
                 :
-                <p className="MangaItem-Tag">
+                <div className="MangaItem-Tag" key="null-Tag">
                     <Icon path={mdiTagTextOutline} size={0.5}/>
-                    <p className="MangaItem-Tag-Value">Tag</p>
-                </p>
+                    <span className="MangaItem-Tag-Value">Tag</span>
+                </div>
             }
             {manga ? manga.linkIds.map(linkId =>
-                <p className="MangaItem-Link" key={linkId}>
+                <div className="MangaItem-Link" key={linkId}>
                     <Icon path={mdiLinkVariant} size={0.5}/>
                     <LinkElement apiUri={apiUri} linkId={linkId} />
-                </p>)
+                </div>)
                 :
-                <p className="MangaItem-Link">
+                <div className="MangaItem-Link" key="null-Link">
                     <Icon path={mdiLinkVariant} size={0.5}/>
                     <LinkElement apiUri={apiUri} linkId={null} />
-                </p>}
+                </div>}
         </div>
         <MarkdownPreview className="MangaItem-Description" source={manga ? manga.description : "# Description"} />
         <div className="MangaItem-Props">
+            <div className="MangaItem-Props-Threshold">
+                Start at Chapter
+                <input type="text" defaultValue={latestChapterDownloaded ? latestChapterDownloaded.chapterNumber : ""} disabled={settingThreshold} onChange={(e) => {
+                    setSettingThreshold(true);
+                    MangaFunctions.SetIgnoreThreshold(apiUri, mangaId, e.currentTarget.valueAsNumber).finally(()=>setSettingThreshold(false));
+                }} />
+                <Loader loading={settingThreshold} />
+                out of <span className="MangaItem-Props-Threshold-Available">{latestChapterAvailable ? latestChapterAvailable.chapterNumber : <Loader loading={loadingChapterStats}/>}</span>
+            </div>
             {children ? children.map(c => {
                 if(c instanceof Element)
                     return c as ReactElement;
                 else
-                    return <span>{c}</span>
+                    return c
             }) : null}
         </div>
     </div>)

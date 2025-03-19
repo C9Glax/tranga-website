@@ -7,18 +7,17 @@ export default interface IAuthor {
 }
 
 export function AuthorElement({apiUri, authorId} : {apiUri: string, authorId: string | null}) : ReactElement{
-    if(authorId === null)
-        return (<p className="Manga-Author-Name">Author</p>);
-
-    let [name, setName] = React.useState<string>(authorId);
+    let [author, setAuthor] = React.useState<IAuthor | null>(null);
 
     useEffect(()=> {
+        if(authorId === null)
+            return;
         getData(`${apiUri}/v2/Query/Author/${authorId}`)
             .then((json) => {
                 let ret = json as IAuthor;
-                setName(ret.authorName);
+                setAuthor(ret);
             });
     }, [])
 
-    return (<p className="Manga-Author-Name">{name}</p>);
+    return (<span className="Manga-Author-Name">{author ? author.authorName : authorId}</span>);
 }

@@ -8,20 +8,17 @@ export default interface ILink {
 }
 
 export function LinkElement({apiUri, linkId} : {apiUri: string, linkId: string | null}) : ReactElement{
-    if(linkId === null)
-        return (<a className="Manga-Link-Value" href="#">Link</a>);
-
-    let [provider, setProvider] = React.useState<string>(linkId);
-    let [linkUrl, setLinkUrl] = React.useState<string>("");
+    let [link, setLink] = React.useState<ILink | null>(null);
 
     useEffect(()=> {
+        if(linkId === null)
+            return;
         getData(`${apiUri}/v2/Query/Link/${linkId}`)
             .then((json) => {
                 let ret = json as ILink;
-                setProvider(ret.linkProvider);
-                setLinkUrl(ret.linkUrl);
+                setLink(ret);
             });
     }, [])
 
-    return (<a className="Manga-Link-Value" href={linkUrl}>{provider}</a>);
+    return (<a className="Manga-Link-Value" href={link ? link.linkUrl : "#"}>{link ? link.linkProvider : linkId}</a>);
 }

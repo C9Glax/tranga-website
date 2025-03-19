@@ -6,12 +6,12 @@ import {mdiCounter, mdiEyeCheck, mdiRun, mdiTrayFull} from '@mdi/js';
 import QueuePopUp from "./QueuePopUp";
 import {JobState, JobType} from "./interfaces/Jobs/IJob";
 
-export default function Footer({connectedToBackend, apiUri} : {connectedToBackend: boolean, apiUri: string}) {
+export default function Footer({connectedToBackend, apiUri, checkConnectedInterval} : {connectedToBackend: boolean, apiUri: string, checkConnectedInterval: number}) {
     const [MonitoringJobsCount, setMonitoringJobsCount] = React.useState(0);
     const [AllJobsCount, setAllJobsCount] = React.useState(0);
     const [RunningJobsCount, setRunningJobsCount] = React.useState(0);
     const [WaitingJobsCount, setWaitingJobs] = React.useState(0);
-    const [countUpdateInterval, setCountUpdateInterval] = React.useState<number>();
+    const [countUpdateInterval, setCountUpdateInterval] = React.useState<number | undefined>(undefined);
 
     function UpdateBackendState(){
         JobFunctions.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob).then((jobs) => setMonitoringJobsCount(jobs.length));
@@ -23,9 +23,11 @@ export default function Footer({connectedToBackend, apiUri} : {connectedToBacken
     useEffect(() => {
         if(connectedToBackend){
             UpdateBackendState();
-            setCountUpdateInterval(setInterval(() => {
-                UpdateBackendState();
-            }, 2000));
+            if(countUpdateInterval === undefined){
+                setCountUpdateInterval(setInterval(() => {
+                    UpdateBackendState();
+                }, checkConnectedInterval));
+            }
         }else{
             clearInterval(countUpdateInterval);
             setCountUpdateInterval(undefined);
@@ -36,7 +38,7 @@ export default function Footer({connectedToBackend, apiUri} : {connectedToBacken
         <footer>
             <div className="statusBadge" ><Icon path={mdiEyeCheck} size={1}/> <span>{MonitoringJobsCount}</span></div>
             <span>+</span>
-            <QueuePopUp connectedToBackend={connectedToBackend} apiUri={apiUri}>
+            <QueuePopUp connectedToBackend={connectedToBackend} apiUri={apiUri} checkConnectedInterval={checkConnectedInterval}>
                 <div className="statusBadge hoverHand"><Icon path={mdiRun} size={1}/> <span>{RunningJobsCount}</span>
                 </div>
                 <span>+</span>

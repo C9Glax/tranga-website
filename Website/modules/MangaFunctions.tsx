@@ -139,7 +139,7 @@ export default class MangaFunctions
             console.error(`chapterThreshold was not provided`);
             return Promise.reject();
         }
-        return patchData(`${apiUri}/v2/Manga/${mangaId}/IgnoreChaptersBefore`, {chapterThreshold});
+        return patchData(`${apiUri}/v2/Manga/${mangaId}/IgnoreChaptersBefore`, chapterThreshold);
     }
 
     static async MoveFolder(apiUri: string, mangaId: string, newPath: string): Promise<object> {

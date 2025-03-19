@@ -13,3 +13,13 @@
     margin: 5px;
     filter: invert(100%) sepia(20%) saturate(7480%) hue-rotate(179deg) brightness(121%) contrast(102%);
 }
+
+#SettingsPopUpBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#SettingsPopUpBody > * {
+    margin: 5px 0;
+}

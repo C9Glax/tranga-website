@@ -2,7 +2,7 @@
     --background-color: #030304;
     --second-background-color: white;
     --primary-color: #f5a9b8;
-    --secondary-color:  #5bcefa;
+    --secondary-color: #5bcefa;
     --blur-background: rgba(245, 169, 184, 0.58);
     --accent-color: #fff;
     /* --primary-color: green;
@@ -11,6 +11,9 @@
     --accent-color: olive; */
     --topbar-height: 60px;
     box-sizing: border-box;
+    scrollbar-color: var(--primary-color) var(--second-background-color);
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
 }
 
 body{

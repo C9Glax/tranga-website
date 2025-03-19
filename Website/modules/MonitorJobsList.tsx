@@ -7,40 +7,45 @@ import IDownloadAvailableChaptersJob from "./interfaces/Jobs/IDownloadAvailableC
 import {MangaItem} from "./interfaces/IManga";
 import MangaFunctions from "./MangaFunctions";
 
-export default function MonitorJobsList({onStartSearch, onJobsChanged, connectedToBackend, apiUri, updateList} : {onStartSearch() : void, onJobsChanged: EventHandler<any>, connectedToBackend: boolean, apiUri: string, updateList: Date}) {
+export default function MonitorJobsList({onStartSearch, connectedToBackend, apiUri, checkConnectedInterval} : {onStartSearch() : void, connectedToBackend: boolean, apiUri: string, checkConnectedInterval: number}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<IDownloadAvailableChaptersJob[]>([]);
-    const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number>();
+    const [joblistUpdateInterval, setJoblistUpdateInterval] = React.useState<number | undefined>(undefined);
 
     useEffect(() => {
-        if(connectedToBackend){
+        if(connectedToBackend) {
             UpdateMonitoringJobsList();
-            setJoblistUpdateInterval(setInterval(() => {
-                UpdateMonitoringJobsList();
-            }, 1000));
+            if(joblistUpdateInterval === undefined){
+                setJoblistUpdateInterval(setInterval(() => {
+                    UpdateMonitoringJobsList();
+                }, checkConnectedInterval));
+            }
         }else{
             clearInterval(joblistUpdateInterval);
             setJoblistUpdateInterval(undefined);
         }
     }, [connectedToBackend]);
 
-    useEffect(() => {
-        UpdateMonitoringJobsList();
-    }, [updateList]);
-
     function UpdateMonitoringJobsList(){
         if(!connectedToBackend)
             return;
         //console.debug("Updating MonitoringJobsList");
         JobFunctions.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob)
-            .then((jobs) => setMonitoringJobs(jobs as IDownloadAvailableChaptersJob[]));
+            .then((jobs) => jobs as IDownloadAvailableChaptersJob[])
+            .then((jobs) => {
+                if(jobs.length != MonitoringJobs.length ||
+                    MonitoringJobs.filter(j => jobs.find(nj => nj.jobId == j.jobId)).length > 1 ||
+                    jobs.filter(nj => MonitoringJobs.find(j => nj.jobId == j.jobId)).length > 1){
+                    setMonitoringJobs(jobs);
+                }
+            });
     }
 
     function StartSearchMangaEntry() : ReactElement {
         return (<div key="monitorMangaEntry.StartSearch" className="startSearchEntry MangaItem" onClick={onStartSearch}>
             <img className="MangaItem-Cover" src="../media/blahaj.png" alt="Blahaj"></img>
             <div>
-                <p style={{textAlign: "center", width: "100%"}} className="MangaItem-Name">Add new Manga</p>
-                <p style={{fontSize: "42pt", textAlign: "center"}}>+</p>
+                <div style={{margin: "30px auto", color: "black", textShadow: "1px 2px #f5a9b8"}} className="MangaItem-Name">Add new Manga</div>
+                <div style={{fontSize: "42pt", textAlign: "center", textShadow: "1px 2px #5bcefa"}}>+</div>
             </div>
         </div>);
     }
