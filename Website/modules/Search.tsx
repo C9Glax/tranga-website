@@ -140,7 +140,7 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
                                 : libraries.map(library => <option key={library.localLibraryId} value={library.localLibraryId}>{library.libraryName} ({library.basePath})</option>)}
                         </select>
                         <button className="Manga-AddButton" onClick={() => {
-                            JobFunctions.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: jobInterval.getTime(), localLibraryId: selectedLibrary!.localLibraryId});
+                            JobFunctions.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: new Date(jobInterval).getTime(), localLibraryId: selectedLibrary!.localLibraryId});
                         }}>Monitor</button>
                     </MangaItem>
                 })

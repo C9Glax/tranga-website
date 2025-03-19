@@ -14,7 +14,7 @@ export default function App(){
     const [showSearch, setShowSearch] = React.useState(false);
     const [frontendSettings, setFrontendSettings] = useState<IFrontendSettings>(LoadFrontendSettings());
     const [updateInterval, setUpdateInterval] = React.useState<number | undefined>(undefined);
-    const checkConnectedInterval = 5000;
+    const checkConnectedInterval = 1000;
 
     const apiUri =  frontendSettings.apiUri;
 
@@ -65,7 +65,7 @@ export function postData(uri: string, content: object | string | number) : Promi
 }
 
 export function deleteData(uri: string) : Promise<void> {
-    return makeRequest("PUT", uri, null) as Promise<void>;
+    return makeRequest("DELETE", uri, null) as Promise<void>;
 }
 
 export function patchData(uri: string, content: object | string | number) : Promise<object> {
