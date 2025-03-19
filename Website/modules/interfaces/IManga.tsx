@@ -115,8 +115,8 @@ export function MangaItem({apiUri, mangaId, children} : {apiUri: string, mangaId
                     setSettingThreshold(true);
                     MangaFunctions.SetIgnoreThreshold(apiUri, mangaId, e.currentTarget.valueAsNumber).finally(()=>setSettingThreshold(false));
                 }} />
-                <Loader loading={settingThreshold} />
-                out of <span className="MangaItem-Props-Threshold-Available">{latestChapterAvailable ? latestChapterAvailable.chapterNumber : <Loader loading={loadingChapterStats}/>}</span>
+                <Loader loading={settingThreshold} style={{margin: "-10px -45px"}}/>
+                out of <span className="MangaItem-Props-Threshold-Available">{latestChapterAvailable ? latestChapterAvailable.chapterNumber : <Loader loading={loadingChapterStats} style={{margin: "-10px -35px"}} />}</span>
             </div>
             {children ? children.map(c => {
                 if(c instanceof Element)

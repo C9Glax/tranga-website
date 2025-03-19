@@ -74,7 +74,7 @@ function DefaultItem({apiUri, notificationConnector}:{apiUri: string, notificati
                   disabled={notificationConnector != null} onChange={(e)=> setInfo({...info, body: e.currentTarget.value})}  />
         {notificationConnector != null ? null :
             (
-                <p className="NotificationConnectorItem-Explanation">Explanation Text</p>
+                <p className="NotificationConnectorItem-Explanation">Formatting placeholders: "%title" and "%text" can be placed in url, header-values and body and will be replaced when notifications are sent</p>
             )}
         <div className="NotificationConnectorItem-Headers">
             {headerElements}
@@ -93,7 +93,7 @@ function DefaultItem({apiUri, notificationConnector}:{apiUri: string, notificati
                 NotificationConnectorFunctions.CreateNotificationConnector(apiUri, info)
                     .finally(() => setLoading(false));
             }}>Add</button>
-            <Loader loading={loading} style={{width:"40px",height:"40px",margin:"calc(sin(70)*(50% - 40px))"}}/>
+            <Loader loading={loading} style={{width:"40px",height:"40px",margin:"25vh calc(sin(70)*(50% - 40px))"}}/>
         </>
     </div>
 }

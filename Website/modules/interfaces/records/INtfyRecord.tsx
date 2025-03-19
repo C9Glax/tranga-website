@@ -56,7 +56,7 @@ export function NtfyItem ({apiUri} : {apiUri: string}) : ReactElement{
                 NotificationConnectorFunctions.CreateNtfy(apiUri, info)
                     .finally(() => setLoading(false));
             }}>Add</button>
-            <Loader loading={loading} style={{width:"40px",height:"40px",margin:"calc(sin(70)*(50% - 40px))"}}/>
+            <Loader loading={loading} style={{width:"40px",height:"40px",margin:"25vh calc(sin(70)*(50% - 40px))"}}/>
         </>
     </div>;
 }

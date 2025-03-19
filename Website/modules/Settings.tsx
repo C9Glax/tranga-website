@@ -1,7 +1,7 @@
 import IFrontendSettings from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import '../styles/react-toggle.css';
-import React, {LegacyRef, MutableRefObject, Ref, RefObject, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import INotificationConnector, {NotificationConnectorItem} from "./interfaces/INotificationConnector";
 import NotificationConnectorFunctions from "./NotificationConnectorFunctions";
 import ILocalLibrary, {LocalLibraryItem} from "./interfaces/ILocalLibrary";
@@ -61,13 +61,13 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                         <img alt="Close Settings" className="close" src="../media/close-x.svg" onClick={() => setShowSettings(false)}/>
                     </div>
                     <div id="SettingsPopUpBody" className="popupBody">
-                        <Loader loading={loadingBackend} style={{width: "64px", height: "64px", margin: "calc(sin(70)*(50% - 40px))", zIndex: 100, padding: 0, borderRadius: "50%", border: 0}}/>
+                        <Loader loading={loadingBackend} style={{width: "64px", height: "64px", margin: "25vh calc(sin(70)*(50% - 40px))", zIndex: 100, padding: 0, borderRadius: "50%", border: 0, minWidth: "initial", maxWidth: "initial"}}/>
                         <div className="settings-apiuri">
-                            <label>ApiUri</label>
+                            <h3>ApiUri</h3>
                             <input type="url" defaultValue={frontendSettings.apiUri} onChange={(e) => setFrontendSettings({...frontendSettings, apiUri:e.currentTarget.value})} id="ApiUri" />
                         </div>
                         <div className="settings-jobinterval">
-                            <label>Default Job-Interval</label>
+                            <h3>Default Job-Interval</h3>
                             <input type="time" min="00:30" max="23:59" defaultValue={dateToStr(new Date(frontendSettings.jobInterval))} onChange={(e) => setFrontendSettings({...frontendSettings, jobInterval: new Date(e.currentTarget.valueAsNumber-60*60*1000) ?? frontendSettings.jobInterval})}/>
                         </div>
                         <div className="settings-bwimages">
@@ -121,6 +121,18 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                                            .finally(() => setLoadingBackend(false));
                                    }} />
                         </div>
+                        <div className="settings-useragent">
+                            <h3>User Agent</h3>
+                            <input type="text" defaultValue={backendSettings ? backendSettings.userAgent : ""}
+                                   onChange={(e) => {
+                                       if(backendSettings === null)
+                                           return;
+                                       setLoadingBackend(true);
+                                       BackendSettings.UpdateUserAgent(apiUri, e.currentTarget.value)
+                                           .then(() => setBackendSettings({...backendSettings, userAgent: e.currentTarget.value}))
+                                           .finally(() => setLoadingBackend(false));
+                                   }} />
+                        </div>
                         <div className="settings-requestLimits">
                             <h3>Request Limits:</h3>
                             <label htmlFor="Default">Default</label>
@@ -142,24 +154,16 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                             <input id="MangaCover" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaCover : 0} disabled={backendSettings ? false : !loadingBackend}
                                    onChange={(e) => ChangeRequestLimit(RequestType.MangaCover, e.currentTarget.valueAsNumber)} />
                         </div>
-                        <div className="settings-useragent">
-                            <label>User Agent</label>
-                            <input type="text" defaultValue={backendSettings ? backendSettings.userAgent : ""}
-                                   onSubmit={(e) => {
-                                       if(backendSettings === null)
-                                           return;
-                                       setLoadingBackend(true);
-                                       BackendSettings.UpdateUserAgent(apiUri, e.currentTarget.value)
-                                           .then(() => setBackendSettings({...backendSettings, userAgent: e.currentTarget.value}))
-                                           .finally(() => setLoadingBackend(false));
-                                   }} />
+                        <div>
+                            <h3>Notification Connectors:</h3>
+                            {notificationConnectors.map(c => <NotificationConnectorItem apiUri={apiUri} notificationConnector={c} key={c.name} />)}
+                            <NotificationConnectorItem apiUri={apiUri} notificationConnector={null} key="New Notification Connector" />
                         </div>
-                        <h3>Notification Connectors:</h3>
-                        {notificationConnectors.map(c => <NotificationConnectorItem apiUri={apiUri} notificationConnector={c} key={c.name} />)}
-                        <NotificationConnectorItem apiUri={apiUri} notificationConnector={null} key="New Notification Connector" />
-                        <h3>Local Libraries:</h3>
-                        {localLibraries.map(l => <LocalLibraryItem apiUri={apiUri} library={l} key={l.localLibraryId} />)}
-                        <LocalLibraryItem apiUri={apiUri} library={null} key="New Local Library" />
+                        <div>
+                            <h3>Local Libraries:</h3>
+                            {localLibraries.map(l => <LocalLibraryItem apiUri={apiUri} library={l} key={l.localLibraryId} />)}
+                            <LocalLibraryItem apiUri={apiUri} library={null} key="New Local Library" />
+                        </div>
                     </div>
                 </div>
                 : null

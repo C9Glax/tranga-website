@@ -127,7 +127,7 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
                     : selectedConnector.supportedLanguages.map(language => <option value={language} key={language}>{language}</option>)}
             </select>
             <button id="Searchbox-button" type="submit" onClick={ExecuteSearch} disabled={loading}>Search</button>
-            <Loader loading={loading} style={{width:"40px", height:"40px"}}/>
+            <Loader loading={loading} style={{width:"40px", height:"40px", zIndex: 50}}/>
         </div>
         <img alt="Close Search" id="closeSearch" src="../media/close-x.svg" onClick={closeSearch} />
         <div id="SearchResults">

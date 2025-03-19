@@ -16,16 +16,33 @@
 
 #SettingsPopUpBody {
     display: flex;
-    flex-direction: column;
+    flex-flow: row wrap;
     justify-content: flex-start;
 }
 
 #SettingsPopUpBody > * {
-    margin: 5px auto;
+    margin: 5px 2px;
     border: 1px solid var(--primary-color);
-    padding: 5px;
-    width: calc(100% - 10px);
     border-radius: 5px;
+    padding: 0 5px;
+    max-width: calc(100% - 10px);
+    min-width: calc(30% - 10px);
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+#SettingsPopUpBody > * > .LocalLibraryFunctions, #SettingsPopUpBody > * > div > .NotificationConnectorItem {
+    border: 1px solid var(--primary-color);
+    border-left: 0;
+    border-right: 0;
+    border-radius: 5px;
+    margin: 5px -5px -1px -5px;
+    padding: 5px;
+}
+
+#SettingsPopUpBody > *:has(.NotificationConnectorItem) {
+    width: 100%;
+    flex-basis: 100%;
 }
 
 #SettingsPopUpBody label {
