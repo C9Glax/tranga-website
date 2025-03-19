@@ -74,7 +74,12 @@ export function putData(uri: string, content: object | string | number | boolean
     return makeRequest("PUT", uri, content) as Promise<object>;
 }
 
+let currentlyRequestedEndpoints: string[] = [];
 function makeRequest(method: string, uri: string, content: object | string | number | null | boolean) : Promise<object | void> {
+    const id = method + uri;
+    if(currentlyRequestedEndpoints.find(x => x == id) != undefined)
+        return Promise.reject(`Already requested: ${method} ${uri}`);
+    currentlyRequestedEndpoints.push(id);
     return fetch(uri,
         {
             method: method,
@@ -113,7 +118,7 @@ function makeRequest(method: string, uri: string, content: object | string | num
         .catch(function(err : Error){
             console.error(`Error ${method}ing Data ${uri}\n${err}`);
             return Promise.reject();
-        });
+        }).finally(() => currentlyRequestedEndpoints.splice(currentlyRequestedEndpoints.indexOf(id), 1));
 }
 
 export function isValidUri(uri: string) : boolean{

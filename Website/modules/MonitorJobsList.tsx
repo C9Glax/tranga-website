@@ -1,4 +1,4 @@
-import React, {EventHandler, ReactElement, useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import JobFunctions from './JobFunctions';
 import '../styles/monitorMangaList.css';
 import {JobType} from "./interfaces/Jobs/IJob";
