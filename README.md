@@ -42,9 +42,9 @@
 |----------------------------------------------------------------------------|----------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-41-51%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-02%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-12%20Tranga.png) |
 
-| | Rudimentary Settings                                                       | |
+| | Settings Dialog                                                            | |
 |-|----------------------------------------------------------------------------|-|
-| | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-21%20Tranga.png) | |
+| | ![Image](Screenshots/Screenshot%202025-03-20%20at%2000-42-58%20Tranga.png) | |
 
 
 ## About The Project
