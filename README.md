@@ -1,16 +1,6 @@
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-
+<span id="readme-top"></span>
 <h3 align="center">Tranga-Website</h3>
 
   <p align="center">
@@ -43,18 +33,18 @@
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
 
-| Default View                                                                  | Search Window                                                                                                                             | Search Results                                                                                                                            |
-|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| ![Image](Screenshots/Screenshot 2025-03-19 at 02-38-47 Tranga.png)            | ![Image](Screenshots/Screenshot 2025-03-19 at 02-39-05 Tranga.png)<br/>![Image](Screenshots/Screenshot 2025-03-19 at 02-39-45 Tranga.png) | ![Image](Screenshots/Screenshot 2025-03-19 at 02-39-52 Tranga.png)<br/>![Image](Screenshots/Screenshot 2025-03-19 at 02-39-58 Tranga.png) |
-| Search opens with click on "Add new Manga".<br/>Settings are on the top right | When selecting different connectors, available languages automatically update.<br/>Spinners to indicate action being performed            | Clicking on an Item here will bring up a view with more information                                                                       |
+| Default View                                                                  | Search Window                                                                                                                                             | Search Results                                                                                                                                            |
+|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-38-47%20Tranga.png)    | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-05%20Tranga.png)<br/>![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-45%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-52%20Tranga.png)<br/>![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-58%20Tranga.png) |
+| Search opens with click on "Add new Manga".<br/>Settings are on the top right | When selecting different connectors, available languages automatically update.<br/>Spinners to indicate action being performed                            | Clicking on an Item here will bring up a view with more information                                                                                       |
 
-|                                                                    | Different Views for Manga                                          |                                                                    |
-|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|
-| ![Image](Screenshots/Screenshot 2025-03-19 at 02-41-51 Tranga.png) | ![Image](Screenshots/Screenshot 2025-03-19 at 02-42-02 Tranga.png) | ![Image](Screenshots/Screenshot 2025-03-19 at 02-42-12 Tranga.png) |
+|                                                                            | Different Views for Manga                                                  |                                                                            |
+|----------------------------------------------------------------------------|----------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-41-51%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-02%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-12%20Tranga.png) |
 
-| | Rudimentary Settings                                               | |
-|-|--------------------------------------------------------------------|-|
-| | ![Image](Screenshots/Screenshot 2025-03-19 at 02-42-21 Tranga.png) | |
+| | Rudimentary Settings                                                       | |
+|-|----------------------------------------------------------------------------|-|
+| | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-21%20Tranga.png) | |
 
 
 ## About The Project
