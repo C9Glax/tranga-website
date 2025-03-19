@@ -15,6 +15,12 @@ export default function Settings({backendConnected, apiUri, frontendSettings, se
         NotificationConnectorFunctions.GetNotificationConnectors(apiUri).then(setNotificationConnectors);
     }, []);
 
+    const dateToStr = (x: Date) => {
+        const ret = (x.getHours() < 10 ? "0" + x.getHours() : x.getHours())
+            + ":" +
+            (x.getMinutes() < 10 ? "0" + x.getMinutes() : x.getMinutes());
+        return ret;
+    }
 
     return (
         <div id="Settings">
@@ -30,20 +36,11 @@ export default function Settings({backendConnected, apiUri, frontendSettings, se
                     <div id="SettingsPopUpBody" className="popupBody">
                         <div className="settings-apiuri">
                             <label>ApiUri</label>
-                            <input type="url" defaultValue={frontendSettings.apiUri} onChange={(e) => {
-                                let newSettings = frontendSettings;
-                                newSettings.apiUri = e.currentTarget.value;
-                                setFrontendSettings(newSettings);
-                            }} id="ApiUri" />
+                            <input type="url" defaultValue={frontendSettings.apiUri} onChange={(e) => setFrontendSettings({...frontendSettings, apiUri:e.currentTarget.value})} id="ApiUri" />
                         </div>
                         <div className="settings-apiuri">
                             <label>Default Job-Interval</label>
-                            <input type="time" defaultValue={new Date(frontendSettings.jobInterval).getTime()} onChange={(e) => {
-                                let newSettings = frontendSettings;
-                                newSettings.jobInterval = e.currentTarget.valueAsDate ?? frontendSettings.jobInterval;
-                                setFrontendSettings(newSettings);
-                                console.log(frontendSettings);
-                            }}/>
+                            <input type="time" min="00:30" max="23:59" defaultValue={dateToStr(new Date(frontendSettings.jobInterval))} onChange={(e) => setFrontendSettings({...frontendSettings, jobInterval: new Date(e.currentTarget.valueAsNumber-60*60*1000) ?? frontendSettings.jobInterval})}/>
                         </div>
                         {notificationConnectors.map(c => <NotificationConnectorItem apiUri={apiUri} notificationConnector={c} />)}
                         <NotificationConnectorItem apiUri={apiUri} notificationConnector={null} />

@@ -2,6 +2,9 @@ import {ReactElement, ReactEventHandler, useState} from "react";
 import "../../styles/notificationConnector.css";
 import Loader from "../Loader";
 import NotificationConnectorFunctions from "../NotificationConnectorFunctions";
+import {LunaseaItem} from "./records/ILunaseaRecord";
+import {GotifyItem} from "./records/IGotifyRecord";
+import {NtfyItem} from "./records/INtfyRecord";
 
 export default interface INotificationConnector {
     name: string;
@@ -12,7 +15,32 @@ export default interface INotificationConnector {
 }
 
 export function NotificationConnectorItem({apiUri, notificationConnector} : {apiUri: string, notificationConnector: INotificationConnector | null}) : ReactElement {
-    const AddHeader : ReactEventHandler<HTMLButtonElement> = (e) => {
+    if(notificationConnector != null)
+        return <DefaultItem apiUri={apiUri} notificationConnector={notificationConnector} />
+
+    const [selectedConnectorElement, setSelectedConnectorElement] = useState<ReactElement>(<DefaultItem apiUri={apiUri} notificationConnector={null} />);
+
+    return <>
+        <p>New Notification Connector</p>
+        <select defaultValue="default" onChange={(e) => {
+            switch (e.currentTarget.value){
+                case "default": setSelectedConnectorElement(<DefaultItem apiUri={apiUri} notificationConnector={null} />); break;
+                case "gotify": setSelectedConnectorElement(<GotifyItem apiUri={apiUri} />); break;
+                case "ntfy": setSelectedConnectorElement(<NtfyItem apiUri={apiUri} />); break;
+                case "lunasea": setSelectedConnectorElement(<LunaseaItem apiUri={apiUri} />); break;
+            }
+        }}>
+            <option value="default">Generic REST</option>
+            <option value="gotify">Gotify</option>
+            <option value="ntfy">Ntfy</option>
+            <option value="lunasea">Lunasea</option>
+        </select>
+        {selectedConnectorElement}
+    </>;
+}
+
+function DefaultItem({apiUri, notificationConnector}:{apiUri: string, notificationConnector: INotificationConnector | null}) : ReactElement {
+    const AddHeader : ReactEventHandler<HTMLButtonElement> = () => {
         let header : Record<string, string> = {};
         let x = info;
         x.headers = [header, ...x.headers];
@@ -20,7 +48,6 @@ export function NotificationConnectorItem({apiUri, notificationConnector} : {api
         setHeaderElements([...headerElements, <HeaderElement record={header} />])
     }
     const [headerElements, setHeaderElements] = useState<ReactElement[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
     const [info, setInfo] = useState<INotificationConnector>({
         name: "",
         url: "",
@@ -28,30 +55,22 @@ export function NotificationConnectorItem({apiUri, notificationConnector} : {api
         httpMethod: "",
         body: ""
     });
-
-    return (<div className="NotificationConnectorItem" key={notificationConnector ? notificationConnector.name : "new"}>
-        <p className="NotificationConnectorItem-Name">{notificationConnector ? notificationConnector.name : "New Notification Connector"}</p>
+    const [loading, setLoading] = useState<boolean>(false);
+    return <div className="NotificationConnectorItem">
+        <input className="NotificationConnectorItem-Name" placeholder="Name" defaultValue={notificationConnector ? notificationConnector.name : ""}
+               disabled={notificationConnector != null} onChange={(e) => setInfo({...info, name: e.currentTarget.value})} />
         <div className="NotificationConnectorItem-Url">
-            <select className="NotificationConnectorItem-RequestMethod" defaultValue={notificationConnector ? notificationConnector.httpMethod : ""} disabled={notificationConnector != null} onChange={(e) => {
-                let x = info;
-                x.httpMethod = e.currentTarget.value;
-                setInfo(x);
-            }}>
+            <select className="NotificationConnectorItem-RequestMethod" defaultValue={notificationConnector ? notificationConnector.httpMethod : ""}
+                    disabled={notificationConnector != null} onChange={(e)=> setInfo({...info, httpMethod: e.currentTarget.value})} >
                 <option value="" disabled hidden>Request Method</option>
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
             </select>
-            <input type="url" className="NotificationConnectorItem-RequestUrl" placeholder="URL" defaultValue={notificationConnector ? notificationConnector.url : ""} disabled={notificationConnector != null} onChange={(e) => {
-                let x = info;
-                x.url = e.currentTarget.value;
-                setInfo(x);
-            }} />
+            <input type="url" className="NotificationConnectorItem-RequestUrl" placeholder="URL" defaultValue={notificationConnector ? notificationConnector.url : ""}
+                   disabled={notificationConnector != null} onChange={(e) => setInfo({...info, url: e.currentTarget.value})}  />
         </div>
-        <textarea className="NotificationConnectorItem-Body" placeholder="Request-Body" defaultValue={notificationConnector ? notificationConnector.body : ""} disabled={notificationConnector != null} onChange={(e) => {
-            let x = info;
-            x.body = e.currentTarget.value;
-            setInfo(x);
-        }} />
+        <textarea className="NotificationConnectorItem-Body" placeholder="Request-Body" defaultValue={notificationConnector ? notificationConnector.body : ""}
+                  disabled={notificationConnector != null} onChange={(e)=> setInfo({...info, body: e.currentTarget.value})}  />
         {notificationConnector != null ? null :
             (
                 <p className="NotificationConnectorItem-Explanation">Explanation Text</p>
@@ -67,17 +86,15 @@ export function NotificationConnectorItem({apiUri, notificationConnector} : {api
                 )
             }
         </div>
-        {notificationConnector != null ? null : (
-            <>
-                <button className="NotificationConnectorItem-Save" onClick={(e) => {
-                    setLoading(true);
-                    NotificationConnectorFunctions.CreateNotificationConnector(apiUri, info)
-                        .finally(() => setLoading(false));
-                }}>Add</button>
-                <Loader loading={loading} style={{width:"40px",height:"40px",margin:"calc(sin(70)*(50% - 40px))"}}/>
-            </>
-        )}
-    </div>);
+        <>
+            <button className="NotificationConnectorItem-Save" onClick={(e) => {
+                setLoading(true);
+                NotificationConnectorFunctions.CreateNotificationConnector(apiUri, info)
+                    .finally(() => setLoading(false));
+            }}>Add</button>
+            <Loader loading={loading} style={{width:"40px",height:"40px",margin:"calc(sin(70)*(50% - 40px))"}}/>
+        </>
+    </div>
 }
 
 function HeaderElement({record, disabled} : {record: Record<string, string>, disabled?: boolean | null}) : ReactElement {

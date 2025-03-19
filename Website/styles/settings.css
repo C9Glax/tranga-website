@@ -23,3 +23,12 @@
 #SettingsPopUpBody > * {
     margin: 5px 0;
 }
+
+#SettingsPopUpBody label {
+    width: max-content;
+    margin-right: 10px;
+}
+
+#SettingsPopUpBody label::after {
+    content: ':';
+}

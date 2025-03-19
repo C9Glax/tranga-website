@@ -16,18 +16,16 @@ export default function App(){
     const [updateInterval, setUpdateInterval] = React.useState<number | undefined>(undefined);
     const checkConnectedInterval = 1000;
 
-    const apiUri =  frontendSettings.apiUri;
-
     useEffect(() => {
         setCookie('apiUri', frontendSettings.apiUri);
         setCookie('jobInterval', frontendSettings.jobInterval);
-        updateConnected(apiUri, connected, setConnected);
+        updateConnected(frontendSettings.apiUri, connected, setConnected);
     }, [frontendSettings]);
 
     useEffect(() => {
         if(updateInterval === undefined){
             setUpdateInterval(setInterval(() => {
-                updateConnected(apiUri, connected, setConnected);
+                updateConnected(frontendSettings.apiUri, connected, setConnected);
             }, checkConnectedInterval));
         }else{
             clearInterval(updateInterval);
@@ -36,23 +34,23 @@ export default function App(){
     }, [connected]);
 
     return(<div>
-        <Header apiUri={apiUri} backendConnected={connected} settings={frontendSettings} setFrontendSettings={setFrontendSettings} />
+        <Header apiUri={frontendSettings.apiUri} backendConnected={connected} settings={frontendSettings} setFrontendSettings={setFrontendSettings} />
         {connected
             ? <>
                 {showSearch
                     ? <>
-                        <Search apiUri={apiUri} jobInterval={frontendSettings.jobInterval} closeSearch={() => setShowSearch(false)} />
+                        <Search apiUri={frontendSettings.apiUri} jobInterval={frontendSettings.jobInterval} closeSearch={() => setShowSearch(false)} />
                         <hr/>
                     </>
                     : <></>}
-                <MonitorJobsList apiUri={apiUri} onStartSearch={() => setShowSearch(true)} connectedToBackend={connected} checkConnectedInterval={checkConnectedInterval} />
+                <MonitorJobsList apiUri={frontendSettings.apiUri} onStartSearch={() => setShowSearch(true)} connectedToBackend={connected} checkConnectedInterval={checkConnectedInterval} />
             </>
             : <>
                 <h1>No connection to the Backend.</h1>
                 <h3>Check the Settings ApiUri.</h3>
                 <Loader loading={true} />
             </>}
-        <Footer apiUri={apiUri} connectedToBackend={connected} checkConnectedInterval={checkConnectedInterval} />
+        <Footer apiUri={frontendSettings.apiUri} connectedToBackend={connected} checkConnectedInterval={checkConnectedInterval} />
     </div>)
 }
 

@@ -6,7 +6,7 @@
     margin: 0 auto;
     padding: 5px;
     border-radius: 5px;
-    grid-template-rows: 30px 30px auto 30px;
+    grid-template-rows: 30px auto auto 30px;
     column-gap: 4px;
     row-gap: 4px;
     grid-template-areas:
@@ -25,6 +25,13 @@
 .NotificationConnectorItem-Name{
     grid-area: name;
     justify-self: flex-start;
+    width: fit-content;
+}
+
+.NotificationConnectorItem-Name::before {
+    content: "Connector-Name";
+    position: absolute;
+    display: block;
 }
 
 .NotificationConnectorItem-Url{
@@ -44,6 +51,14 @@
 .NotificationConnectorItem-Explanation{
     grid-area: explanation;
     align-self: flex-end;
+}
+
+.NotificationConnectorItem-Priority {
+    grid-area: explanation;
+}
+
+.NotificationConnectorItem-Ident {
+    grid-area: body;
 }
 
 .NotificationConnectorItem-Headers{
