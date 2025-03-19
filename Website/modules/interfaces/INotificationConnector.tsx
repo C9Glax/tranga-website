@@ -20,8 +20,9 @@ export function NotificationConnectorItem({apiUri, notificationConnector} : {api
 
     const [selectedConnectorElement, setSelectedConnectorElement] = useState<ReactElement>(<DefaultItem apiUri={apiUri} notificationConnector={null} />);
 
-    return <>
-        <p>New Notification Connector</p>
+    return <div>
+        <div>New Notification Connector</div>
+        <label>Type</label>
         <select defaultValue="default" onChange={(e) => {
             switch (e.currentTarget.value){
                 case "default": setSelectedConnectorElement(<DefaultItem apiUri={apiUri} notificationConnector={null} />); break;
@@ -36,7 +37,7 @@ export function NotificationConnectorItem({apiUri, notificationConnector} : {api
             <option value="lunasea">Lunasea</option>
         </select>
         {selectedConnectorElement}
-    </>;
+    </div>;
 }
 
 function DefaultItem({apiUri, notificationConnector}:{apiUri: string, notificationConnector: INotificationConnector | null}) : ReactElement {

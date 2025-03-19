@@ -1,11 +1,7 @@
 .NotificationConnectorItem{
     position: relative;
     display: grid;
-    width: calc(100% - 10px);
     grid-template-columns: 40% calc(60% - 10px);
-    margin: 0 auto;
-    padding: 5px;
-    border-radius: 5px;
     grid-template-rows: 30px auto auto 30px;
     column-gap: 4px;
     row-gap: 4px;
@@ -15,7 +11,6 @@
         "headers body"
         "footer footer";
     align-items: center;
-    border: 1px solid var(--primary-color);
 }
 
 .NotificationConnectorItem p{
@@ -80,5 +75,4 @@
 .NotificationConnectorItem-Save{
     grid-area: footer;
     justify-self: flex-end;
-    padding: 0 15px;
 }

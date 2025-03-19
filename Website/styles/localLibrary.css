@@ -1,0 +1,13 @@
+.LocalLibraryFunctions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.LocalLibraryFunctions input{
+    width: min-content;
+}
+
+.LocalLibraryFunctions-Action {
+    margin-left: auto;
+}

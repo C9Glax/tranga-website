@@ -21,14 +21,28 @@
 }
 
 #SettingsPopUpBody > * {
-    margin: 5px 0;
+    margin: 5px auto;
+    border: 1px solid var(--primary-color);
+    padding: 5px;
+    width: calc(100% - 10px);
+    border-radius: 5px;
 }
 
 #SettingsPopUpBody label {
     width: max-content;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 #SettingsPopUpBody label::after {
     content: ':';
+}
+
+#SettingsPopUpBody button {
+    padding: 0 15px;
+}
+
+#SettingsPopUpBody h1, #SettingsPopUpBody h2, #SettingsPopUpBody h3 {
+    border: 0;
+    margin: 5px 0 0 0;
+    padding: 0;
 }

@@ -47,4 +47,11 @@ export default class LocalLibraryFunctions
                 return Promise.resolve()
             });
     }
+
+    static async UpdateLibrary(apiUri: string, libraryId: string, record: INewLibraryRecord): Promise<void> {
+        return patchData(`${apiUri}/v2/LocalLibraries/${libraryId}`, record)
+            .then(()=> {
+                return Promise.resolve()
+            });
+    }
 }

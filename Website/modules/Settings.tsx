@@ -4,16 +4,20 @@ import '../styles/react-toggle.css';
 import React, {useEffect, useState} from "react";
 import INotificationConnector, {NotificationConnectorItem} from "./interfaces/INotificationConnector";
 import NotificationConnectorFunctions from "./NotificationConnectorFunctions";
+import ILocalLibrary, {LocalLibraryItem} from "./interfaces/ILocalLibrary";
+import LocalLibraryFunctions from "./LocalLibraryFunctions";
 
 export default function Settings({backendConnected, apiUri, frontendSettings, setFrontendSettings} : {backendConnected: boolean, apiUri: string, frontendSettings: IFrontendSettings, setFrontendSettings: (settings: IFrontendSettings) => void}) {
     let [showSettings, setShowSettings] = useState<boolean>(false);
     let [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
+    let [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>([]);
 
     useEffect(() => {
         if(!backendConnected)
             return;
         NotificationConnectorFunctions.GetNotificationConnectors(apiUri).then(setNotificationConnectors);
-    }, []);
+        LocalLibraryFunctions.GetLibraries(apiUri).then(setLocalLibraries);
+    }, [backendConnected, showSettings]);
 
     const dateToStr = (x: Date) => {
         const ret = (x.getHours() < 10 ? "0" + x.getHours() : x.getHours())
@@ -42,8 +46,12 @@ export default function Settings({backendConnected, apiUri, frontendSettings, se
                             <label>Default Job-Interval</label>
                             <input type="time" min="00:30" max="23:59" defaultValue={dateToStr(new Date(frontendSettings.jobInterval))} onChange={(e) => setFrontendSettings({...frontendSettings, jobInterval: new Date(e.currentTarget.valueAsNumber-60*60*1000) ?? frontendSettings.jobInterval})}/>
                         </div>
-                        {notificationConnectors.map(c => <NotificationConnectorItem apiUri={apiUri} notificationConnector={c} />)}
-                        <NotificationConnectorItem apiUri={apiUri} notificationConnector={null} />
+                        <h3>Notification Connectors:</h3>
+                        {notificationConnectors.map(c => <NotificationConnectorItem apiUri={apiUri} notificationConnector={c} key={c.name} />)}
+                        <NotificationConnectorItem apiUri={apiUri} notificationConnector={null} key="New Notification Connector" />
+                        <h3>Local Libraries:</h3>
+                        {localLibraries.map(l => <LocalLibraryItem apiUri={apiUri} library={l} key={l.localLibraryId} />)}
+                        <LocalLibraryItem apiUri={apiUri} library={null} key="New Local Library" />
                     </div>
                 </div>
                 : null
