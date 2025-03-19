@@ -58,7 +58,7 @@ export function getData(uri: string) : Promise<object> {
     return makeRequest("GET", uri, null) as Promise<object>;
 }
 
-export function postData(uri: string, content: object | string | number) : Promise<object> {
+export function postData(uri: string, content: object | string | number | boolean) : Promise<object> {
     return makeRequest("POST", uri, content) as Promise<object>;
 }
 
@@ -66,15 +66,15 @@ export function deleteData(uri: string) : Promise<void> {
     return makeRequest("DELETE", uri, null) as Promise<void>;
 }
 
-export function patchData(uri: string, content: object | string | number) : Promise<object> {
+export function patchData(uri: string, content: object | string | number | boolean) : Promise<object> {
     return makeRequest("patch", uri, content) as Promise<object>;
 }
 
-export function putData(uri: string, content: object | string | number) : Promise<object> {
+export function putData(uri: string, content: object | string | number | boolean) : Promise<object> {
     return makeRequest("PUT", uri, content) as Promise<object>;
 }
 
-function makeRequest(method: string, uri: string, content: object | string | number | null) : Promise<object | void> {
+function makeRequest(method: string, uri: string, content: object | string | number | null | boolean) : Promise<object | void> {
     return fetch(uri,
         {
             method: method,
@@ -139,8 +139,8 @@ export const checkConnection  = async (apiUri: string): Promise<boolean> =>{
         {
             method: 'GET',
         })
-        .then((response) =>{
-            return response.type != "error";
+        .then((response) => {
+            return response.ok;
         })
         .catch(() => {
             return Promise.reject();

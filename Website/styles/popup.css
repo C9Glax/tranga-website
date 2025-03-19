@@ -40,5 +40,8 @@
     left: 0;
     width: calc(100% - 30px);
     height: calc(100% - 50px);
-    margin: 5px 15px;
+    padding: 5px 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
 }

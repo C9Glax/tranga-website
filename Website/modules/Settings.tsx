@@ -1,22 +1,35 @@
 import IFrontendSettings from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import '../styles/react-toggle.css';
-import React, {useEffect, useState} from "react";
+import React, {LegacyRef, MutableRefObject, Ref, RefObject, useEffect, useRef, useState} from "react";
 import INotificationConnector, {NotificationConnectorItem} from "./interfaces/INotificationConnector";
 import NotificationConnectorFunctions from "./NotificationConnectorFunctions";
 import ILocalLibrary, {LocalLibraryItem} from "./interfaces/ILocalLibrary";
 import LocalLibraryFunctions from "./LocalLibraryFunctions";
+import IBackendSettings from "./interfaces/IBackendSettings";
+import BackendSettings from "./BackendSettingsFunctions";
+import Toggle from "react-toggle";
+import Loader from "./Loader";
+import {RequestType} from "./interfaces/IRequestLimits";
 
-export default function Settings({backendConnected, apiUri, frontendSettings, setFrontendSettings} : {backendConnected: boolean, apiUri: string, frontendSettings: IFrontendSettings, setFrontendSettings: (settings: IFrontendSettings) => void}) {
-    let [showSettings, setShowSettings] = useState<boolean>(false);
-    let [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
-    let [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>([]);
+export default function Settings({ backendConnected, apiUri, frontendSettings, setFrontendSettings } : {
+    backendConnected: boolean,
+    apiUri: string,
+    frontendSettings: IFrontendSettings,
+    setFrontendSettings: (settings: IFrontendSettings) => void
+}) {
+    const [showSettings, setShowSettings] = useState<boolean>(false);
+    const [loadingBackend, setLoadingBackend] = useState(false);
+    const [backendSettings, setBackendSettings] = useState<IBackendSettings|null>(null);
+    const [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
+    const [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>([]);
 
     useEffect(() => {
         if(!backendConnected)
             return;
         NotificationConnectorFunctions.GetNotificationConnectors(apiUri).then(setNotificationConnectors);
         LocalLibraryFunctions.GetLibraries(apiUri).then(setLocalLibraries);
+        BackendSettings.GetSettings(apiUri).then(setBackendSettings);
     }, [backendConnected, showSettings]);
 
     const dateToStr = (x: Date) => {
@@ -25,6 +38,16 @@ export default function Settings({backendConnected, apiUri, frontendSettings, se
             (x.getMinutes() < 10 ? "0" + x.getMinutes() : x.getMinutes());
         return ret;
     }
+
+    const ChangeRequestLimit = (requestType: RequestType, limit: number) => {
+        if(backendSettings === null)
+            return;
+        setLoadingBackend(true);
+        BackendSettings.UpdateRequestLimit(apiUri, requestType, limit)
+            .then(() => setBackendSettings({...backendSettings, [requestType]: requestType}))
+            .finally(() => setLoadingBackend(false));
+    }
+    const ref : React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement>(null);
 
     return (
         <div id="Settings">
@@ -38,13 +61,98 @@ export default function Settings({backendConnected, apiUri, frontendSettings, se
                         <img alt="Close Settings" className="close" src="../media/close-x.svg" onClick={() => setShowSettings(false)}/>
                     </div>
                     <div id="SettingsPopUpBody" className="popupBody">
+                        <Loader loading={loadingBackend} style={{width: "64px", height: "64px", margin: "calc(sin(70)*(50% - 40px))", zIndex: 100, padding: 0, borderRadius: "50%", border: 0}}/>
                         <div className="settings-apiuri">
                             <label>ApiUri</label>
                             <input type="url" defaultValue={frontendSettings.apiUri} onChange={(e) => setFrontendSettings({...frontendSettings, apiUri:e.currentTarget.value})} id="ApiUri" />
                         </div>
-                        <div className="settings-apiuri">
+                        <div className="settings-jobinterval">
                             <label>Default Job-Interval</label>
                             <input type="time" min="00:30" max="23:59" defaultValue={dateToStr(new Date(frontendSettings.jobInterval))} onChange={(e) => setFrontendSettings({...frontendSettings, jobInterval: new Date(e.currentTarget.valueAsNumber-60*60*1000) ?? frontendSettings.jobInterval})}/>
+                        </div>
+                        <div className="settings-bwimages">
+                            <h3>B/W Images</h3>
+                            <Toggle defaultChecked={backendSettings ? backendSettings.bwImages : false} disabled={backendSettings ? false : !loadingBackend}
+                                    onChange={(e) => {
+                                        if(backendSettings === null)
+                                            return;
+                                        setLoadingBackend(true);
+                                        BackendSettings.UpdateBWImageToggle(apiUri, e.target.checked)
+                                            .then(() => setBackendSettings({...backendSettings, bwImages: e.target.checked}))
+                                            .finally(() => setLoadingBackend(false));
+                                    }} />
+                        </div>
+                        <div className="settings-aprilfools">
+                            <h3>April Fools Mode</h3>
+                            <Toggle defaultChecked={backendSettings ? backendSettings.aprilFoolsMode : false} disabled={backendSettings ? false : !loadingBackend}
+                                    onChange={(e) => {
+                                        if(backendSettings === null)
+                                            return;
+                                        setLoadingBackend(true);
+                                        BackendSettings.UpdateAprilFoolsToggle(apiUri, e.target.checked)
+                                            .then(() => setBackendSettings({...backendSettings, aprilFoolsMode: e.target.checked}))
+                                            .finally(() => setLoadingBackend(false));
+                                    }} />
+                        </div>
+                        <div className="settings-imagecompression">
+                            <h3>Image Compression</h3>
+                            <Toggle defaultChecked={backendSettings ? backendSettings.compression < 100 : false} disabled={backendSettings ? false : !loadingBackend}
+                                    onChange={(e) => {
+                                        if(backendSettings === null)
+                                            return;
+                                        setLoadingBackend(true);
+                                        BackendSettings.UpdateImageCompressionValue(apiUri, e.target.checked ? 40 : 100)
+                                            .then(() => setBackendSettings({...backendSettings, compression: e.target.checked ? 40 : 100}))
+                                            .then(() => {
+                                                if(ref.current != null){
+                                                    ref.current.value = e.target.checked ? "40" : "100";
+                                                    ref.current.disabled = !e.target.checked;
+                                                }
+                                            })
+                                            .finally(() => setLoadingBackend(false));
+                                    }} />
+                            <input ref={ref} type="number" min={0} max={100} defaultValue={backendSettings ? backendSettings.compression : 0} disabled={backendSettings ? false : !loadingBackend}
+                                   onChange={(e) => {
+                                       if(backendSettings === null)
+                                           return;
+                                       setLoadingBackend(true);
+                                       BackendSettings.UpdateImageCompressionValue(apiUri, e.currentTarget.valueAsNumber)
+                                           .then(() => setBackendSettings({...backendSettings, compression: e.currentTarget.valueAsNumber}))
+                                           .finally(() => setLoadingBackend(false));
+                                   }} />
+                        </div>
+                        <div className="settings-requestLimits">
+                            <h3>Request Limits:</h3>
+                            <label htmlFor="Default">Default</label>
+                            <input id="Default" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.Default : 0} disabled={backendSettings ? false : !loadingBackend}
+                                onChange={(e) => ChangeRequestLimit(RequestType.Default, e.currentTarget.valueAsNumber)} />
+                            <label htmlFor="MangaInfo">MangaInfo</label>
+                            <input id="MangaInfo" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaInfo : 0} disabled={backendSettings ? false : !loadingBackend}
+                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaInfo, e.currentTarget.valueAsNumber)} />
+                            <label htmlFor="MangaDexFeed">MangaDexFeed</label>
+                            <input id="MangaDexFeed" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaDexFeed : 0} disabled={backendSettings ? false : !loadingBackend}
+                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaDexFeed, e.currentTarget.valueAsNumber)} />
+                            <label htmlFor="MangaDexImage">MangaDexImage</label>
+                            <input id="MangaDexImage" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaDexImage : 0} disabled={backendSettings ? false : !loadingBackend}
+                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaDexImage, e.currentTarget.valueAsNumber)} />
+                            <label htmlFor="MangaImage">MangaImage</label>
+                            <input id="MangaImage" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaImage : 0} disabled={backendSettings ? false : !loadingBackend}
+                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaImage, e.currentTarget.valueAsNumber)} />
+                            <label htmlFor="MangaCover">MangaCover</label>
+                            <input id="MangaCover" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaCover : 0} disabled={backendSettings ? false : !loadingBackend}
+                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaCover, e.currentTarget.valueAsNumber)} />
+                        </div>
+                        <div className="settings-useragent">
+                            <label>User Agent</label>
+                            <input type="text" defaultValue={backendSettings ? backendSettings.userAgent : ""}
+                                   onSubmit={(e) => {
+                                       if(backendSettings === null)
+                                           return;
+                                       setLoadingBackend(true);
+                                       BackendSettings.UpdateUserAgent(apiUri, e.currentTarget.value)
+                                           .then(() => setBackendSettings({...backendSettings, userAgent: e.currentTarget.value}))
+                                           .finally(() => setLoadingBackend(false));
+                                   }} />
                         </div>
                         <h3>Notification Connectors:</h3>
                         {notificationConnectors.map(c => <NotificationConnectorItem apiUri={apiUri} notificationConnector={c} key={c.name} />)}
