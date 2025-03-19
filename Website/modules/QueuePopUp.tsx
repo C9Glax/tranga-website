@@ -14,7 +14,7 @@ export default function QueuePopUp({connectedToBackend, children, apiUri, checkC
     const [queueListInterval, setQueueListInterval] = React.useState<number | undefined>(undefined);
 
     useEffect(() => {
-        if(connectedToBackend) {
+        if(connectedToBackend && showQueuePopup) {
             UpdateMonitoringJobsList();
             if(queueListInterval === undefined){
                 setQueueListInterval(setInterval(() => {
@@ -25,7 +25,7 @@ export default function QueuePopUp({connectedToBackend, children, apiUri, checkC
             clearInterval(queueListInterval);
             setQueueListInterval(undefined);
         }
-    }, [connectedToBackend]);
+    }, [connectedToBackend, showQueuePopup]);
 
     function UpdateMonitoringJobsList(){
         JobFunctions.GetJobsInState(apiUri, JobState.Waiting)
