@@ -26,7 +26,7 @@ export default function Footer({connectedToBackend, apiUri, checkConnectedInterv
             if(countUpdateInterval === undefined){
                 setCountUpdateInterval(setInterval(() => {
                     UpdateBackendState();
-                }, checkConnectedInterval));
+                }, checkConnectedInterval * 5));
             }
         }else{
             clearInterval(countUpdateInterval);
