@@ -140,12 +140,14 @@ const updateConnected = (apiUri: string, connected: boolean, setConnected: (c: b
 }
 
 export const checkConnection  = async (apiUri: string): Promise<boolean> =>{
-    return fetch(`${apiUri}/swagger`,
+    return fetch(`${apiUri}/swagger/v2/swagger.json`,
         {
             method: 'GET',
         })
         .then((response) => {
-            return response.ok;
+            if(!(response.ok && response.status == 200))
+                return false;
+            return response.json().then((json) => (json as {openapi:string}).openapi.match("[0-9]+(?:\.[0-9]+)+")?true:false).catch(() => false);
         })
         .catch(() => {
             return Promise.reject();

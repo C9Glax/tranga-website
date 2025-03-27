@@ -11,6 +11,7 @@ import LocalLibraryFunctions from "./LocalLibraryFunctions";
 import Loader from "./Loader";
 
 export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: string, jobInterval: Date, closeSearch(): void}) {
+    let [loading, setLoading] = useState<boolean>(true);
     const [mangaConnectors, setConnectors] = useState<IMangaConnector[]>();
     const [selectedConnector, setSelectedConnector] = useState<IMangaConnector>();
     const [selectedLanguage, setSelectedLanguage] = useState<string>();
@@ -22,6 +23,11 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
     useEffect(() => {
         MangaConnectorFunctions.GetAllConnectors(apiUri).then(setConnectors).then(() => setLoading(false));
     }, []);
+
+    useEffect(() => {
+        setSelectedConnector(mangaConnectors?.find(c => c.name == "Global"));
+        setSelectedLanguage(mangaConnectors?.find(c => c.name == "Global")?.supportedLanguages[0])
+    }, [mangaConnectors]);
 
     const selectedConnectorChanged : ChangeEventHandler<HTMLSelectElement> = (event) => {
         event.preventDefault();
@@ -90,7 +96,6 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
     const changeSelectedLanguage : ChangeEventHandler<HTMLSelectElement> = (event) => setSelectedLanguage(event.target.value);
     let [selectedLibrary, setSelectedLibrary] = useState<ILocalLibrary | null>(null);
     let [libraries, setLibraries] = useState<ILocalLibrary[] | null>(null);
-    let [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {
         LocalLibraryFunctions.GetLibraries(apiUri).then(setLibraries);
     }, []);

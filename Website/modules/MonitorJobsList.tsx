@@ -35,7 +35,7 @@ export default function MonitorJobsList({onStartSearch, connectedToBackend, apiU
                 if(jobs.length != MonitoringJobs.length ||
                     MonitoringJobs.filter(j => jobs.find(nj => nj.jobId == j.jobId)).length > 1 ||
                     jobs.filter(nj => MonitoringJobs.find(j => nj.jobId == j.jobId)).length > 1){
-                    setMonitoringJobs(jobs);
+                        setMonitoringJobs(jobs);
                 }
             });
     }
