@@ -11,6 +11,8 @@ import BackendSettings from "./BackendSettingsFunctions";
 import Toggle from "react-toggle";
 import Loader from "./Loader";
 import {RequestType} from "./interfaces/IRequestLimits";
+import IMangaConnector from "./interfaces/IMangaConnector";
+import {MangaConnectorFunctions} from "./MangaConnectorFunctions";
 
 export default function Settings({ backendConnected, apiUri, frontendSettings, setFrontendSettings } : {
     backendConnected: boolean,
@@ -22,6 +24,7 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
     const [loadingBackend, setLoadingBackend] = useState(false);
     const [backendSettings, setBackendSettings] = useState<IBackendSettings|null>(null);
     const [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
+    const [mangaConnectors,setMangaConnectors] = useState<IMangaConnector[]>([]);
     const [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>([]);
 
     useEffect(() => {
@@ -30,6 +33,7 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
         NotificationConnectorFunctions.GetNotificationConnectors(apiUri).then(setNotificationConnectors);
         LocalLibraryFunctions.GetLibraries(apiUri).then(setLocalLibraries);
         BackendSettings.GetSettings(apiUri).then(setBackendSettings);
+        MangaConnectorFunctions.GetAllConnectors(apiUri).then(setMangaConnectors);
     }, [backendConnected, showSettings]);
 
     const dateToStr = (x: Date) => {
@@ -153,6 +157,17 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                             <label htmlFor="MangaCover">MangaCover</label>
                             <input id="MangaCover" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaCover : 0} disabled={backendSettings ? false : !loadingBackend}
                                    onChange={(e) => ChangeRequestLimit(RequestType.MangaCover, e.currentTarget.valueAsNumber)} />
+                        </div>
+                        <div className={"settings-mangaConnectors"}>
+                            {mangaConnectors.map(mc => {
+                                return (
+                                    <div key={mc.name}>
+                                        <span>{mc.name}</span>
+                                        <Toggle defaultChecked={mc.enabled} onChange={(e) => {
+                                                    MangaConnectorFunctions.SetConnectorEnabled(apiUri, mc.name, e.currentTarget.checked);
+                                                }} />
+                                    </div>);
+                            })}
                         </div>
                         <div>
                             <h3>Notification Connectors:</h3>

@@ -21,7 +21,9 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
     const pattern = /https:\/\/([a-z0-9.]+\.[a-z0-9]{2,})(?:\/.*)?/i
 
     useEffect(() => {
-        MangaConnectorFunctions.GetAllConnectors(apiUri).then(setConnectors).then(() => setLoading(false));
+        MangaConnectorFunctions.GetAllConnectors(apiUri).then((connectors)=> {
+            return connectors.filter(c => c.enabled);
+        }).then(setConnectors).then(() => setLoading(false));
     }, []);
 
     useEffect(() => {
