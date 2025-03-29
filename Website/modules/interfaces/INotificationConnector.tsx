@@ -5,6 +5,7 @@ import NotificationConnectorFunctions from "../NotificationConnectorFunctions";
 import {LunaseaItem} from "./records/ILunaseaRecord";
 import {GotifyItem} from "./records/IGotifyRecord";
 import {NtfyItem} from "./records/INtfyRecord";
+import {PushoverItem} from "./records/IPushoverRecord";
 
 export default interface INotificationConnector {
     name: string;
@@ -29,12 +30,14 @@ export function NotificationConnectorItem({apiUri, notificationConnector} : {api
                 case "gotify": setSelectedConnectorElement(<GotifyItem apiUri={apiUri} />); break;
                 case "ntfy": setSelectedConnectorElement(<NtfyItem apiUri={apiUri} />); break;
                 case "lunasea": setSelectedConnectorElement(<LunaseaItem apiUri={apiUri} />); break;
+                case "pushover": setSelectedConnectorElement(<PushoverItem apiUri={apiUri} />); break;
             }
         }}>
             <option value="default">Generic REST</option>
             <option value="gotify">Gotify</option>
             <option value="ntfy">Ntfy</option>
             <option value="lunasea">Lunasea</option>
+            <option value="pushover">Pushover</option>
         </select>
         {selectedConnectorElement}
     </div>;
