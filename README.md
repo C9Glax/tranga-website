@@ -1,11 +1,6 @@
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
+# Testers for V2 wanted!
+
+[Details](https://github.com/C9Glax/tranga/pull/355#issuecomment-2764217944)
 
 <!-- PROJECT LOGO -->
 <br />
