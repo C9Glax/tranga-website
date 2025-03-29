@@ -26,6 +26,7 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
     const [notificationConnectors, setNotificationConnectors] = useState<INotificationConnector[]>([]);
     const [mangaConnectors,setMangaConnectors] = useState<IMangaConnector[]>([]);
     const [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>([]);
+    const [chapterNamingScheme, setChapterNamingScheme] = useState<string>("");
 
     useEffect(() => {
         if(!backendConnected)
@@ -73,6 +74,14 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                         <div className="settings-jobinterval">
                             <h3>Default Job-Interval</h3>
                             <input type="time" min="00:30" max="23:59" defaultValue={dateToStr(new Date(frontendSettings.jobInterval))} onChange={(e) => setFrontendSettings({...frontendSettings, jobInterval: new Date(e.currentTarget.valueAsNumber-60*60*1000) ?? frontendSettings.jobInterval})}/>
+                        </div>
+                        <div className={"settings-chapterNamingScheme"}>
+                            <h3>Chapter Naming-Scheme</h3>
+                            <input type={"text"} placeholder={backendSettings?.chapterNamingScheme} onChange={(e) => setChapterNamingScheme(e.target.value)} />
+                            <button type={"button"} onClick={() => {
+                                setLoadingBackend(true);
+                                BackendSettings.UpdateChapterNamingScheme(apiUri, chapterNamingScheme).finally(() => setLoadingBackend(false));
+                            }}>Submit</button>
                         </div>
                         <div className="settings-bwimages">
                             <h3>B/W Images</h3>

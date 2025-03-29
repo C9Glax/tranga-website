@@ -58,4 +58,12 @@ export default class BackendSettings {
     static async UpdateAprilFoolsToggle(apiUri: string, value: boolean) {
         return patchData(`${apiUri}/v2/Settings/AprilFoolsMode`, value);
     }
+
+    static async GetChapterNamingScheme(apiUri: string) : Promise<string> {
+        return getData(`${apiUri}/v2/Settings/ChapterNamingScheme`).then((state) => state as unknown as string);
+    }
+
+    static async UpdateChapterNamingScheme(apiUri: string, value: string) {
+        return patchData(`${apiUri}/v2/Settings/ChapterNamingScheme`, value);
+    }
 }

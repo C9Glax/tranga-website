@@ -14,4 +14,5 @@ export default interface IBackendSettings {
     compression: number;
     bwImages: boolean;
     startNewJobTimeoutMs: number;
+    chapterNamingScheme: string;
 }
