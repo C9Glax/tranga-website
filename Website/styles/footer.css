@@ -18,7 +18,7 @@ footer {
     flex-grow: 1;
     text-align: right;
     margin-right: 20px;
-    cursor: url("Website/media/blahaj.png"), grab;
+    cursor: url("../media/blahaj.png"), grab;
 }
 
 footer .statusBadge {
