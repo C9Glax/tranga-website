@@ -57,7 +57,7 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
     return (
         <div id="Settings">
             <div onClick={() => setShowSettings(true)}>
-                <img id="Settings-Cogwheel" src="../../media/settings-cogwheel.svg" alt="settings-cogwheel" />
+                <img id="Settings-Cogwheel" src="../media/settings-cogwheel.svg" alt="settings-cogwheel" />
             </div>
             {showSettings
                 ? <div className="popup" id="SettingsPopUp">
