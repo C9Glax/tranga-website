@@ -1,15 +1,19 @@
 import {
-    Avatar, Button, Chip,
+    Avatar,
+    Button,
+    Chip,
+    CircularProgress,
     Drawer,
     Input,
     ListItemDecorator,
     Option,
-    Select,
-    SelectOption,
-    Skeleton, Stack,
+    Select, SelectOption,
+    Skeleton,
+    Stack,
     Step,
     StepIndicator,
-    Stepper, Typography
+    Stepper,
+    Typography
 } from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
 import IMangaConnector from "../api/types/IMangaConnector";
@@ -22,6 +26,9 @@ import {Manga} from "./Manga.tsx";
 import Add from "@mui/icons-material/Add";
 import React from "react";
 import {CreateDownloadAvailableChaptersJob} from "../api/Job.tsx";
+import ILocalLibrary from "../api/types/ILocalLibrary.ts";
+import {GetLibraries} from "../api/LocalLibrary.tsx";
+import { LibraryBooks } from "@mui/icons-material";
 
 export default function Search({open, setOpen}:{open:boolean, setOpen:React.Dispatch<React.SetStateAction<boolean>>}){
 
@@ -32,10 +39,10 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
     const [mangaConnectorsLoading, setMangaConnectorsLoading] = useState<boolean>(true);
     const [selectedMangaConnector, setSelectedMangaConnector] = useState<IMangaConnector>();
 
-    useEffect(() => {
+    const loadMangaConnectors = useCallback(() => {
         setMangaConnectorsLoading(true);
         GetAllConnectors(apiUri).then(setMangaConnectors).finally(() => setMangaConnectorsLoading(false));
-    },[apiUri])
+    }, [apiUri]);
 
     const [results, setResults] = useState<IManga[]>([]);
     const [resultsLoading, setResultsLoading] = useState<boolean>(false);
@@ -47,6 +54,25 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
         setResultsLoading(true);
         SearchNameOnConnector(apiUri, mangaConnector.name, value).then(setResults).finally(() => setResultsLoading(false));
     },[apiUri])
+
+    const [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>();
+    const [localLibrariesLoading, setLocalLibrariesLoading] = useState<boolean>(true);
+    const [selectedLibraryId, setSelectedLibraryId] = useState<string>();
+
+    const loadLocalLibraries = useCallback(() => {
+        setLocalLibrariesLoading(true);
+        GetLibraries(apiUri).then(setLocalLibraries).finally(() => setLocalLibrariesLoading(false));
+    }, [apiUri]);
+
+    useEffect(() => {
+        loadMangaConnectors();
+        loadLocalLibraries();
+    },[apiUri]);
+
+    useEffect(() => {
+        loadMangaConnectors();
+        loadLocalLibraries();
+    }, []);
 
     function renderValue(option: SelectOption<string> | null) {
         if (!option) {
@@ -63,6 +89,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
         );
     }
 
+    // @ts-ignore
     return (
         <Drawer size={"lg"} anchor={"right"} open={open} onClose={() => {
             setStep(2);
@@ -118,8 +145,22 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                         <Stack direction={"row"} spacing={1}>
                             {results.map((result) =>
                                 <Manga key={result.mangaId} manga={result}>
-                                    <Button onClick={() => {
-                                        CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {localLibraryId: "",recurrenceTimeMs: 1000 * 60 * 60 * 3})
+                                    <Select
+                                        placeholder={"Select Library"}
+                                        defaultValue={""}
+                                        startDecorator={<LibraryBooks />}
+                                        onChange={(_e, newValue) => setSelectedLibraryId(newValue!)}>
+                                        {localLibrariesLoading ?
+                                            <Option value={""} disabled>Loading <CircularProgress color={"primary"} size={"sm"} /></Option>
+                                            :
+                                            (localLibraries??[]).map(library => {
+                                                return (
+                                                    <Option value={library.localLibraryId}>{library.libraryName} ({library.basePath})</Option>
+                                                );
+                                            })}
+                                    </Select>
+                                    <Button disabled={localLibrariesLoading || selectedLibraryId === undefined} onClick={() => {
+                                        CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {localLibraryId: selectedLibraryId!,recurrenceTimeMs: 1000 * 60 * 60 * 3})
                                     }} endDecorator={<Add />}>Watch</Button>
                                 </Manga>)}
                         </Stack>

@@ -59,7 +59,7 @@ export function Manga({manga, children} : { manga: IManga | undefined, children?
         position: "relative",
     }
 
-    const interactiveElements = ["button", "input", "textarea", "a"];
+    const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
 
     return (
         <Badge badgeContent={useManga.mangaConnectorId} color={ReleaseStatusToPalette(useManga.releaseStatus)} size={"lg"}>
