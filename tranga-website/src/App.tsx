@@ -2,7 +2,7 @@ import Sheet from '@mui/joy/Sheet';
 import './App.css'
 import Settings from "./Settings.tsx";
 import Header from "./Header.tsx";
-import {Badge, Button} from "@mui/joy";
+import {Badge, Button, Card, CardContent, CardCover, Typography} from "@mui/joy";
 import {useState} from "react";
 import {ApiUriContext} from "./api/fetchApi.tsx";
 import Search from './Components/Search.tsx';
@@ -23,12 +23,25 @@ export default function App () {
                     <Badge color={"danger"} invisible={apiConnected} badgeContent={"!"}>
                         <Button onClick={() => setShowSettings(true)}>Settings</Button>
                     </Badge>
-                    <Button onClick={() => setShowSearch(true)}>Search</Button>
                 </Header>
                 <Settings open={showSettings} setOpen={setShowSettings} setApiUri={setApiUri} setConnected={setApiConnected} />
                 <Search open={showSearch} setOpen={setShowSearch} />
                 <Sheet className={"app-content"}>
-                    <MangaList />
+                    <MangaList>
+                        <Card onClick={() => setShowSearch(true)} sx={{height:"400px", width:"300px"}}>
+                            <CardCover>
+                                <img src={"/blahaj.png"} />
+                            </CardCover>
+                            <CardCover sx={{
+                                background: 'rgba(234, 119, 246, 0.14)',
+                                backdropFilter: 'blur(6.9px)',
+                                webkitBackdropFilter: 'blur(6.9px)',
+                            }}/>
+                            <CardContent>
+                                <Typography level={"h1"}>Search</Typography>
+                            </CardContent>
+                        </Card>
+                    </MangaList>
                 </Sheet>
             </Sheet>
         </ApiUriContext.Provider>

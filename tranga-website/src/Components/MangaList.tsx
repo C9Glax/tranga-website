@@ -7,7 +7,7 @@ import IDownloadAvailableChaptersJob from "../api/types/Jobs/IDownloadAvailableC
 import {MangaFromId} from "./Manga.tsx";
 import { Remove } from "@mui/icons-material";
 
-export default function MangaList(){
+export default function MangaList({children}: {children?: React.ReactNode} ){
     const apiUri = useContext(ApiUriContext);
 
     const [jobList, setJobList] = useState<IDownloadAvailableChaptersJob[]>([]);
@@ -26,6 +26,7 @@ export default function MangaList(){
 
     return(
         <Stack direction="row" spacing={1}>
+            {children}
             {jobList.map((job) => (
                 <MangaFromId key={job.mangaId} mangaId={job.mangaId}>
                     <Button color={"danger"} endDecorator={<Remove />} onClick={() => deleteJob(job.jobId)}>Delete</Button>

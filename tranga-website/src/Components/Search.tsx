@@ -48,6 +48,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
     const [resultsLoading, setResultsLoading] = useState<boolean>(false);
 
     const StartSearch = useCallback((mangaConnector : IMangaConnector | undefined, value: string)=>{
+        setStep(3);
         if(mangaConnector === undefined)
             return;
         setResults([]);
@@ -92,19 +93,20 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
     // @ts-ignore
     return (
         <Drawer size={"lg"} anchor={"right"} open={open} onClose={() => {
-            setStep(2);
+            setStep(1);
             setResults([]);
             setOpen(false);
         }}>
             <ModalClose />
             <Stepper orientation={"vertical"} sx={{ height: '100%', width: "calc(100% - 80px)", margin:"40px"}}>
                 <Step indicator={
-                    <StepIndicator variant="solid" color="primary">
+                    <StepIndicator variant={step==1?"solid":"outlined"} color={mangaConnectors.length < 1 ? "danger" : "primary"}>
                         1
                     </StepIndicator>}>
                     <Skeleton loading={mangaConnectorsLoading}>
                         <Select
-                            disabled={mangaConnectorsLoading || resultsLoading}
+                            color={mangaConnectors.length < 1 ? "danger" : "neutral"}
+                            disabled={mangaConnectorsLoading || resultsLoading || mangaConnectors.length < 1}
                             placeholder={"Select Connector"}
                             slotProps={{
                                     listbox: {
@@ -119,13 +121,13 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                                 setStep(2);
                                 setSelectedMangaConnector(mangaConnectors.find((o) => o.name === newValue));
                             }}
-                            endDecorator={<Chip size={"sm"} color={"primary"}>{mangaConnectors.length}</Chip>}>
+                            endDecorator={<Chip size={"sm"} color={mangaConnectors.length < 1 ? "danger" : "primary"}>{mangaConnectors.length}</Chip>}>
                             {mangaConnectors?.map((connector: IMangaConnector) => ConnectorOption(connector))}
                         </Select>
                     </Skeleton>
                 </Step>
                 <Step indicator={
-                    <StepIndicator variant="solid" color="primary">
+                    <StepIndicator variant={step==2?"solid":"outlined"} color="primary">
                         2
                     </StepIndicator>}>
                     <Input disabled={step < 2 || resultsLoading} placeholder={"Name or Url " + (selectedMangaConnector ? selectedMangaConnector.baseUris[0] : "")} onKeyDown={(e) => {
@@ -137,7 +139,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                     }}/>
                 </Step>
                 <Step indicator={
-                    <StepIndicator variant="solid" color="primary">
+                    <StepIndicator variant={step==3?"solid":"outlined"} color="primary">
                         3
                     </StepIndicator>}>
                     <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results.length}</Chip>}>Results</Typography>
