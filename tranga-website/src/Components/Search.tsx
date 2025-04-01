@@ -149,6 +149,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                                         placeholder={"Select Library"}
                                         defaultValue={""}
                                         startDecorator={<LibraryBooks />}
+                                        value={selectedLibraryId}
                                         onChange={(_e, newValue) => setSelectedLibraryId(newValue!)}>
                                         {localLibrariesLoading ?
                                             <Option value={""} disabled>Loading <CircularProgress color={"primary"} size={"sm"} /></Option>

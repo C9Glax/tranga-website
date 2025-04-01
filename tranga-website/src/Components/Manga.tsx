@@ -13,7 +13,7 @@ import {
 } from "@mui/joy";
 import IManga, {DefaultManga} from "../api/types/IManga.ts";
 import {ReactElement, useCallback, useContext, useEffect, useState} from "react";
-import {GetLatestChapterAvailable, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
+import {GetLatestChapterAvailable, GetMangaById, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import AuthorTag from "./AuthorTag.tsx";
 import LinkTag from "./LinkTag.tsx";
@@ -22,8 +22,27 @@ import IChapter from "../api/types/IChapter.ts";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import {SxProps} from "@mui/joy/styles/types";
 
-export function Manga({manga, children} : { manga: IManga | undefined, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }) {
+export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
+    const [manga, setManga] = useState(DefaultManga);
+    const [loading, setLoading] = useState(true);
+
+    const apiUri = useContext(ApiUriContext);
+
+    const loadManga = useCallback(() => {
+        setLoading(true);
+        GetMangaById(apiUri, mangaId).then(setManga).finally(() => setLoading(false));
+    },[apiUri, mangaId]);
+
+    useEffect(() => {
+        loadManga();
+    }, []);
+
+    return <Manga manga={manga} loading={loading} children={children} />
+}
+
+export function Manga({manga, children, loading} : { manga: IManga | undefined, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined, loading?: boolean}) {
     const useManga = manga ?? DefaultManga;
+    loading = loading ?? false;
 
     const apiUri = useContext(ApiUriContext);
 
@@ -79,19 +98,25 @@ export function Manga({manga, children} : { manga: IManga | undefined, children?
                 }}/>
                 <CardContent sx={{display: "flex", alignItems: "center", flexFlow: "row nowrap"}}>
                     <Box sx={sideSx}>
-                        <Link href={useManga.websiteUrl} level={"h1"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
-                            {useManga.name}
-                        </Link>
+                        <Skeleton loading={loading}>
+                            <Link href={useManga.websiteUrl} level={"h1"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
+                                {useManga.name}
+                            </Link>
+                        </Skeleton>
                     </Box>
                     {
                         expanded ?
                             <Box sx={sideSx}>
-                                <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5}>
-                                    {useManga.authorIds.map(authorId => <AuthorTag key={authorId} authorId={authorId} color={"success"} />)}
-                                    {useManga.tags.map(tag => <Chip key={tag} variant={"outlined"} size={"md"} color={"primary"}>{tag}</Chip>)}
-                                    {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"danger"} />)}
-                                </Stack>
-                                <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black"}} />
+                                <Skeleton loading={loading} variant={"text"} level={"title-lg"}>
+                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5}>
+                                        {useManga.authorIds.map(authorId => <AuthorTag key={authorId} authorId={authorId} color={"success"} />)}
+                                        {useManga.tags.map(tag => <Chip key={tag} variant={"outlined"} size={"md"} color={"primary"}>{tag}</Chip>)}
+                                        {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"danger"} />)}
+                                    </Stack>
+                                </Skeleton>
+                                <Skeleton loading={loading} sx={{maxHeight:"300px"}}>
+                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black"}} />
+                                </Skeleton>
                             </Box>
                             : null
                     }
@@ -99,30 +124,32 @@ export function Manga({manga, children} : { manga: IManga | undefined, children?
                 {
                     expanded ?
                         <CardActions sx={{justifyContent:"space-between"}}>
-                            <Input
-                                type={"number"}
-                                placeholder={"0.0"}
-                                startDecorator={
-                                <>
-                                    {
-                                        updatingThreshold ?
-                                            <CircularProgress color={"primary"} size={"sm"} />
-                                            : <Typography>Ch.</Typography>
+                            <Skeleton loading={loading} sx={{maxHeight: "30px", maxWidth:"calc(100% - 40px)"}}>
+                                <Input
+                                    type={"number"}
+                                    placeholder={"0.0"}
+                                    startDecorator={
+                                        <>
+                                            {
+                                                updatingThreshold ?
+                                                    <CircularProgress color={"primary"} size={"sm"} />
+                                                    : <Typography>Ch.</Typography>
+                                            }
+                                        </>
                                     }
-                                </>
-                                }
-                                endDecorator={
-                                    <Typography>
-                                        <Skeleton loading={maxChapterLoading}>
-                                            /{mangaMaxChapter?.chapterNumber??"Load Failed"}
-                                        </Skeleton>
-                                    </Typography>
-                                }
-                                sx={{width:"min-content"}}
-                                size={"md"}
-                                onChange={(e) => updateIgnoreThreshhold(e.currentTarget.valueAsNumber)}
-                            />
-                            {children}
+                                    endDecorator={
+                                        <Typography>
+                                            <Skeleton loading={maxChapterLoading}>
+                                                /{mangaMaxChapter?.chapterNumber??"Load Failed"}
+                                            </Skeleton>
+                                        </Typography>
+                                    }
+                                    sx={{width:"min-content"}}
+                                    size={"md"}
+                                    onChange={(e) => updateIgnoreThreshhold(e.currentTarget.valueAsNumber)}
+                                />
+                                {children}
+                            </Skeleton>
                         </CardActions>
                         : null
                 }

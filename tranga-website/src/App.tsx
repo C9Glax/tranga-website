@@ -6,6 +6,7 @@ import {Badge, Button} from "@mui/joy";
 import {useState} from "react";
 import {ApiUriContext} from "./api/fetchApi.tsx";
 import Search from './Components/Search.tsx';
+import MangaList from "./Components/MangaList.tsx";
 
 export default function App () {
 
@@ -27,7 +28,7 @@ export default function App () {
                 <Settings open={showSettings} setOpen={setShowSettings} setApiUri={setApiUri} setConnected={setApiConnected} />
                 <Search open={showSearch} setOpen={setShowSearch} />
                 <Sheet className={"app-content"}>
-
+                    <MangaList />
                 </Sheet>
             </Sheet>
         </ApiUriContext.Provider>
