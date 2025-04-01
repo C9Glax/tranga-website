@@ -140,7 +140,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                     <StepIndicator variant="solid" color="primary">
                         3
                     </StepIndicator>}>
-                    <Typography>Results</Typography>
+                    <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results.length}</Chip>}>Results</Typography>
                     <Skeleton loading={resultsLoading}>
                         <Stack direction={"row"} spacing={1}>
                             {results.map((result) =>

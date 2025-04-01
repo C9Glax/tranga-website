@@ -25,8 +25,9 @@ export default function App () {
                     <Button onClick={() => setShowSearch(true)}>Search</Button>
                 </Header>
                 <Settings open={showSettings} setOpen={setShowSettings} setApiUri={setApiUri} setConnected={setApiConnected} />
+                <Search open={showSearch} setOpen={setShowSearch} />
                 <Sheet className={"app-content"}>
-                    <Search open={showSearch} setOpen={setShowSearch} />
+
                 </Sheet>
             </Sheet>
         </ApiUriContext.Provider>
