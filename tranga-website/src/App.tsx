@@ -1,0 +1,31 @@
+import Sheet from '@mui/joy/Sheet';
+import './App.css'
+import Settings from "./Settings.tsx";
+import Header from "./Header.tsx";
+import {Button} from "@mui/joy";
+import {useState} from "react";
+import {ApiUriContext} from "./api/fetchApi.tsx";
+import Search from './Components/Search.tsx';
+
+export default function App () {
+
+    const [showSettings, setShowSettings] = useState<boolean>(false);
+    const [showSearch, setShowSearch] = useState<boolean>(false);
+
+    const [apiUri, setApiUri] = useState<string>(window.location.href.substring(0, window.location.href.lastIndexOf("/")));
+
+    return (
+        <ApiUriContext.Provider value={apiUri}>
+            <Sheet className={"app"}>
+                <Header>
+                    <Button onClick={() => setShowSettings(true)}>Settings</Button>
+                    <Button onClick={() => setShowSearch(true)}>Search</Button>
+                </Header>
+                <Settings open={showSettings} setOpen={setShowSettings} setApiUri={setApiUri}/>
+                <Sheet className={"app-content"}>
+                    <Search open={showSearch} setOpen={setShowSearch} />
+                </Sheet>
+            </Sheet>
+        </ApiUriContext.Provider>
+    );
+}

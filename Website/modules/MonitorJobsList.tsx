@@ -1,11 +1,11 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import JobFunctions from './JobFunctions';
+import Job from './api/Job';
 import '../styles/monitorMangaList.css';
-import {JobType} from "./interfaces/Jobs/IJob";
+import {JobType} from "./types/Jobs/IJob";
 import '../styles/mangaCover.css'
-import IDownloadAvailableChaptersJob from "./interfaces/Jobs/IDownloadAvailableChaptersJob";
-import {MangaItem} from "./interfaces/IManga";
-import MangaFunctions from "./MangaFunctions";
+import IDownloadAvailableChaptersJob from "./types/Jobs/IDownloadAvailableChaptersJob";
+import Manga from "./api/Manga";
+import MangaItem from "./Elements/Manga";
 
 export default function MonitorJobsList({onStartSearch, connectedToBackend, apiUri, checkConnectedInterval} : {onStartSearch() : void, connectedToBackend: boolean, apiUri: string, checkConnectedInterval: number}) {
     const [MonitoringJobs, setMonitoringJobs] = useState<IDownloadAvailableChaptersJob[]>([]);
@@ -29,7 +29,7 @@ export default function MonitorJobsList({onStartSearch, connectedToBackend, apiU
         if(!connectedToBackend)
             return;
         //console.debug("Updating MonitoringJobsList");
-        JobFunctions.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob)
+        Job.GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob)
             .then((jobs) => jobs as IDownloadAvailableChaptersJob[])
             .then((jobs) => {
                 if(jobs.length != MonitoringJobs.length ||
@@ -57,7 +57,7 @@ export default function MonitorJobsList({onStartSearch, connectedToBackend, apiU
                 <MangaItem apiUri={apiUri} mangaId={MonitoringJob.mangaId} key={MonitoringJob.mangaId}>
                     <></>
                     <button className="Manga-DeleteButton" onClick={() => {
-                        MangaFunctions.DeleteManga(apiUri, MonitoringJob.mangaId);
+                        Manga.DeleteManga(apiUri, MonitoringJob.mangaId);
                     }}>Delete</button>
                 </MangaItem>
             )}

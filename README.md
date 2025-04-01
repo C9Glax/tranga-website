@@ -4,7 +4,7 @@
 <h3 align="center">Tranga-Website</h3>
 
   <p align="center">
-    Automatic MangaFunctions and Metadata downloader 
+    Automatic Manga and Metadata downloader 
   </p>
   <p align="center">
     This is the Website for <a href="https://github.com/C9Glax/tranga">Tranga</a> (API)  

@@ -1,14 +1,15 @@
 import React, {ChangeEventHandler, EventHandler, useEffect, useState} from 'react';
-import {MangaConnectorFunctions} from "./MangaConnectorFunctions";
-import IMangaConnector from "./interfaces/IMangaConnector";
+import {MangaConnector} from "./api/MangaConnector";
+import IMangaConnector from "./types/IMangaConnector";
 import {isValidUri} from "../App";
-import IManga, {MangaItem} from "./interfaces/IManga";
 import '../styles/search.css';
-import SearchFunctions from "./SearchFunctions";
-import JobFunctions from "./JobFunctions";
-import ILocalLibrary from "./interfaces/ILocalLibrary";
-import LocalLibraryFunctions from "./LocalLibraryFunctions";
+import Job from "./api/Job";
+import LocalLibrary from "./api/LocalLibrary";
 import Loader from "./Loader";
+import IManga from "./types/IManga";
+import SearchFunctions from "./api/Search";
+import ILocalLibrary from "./types/ILocalLibrary";
+import MangaItem from "./Elements/Manga";
 
 export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: string, jobInterval: Date, closeSearch(): void}) {
     let [loading, setLoading] = useState<boolean>(true);
@@ -21,7 +22,7 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
     const pattern = /https:\/\/([a-z0-9.]+\.[a-z0-9]{2,})(?:\/.*)?/i
 
     useEffect(() => {
-        MangaConnectorFunctions.GetAllConnectors(apiUri).then((connectors)=> {
+        MangaConnector.GetAllConnectors(apiUri).then((connectors)=> {
             return connectors.filter(c => c.enabled);
         }).then(setConnectors).then(() => setLoading(false));
     }, []);
@@ -99,7 +100,7 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
     let [selectedLibrary, setSelectedLibrary] = useState<ILocalLibrary | null>(null);
     let [libraries, setLibraries] = useState<ILocalLibrary[] | null>(null);
     useEffect(() => {
-        LocalLibraryFunctions.GetLibraries(apiUri).then(setLibraries);
+        LocalLibrary.GetLibraries(apiUri).then(setLibraries);
     }, []);
     useEffect(() => {
         if(libraries === null || libraries.length < 1)
@@ -147,7 +148,7 @@ export default function Search({apiUri, jobInterval, closeSearch} : {apiUri: str
                                 : libraries.map(library => <option key={library.localLibraryId} value={library.localLibraryId}>{library.libraryName} ({library.basePath})</option>)}
                         </select>
                         <button className="Manga-AddButton" onClick={() => {
-                            JobFunctions.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: new Date(jobInterval).getTime(), localLibraryId: selectedLibrary!.localLibraryId});
+                            Job.CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {recurrenceTimeMs: new Date(jobInterval).getTime(), localLibraryId: selectedLibrary!.localLibraryId});
                         }}>Monitor</button>
                     </MangaItem>
                 })

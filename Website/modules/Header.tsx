@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/header.css'
-import IFrontendSettings from "./interfaces/IFrontendSettings";
 import Settings from "./Settings";
+import IFrontendSettings from "./types/IFrontendSettings";
 
 export default function Header({backendConnected, apiUri, settings, setFrontendSettings} : {backendConnected: boolean, apiUri: string, settings: IFrontendSettings, setFrontendSettings: (settings: IFrontendSettings) => void}){
     return (
