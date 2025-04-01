@@ -93,7 +93,8 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
     // @ts-ignore
     return (
         <Drawer size={"lg"} anchor={"right"} open={open} onClose={() => {
-            setStep(1);
+            if(step > 2)
+                setStep(2);
             setResults([]);
             setOpen(false);
         }}>
