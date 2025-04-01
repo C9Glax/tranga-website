@@ -1,8 +1,15 @@
 import IBackendSettings from "../../api/types/IBackendSettings";
-import {Accordion, AccordionDetails, AccordionSummary, CircularProgress, ColorPaletteProp, Input} from "@mui/joy";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Button,
+    ColorPaletteProp,
+    Input
+} from "@mui/joy";
 import {KeyboardEventHandler, useCallback, useContext, useState} from "react";
 import {ApiUriContext} from "../../api/fetchApi.tsx";
-import {UpdateUserAgent} from "../../api/BackendSettings.tsx";
+import {ResetUserAgent, UpdateUserAgent} from "../../api/BackendSettings.tsx";
 
 export default function UserAgent({backendSettings}: {backendSettings?: IBackendSettings}) {
     const apiUri = useContext(ApiUriContext);
@@ -20,6 +27,14 @@ export default function UserAgent({backendSettings}: {backendSettings?: IBackend
         }
     }, [apiUri])
 
+    const Reset = useCallback(() => {
+        setLoading(true);
+        ResetUserAgent(apiUri)
+            .then(() => setColor("success"))
+            .catch(() => setColor("danger"))
+            .finally(() => setLoading(false));
+    }, [apiUri]);
+
     return (
         <Accordion>
             <AccordionSummary>UserAgent</AccordionSummary>
@@ -30,7 +45,7 @@ export default function UserAgent({backendSettings}: {backendSettings?: IBackend
                         onKeyDown={keyDown}
                         onChange={e => setValue(e.target.value)}
                         color={color}
-                        endDecorator={(loading ? <CircularProgress color={"primary"} size={"sm"} /> : null)}
+                       endDecorator={<Button onClick={Reset} loading={loading}>Reset</Button>}
                 />
             </AccordionDetails>
         </Accordion>
