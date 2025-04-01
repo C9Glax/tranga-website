@@ -28,7 +28,7 @@ const checkConnection  = async (apiUri: string): Promise<boolean> =>{
         });
 }
 
-export default function Settings({open, setOpen, setApiUri}:{open:boolean, setOpen:React.Dispatch<React.SetStateAction<boolean>>, setApiUri:React.Dispatch<React.SetStateAction<string>>}) {
+export default function Settings({open, setOpen, setApiUri, setConnected}:{open:boolean, setOpen:React.Dispatch<React.SetStateAction<boolean>>, setApiUri:React.Dispatch<React.SetStateAction<string>>, setConnected:React.Dispatch<React.SetStateAction<boolean>>}) {
 
     const apiUri = useContext(ApiUriContext);
 
@@ -53,6 +53,7 @@ export default function Settings({open, setOpen, setApiUri}:{open:boolean, setOp
         setChecking(true);
         checkConnection(uri)
             .then((result) => {
+                setConnected(result);
                 setApiUriAccordionOpen(!result);
                 setApiUriColor(result ? "success" : "danger");
                 if(result)
