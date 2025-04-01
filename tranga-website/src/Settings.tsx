@@ -17,6 +17,7 @@ import { GetSettings } from './api/BackendSettings.tsx';
 import UserAgent from "./Components/Settings/UserAgent.tsx";
 import ImageProcessing from "./Components/Settings/ImageProcessing.tsx";
 import ChapterNamingScheme from "./Components/Settings/ChapterNamingScheme.tsx";
+import AprilFoolsMode from './Components/Settings/AprilFoolsMode.tsx';
 
 const checkConnection  = async (apiUri: string): Promise<boolean> =>{
     return fetch(`${apiUri}/swagger/v2/swagger.json`,
@@ -105,6 +106,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
                     <UserAgent backendSettings={backendSettings} />
                     <ImageProcessing backendSettings={backendSettings} />
                     <ChapterNamingScheme backendSettings={backendSettings} />
+                    <AprilFoolsMode backendSettings={backendSettings} />
                 </AccordionGroup>
             </DialogContent>
         </Drawer>
