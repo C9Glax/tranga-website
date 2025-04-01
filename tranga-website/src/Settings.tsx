@@ -15,6 +15,7 @@ import {ApiUriContext} from "./api/fetchApi.tsx";
 import IBackendSettings from "./api/types/IBackendSettings.ts";
 import { GetSettings } from './api/BackendSettings.tsx';
 import UserAgent from "./Components/Settings/UserAgent.tsx";
+import ImageProcessing from "./Components/Settings/ImageProcessing.tsx";
 
 const checkConnection  = async (apiUri: string): Promise<boolean> =>{
     return fetch(`${apiUri}/swagger/v2/swagger.json`,
@@ -101,6 +102,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
                         </AccordionDetails>
                     </Accordion>
                     <UserAgent backendSettings={backendSettings} />
+                    <ImageProcessing backendSettings={backendSettings} />
                 </AccordionGroup>
             </DialogContent>
         </Drawer>
