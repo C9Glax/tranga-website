@@ -10,8 +10,11 @@ import {
 } from "@mui/joy";
 import './Settings.css';
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "./api/fetchApi.tsx";
+import IBackendSettings from "./api/types/IBackendSettings.ts";
+import { GetSettings } from './api/BackendSettings.tsx';
+import UserAgent from "./Components/Settings/UserAgent.tsx";
 
 const checkConnection  = async (apiUri: string): Promise<boolean> =>{
     return fetch(`${apiUri}/swagger/v2/swagger.json`,
@@ -62,6 +65,16 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
             .finally(() => setChecking(false));
     }
 
+    const [backendSettings, setBackendSettings] = useState<IBackendSettings>();
+
+    const getBackendSettings = useCallback(() => {
+        GetSettings(apiUri).then(setBackendSettings);
+    }, [apiUri]);
+
+    useEffect(() => {
+        getBackendSettings();
+    }, [checking]);
+
     return (
         <Drawer size={"md"} open={open} onClose={() => setOpen(false)}>
             <ModalClose />
@@ -87,6 +100,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
                                 endDecorator={(checking ? <CircularProgress color={apiUriColor} size={"sm"} /> : null)} />
                         </AccordionDetails>
                     </Accordion>
+                    <UserAgent backendSettings={backendSettings} />
                 </AccordionGroup>
             </DialogContent>
         </Drawer>
