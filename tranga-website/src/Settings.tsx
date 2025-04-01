@@ -18,6 +18,7 @@ import UserAgent from "./Components/Settings/UserAgent.tsx";
 import ImageProcessing from "./Components/Settings/ImageProcessing.tsx";
 import ChapterNamingScheme from "./Components/Settings/ChapterNamingScheme.tsx";
 import AprilFoolsMode from './Components/Settings/AprilFoolsMode.tsx';
+import RequestLimits from "./Components/Settings/RequestLimits.tsx";
 
 const checkConnection  = async (apiUri: string): Promise<boolean> =>{
     return fetch(`${apiUri}/swagger/v2/swagger.json`,
@@ -107,6 +108,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
                     <ImageProcessing backendSettings={backendSettings} />
                     <ChapterNamingScheme backendSettings={backendSettings} />
                     <AprilFoolsMode backendSettings={backendSettings} />
+                    <RequestLimits backendSettings={backendSettings} />
                 </AccordionGroup>
             </DialogContent>
         </Drawer>
