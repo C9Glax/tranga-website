@@ -46,9 +46,10 @@ export default function RequestLimits({backendSettings}: {backendSettings?: IBac
 
     return (
         <Accordion>
-            <AccordionSummary>Request Limits<Button loading={backendSettings === undefined} onClick={ResetAll} size={"sm"} variant={"outlined"} endDecorator={<Restore />}>Reset all</Button></AccordionSummary>
+            <AccordionSummary>Request Limits</AccordionSummary>
             <AccordionDetails>
                 <Stack spacing={1} direction="column">
+                    <Button loading={backendSettings === undefined} onClick={ResetAll} size={"sm"} variant={"outlined"} endDecorator={<Restore />} color={"warning"}>Reset all</Button>
                     <Item type={RequestLimitType.Default} color={color} backendSettings={backendSettings} loading={loading} Reset={Reset} Update={Update} />
                     <Item type={RequestLimitType.MangaInfo} color={color} backendSettings={backendSettings} loading={loading} Reset={Reset} Update={Update} />
                     <Item type={RequestLimitType.MangaImage} color={color} backendSettings={backendSettings} loading={loading} Reset={Reset} Update={Update} />
