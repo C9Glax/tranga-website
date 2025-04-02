@@ -108,14 +108,14 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                         expanded ?
                             <Box sx={sideSx}>
                                 <Skeleton loading={loading} variant={"text"} level={"title-lg"}>
-                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5}>
+                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:"75px", overflowY:"auto", scrollbarWidth: "thin"}}>
                                         {useManga.authorIds.map(authorId => <AuthorTag key={authorId} authorId={authorId} color={"success"} />)}
-                                        {useManga.tags.map(tag => <Chip key={tag} variant={"outlined"} size={"md"} color={"primary"}>{tag}</Chip>)}
-                                        {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"danger"} />)}
+                                        {useManga.tags.map(tag => <Chip key={tag} variant={"soft"} size={"md"} color={"primary"}>{tag}</Chip>)}
+                                        {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"warning"} />)}
                                     </Stack>
                                 </Skeleton>
                                 <Skeleton loading={loading} sx={{maxHeight:"300px"}}>
-                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black"}} />
+                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black", maxHeight:"310px", overflowY:"auto", marginTop:"10px", scrollbarWidth: "thin"}} />
                                 </Skeleton>
                             </Box>
                             : null

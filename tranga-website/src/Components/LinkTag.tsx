@@ -16,9 +16,9 @@ export default function LinkTag({linkId, color} : { linkId: string | undefined, 
     }, [linkId]);
 
     return (
-        <Chip variant={"outlined"} size={"md"} color={color??"primary"}>
+        <Chip variant={"soft"} size={"sm"} color={color??"primary"}>
             <Skeleton variant={"text"} loading={loading}>
-                <Link href={link?.linkUrl}>{link?.linkProvider??"Load Failed"}</Link>
+                <Link sx={{textDecoration:"underline"}} level={"body-xs"} href={link?.linkUrl}>{link?.linkProvider??"Load Failed"}</Link>
             </Skeleton>
         </Chip>
     );

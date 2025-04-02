@@ -6,13 +6,16 @@ import {JobType} from "../api/types/Jobs/IJob.ts";
 import IDownloadAvailableChaptersJob from "../api/types/Jobs/IDownloadAvailableChaptersJob.ts";
 import {MangaFromId} from "./Manga.tsx";
 import { Remove } from "@mui/icons-material";
+import * as React from "react";
 
-export default function MangaList({children}: {children?: React.ReactNode} ){
+export default function MangaList({connected, children}: {connected: boolean, children?: React.ReactNode} ){
     const apiUri = useContext(ApiUriContext);
 
     const [jobList, setJobList] = useState<IDownloadAvailableChaptersJob[]>([]);
 
     const getJobList = useCallback(() => {
+        if(!connected)
+            return;
         GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob).then((jl) => setJobList(jl as IDownloadAvailableChaptersJob[]));
     },[apiUri]);
 
@@ -23,6 +26,18 @@ export default function MangaList({children}: {children?: React.ReactNode} ){
     useEffect(() => {
         getJobList();
     }, [apiUri]);
+
+    const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
+    useEffect(() => {
+        if(!connected){
+            clearTimeout(timerRef.current);
+            return;
+        }else{
+            timerRef.current = setInterval(() => {
+                getJobList();
+            }, 2000);
+        }
+    }, [connected,]);
 
     return(
         <Stack direction="row" spacing={1}>
