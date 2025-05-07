@@ -2,7 +2,7 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY . /app
+COPY ./tranga-website /app
 RUN npm install
 RUN npm run build
 
