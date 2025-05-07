@@ -1,10 +1,10 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import IJob, {JobState, JobType} from "./interfaces/Jobs/IJob";
+import IJob, {JobState, JobType} from "./types/Jobs/IJob";
 import '../styles/queuePopUp.css';
 import '../styles/popup.css';
-import JobFunctions from "./JobFunctions";
-import IDownloadSingleChapterJob from "./interfaces/Jobs/IDownloadSingleChapterJob";
-import {ChapterItem} from "./interfaces/IChapter";
+import Job from "./api/Job";
+import IDownloadSingleChapterJob from "./types/Jobs/IDownloadSingleChapterJob";
+import ChapterItem from "./Elements/Chapter";
 
 export default function QueuePopUp({connectedToBackend, children, apiUri, checkConnectedInterval} : {connectedToBackend: boolean, children: ReactElement[], apiUri: string, checkConnectedInterval: number}) {
 
@@ -28,13 +28,13 @@ export default function QueuePopUp({connectedToBackend, children, apiUri, checkC
     }, [connectedToBackend, showQueuePopup]);
 
     function UpdateMonitoringJobsList(){
-        JobFunctions.GetJobsInState(apiUri, JobState.Waiting)
+        Job.GetJobsInState(apiUri, JobState.Waiting)
             .then((jobs: IJob[]) => {
                 //console.log(jobs);
                 return jobs;
             })
             .then(setWaitingJobs);
-        JobFunctions.GetJobsInState(apiUri, JobState.Running)
+        Job.GetJobsInState(apiUri, JobState.Running)
             .then((jobs: IJob[]) => {
                 //console.log(jobs);
                 return jobs;

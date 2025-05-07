@@ -1,0 +1,15 @@
+.app {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  width: 100%;
+  left: 0;
+}
+
+.app-content {
+  position: absolute;
+  height: calc(100% - 60px);
+  top: 60px;
+  width: 100%;
+  left: 0;
+}

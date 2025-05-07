@@ -1,18 +1,20 @@
-import IFrontendSettings from "./interfaces/IFrontendSettings";
 import '../styles/settings.css';
 import '../styles/react-toggle.css';
 import React, {useEffect, useRef, useState} from "react";
-import INotificationConnector, {NotificationConnectorItem} from "./interfaces/INotificationConnector";
-import NotificationConnectorFunctions from "./NotificationConnectorFunctions";
-import ILocalLibrary, {LocalLibraryItem} from "./interfaces/ILocalLibrary";
-import LocalLibraryFunctions from "./LocalLibraryFunctions";
-import IBackendSettings from "./interfaces/IBackendSettings";
-import BackendSettings from "./BackendSettingsFunctions";
+import NotificationConnector from "./api/NotificationConnector";
+import IBackendSettings from "./types/IBackendSettings";
+import BackendSettings from "./api/BackendSettings";
 import Toggle from "react-toggle";
 import Loader from "./Loader";
-import {RequestType} from "./interfaces/IRequestLimits";
-import IMangaConnector from "./interfaces/IMangaConnector";
-import {MangaConnectorFunctions} from "./MangaConnectorFunctions";
+import IMangaConnector from "./types/IMangaConnector";
+import {MangaConnector} from "./api/MangaConnector";
+import IFrontendSettings from "./types/IFrontendSettings";
+import INotificationConnector from "./types/INotificationConnector";
+import ILocalLibrary from "./types/ILocalLibrary";
+import LocalLibrary from "./api/LocalLibrary";
+import {RequestLimitType} from "./types/EnumRequestLimitType";
+import NotificationConnectorItem from "./Elements/NotificationConnector";
+import LocalLibraryItem from "./Elements/LocalLibrary";
 
 export default function Settings({ backendConnected, apiUri, frontendSettings, setFrontendSettings } : {
     backendConnected: boolean,
@@ -31,10 +33,10 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
     useEffect(() => {
         if(!backendConnected)
             return;
-        NotificationConnectorFunctions.GetNotificationConnectors(apiUri).then(setNotificationConnectors);
-        LocalLibraryFunctions.GetLibraries(apiUri).then(setLocalLibraries);
+        NotificationConnector.GetNotificationConnectors(apiUri).then(setNotificationConnectors);
+        LocalLibrary.GetLibraries(apiUri).then(setLocalLibraries);
         BackendSettings.GetSettings(apiUri).then(setBackendSettings);
-        MangaConnectorFunctions.GetAllConnectors(apiUri).then(setMangaConnectors);
+        MangaConnector.GetAllConnectors(apiUri).then(setMangaConnectors);
     }, [backendConnected, showSettings]);
 
     const dateToStr = (x: Date) => {
@@ -44,7 +46,7 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
         return ret;
     }
 
-    const ChangeRequestLimit = (requestType: RequestType, limit: number) => {
+    const ChangeRequestLimit = (requestType: RequestLimitType, limit: number) => {
         if(backendSettings === null)
             return;
         setLoadingBackend(true);
@@ -150,22 +152,22 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                             <h3>Request Limits:</h3>
                             <label htmlFor="Default">Default</label>
                             <input id="Default" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.Default : 0} disabled={backendSettings ? false : !loadingBackend}
-                                onChange={(e) => ChangeRequestLimit(RequestType.Default, e.currentTarget.valueAsNumber)} />
+                                onChange={(e) => ChangeRequestLimit(RequestLimitType.Default, e.currentTarget.valueAsNumber)} />
                             <label htmlFor="MangaInfo">MangaInfo</label>
                             <input id="MangaInfo" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaInfo : 0} disabled={backendSettings ? false : !loadingBackend}
-                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaInfo, e.currentTarget.valueAsNumber)} />
+                                   onChange={(e) => ChangeRequestLimit(RequestLimitType.MangaInfo, e.currentTarget.valueAsNumber)} />
                             <label htmlFor="MangaDexFeed">MangaDexFeed</label>
                             <input id="MangaDexFeed" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaDexFeed : 0} disabled={backendSettings ? false : !loadingBackend}
-                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaDexFeed, e.currentTarget.valueAsNumber)} />
+                                   onChange={(e) => ChangeRequestLimit(RequestLimitType.MangaDexFeed, e.currentTarget.valueAsNumber)} />
                             <label htmlFor="MangaDexImage">MangaDexImage</label>
                             <input id="MangaDexImage" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaDexImage : 0} disabled={backendSettings ? false : !loadingBackend}
-                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaDexImage, e.currentTarget.valueAsNumber)} />
+                                   onChange={(e) => ChangeRequestLimit(RequestLimitType.MangaDexImage, e.currentTarget.valueAsNumber)} />
                             <label htmlFor="MangaImage">MangaImage</label>
                             <input id="MangaImage" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaImage : 0} disabled={backendSettings ? false : !loadingBackend}
-                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaImage, e.currentTarget.valueAsNumber)} />
+                                   onChange={(e) => ChangeRequestLimit(RequestLimitType.MangaImage, e.currentTarget.valueAsNumber)} />
                             <label htmlFor="MangaCover">MangaCover</label>
                             <input id="MangaCover" type="number" defaultValue={backendSettings ? backendSettings.requestLimits.MangaCover : 0} disabled={backendSettings ? false : !loadingBackend}
-                                   onChange={(e) => ChangeRequestLimit(RequestType.MangaCover, e.currentTarget.valueAsNumber)} />
+                                   onChange={(e) => ChangeRequestLimit(RequestLimitType.MangaCover, e.currentTarget.valueAsNumber)} />
                         </div>
                         <div className={"settings-mangaConnectors"}>
                             {mangaConnectors.map(mc => {
@@ -173,7 +175,7 @@ export default function Settings({ backendConnected, apiUri, frontendSettings, s
                                     <div key={mc.name}>
                                         <span>{mc.name}</span>
                                         <Toggle defaultChecked={mc.enabled} onChange={(e) => {
-                                                    MangaConnectorFunctions.SetConnectorEnabled(apiUri, mc.name, e.currentTarget.checked);
+                                                    MangaConnector.SetConnectorEnabled(apiUri, mc.name, e.currentTarget.checked);
                                                 }} />
                                     </div>);
                             })}

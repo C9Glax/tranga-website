@@ -4,9 +4,10 @@ import Search from "./modules/Search";
 import Header from "./modules/Header";
 import MonitorJobsList from "./modules/MonitorJobsList";
 import './styles/index.css'
-import IFrontendSettings, {LoadFrontendSettings} from "./modules/interfaces/IFrontendSettings";
 import {useCookies} from "react-cookie";
 import Loader from "./modules/Loader";
+import IFrontendSettings from "./modules/types/IFrontendSettings";
+import {LoadFrontendSettings} from "./modules/api/FrontendSettings";
 
 export default function App(){
     const [, setCookie] = useCookies(['apiUri', 'jobInterval']);
