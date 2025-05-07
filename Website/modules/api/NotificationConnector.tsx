@@ -1,7 +1,6 @@
 import {deleteData, getData, putData} from "../../App";
 import IGotifyRecord from "../types/records/IGotifyRecord";
 import INtfyRecord from "../types/records/INtfyRecord";
-import ILunaseaRecord from "../types/records/ILunaseaRecord";
 import IPushoverRecord from "../types/records/IPushoverRecord";
 import INotificationConnector from "../types/INotificationConnector";
 
@@ -74,21 +73,6 @@ export default class NotificationConnector {
         }
         //console.info("Getting Notification Connectors");
         return putData(`${apiUri}/v2/NotificationConnector/Ntfy`, ntfy)
-            .then((json) => {
-                //console.info("Got Notification Connectors");
-                const ret = json as unknown as string;
-                //console.debug(ret);
-                return (ret);
-            });
-    }
-
-    static async CreateLunasea(apiUri: string, lunasea: ILunaseaRecord) : Promise<string> {
-        if(lunasea === undefined || lunasea === null) {
-            console.error(`lunasea was not provided`);
-            return Promise.reject();
-        }
-        //console.info("Getting Notification Connectors");
-        return putData(`${apiUri}/v2/NotificationConnector/Lunasea`, lunasea)
             .then((json) => {
                 //console.info("Got Notification Connectors");
                 const ret = json as unknown as string;

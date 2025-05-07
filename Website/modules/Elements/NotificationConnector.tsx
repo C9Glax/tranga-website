@@ -5,7 +5,6 @@ import NotificationConnector from "../api/NotificationConnector";
 import INotificationConnector from "../types/INotificationConnector";
 import {GotifyItem} from "./Gotify";
 import {NtfyItem} from "./Ntfy";
-import {LunaseaItem} from "./Lunasea";
 import {PushoverItem} from "./Pushover";
 
 export default function NotificationConnectorItem({apiUri, notificationConnector} : {apiUri: string, notificationConnector: INotificationConnector | null}) : ReactElement {
@@ -22,14 +21,12 @@ export default function NotificationConnectorItem({apiUri, notificationConnector
                 case "default": setSelectedConnectorElement(<DefaultItem apiUri={apiUri} notificationConnector={null} />); break;
                 case "gotify": setSelectedConnectorElement(<GotifyItem apiUri={apiUri} />); break;
                 case "ntfy": setSelectedConnectorElement(<NtfyItem apiUri={apiUri} />); break;
-                case "lunasea": setSelectedConnectorElement(<LunaseaItem apiUri={apiUri} />); break;
                 case "pushover": setSelectedConnectorElement(<PushoverItem apiUri={apiUri} />); break;
             }
         }}>
             <option value="default">Generic REST</option>
             <option value="gotify">Gotify</option>
             <option value="ntfy">Ntfy</option>
-            <option value="lunasea">Lunasea</option>
             <option value="pushover">Pushover</option>
         </select>
         {selectedConnectorElement}
