@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "cuttingedge" ]
+    branches: [ "vite-react-ts" ]
   workflow_dispatch:
 
 jobs:
@@ -35,11 +35,11 @@ jobs:
       - name: Build and push Website
         uses: docker/build-push-action@v6.16.0
         with:
-          context: ./Website
+          context: .
           file: ./Dockerfile
           #platforms: linux/amd64,linux/arm64,linux/riscv64,linux/ppc64le,linux/s390x,linux/386,linux/mips64le,linux/mips64,linux/arm/v7,linux/arm/v6
           platforms: linux/amd64
           pull: true
           push: true
           tags: |
-            glax/tranga-website:dev
+            glax/tranga-website:Server-V2
