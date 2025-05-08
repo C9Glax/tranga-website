@@ -78,18 +78,24 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
         CoverRef.current.src = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
     }, [useManga, apiUri])
 
-    const width = "200px";
-    const height = "300px";
+    const width = 200;
+    const height = 300;
 
-    const sideSx : SxProps = {
-        height: height,
-        width: width,
+    const coverSx : SxProps = {
+        height: height + "px",
+        width: width + "px",
         position: "relative",
     }
 
-    const cssProps : CSSProperties = {
-        maxHeight: "100%",
-        maxWidth: "100%",
+    const descriptionSx : SxProps = {
+        height: height + "px",
+        width: width * 2 + "px",
+        position: "relative"
+    }
+
+    const coverCss : CSSProperties = {
+        maxHeight: "calc("+height+"px + 2rem)",
+        maxWidth: "calc("+width+"px + 2rem)",
     }
 
     const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
@@ -102,7 +108,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                     setExpanded(!expanded)}
             }>
                 <CardCover>
-                    <img style={cssProps} src="/blahaj.png" alt="Manga Cover"
+                    <img style={coverCss} src="/blahaj.png" alt="Manga Cover"
                          ref={CoverRef}
                          onLoad={LoadMangaCover}
                          onResize={LoadMangaCover}/>
@@ -112,7 +118,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                         'linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)',
                 }}/>
                 <CardContent sx={{display: "flex", alignItems: "center", flexFlow: "row nowrap"}}>
-                    <Box sx={sideSx}>
+                    <Box sx={coverSx}>
                         <Skeleton loading={loading}>
                             <Link href={useManga.websiteUrl} level={"h3"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
                                 {useManga.name}
@@ -121,16 +127,16 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                     </Box>
                     {
                         expanded ?
-                            <Box sx={sideSx}>
+                            <Box sx={descriptionSx}>
                                 <Skeleton loading={loading} variant={"text"} level={"title-lg"}>
-                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:"75px", overflowY:"auto", scrollbarWidth: "thin"}}>
+                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:height*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
                                         {useManga.authorIds.map(authorId => <AuthorTag key={authorId} authorId={authorId} color={"success"} />)}
                                         {useManga.tags.map(tag => <Chip key={tag} variant={"soft"} size={"md"} color={"primary"}>{tag}</Chip>)}
                                         {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"warning"} />)}
                                     </Stack>
                                 </Skeleton>
                                 <Skeleton loading={loading} sx={{maxHeight:"300px"}}>
-                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black", maxHeight:"310px", overflowY:"auto", marginTop:"10px", scrollbarWidth: "thin"}} />
+                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black", maxHeight:height*0.7+"px", overflowY:"auto", marginTop:"10px", scrollbarWidth: "thin"}} />
                                 </Skeleton>
                             </Box>
                             : null
