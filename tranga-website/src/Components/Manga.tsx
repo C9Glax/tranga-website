@@ -44,8 +44,6 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
     const useManga = manga ?? DefaultManga;
     loading = loading ?? false;
     const CoverRef = useRef<HTMLImageElement>(null);
-    console.log(useManga);
-    console.log(manga);
 
     const apiUri = useContext(ApiUriContext);
 
