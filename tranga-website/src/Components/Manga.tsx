@@ -43,6 +43,8 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
 export function Manga({manga, children, loading} : { manga: IManga | undefined, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined, loading?: boolean}) {
     const useManga = manga ?? DefaultManga;
     loading = loading ?? false;
+    console.log(useManga);
+    console.log(manga);
 
     const apiUri = useContext(ApiUriContext);
 
