@@ -145,7 +145,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                     </StepIndicator>}>
                     <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results.length}</Chip>}>Results</Typography>
                     <Skeleton loading={resultsLoading}>
-                        <Stack direction={"row"} spacing={1}>
+                        <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
                             {results.map((result) =>
                                 <Manga key={result.mangaId} manga={result}>
                                     <Select

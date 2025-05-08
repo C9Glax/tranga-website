@@ -12,7 +12,7 @@ import {
     Typography
 } from "@mui/joy";
 import IManga, {DefaultManga} from "../api/types/IManga.ts";
-import {ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
+import {CSSProperties, ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetLatestChapterAvailable, GetMangaById, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import AuthorTag from "./AuthorTag.tsx";
@@ -78,10 +78,18 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
         CoverRef.current.src = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
     }, [useManga, apiUri])
 
+    const width = "200px";
+    const height = "300px";
+
     const sideSx : SxProps = {
-        height: "400px",
-        width: "300px",
+        height: height,
+        width: width,
         position: "relative",
+    }
+
+    const cssProps : CSSProperties = {
+        maxHeight: "100%",
+        maxWidth: "100%",
     }
 
     const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
@@ -93,8 +101,8 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                 if(interactiveElements.find(x => x == target.localName) == undefined)
                     setExpanded(!expanded)}
             }>
-                <CardCover sx={{margin: "var(--Card-padding)"}}>
-                    <img style={{maxHeight:"100%",height:"400px",width:"300px"}} src="/blahaj.png" alt="Manga Cover"
+                <CardCover>
+                    <img style={cssProps} src="/blahaj.png" alt="Manga Cover"
                          ref={CoverRef}
                          onLoad={LoadMangaCover}
                          onResize={LoadMangaCover}/>
@@ -106,7 +114,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                 <CardContent sx={{display: "flex", alignItems: "center", flexFlow: "row nowrap"}}>
                     <Box sx={sideSx}>
                         <Skeleton loading={loading}>
-                            <Link href={useManga.websiteUrl} level={"h1"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
+                            <Link href={useManga.websiteUrl} level={"h3"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
                                 {useManga.name}
                             </Link>
                         </Skeleton>

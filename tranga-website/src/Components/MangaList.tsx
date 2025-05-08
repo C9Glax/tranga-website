@@ -40,7 +40,7 @@ export default function MangaList({connected, children}: {connected: boolean, ch
     }, [connected,]);
 
     return(
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} flexWrap={"wrap"}>
             {children}
             {jobList.map((job) => (
                 <MangaFromId key={job.mangaId} mangaId={job.mangaId}>
