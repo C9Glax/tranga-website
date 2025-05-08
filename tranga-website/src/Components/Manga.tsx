@@ -12,7 +12,7 @@ import {
     Typography
 } from "@mui/joy";
 import IManga, {DefaultManga} from "../api/types/IManga.ts";
-import {ReactElement, useCallback, useContext, useEffect, useState} from "react";
+import {ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetLatestChapterAvailable, GetMangaById, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import AuthorTag from "./AuthorTag.tsx";
@@ -43,6 +43,7 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
 export function Manga({manga, children, loading} : { manga: IManga | undefined, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined, loading?: boolean}) {
     const useManga = manga ?? DefaultManga;
     loading = loading ?? false;
+    const CoverRef = useRef<HTMLImageElement>(null);
     console.log(useManga);
     console.log(manga);
 
@@ -52,7 +53,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
 
     const [mangaMaxChapter, setMangaMaxChapter] = useState<IChapter>();
     const [maxChapterLoading, setMaxChapterLoading] = useState<boolean>(true);
-    const loadMaxChapter = useCallback(() => {
+    const LoadMaxChapter = useCallback(() => {
         setMaxChapterLoading(true);
         GetLatestChapterAvailable(apiUri, useManga.mangaId)
             .then(setMangaMaxChapter)
@@ -66,12 +67,17 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
     },[useManga, apiUri])
 
     useEffect(() => {
-        loadMaxChapter();
-    }, []);
+        LoadMaxChapter();
+        LoadMangaCover();
+    }, [useManga]);
 
-    const LoadMangaCover = useCallback((e : EventTarget & HTMLImageElement) => {
-        if(e.src != GetMangaCoverImageUrl(apiUri, useManga.mangaId, e))
-            e.src = GetMangaCoverImageUrl(apiUri, useManga.mangaId, e);
+    const LoadMangaCover = useCallback(() => {
+        if(CoverRef.current == null)
+            return;
+        const coverUrl = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
+        if(CoverRef.current.src == coverUrl)
+            return;
+        CoverRef.current.src = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
     }, [useManga, apiUri])
 
     const sideSx : SxProps = {
@@ -91,8 +97,9 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
             }>
                 <CardCover sx={{margin: "var(--Card-padding)"}}>
                     <img style={{maxHeight:"100%",height:"400px",width:"300px"}} src="/blahaj.png" alt="Manga Cover"
-                         onLoad={(e) => LoadMangaCover(e.currentTarget)}
-                         onResize={(e) => LoadMangaCover(e.currentTarget)}/>
+                         ref={CoverRef}
+                         onLoad={LoadMangaCover}
+                         onResize={LoadMangaCover}/>
                 </CardCover>
                 <CardCover sx={{
                     background:
