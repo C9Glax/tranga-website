@@ -100,6 +100,8 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
 
     const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
 
+    const mangaName = useManga.name.length > 30 ? useManga.name.substring(0, 27) + "..." : useManga.name;
+
     return (
         <Badge sx={{margin:"8px !important"}} badgeContent={useManga.mangaConnectorId} color={ReleaseStatusToPalette(useManga.releaseStatus)} size={"lg"}>
             <Card sx={{height:"fit-content",width:"fit-content"}} onClick={(e) => {
@@ -121,7 +123,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                     <Box sx={coverSx}>
                         <Skeleton loading={loading}>
                             <Link href={useManga.websiteUrl} level={"h3"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
-                                {useManga.name}
+                                {mangaName}
                             </Link>
                         </Skeleton>
                     </Box>
