@@ -28,7 +28,7 @@ export default function App () {
                 <Search open={showSearch} setOpen={setShowSearch} />
                 <Sheet className={"app-content"}>
                     <MangaList connected={apiConnected}>
-                        <Badge invisible>
+                        <Badge invisible sx={{margin: "8px !important"}}>
                             <Card onClick={() => setShowSearch(true)} sx={{height:"fit-content",width:"fit-content"}}>
                                 <CardCover sx={{margin:"var(--Card-padding)"}}>
                                     <img src={"/blahaj.png"} style={{height:"300px", width:"200px"}} />
