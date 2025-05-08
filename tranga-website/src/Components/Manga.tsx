@@ -40,6 +40,9 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
     return <Manga manga={manga} loading={loading} children={children} />
 }
 
+export const CardWidth = 190;
+export const CardHeight = 300;
+
 export function Manga({manga, children, loading} : { manga: IManga | undefined, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined, loading?: boolean}) {
     const useManga = manga ?? DefaultManga;
     loading = loading ?? false;
@@ -78,24 +81,21 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
         CoverRef.current.src = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
     }, [useManga, apiUri])
 
-    const width = 200;
-    const height = 300;
-
     const coverSx : SxProps = {
-        height: height + "px",
-        width: width + "px",
+        height: CardHeight + "px",
+        width: CardWidth + "px",
         position: "relative",
     }
 
     const descriptionSx : SxProps = {
-        height: height + "px",
-        width: width * 2 + "px",
+        height: CardHeight + "px",
+        width: CardWidth * 2 + "px",
         position: "relative"
     }
 
     const coverCss : CSSProperties = {
-        maxHeight: "calc("+height+"px + 2rem)",
-        maxWidth: "calc("+width+"px + 2rem)",
+        maxHeight: "calc("+CardHeight+"px + 2rem)",
+        maxWidth: "calc("+CardWidth+"px + 2rem)",
     }
 
     const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
@@ -129,14 +129,14 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                         expanded ?
                             <Box sx={descriptionSx}>
                                 <Skeleton loading={loading} variant={"text"} level={"title-lg"}>
-                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:height*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
+                                    <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:CardHeight*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
                                         {useManga.authorIds.map(authorId => <AuthorTag key={authorId} authorId={authorId} color={"success"} />)}
                                         {useManga.tags.map(tag => <Chip key={tag} variant={"soft"} size={"md"} color={"primary"}>{tag}</Chip>)}
                                         {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"warning"} />)}
                                     </Stack>
                                 </Skeleton>
                                 <Skeleton loading={loading} sx={{maxHeight:"300px"}}>
-                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black", maxHeight:height*0.7+"px", overflowY:"auto", marginTop:"10px", scrollbarWidth: "thin"}} />
+                                    <MarkdownPreview source={useManga.description} style={{backgroundColor: "transparent", color: "black", maxHeight:CardHeight*0.7+"px", overflowY:"auto", marginTop:"10px", scrollbarWidth: "thin"}} />
                                 </Skeleton>
                             </Box>
                             : null
