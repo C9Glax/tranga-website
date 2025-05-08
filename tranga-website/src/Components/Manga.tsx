@@ -101,7 +101,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
     const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
 
     return (
-        <Badge badgeContent={useManga.mangaConnectorId} color={ReleaseStatusToPalette(useManga.releaseStatus)} size={"lg"}>
+        <Badge sx={{margin:"8px"}} badgeContent={useManga.mangaConnectorId} color={ReleaseStatusToPalette(useManga.releaseStatus)} size={"lg"}>
             <Card sx={{height:"fit-content",width:"fit-content"}} onClick={(e) => {
                 const target = e.target as HTMLElement;
                 if(interactiveElements.find(x => x == target.localName) == undefined)
