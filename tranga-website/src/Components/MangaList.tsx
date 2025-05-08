@@ -17,7 +17,7 @@ export default function MangaList({connected, children}: {connected: boolean, ch
         if(!connected)
             return;
         GetJobsWithType(apiUri, JobType.DownloadAvailableChaptersJob).then((jl) => setJobList(jl as IDownloadAvailableChaptersJob[]));
-    },[apiUri]);
+    },[apiUri,connected]);
 
     const deleteJob = useCallback((jobId: string) => {
         DeleteJob(apiUri, jobId).finally(() => getJobList());
@@ -27,17 +27,24 @@ export default function MangaList({connected, children}: {connected: boolean, ch
         getJobList();
     }, [apiUri]);
 
-    const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
     useEffect(() => {
+        updateTimer();
+        getJobList();
+    }, [connected]);
+
+    const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
+    const updateTimer = () => {
         if(!connected){
+            console.debug("Clear timer");
             clearTimeout(timerRef.current);
             return;
         }else{
+            console.debug("Add timer");
             timerRef.current = setInterval(() => {
                 getJobList();
             }, 2000);
         }
-    }, [connected,]);
+    }
 
     return(
         <Stack direction="row" spacing={1} flexWrap={"wrap"}>

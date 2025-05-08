@@ -44,6 +44,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
 
     const [apiUriAccordionOpen, setApiUriAccordionOpen] = React.useState(true);
     const [checking, setChecking] = useState(false);
+
     useEffect(() => {
         OnCheckConnection(apiUri);
     }, []);
@@ -57,10 +58,13 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
     }
 
     const OnCheckConnection = (uri: string) => {
+        console.log("Checking connection...");
         setChecking(true);
         checkConnection(uri)
             .then((result) => {
                 setConnected(result);
+                if(result)
+                    console.log("Connected!");
                 setApiUriAccordionOpen(!result);
                 setApiUriColor(result ? "success" : "danger");
                 if(result)
