@@ -2,7 +2,6 @@ import {deleteData, getData, putData} from "./fetchApi.tsx";
 import INotificationConnector from "./types/INotificationConnector.ts";
 import IGotifyRecord from "./types/records/IGotifyRecord.ts";
 import INtfyRecord from "./types/records/INtfyRecord.ts";
-import ILunaseaRecord from "./types/records/ILunaseaRecord.ts";
 import IPushoverRecord from "./types/records/IPushoverRecord.ts";
 
 export const  GetNotificationConnectors = async (apiUri: string) : Promise<INotificationConnector[]> => {
@@ -37,12 +36,6 @@ export const  CreateNtfy = async (apiUri: string, ntfy: INtfyRecord) : Promise<s
     if(ntfy === undefined || ntfy === null)
         return Promise.reject("gotify was not provided");
     return await putData(`${apiUri}/v2/NotificationConnector/Ntfy`, ntfy) as Promise<string>;
-}
-
-export const  CreateLunasea = async (apiUri: string, lunasea: ILunaseaRecord) : Promise<string> => {
-    if(lunasea === undefined || lunasea === null)
-        return Promise.reject("lunasea was not provided");
-    return await putData(`${apiUri}/v2/NotificationConnector/Lunasea`, lunasea) as Promise<string>;
 }
 
 export const  CreatePushover = async (apiUri: string, pushover: IPushoverRecord) : Promise<string> => {
