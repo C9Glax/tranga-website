@@ -1,7 +1,6 @@
 export default interface IJob{
     jobId: string;
-    parentJobId: string;
-    dependsOnJobIds: string[];
+    parentJobId: string | null;
     jobType: JobType;
     recurrenceMs: number;
     lastExecution: Date;
@@ -17,13 +16,15 @@ export enum JobType {
     MoveFileOrFolderJob = "MoveFileOrFolderJob",
     DownloadMangaCoverJob = "DownloadMangaCoverJob",
     RetrieveChaptersJob = "RetrieveChaptersJob",
-    UpdateFilesDownloadedJob = "UpdateFilesDownloadedJob",
-    MoveMangaLibraryJob = "MoveMangaLibraryJob"
+    UpdateChaptersDownloadedJob = "UpdateChaptersDownloadedJob",
+    MoveMangaLibraryJob = "MoveMangaLibraryJob",
+    UpdateSingleChapterDownloadedJob = "UpdateSingleChapterDownloadedJob"
 }
 
 export enum JobState {
-    Waiting = "Waiting",
+    FirstExecution = "FirstExecution",
     Running = "Running",
     Completed = "Completed",
+    CompletedWaiting = "CompletedWaiting",
     Failed = "Failed"
 }

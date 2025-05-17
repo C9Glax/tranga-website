@@ -1,7 +1,7 @@
 import {deleteData, getData, patchData, postData, putData} from "./fetchApi";
 import IJob, {JobState, JobType} from "./types/Jobs/IJob";
 import IModifyJobRecord from "./types/records/IModifyJobRecord";
-import IDownloadAvailableJobsRecord from "./types/records/IDownloadAvailableJobsRecord.ts";
+import IDownloadAvailableChaptersJobRecord from "./types/records/IDownloadAvailableChaptersJobRecord.ts";
 
 export const GetAllJobs = async (apiUri: string) : Promise<IJob[]> => {
     return await getData(`${apiUri}/v2/Job`) as Promise<IJob[]>;
@@ -54,7 +54,7 @@ export const ModifyJob = async (apiUri: string, jobId: string, modifyData: IModi
     return await patchData(`${apiUri}/v2/Job/${jobId}`, modifyData) as Promise<IJob>;
 }
 
-export const CreateDownloadAvailableChaptersJob = async (apiUri: string, mangaId: string, data: IDownloadAvailableJobsRecord) : Promise<string[]> => {
+export const CreateDownloadAvailableChaptersJob = async (apiUri: string, mangaId: string, data: IDownloadAvailableChaptersJobRecord) : Promise<string[]> => {
     if(mangaId === undefined || mangaId === null || mangaId.length < 1)
         return Promise.reject("mangaId was not provided");
     if(data === undefined || data === null)

@@ -1,4 +1,4 @@
-import {postData} from "./fetchApi.tsx";
+import {getData, postData} from "./fetchApi.tsx";
 import IManga from "./types/IManga.ts";
 
 export const SearchName = async (apiUri: string, name: string) : Promise<IManga[]> => {
@@ -12,7 +12,7 @@ export const SearchNameOnConnector = async (apiUri: string, connectorName: strin
         return Promise.reject("connectorName was not provided");
     if(name === undefined || name === null || name.length < 1)
         return Promise.reject("name was not provided");
-    return await postData(`${apiUri}/v2/Search/${connectorName}`, name) as Promise<IManga[]>;
+    return await getData(`${apiUri}/v2/Search/${connectorName}/${name}`) as Promise<IManga[]>;
 }
 
 export const SearchUrl = async (apiUri: string, url: string) : Promise<IManga> => {

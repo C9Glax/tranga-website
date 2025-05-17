@@ -103,7 +103,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
     const mangaName = useManga.name.length > 30 ? useManga.name.substring(0, 27) + "..." : useManga.name;
 
     return (
-        <Badge sx={{margin:"8px !important"}} badgeContent={useManga.mangaConnectorId} color={ReleaseStatusToPalette(useManga.releaseStatus)} size={"lg"}>
+        <Badge sx={{margin:"8px !important"}} badgeContent={useManga.mangaConnectorName} color={ReleaseStatusToPalette(useManga.releaseStatus)} size={"lg"}>
             <Card sx={{height:"fit-content",width:"fit-content"}} onClick={(e) => {
                 const target = e.target as HTMLElement;
                 if(interactiveElements.find(x => x == target.localName) == undefined)

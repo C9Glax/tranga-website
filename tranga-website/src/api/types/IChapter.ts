@@ -1,10 +1,11 @@
 export default interface IChapter{
     chapterId: string;
-    volumeNumber: number;
+    parentMangaId: string;
+    volumeNumber: number | null;
     chapterNumber: string;
     url: string;
-    title: string | undefined;
-    archiveFileName: string;
+    title: string | null;
+    fileName: string | null;
     downloaded: boolean;
-    parentMangaId: string;
+    fullArchiveFilePath: string;
 }

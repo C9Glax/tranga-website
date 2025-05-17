@@ -1,5 +1,3 @@
-import "../../../styles/notificationConnector.css";
-
 export default interface INtfyRecord {
     endpoint: string;
     username: string;

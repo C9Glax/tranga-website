@@ -164,7 +164,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                                             })}
                                     </Select>
                                     <Button disabled={localLibrariesLoading || selectedLibraryId === undefined} onClick={() => {
-                                        CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {localLibraryId: selectedLibraryId!,recurrenceTimeMs: 1000 * 60 * 60 * 3})
+                                        CreateDownloadAvailableChaptersJob(apiUri, result.mangaId, {localLibraryId: selectedLibraryId!,recurrenceTimeMs: 1000 * 60 * 60 * 3, language: "en"})
                                     }} endDecorator={<Add />}>Watch</Button>
                                 </Manga>)}
                         </Stack>

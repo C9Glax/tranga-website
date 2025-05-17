@@ -6,11 +6,12 @@ import '@fontsource/inter';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import {StrictMode} from "react";
+import {trangaTheme} from "./theme.ts";
 
 export default function MyApp() {
     return (
         <StrictMode>
-            <CssVarsProvider>
+            <CssVarsProvider theme={trangaTheme}>
                 {/* must be used under CssVarsProvider */}
                 <CssBaseline />
 
