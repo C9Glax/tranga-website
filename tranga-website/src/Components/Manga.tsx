@@ -14,7 +14,7 @@ import {
 import IManga, {DefaultManga} from "../api/types/IManga.ts";
 import {CSSProperties, ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetLatestChapterAvailable, GetMangaById, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
-import {ApiUriContext} from "../api/fetchApi.tsx";
+import {ApiUriContext, getData} from "../api/fetchApi.tsx";
 import AuthorTag from "./AuthorTag.tsx";
 import LinkTag from "./LinkTag.tsx";
 import {ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
@@ -78,7 +78,11 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
         const coverUrl = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
         if(CoverRef.current.src == coverUrl)
             return;
-        CoverRef.current.src = GetMangaCoverImageUrl(apiUri, useManga.mangaId, CoverRef.current);
+
+        //Check if we can fetch the image exists (by fetching it), only then update
+        getData(coverUrl).then(() => {
+            if(CoverRef.current) CoverRef.current.src = coverUrl;
+        });
     }, [useManga, apiUri])
 
     const coverSx : SxProps = {
@@ -112,8 +116,7 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                 <CardCover>
                     <img style={coverCss} src="/blahaj.png" alt="Manga Cover"
                          ref={CoverRef}
-                         onLoad={LoadMangaCover}
-                         onResize={LoadMangaCover}/>
+                         onLoad={LoadMangaCover}/>
                 </CardCover>
                 <CardCover sx={{
                     background:
@@ -132,9 +135,9 @@ export function Manga({manga, children, loading} : { manga: IManga | undefined, 
                             <Box sx={descriptionSx}>
                                 <Skeleton loading={loading} variant={"text"} level={"title-lg"}>
                                     <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:CardHeight*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
-                                        {useManga.authorIds.map(authorId => <AuthorTag key={authorId} authorId={authorId} color={"success"} />)}
-                                        {useManga.tags.map(tag => <Chip key={tag} variant={"soft"} size={"md"} color={"primary"}>{tag}</Chip>)}
-                                        {useManga.linkIds.map(linkId => <LinkTag key={linkId} linkId={linkId} color={"warning"} />)}
+                                        {useManga.authors?.map(author => <AuthorTag key={author.authorId} author={author} color={"success"} />)}
+                                        {useManga.mangaTags?.map(tag => <Chip key={tag.tag} variant={"soft"} size={"md"} color={"primary"}>{tag.tag}</Chip>)}
+                                        {useManga.links?.map(link => <LinkTag key={link.linkId} link={link} color={"warning"} />)}
                                     </Stack>
                                 </Skeleton>
                                 <Skeleton loading={loading} sx={{maxHeight:"300px"}}>
