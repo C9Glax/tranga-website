@@ -24,7 +24,7 @@ export const DeleteManga = async (apiUri: string, mangaId: string) : Promise<voi
     return await deleteData(`${apiUri}/v2/Manga/${mangaId}`);
 }
 
-export const GetMangaCoverImageUrl = (apiUri: string, mangaId: string, ref: HTMLImageElement | undefined) : string => {
+export const GetMangaCoverImageUrl = (apiUri: string, mangaId: string, ref: HTMLImageElement | undefined | null) : string => {
     if(ref == null || ref == undefined)
         return `${apiUri}/v2/Manga/${mangaId}/Cover?width=64&height=64`;
     return `${apiUri}/v2/Manga/${mangaId}/Cover?width=${ref.clientWidth}&height=${ref.clientHeight}`;

@@ -38,7 +38,7 @@ export default function App () {
                         <Badge invisible sx={{margin: "8px !important"}}>
                             <Card onClick={() => setShowSearch(true)} sx={{height:"fit-content",width:"fit-content"}}>
                                 <CardCover sx={{margin:"var(--Card-padding)"}}>
-                                    <img src={"/blahaj.png"} style={{height: CardHeight + "px", width: CardWidth + "px"}} />
+                                    <img src={"/blahaj.png"} style={{height: CardHeight + "px", width: CardWidth + 10 + "px"}} />
                                 </CardCover>
                                 <CardCover sx={{
                                     background: 'rgba(234, 119, 246, 0.14)',
@@ -46,7 +46,7 @@ export default function App () {
                                     webkitBackdropFilter: 'blur(6.9px)',
                                 }}/>
                                 <CardContent>
-                                    <Box style={{height: CardHeight + "px", width: CardWidth + "px"}} >
+                                    <Box style={{height: CardHeight + "px", width: CardWidth + 10 + "px"}} >
                                         <Typography level={"h1"}>Search</Typography>
                                     </Box>
                                 </CardContent>
