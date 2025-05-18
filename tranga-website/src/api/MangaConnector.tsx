@@ -5,6 +5,10 @@ export const GetAllConnectors = async (apiUri: string) : Promise<IMangaConnector
     return await getData(`${apiUri}/v2/MangaConnector`) as Promise<IMangaConnector[]>
 }
 
+export const GetConnector = async (apiUri: string, mangaConnectorName: string) : Promise<IMangaConnector> => {
+    return await getData(`${apiUri}/v2/MangaConnector/${mangaConnectorName}`) as Promise<IMangaConnector>;
+}
+
 export const  GetEnabledConnectors = async (apiUri: string) : Promise<IMangaConnector[]> => {
     return await getData(`${apiUri}/v2/MangaConnector/enabled`) as Promise<IMangaConnector[]>
 }
