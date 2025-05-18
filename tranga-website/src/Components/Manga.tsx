@@ -13,16 +13,15 @@ import {ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
 import {SxProps} from "@mui/joy/styles/types";
 import MangaPopup from "./MangaPopup.tsx";
 import {MangaConnectorContext} from "../api/Contexts/MangaConnectorContext.tsx";
+import IMangaConnector from "../api/types/IMangaConnector.ts";
 
 export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
     const [manga, setManga] = useState<IManga>();
-    const [loading, setLoading] = useState(true);
 
     const apiUri = useContext(ApiUriContext);
 
     const loadManga = useCallback(() => {
-        setLoading(true);
-        GetMangaById(apiUri, mangaId).then(setManga).finally(() => setLoading(false));
+        GetMangaById(apiUri, mangaId).then(setManga);
     },[apiUri, mangaId]);
 
     useEffect(() => {
@@ -31,7 +30,7 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
 
     return (
         <>
-            {loading || manga === undefined ? <></> : <Manga manga={manga} children={children} /> }
+            {manga === undefined ? <></> : <Manga manga={manga} children={children} /> }
         </>
     );
 }
@@ -46,10 +45,11 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
     const mangaConnectors = useContext(MangaConnectorContext);
 
     const [expanded, setExpanded] = useState(false);
-    const mangaConnector = mangaConnectors.find(all => all.name == manga.mangaConnectorName);
+    const [mangaConnector, setMangaConnector] = useState<IMangaConnector>();
 
     useEffect(() => {
         LoadMangaCover();
+        setMangaConnector(mangaConnectors.find(all => all.name == manga.mangaConnectorName));
     }, [manga]);
 
     const LoadMangaCover = useCallback(() => {
