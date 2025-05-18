@@ -17,7 +17,7 @@ export const  GetDisabledConnectors = async (apiUri: string) : Promise<IMangaCon
     return await getData(`${apiUri}/v2/MangaConnector/disabled`) as Promise<IMangaConnector[]>
 }
 
-export const  SetConnectorEnabled = async (apiUri: string, connectorName: string, enabled: boolean) : Promise<object> => {
+export const  SetConnectorEnabled = async (apiUri: string, connectorName: string, enabled: boolean) : Promise<object | undefined> => {
     if(connectorName === undefined || connectorName === null || connectorName.length < 1)
         return Promise.reject("connectorName was not provided");
     if(enabled === undefined || enabled === null)

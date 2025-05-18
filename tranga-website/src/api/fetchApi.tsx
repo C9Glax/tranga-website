@@ -2,24 +2,33 @@ import {createContext} from "react";
 
 export const ApiUriContext = createContext<string>("");
 
-export function getData(uri: string) : Promise<object> {
-    return makeRequest("GET", uri, null) as Promise<object>;
+export function getData(uri: string) : Promise<object | undefined> {
+    return makeRequestWrapper("GET", uri, null);
 }
 
-export function postData(uri: string, content: object | string | number | boolean) : Promise<object> {
-    return makeRequest("POST", uri, content) as Promise<object>;
+export function postData(uri: string, content: object | string | number | boolean) : Promise<object | undefined> {
+    return makeRequestWrapper("POST", uri, content);
 }
 
 export function deleteData(uri: string) : Promise<void> {
-    return makeRequest("DELETE", uri, null) as Promise<void>;
+    return makeRequestWrapper("DELETE", uri, null) as Promise<void>;
 }
 
-export function patchData(uri: string, content: object | string | number | boolean) : Promise<object> {
-    return makeRequest("patch", uri, content) as Promise<object>;
+export function patchData(uri: string, content: object | string | number | boolean) : Promise<object | undefined> {
+    return makeRequestWrapper("patch", uri, content);
 }
 
-export function putData(uri: string, content: object | string | number | boolean) : Promise<object> {
-    return makeRequest("PUT", uri, content) as Promise<object>;
+export function putData(uri: string, content: object | string | number | boolean) : Promise<object | undefined> {
+    return makeRequestWrapper("PUT", uri, content);
+}
+
+function makeRequestWrapper(method: string, uri: string, content: object | string | number | null | boolean) : Promise<object | undefined>{
+    return makeRequest(method, uri, content)
+        .then((result) => result as Promise<object>)
+        .catch((e) => {
+            console.warn(e);
+            return Promise.resolve(undefined);
+        });
 }
 
 let currentlyRequestedEndpoints: string[] = [];

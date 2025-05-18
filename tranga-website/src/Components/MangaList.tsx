@@ -35,21 +35,23 @@ export default function MangaList({connected, children}: {connected: boolean, ch
     const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
     const updateTimer = () => {
         if(!connected){
-            console.debug("Clear timer");
             clearTimeout(timerRef.current);
             return;
         }else{
-            console.debug("Add timer");
-            timerRef.current = setInterval(() => {
+            if(timerRef.current === undefined) {
+                console.log("Added timer!");
                 getJobList();
-            }, 2000);
+                timerRef.current = setInterval(() => {
+                    getJobList();
+                }, 2000);
+            }
         }
     }
 
     return(
         <Stack direction="row" spacing={1} flexWrap={"wrap"}>
             {children}
-            {jobList.map((job) => (
+            {jobList?.map((job) => (
                 <MangaFromId key={job.mangaId} mangaId={job.mangaId}>
                     <Button color={"danger"} endDecorator={<Remove />} onClick={() => deleteJob(job.jobId)}>Delete</Button>
                 </MangaFromId>

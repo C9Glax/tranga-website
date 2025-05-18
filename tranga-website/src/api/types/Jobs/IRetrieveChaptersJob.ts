@@ -1,5 +1,5 @@
-import IJob from "./IJob";
+import IJobWithMangaId from "./IJobWithMangaId.ts";
 
-export default interface IRetrieveChaptersJob extends IJob {
-    mangaId: string;
+export default interface IRetrieveChaptersJob extends IJobWithMangaId {
+
 }

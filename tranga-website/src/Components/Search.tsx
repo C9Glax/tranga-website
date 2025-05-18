@@ -35,7 +35,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
     const [step, setStep] = useState<number>(1);
 
     const apiUri = useContext(ApiUriContext);
-    const [mangaConnectors, setMangaConnectors] = useState<IMangaConnector[]>([]);
+    const [mangaConnectors, setMangaConnectors] = useState<IMangaConnector[]>();
     const [mangaConnectorsLoading, setMangaConnectorsLoading] = useState<boolean>(true);
     const [selectedMangaConnector, setSelectedMangaConnector] = useState<IMangaConnector>();
 
@@ -83,7 +83,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
         return (
             <React.Fragment>
                 <ListItemDecorator>
-                    <Avatar size="sm" src={mangaConnectors.find((o) => o.name === option.value)?.iconUrl} />
+                    <Avatar size="sm" src={mangaConnectors?.find((o) => o.name === option.value)?.iconUrl} />
                 </ListItemDecorator>
                 {option.label}
             </React.Fragment>
@@ -101,13 +101,13 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
             <ModalClose />
             <Stepper orientation={"vertical"} sx={{ height: '100%', width: "calc(100% - 80px)", margin:"40px"}}>
                 <Step indicator={
-                    <StepIndicator variant={step==1?"solid":"outlined"} color={mangaConnectors.length < 1 ? "danger" : "primary"}>
+                    <StepIndicator variant={step==1?"solid":"outlined"} color={mangaConnectors?.length??0 < 1 ? "danger" : "primary"}>
                         1
                     </StepIndicator>}>
                     <Skeleton loading={mangaConnectorsLoading}>
                         <Select
-                            color={mangaConnectors.length < 1 ? "danger" : "neutral"}
-                            disabled={mangaConnectorsLoading || resultsLoading || mangaConnectors.length < 1}
+                            color={mangaConnectors?.length??0 < 1 ? "danger" : "neutral"}
+                            disabled={mangaConnectorsLoading || resultsLoading || mangaConnectors?.length == null || mangaConnectors.length < 1}
                             placeholder={"Select Connector"}
                             slotProps={{
                                     listbox: {
@@ -120,9 +120,9 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                             renderValue={renderValue}
                             onChange={(_e, newValue) => {
                                 setStep(2);
-                                setSelectedMangaConnector(mangaConnectors.find((o) => o.name === newValue));
+                                setSelectedMangaConnector(mangaConnectors?.find((o) => o.name === newValue));
                             }}
-                            endDecorator={<Chip size={"sm"} color={mangaConnectors.length < 1 ? "danger" : "primary"}>{mangaConnectors.length}</Chip>}>
+                            endDecorator={<Chip size={"sm"} color={mangaConnectors?.length??0 < 1 ? "danger" : "primary"}>{mangaConnectors?.length}</Chip>}>
                             {mangaConnectors?.map((connector: IMangaConnector) => ConnectorOption(connector))}
                         </Select>
                     </Skeleton>

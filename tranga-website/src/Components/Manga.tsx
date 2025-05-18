@@ -5,7 +5,7 @@ import {
     CardContent, CardCover,
     Link,
 } from "@mui/joy";
-import IManga, {DefaultManga} from "../api/types/IManga.ts";
+import IManga from "../api/types/IManga.ts";
 import {CSSProperties, ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetMangaById, GetMangaCoverImageUrl} from "../api/Manga.tsx";
 import {ApiUriContext, getData} from "../api/fetchApi.tsx";
@@ -16,7 +16,7 @@ import IMangaConnector from "../api/types/IMangaConnector.ts";
 import {GetConnector} from "../api/MangaConnector.tsx";
 
 export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
-    const [manga, setManga] = useState(DefaultManga);
+    const [manga, setManga] = useState<IManga>();
     const [loading, setLoading] = useState(true);
 
     const apiUri = useContext(ApiUriContext);
@@ -32,7 +32,7 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
 
     return (
         <>
-            {loading ? <></> : <Manga manga={manga} children={children} /> }
+            {loading || manga === undefined ? <></> : <Manga manga={manga} children={children} /> }
         </>
     );
 }

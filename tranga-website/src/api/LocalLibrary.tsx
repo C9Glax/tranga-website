@@ -18,14 +18,14 @@ export const  DeleteLibrary = async (apiUri: string, libraryId: string) : Promis
     return await deleteData(`${apiUri}/v2/LocalLibraries/${libraryId}`);
 }
 
-export const  ChangeLibraryPath = async (apiUri: string, libraryId: string, newPath: string) : Promise<object> => {
+export const  ChangeLibraryPath = async (apiUri: string, libraryId: string, newPath: string) : Promise<object | undefined> => {
     return await patchData(`${apiUri}/v2/LocalLibraries/${libraryId}/ChangeBasePath`, newPath);
 }
 
-export const  ChangeLibraryName = async (apiUri: string, libraryId: string, newName: string) : Promise<object> => {
+export const  ChangeLibraryName = async (apiUri: string, libraryId: string, newName: string) : Promise<object | undefined> => {
     return await patchData(`${apiUri}/v2/LocalLibraries/${libraryId}/ChangeName`, newName);
 }
 
-export const  UpdateLibrary = async (apiUri: string, libraryId: string, record: INewLibraryRecord) : Promise<object> => {
+export const  UpdateLibrary = async (apiUri: string, libraryId: string, record: INewLibraryRecord) : Promise<object | undefined> => {
     return await patchData(`${apiUri}/v2/LocalLibraries/${libraryId}`, record);
 }

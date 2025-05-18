@@ -88,10 +88,10 @@ export const CreateUpdateAllMetadataJob = async (apiUri: string) : Promise<strin
     return await putData(`${apiUri}/v2/Job/UpdateAllMetadataJob`, {}) as Promise<string[]>;
 }
 
-export const StartJob = async (apiUri: string, jobId: string) : Promise<object> => {
+export const StartJob = async (apiUri: string, jobId: string) : Promise<object | undefined> => {
     return await postData(`${apiUri}/v2/Job/${jobId}/Start`, {});
 }
 
-export const StopJob = async (apiUri: string, jobId: string) : Promise<object> => {
+export const StopJob = async (apiUri: string, jobId: string) : Promise<object | undefined> => {
     return await postData(`${apiUri}/v2/Job/${jobId}/Stop`, {});
 }

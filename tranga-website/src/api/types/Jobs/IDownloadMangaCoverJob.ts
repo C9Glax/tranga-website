@@ -1,5 +1,5 @@
-import IJob from "./IJob";
+import IJobWithMangaId from "./IJobWithMangaId.ts";
 
-export default interface IDownloadMangaCoverJob extends IJob {
-    mangaId: string;
+export default interface IDownloadMangaCoverJob extends IJobWithMangaId {
+
 }

@@ -1,5 +1,5 @@
-import IJob from "./IJob";
+import IJobWithChapterId from "./IJobWithChapterId.tsx";
 
-export default interface IDownloadSingleChapterJob extends IJob {
-    chapterId: string;
+export default interface IDownloadSingleChapterJob extends IJobWithChapterId {
+
 }
