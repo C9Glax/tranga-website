@@ -9,6 +9,7 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import {CardHeight} from "./Manga.tsx";
 import IChapter from "../api/types/IChapter.ts";
 import {MangaReleaseStatus, ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
+import {MangaConnectorContext} from "../api/Contexts/MangaConnectorContext.tsx";
 
 
 export default function MangaPopup({manga, open, children} : {manga: IManga | null, open: boolean, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined}) {
@@ -56,12 +57,14 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
         SetIgnoreThreshold(apiUri, manga.mangaId, value).finally(() => setUpdatingThreshold(false));
     },[manga, apiUri])
 
+    const mangaConnector = useContext(MangaConnectorContext).find(all => all.name == manga?.mangaConnectorName);
+
     return (
         <Drawer anchor="bottom" size="lg" open={open}>
             <Stack direction="column" spacing={2} margin={"10px"}>
                 { /* Cover and Description */ }
                 <Stack direction="row" spacing={2} margin={"10px"}>
-                    <Badge sx={{margin:"8px !important"}} badgeContent={manga?.mangaConnectorName} color={ReleaseStatusToPalette(manga?.releaseStatus??MangaReleaseStatus.Unreleased)} size={"lg"}>
+                    <Badge sx={{margin:"8px !important"}} badgeContent={mangaConnector ? <img width={"24pt"} height={"24pt"} src={mangaConnector.iconUrl} /> : manga?.mangaConnectorName} color={ReleaseStatusToPalette(manga?.releaseStatus??MangaReleaseStatus.Unreleased)} size={"lg"}>
                         <img src="/blahaj.png" alt="Manga Cover"
                              ref={CoverRef}
                              onLoad={LoadMangaCover}/>

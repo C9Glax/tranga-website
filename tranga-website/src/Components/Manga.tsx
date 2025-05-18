@@ -13,7 +13,6 @@ import {ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
 import {SxProps} from "@mui/joy/styles/types";
 import MangaPopup from "./MangaPopup.tsx";
 import {MangaConnectorContext} from "../api/Contexts/MangaConnectorContext.tsx";
-import IMangaConnector from "../api/types/IMangaConnector.ts";
 
 export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
     const [manga, setManga] = useState<IManga>();
@@ -42,15 +41,13 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
     const CoverRef = useRef<HTMLImageElement>(null);
 
     const apiUri = useContext(ApiUriContext);
-    const mangaConnectors = useContext(MangaConnectorContext);
+    const mangaConnector = useContext(MangaConnectorContext).find(all => all.name == manga.mangaConnectorName);
 
     const [expanded, setExpanded] = useState(false);
-    const [mangaConnector, setMangaConnector] = useState<IMangaConnector>();
 
     useEffect(() => {
         LoadMangaCover();
-        setMangaConnector(mangaConnectors.find(all => all.name == manga.mangaConnectorName));
-    }, [manga]);
+    }, [manga, apiUri]);
 
     const LoadMangaCover = useCallback(() => {
         if(CoverRef.current == null)
