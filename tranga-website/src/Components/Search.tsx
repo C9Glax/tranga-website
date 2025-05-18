@@ -44,7 +44,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
         GetAllConnectors(apiUri).then(setMangaConnectors).finally(() => setMangaConnectorsLoading(false));
     }, [apiUri]);
 
-    const [results, setResults] = useState<IManga[]>([]);
+    const [results, setResults] = useState<IManga[]|undefined>([]);
     const [resultsLoading, setResultsLoading] = useState<boolean>(false);
 
     const StartSearch = useCallback((mangaConnector : IMangaConnector | undefined, value: string)=>{
@@ -143,10 +143,10 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                     <StepIndicator variant={step==3?"solid":"outlined"} color="primary">
                         3
                     </StepIndicator>}>
-                    <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results.length}</Chip>}>Results</Typography>
+                    <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results?.length}</Chip>}>Results</Typography>
                     <Skeleton loading={resultsLoading}>
                         <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
-                            {results.map((result) =>
+                            {results?.map((result) =>
                                 <Manga key={result.mangaId} manga={result}>
                                     <Select
                                         placeholder={"Select Library"}
