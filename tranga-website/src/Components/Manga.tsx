@@ -86,7 +86,7 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
     const mangaName = manga.name.length > 30 ? manga.name.substring(0, 27) + "..." : manga.name;
 
     return (
-        <Badge sx={{margin:"8px !important"}} badgeContent={mangaConnector ? <img src={mangaConnector.iconUrl} /> : manga.mangaConnectorName} color={ReleaseStatusToPalette(manga.releaseStatus)} size={"lg"}>
+        <Badge sx={{margin:"8px !important"}} badgeContent={mangaConnector ? <img width={"24pt"} height={"24pt"} src={mangaConnector.iconUrl} /> : manga.mangaConnectorName} color={ReleaseStatusToPalette(manga.releaseStatus)} size={"lg"}>
             <Card sx={{height:"fit-content",width:"fit-content"}} onClick={(e) => {
                 const target = e.target as HTMLElement;
                 if(interactiveElements.find(x => x == target.localName) == undefined)
