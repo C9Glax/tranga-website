@@ -12,8 +12,7 @@ import {ApiUriContext, getData} from "../api/fetchApi.tsx";
 import {ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
 import {SxProps} from "@mui/joy/styles/types";
 import MangaPopup from "./MangaPopup.tsx";
-import IMangaConnector from "../api/types/IMangaConnector.ts";
-import {GetConnector} from "../api/MangaConnector.tsx";
+import {MangaConnectorContext} from "../api/Contexts/MangaConnectorContext.tsx";
 
 export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
     const [manga, setManga] = useState<IManga>();
@@ -44,13 +43,13 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
     const CoverRef = useRef<HTMLImageElement>(null);
 
     const apiUri = useContext(ApiUriContext);
+    const mangaConnectors = useContext(MangaConnectorContext);
 
     const [expanded, setExpanded] = useState(false);
-    const [mangaConnector, setMangaConnector] = useState<IMangaConnector | undefined>(undefined);
+    const mangaConnector = mangaConnectors.find(all => all.name == manga.mangaConnectorName);
 
     useEffect(() => {
         LoadMangaCover();
-        LoadMangaConnector();
     }, [manga]);
 
     const LoadMangaCover = useCallback(() => {
@@ -65,10 +64,6 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
             if(CoverRef.current) CoverRef.current.src = coverUrl;
         });
     }, [manga, apiUri])
-
-    const LoadMangaConnector = useCallback(() => {
-        GetConnector(apiUri, manga.mangaConnectorName).then(setMangaConnector);
-    }, [manga, apiUri]);
 
     const coverSx : SxProps = {
         height: CardHeight + "px",
