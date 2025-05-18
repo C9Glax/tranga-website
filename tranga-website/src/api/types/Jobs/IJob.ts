@@ -12,8 +12,6 @@ export default interface IJob{
 export enum JobType {
     DownloadSingleChapterJob = "DownloadSingleChapterJob",
     DownloadAvailableChaptersJob = "DownloadAvailableChaptersJob",
-    UpdateMetaDataJob = "UpdateMetaDataJob",
-    MoveFileOrFolderJob = "MoveFileOrFolderJob",
     DownloadMangaCoverJob = "DownloadMangaCoverJob",
     RetrieveChaptersJob = "RetrieveChaptersJob",
     UpdateChaptersDownloadedJob = "UpdateChaptersDownloadedJob",
