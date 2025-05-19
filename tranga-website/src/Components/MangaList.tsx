@@ -1,7 +1,7 @@
 import {Badge, Box, Button, Card, CardContent, CardCover, Stack, Typography} from "@mui/joy";
 import {Dispatch, SetStateAction, useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "../api/fetchApi.tsx";
-import {DeleteJob, GetJobsWithType} from "../api/Job.tsx";
+import {DeleteJob, GetJobsWithType, StartJob} from "../api/Job.tsx";
 import {JobType} from "../api/types/Jobs/IJob.ts";
 import IDownloadAvailableChaptersJob from "../api/types/Jobs/IDownloadAvailableChaptersJob.ts";
 import {CardHeight, CardWidth, MangaFromId} from "./Manga.tsx";
@@ -21,6 +21,10 @@ export default function MangaList({connected, setShowSearch}: {connected: boolea
 
     const deleteJob = useCallback((jobId: string) => {
         DeleteJob(apiUri, jobId).finally(() => getJobList());
+    },[apiUri]);
+
+    const startJob = useCallback((jobId: string) => {
+        StartJob(apiUri, jobId, true).finally(() => getJobList());
     },[apiUri]);
 
     useEffect(() => {
@@ -69,6 +73,7 @@ export default function MangaList({connected, setShowSearch}: {connected: boolea
             </Badge>
             {jobList?.map((job) => (
                 <MangaFromId key={job.mangaId} mangaId={job.mangaId}>
+                    <Button color={"success"} endDecorator={<PlayArrow />} onClick={() => startJob(job.jobId)}>Start</Button>
                     <Button color={"danger"} endDecorator={<Remove />} onClick={() => deleteJob(job.jobId)}>Delete</Button>
                 </MangaFromId>
             ))}
