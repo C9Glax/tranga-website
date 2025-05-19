@@ -84,7 +84,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
     }, [checking]);
 
     return (
-        <Drawer size={"md"} open={open} onClose={() => setOpen(false)}>
+        <Drawer size={"lg"} open={open} onClose={() => setOpen(false)}>
             <ModalClose />
             <DialogTitle>Settings</DialogTitle>
             <DialogContent>

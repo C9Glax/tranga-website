@@ -23,7 +23,6 @@ export default function ImageProcessing({backendSettings}: {backendSettings?: IB
     const valueChanged = (e : React.ChangeEvent<HTMLInputElement>) => {
         setColor("warning");
         clearTimeout(timerRef.current);
-        console.log(e);
         timerRef.current = setTimeout(() => {
             UpdateAprilFoolsMode(e.target.checked);
         }, 1000);
@@ -33,14 +32,14 @@ export default function ImageProcessing({backendSettings}: {backendSettings?: IB
         setValue(backendSettings?.aprilFoolsMode??false);
     }, [backendSettings]);
 
-    const UpdateAprilFoolsMode = useCallback((value: boolean) => {
-        UpdateAprilFoolsToggle(apiUri, value)
+    const UpdateAprilFoolsMode = useCallback((val: boolean) => {
+        UpdateAprilFoolsToggle(apiUri, val)
             .then(() => GetAprilFoolsToggle(apiUri))
             .then((val) => setValue(val))
             .then(() => setColor("success"))
             .catch(() => setColor("danger"))
             .finally(() => setLoading(false));
-    }, [apiUri, value]);
+    }, [apiUri]);
 
     return (
         <Accordion>
