@@ -1,14 +1,14 @@
-import {Button, Stack} from "@mui/joy";
-import {useCallback, useContext, useEffect, useState} from "react";
+import {Badge, Box, Button, Card, CardContent, CardCover, Stack, Typography} from "@mui/joy";
+import {Dispatch, SetStateAction, useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import {DeleteJob, GetJobsWithType} from "../api/Job.tsx";
 import {JobType} from "../api/types/Jobs/IJob.ts";
 import IDownloadAvailableChaptersJob from "../api/types/Jobs/IDownloadAvailableChaptersJob.ts";
-import {MangaFromId} from "./Manga.tsx";
-import { Remove } from "@mui/icons-material";
+import {CardHeight, CardWidth, MangaFromId} from "./Manga.tsx";
+import {PlayArrow, Remove} from "@mui/icons-material";
 import * as React from "react";
 
-export default function MangaList({connected, children}: {connected: boolean, children?: React.ReactNode} ){
+export default function MangaList({connected, setShowSearch}: {connected: boolean, setShowSearch: Dispatch<SetStateAction<boolean>>} ) {
     const apiUri = useContext(ApiUriContext);
 
     const [jobList, setJobList] = useState<IDownloadAvailableChaptersJob[]>([]);
@@ -50,7 +50,23 @@ export default function MangaList({connected, children}: {connected: boolean, ch
 
     return(
         <Stack direction="row" spacing={1} flexWrap={"wrap"}>
-            {children}
+            <Badge invisible sx={{margin: "8px !important"}}>
+                <Card onClick={() => setShowSearch(true)} sx={{height:"fit-content",width:"fit-content"}}>
+                    <CardCover sx={{margin:"var(--Card-padding)"}}>
+                        <img src={"/blahaj.png"} style={{height: CardHeight + "px", width: CardWidth + 10 + "px"}} />
+                    </CardCover>
+                    <CardCover sx={{
+                        background: 'rgba(234, 119, 246, 0.14)',
+                        backdropFilter: 'blur(6.9px)',
+                        webkitBackdropFilter: 'blur(6.9px)',
+                    }}/>
+                    <CardContent>
+                        <Box style={{height: CardHeight + "px", width: CardWidth + 10 + "px"}} >
+                            <Typography level={"h1"}>Search</Typography>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Badge>
             {jobList?.map((job) => (
                 <MangaFromId key={job.mangaId} mangaId={job.mangaId}>
                     <Button color={"danger"} endDecorator={<Remove />} onClick={() => deleteJob(job.jobId)}>Delete</Button>
