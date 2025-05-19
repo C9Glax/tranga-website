@@ -6,7 +6,7 @@ export function getData(uri: string) : Promise<object | undefined> {
     return makeRequestWrapper("GET", uri, null);
 }
 
-export function postData(uri: string, content: object | string | number | boolean) : Promise<object | undefined> {
+export function postData(uri: string, content?: object | string | number | boolean | null) : Promise<object | undefined> {
     return makeRequestWrapper("POST", uri, content);
 }
 
@@ -22,7 +22,7 @@ export function putData(uri: string, content: object | string | number | boolean
     return makeRequestWrapper("PUT", uri, content);
 }
 
-function makeRequestWrapper(method: string, uri: string, content: object | string | number | null | boolean) : Promise<object | undefined>{
+function makeRequestWrapper(method: string, uri: string, content?: object | string | number | null | boolean) : Promise<object | undefined>{
     return makeRequest(method, uri, content)
         .then((result) => result as Promise<object>)
         .catch((e) => {
@@ -32,7 +32,7 @@ function makeRequestWrapper(method: string, uri: string, content: object | strin
 }
 
 let currentlyRequestedEndpoints: string[] = [];
-function makeRequest(method: string, uri: string, content: object | string | number | null | boolean) : Promise<object | void> {
+function makeRequest(method: string, uri: string, content?: object | string | number | null | boolean) : Promise<object | void> {
     const id = method + uri;
     if(currentlyRequestedEndpoints.find(x => x == id) != undefined)
         return Promise.reject(`Already requested: ${method} ${uri}`);
