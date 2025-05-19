@@ -1,7 +1,12 @@
 import IManga from "../api/types/IManga.ts";
 import {Badge, Box, Chip, CircularProgress, Drawer, Input, Link, Skeleton, Stack, Typography} from "@mui/joy";
 import {ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
-import {GetLatestChapterAvailable, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
+import {
+    GetLatestChapterAvailable,
+    GetLatestChapterDownloaded,
+    GetMangaCoverImageUrl,
+    SetIgnoreThreshold
+} from "../api/Manga.tsx";
 import {ApiUriContext, getData} from "../api/fetchApi.tsx";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import {CardHeight} from "./Manga.tsx";
@@ -33,6 +38,7 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
         if(!open)
             return;
         LoadMaxChapter();
+        LoadDownloadedChapter();
         LoadMangaCover();
     }, [open]);
 
@@ -45,6 +51,17 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
         GetLatestChapterAvailable(apiUri, manga.mangaId)
             .then(setMangaMaxChapter)
             .finally(() => setMaxChapterLoading(false));
+    }, [manga, apiUri]);
+
+    const [mangaDownloadedChapter, setMangaDownloadedChapter] = useState<IChapter>();
+    const [downloadedChapterLoading, setDownloadedChapterLoading] = useState<boolean>(true);
+    const LoadDownloadedChapter = useCallback(() => {
+        if(manga == null)
+            return;
+        setDownloadedChapterLoading(true);
+        GetLatestChapterDownloaded(apiUri, manga.mangaId)
+            .then(setMangaDownloadedChapter)
+            .finally(() => setDownloadedChapterLoading(false));
     }, [manga, apiUri]);
 
     const [updatingThreshold, setUpdatingThreshold] = useState<boolean>(false);
@@ -88,7 +105,7 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
                 <Stack direction="row" spacing={2}>
                     <Input
                         type={"number"}
-                        placeholder={"0.0"}
+                        placeholder={downloadedChapterLoading ? "" : mangaDownloadedChapter?.chapterNumber??"0.0"}
                         startDecorator={
                             <>
                                 {
