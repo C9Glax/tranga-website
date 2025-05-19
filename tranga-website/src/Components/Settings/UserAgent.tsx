@@ -14,7 +14,7 @@ import {GetUserAgent, ResetUserAgent, UpdateUserAgent} from "../../api/BackendSe
 export default function UserAgent({backendSettings}: {backendSettings?: IBackendSettings}) {
     const apiUri = useContext(ApiUriContext);
     const [loading, setLoading] = useState<boolean>(false);
-    const [value, setValue] = useState<string|undefined>(backendSettings?.userAgent);
+    const [value, setValue] = useState<string>(backendSettings?.userAgent??"");
     const [color, setColor] = useState<ColorPaletteProp>("neutral");
 
     const keyDown : KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
@@ -39,7 +39,7 @@ export default function UserAgent({backendSettings}: {backendSettings?: IBackend
     }, [apiUri]);
 
     useEffect(() => {
-        setValue(backendSettings?.userAgent);
+        setValue(backendSettings?.userAgent??"");
     }, [backendSettings]);
 
     return (
