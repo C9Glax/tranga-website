@@ -1,4 +1,4 @@
-import {Badge, Box, Button, Card, CardContent, CardCover, Stack, Typography} from "@mui/joy";
+import {Badge, Box, Button, Card, CardContent, CardCover, Stack, Tooltip, Typography} from "@mui/joy";
 import {Dispatch, SetStateAction, useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import {DeleteJob, GetJobsWithType, StartJob} from "../api/Job.tsx";
@@ -73,7 +73,9 @@ export default function MangaList({connected, setShowSearch}: {connected: boolea
             </Badge>
             {jobList?.map((job) => (
                 <MangaFromId key={job.mangaId} mangaId={job.mangaId}>
-                    <Button color={"success"} endDecorator={<PlayArrow />} onClick={() => startJob(job.jobId)}>Start</Button>
+                    <Tooltip title={"Last run: " + new Date(job.lastExecution).toLocaleString()}>
+                        <Button color={"success"} endDecorator={<PlayArrow />} onClick={() => startJob(job.jobId)}>Start</Button>
+                    </Tooltip>
                     <Button color={"danger"} endDecorator={<Remove />} onClick={() => deleteJob(job.jobId)}>Delete</Button>
                 </MangaFromId>
             ))}
