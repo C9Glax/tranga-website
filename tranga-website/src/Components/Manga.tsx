@@ -1,18 +1,26 @@
-import {
-    Badge,
-    Box,
-    Card,
-    CardContent, CardCover,
-    Link,
-} from "@mui/joy";
+import {Badge, Box, Card, CardContent, CardCover, Skeleton, Typography,} from "@mui/joy";
 import IManga from "../api/types/IManga.ts";
 import {CSSProperties, ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetMangaById, GetMangaCoverImageUrl} from "../api/Manga.tsx";
 import {ApiUriContext, getData} from "../api/fetchApi.tsx";
-import {ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
+import {MangaReleaseStatus, ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
 import {SxProps} from "@mui/joy/styles/types";
 import MangaPopup from "./MangaPopup.tsx";
 import {MangaConnectorContext} from "../api/Contexts/MangaConnectorContext.tsx";
+
+export const CardWidth = 190;
+export const CardHeight = 300;
+
+const coverSx : SxProps = {
+    height: CardHeight + "px",
+    width: CardWidth + "px",
+    position: "relative",
+}
+
+const coverCss : CSSProperties = {
+    maxHeight: "calc("+CardHeight+"px + 2rem)",
+    maxWidth: "calc("+CardWidth+"px + 2rem)",
+}
 
 export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
     const [manga, setManga] = useState<IManga>();
@@ -29,13 +37,32 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
 
     return (
         <>
-            {manga === undefined ? <></> : <Manga manga={manga} children={children} /> }
+            {manga === undefined ?
+                <Badge sx={{margin:"8px !important"}} badgeContent={<Skeleton><img width={"24pt"} height={"24pt"} src={"/blahaj.png"} /></Skeleton>} color={ReleaseStatusToPalette(MangaReleaseStatus.Completed)} size={"lg"}>
+                    <Card sx={{height:"fit-content",width:"fit-content"}}>
+                        <CardCover>
+                            <img style={coverCss} src={"/blahaj.png"} alt="Manga Cover"/>
+                        </CardCover>
+                        <CardCover sx={{
+                            background:
+                                'linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)',
+                        }}/>
+                        <CardContent sx={{display: "flex", alignItems: "center", flexFlow: "row nowrap"}}>
+                            <Box sx={coverSx}>
+                                <Typography level={"h3"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
+                                    <Skeleton loading={true} animation={"wave"}>
+                                        {"x ".repeat(Math.random()*25+5)}
+                                    </Skeleton>
+                                </Typography>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Badge>
+                 :
+                <Manga manga={manga} children={children} /> }
         </>
     );
 }
-
-export const CardWidth = 190;
-export const CardHeight = 300;
 
 export function Manga({manga: manga, children} : { manga: IManga, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined}) {
     const CoverRef = useRef<HTMLImageElement>(null);
@@ -60,18 +87,7 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
         getData(coverUrl).then(() => {
             if(CoverRef.current) CoverRef.current.src = coverUrl;
         });
-    }, [manga, apiUri])
-
-    const coverSx : SxProps = {
-        height: CardHeight + "px",
-        width: CardWidth + "px",
-        position: "relative",
-    }
-
-    const coverCss : CSSProperties = {
-        maxHeight: "calc("+CardHeight+"px + 2rem)",
-        maxWidth: "calc("+CardWidth+"px + 2rem)",
-    }
+    }, [manga, apiUri]);
 
     const interactiveElements = ["button", "input", "textarea", "a", "select", "option", "li"];
 
@@ -95,9 +111,9 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
                 }}/>
                 <CardContent sx={{display: "flex", alignItems: "center", flexFlow: "row nowrap"}}>
                     <Box sx={coverSx}>
-                        <Link href={manga.websiteUrl} level={"h3"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
+                        <Typography level={"h3"} sx={{height:"min-content",width:"fit-content",color:"white",margin:"0 0 0 10px"}}>
                             {mangaName}
-                        </Link>
+                        </Typography>
                     </Box>
                 </CardContent>
                 <MangaPopup manga={manga} open={expanded}>{children}</MangaPopup>

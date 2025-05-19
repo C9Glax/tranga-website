@@ -1,5 +1,5 @@
 import IManga from "../api/types/IManga.ts";
-import {Badge, Box, Chip, CircularProgress, Drawer, Input, Skeleton, Stack, Typography} from "@mui/joy";
+import {Badge, Box, Chip, CircularProgress, Drawer, Input, Link, Skeleton, Stack, Typography} from "@mui/joy";
 import {ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetLatestChapterAvailable, GetMangaCoverImageUrl, SetIgnoreThreshold} from "../api/Manga.tsx";
 import {ApiUriContext, getData} from "../api/fetchApi.tsx";
@@ -70,7 +70,9 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
                              onLoad={LoadMangaCover}/>
                     </Badge>
                     <Box>
-                        <Typography level={"h2"} marginTop={"20px"}>{manga?.name}</Typography>
+                        <Link href={manga?.websiteUrl} level={"h2"}>
+                            {manga?.name}
+                        </Link>
                         <Stack direction={"row"} flexWrap={"wrap"} spacing={0.5} sx={{maxHeight:CardHeight*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
                             {manga?.authors?.map(author => <AuthorTag key={author.authorId} author={author} color={"success"} />)}
                             {manga?.mangaTags?.map(tag => <Chip key={tag.tag} variant={"soft"} size={"md"} color={"primary"}>{tag.tag}</Chip>)}
