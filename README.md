@@ -33,19 +33,6 @@
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
 
-| Default View                                                                  | Search Window                                                                                                                                             | Search Results                                                                                                                                            |
-|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-38-47%20Tranga.png)    | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-05%20Tranga.png)<br/>![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-45%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-52%20Tranga.png)<br/>![Image](Screenshots/Screenshot%202025-03-19%20at%2002-39-58%20Tranga.png) |
-| Search opens with click on "Add new Manga".<br/>Settings are on the top right | When selecting different connectors, available languages automatically update.<br/>Spinners to indicate action being performed                            | Clicking on an Item here will bring up a view with more information                                                                                       |
-
-|                                                                            | Different Views for Manga                                                  |                                                                            |
-|----------------------------------------------------------------------------|----------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-41-51%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-02%20Tranga.png) | ![Image](Screenshots/Screenshot%202025-03-19%20at%2002-42-12%20Tranga.png) |
-
-| | Settings Dialog                                                            | |
-|-|----------------------------------------------------------------------------|-|
-| | ![Image](Screenshots/Screenshot%202025-03-20%20at%2000-42-58%20Tranga.png) | |
-
 
 ## About The Project
 
