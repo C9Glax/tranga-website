@@ -82,7 +82,7 @@ export default function App () {
 
     return (
         <ApiUriContext.Provider value={apiUri}>
-            <MangaConnectorContext value={mangaConnectors}>
+            <MangaConnectorContext.Provider value={mangaConnectors}>
                 <MangaContext.Provider value={{mangas, GetManga}}>
                     <ChapterContext.Provider value={{chapters, GetChapter}}>
                         <Sheet className={"app"}>
@@ -101,7 +101,7 @@ export default function App () {
                         </Sheet>
                     </ChapterContext.Provider>
                 </MangaContext.Provider>
-            </MangaConnectorContext>
+            </MangaConnectorContext.Provider>
         </ApiUriContext.Provider>
     );
 }
