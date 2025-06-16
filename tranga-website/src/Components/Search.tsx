@@ -21,7 +21,7 @@ import {useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import {GetAllConnectors} from "../api/MangaConnector.tsx";
 import IManga from "../api/types/IManga.ts";
-import {SearchNameOnConnector} from "../api/Search.tsx";
+import {SearchNameOnConnector, SearchUrl} from "../api/Search.tsx";
 import {Manga} from "./Manga.tsx";
 import Add from "@mui/icons-material/Add";
 import React from "react";
@@ -32,7 +32,7 @@ import { LibraryBooks } from "@mui/icons-material";
 
 export default function Search({open, setOpen}:{open:boolean, setOpen:React.Dispatch<React.SetStateAction<boolean>>}){
 
-    const [step, setStep] = useState<number>(1);
+    const [step, setStep] = useState<number>(2);
 
     const apiUri = useContext(ApiUriContext);
     const [mangaConnectors, setMangaConnectors] = useState<IMangaConnector[]>();
@@ -48,13 +48,27 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
     const [resultsLoading, setResultsLoading] = useState<boolean>(false);
 
     const StartSearch = useCallback((mangaConnector : IMangaConnector | undefined, value: string)=>{
-        setStep(3);
-        if(mangaConnector === undefined)
+        if(mangaConnector === undefined && !IsValidUrl(value))
             return;
-        setResults([]);
+        setResults(undefined);
         setResultsLoading(true);
-        SearchNameOnConnector(apiUri, mangaConnector.name, value).then(setResults).finally(() => setResultsLoading(false));
+        setStep(3);
+        if (IsValidUrl(value)){
+            SearchUrl(apiUri, value).then((r) => setResults([r])).finally(() => setResultsLoading(false));
+        }else if (mangaConnector != undefined){
+            SearchNameOnConnector(apiUri, mangaConnector.name, value).then(setResults).finally(() => setResultsLoading(false));
+        }
     },[apiUri])
+
+    function IsValidUrl(str : string) : boolean {
+        const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
+    }
 
     const [localLibraries, setLocalLibraries] = useState<ILocalLibrary[]>();
     const [localLibrariesLoading, setLocalLibrariesLoading] = useState<boolean>(true);
@@ -101,12 +115,12 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
             <ModalClose />
             <Stepper orientation={"vertical"} sx={{ height: '100%', width: "calc(100% - 80px)", margin:"40px"}}>
                 <Step indicator={
-                    <StepIndicator variant={step==1?"solid":"outlined"} color={mangaConnectors?.length??0 < 1 ? "danger" : "primary"}>
+                    <StepIndicator variant={step==1?"solid":"outlined"} color={(mangaConnectors?.length??0) < 1 ? "danger" : "primary"}>
                         1
                     </StepIndicator>}>
                     <Skeleton loading={mangaConnectorsLoading}>
                         <Select
-                            color={mangaConnectors?.length??0 < 1 ? "danger" : "neutral"}
+                            color={(mangaConnectors?.length??0) < 1 ? "danger" : "neutral"}
                             disabled={mangaConnectorsLoading || resultsLoading || mangaConnectors?.length == null || mangaConnectors.length < 1}
                             placeholder={"Select Connector"}
                             slotProps={{
@@ -119,8 +133,9 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                             sx={{ '--ListItemDecorator-size': '44px', minWidth: 240 }}
                             renderValue={renderValue}
                             onChange={(_e, newValue) => {
-                                setStep(2);
                                 setSelectedMangaConnector(mangaConnectors?.find((o) => o.name === newValue));
+                                setStep(2);
+                                setResults(undefined);
                             }}
                             endDecorator={<Chip size={"sm"} color={mangaConnectors?.length??0 < 1 ? "danger" : "primary"}>{mangaConnectors?.length}</Chip>}>
                             {mangaConnectors?.map((connector: IMangaConnector) => ConnectorOption(connector))}
@@ -131,9 +146,9 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                     <StepIndicator variant={step==2?"solid":"outlined"} color="primary">
                         2
                     </StepIndicator>}>
-                    <Input disabled={step < 2 || resultsLoading} placeholder={"Name or Url " + (selectedMangaConnector ? selectedMangaConnector.baseUris[0] : "")} onKeyDown={(e) => {
+                    <Input disabled={resultsLoading} placeholder={"Name or Url " + (selectedMangaConnector ? selectedMangaConnector.baseUris[0] : "")} onKeyDown={(e) => {
                         setStep(2);
-                        setResults([]);
+                        setResults(undefined);
                         if(e.key === "Enter") {
                             StartSearch(selectedMangaConnector, e.currentTarget.value);
                         }
@@ -143,7 +158,7 @@ export default function Search({open, setOpen}:{open:boolean, setOpen:React.Disp
                     <StepIndicator variant={step==3?"solid":"outlined"} color="primary">
                         3
                     </StepIndicator>}>
-                    <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results?.length}</Chip>}>Results</Typography>
+                    <Typography endDecorator={<Chip size={"sm"} color={"primary"}>{results?.length??"-"}</Chip>}>Results</Typography>
                     <Skeleton loading={resultsLoading}>
                         <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
                             {results?.map((result) =>
