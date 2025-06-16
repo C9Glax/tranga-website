@@ -1,6 +1,6 @@
 import IManga from "../api/types/IManga.ts";
 import {Badge, Box, Chip, CircularProgress, Drawer, Input, Link, Skeleton, Stack, Typography} from "@mui/joy";
-import {ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {
     GetLatestChapterAvailable,
     GetLatestChapterDownloaded,
@@ -13,9 +13,58 @@ import {CardHeight} from "./Manga.tsx";
 import IChapter from "../api/types/IChapter.ts";
 import {MangaReleaseStatus, ReleaseStatusToPalette} from "../api/types/EnumMangaReleaseStatus.ts";
 import {MangaConnectorContext} from "../api/Contexts/MangaConnectorContext.tsx";
+import {MangaContext} from "../api/Contexts/MangaContext.tsx";
+import ModalClose from "@mui/joy/ModalClose";
 
 
-export default function MangaPopup({manga, open, children} : {manga: IManga | null, open: boolean, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined}) {
+export function MangaPopupFromId({mangaId, open, setOpen, children} : {mangaId: string | null, open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>>, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined}) {
+    const mangaContext = useContext(MangaContext);
+
+    const [manga, setManga] = useState<IManga | undefined>(undefined);
+
+    useEffect(() => {
+        if (!open || mangaId === null)
+            return;
+        mangaContext.GetManga(mangaId).then(setManga);
+    }, [open]);
+
+    return (
+        manga === undefined ?
+            <Drawer anchor="bottom" size="lg" open={open} onClose={() => setOpen(false)}>
+                <ModalClose />
+                <Stack direction="column" spacing={2} margin={"10px"}>
+                    { /* Cover and Description */ }
+                    <Stack direction="row" spacing={2} margin={"10px"}>
+                        <Badge sx={{margin:"8px !important"}} color={ReleaseStatusToPalette(MangaReleaseStatus.Unreleased)} size={"lg"}>
+                            <img src="/blahaj.png" alt="Manga Cover"/>
+                        </Badge>
+                        <Box>
+                            <Skeleton loading={true} animation={"wave"}>
+                                {mangaId?.split("").splice(0,mangaId.length/2).join(" ")}
+                            </Skeleton>
+                            <Stack direction={"row"} flexWrap={"wrap"} useFlexGap={true} spacing={0.3} sx={{maxHeight:CardHeight*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
+                                {mangaId?.split("").filter(x => Number.isNaN(x)).map(_ =>
+                                    <Skeleton loading={true} animation={"wave"}>
+                                        <Chip>Wow</Chip>
+                                    </Skeleton>
+                                )}
+                            </Stack>
+                            <MarkdownPreview style={{backgroundColor: "transparent", color: "var(--joy-palette-neutral-50)", maxHeight:CardHeight*0.7+"px", overflowY:"auto", marginTop:"10px", scrollbarWidth: "thin"}} />
+                        </Box>
+                    </Stack>
+    
+                    { /* Actions */ }
+                    <Stack direction="row" spacing={2}>
+                        {children}
+                    </Stack>
+                </Stack>
+            </Drawer> 
+            :
+            <MangaPopup manga={manga} open={open} setOpen={setOpen}>{children}</MangaPopup>
+    );
+}
+
+export default function MangaPopup({manga, open, setOpen, children} : {manga: IManga | null, open: boolean, setOpen:React.Dispatch<React.SetStateAction<boolean>>, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined}) {
 
     const apiUri = useContext(ApiUriContext);
 
@@ -23,6 +72,8 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
 
     const LoadMangaCover = useCallback(() => {
         if(CoverRef.current == null || manga == null)
+            return;
+        if (!open)
             return;
         const coverUrl = GetMangaCoverImageUrl(apiUri, manga.mangaId, CoverRef.current);
         if(CoverRef.current.src == coverUrl)
@@ -32,7 +83,7 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
         getData(coverUrl).then(() => {
             if(CoverRef.current) CoverRef.current.src = coverUrl;
         });
-    }, [manga, apiUri])
+    }, [manga, apiUri, open])
 
     useEffect(() => {
         if(!open)
@@ -75,7 +126,8 @@ export default function MangaPopup({manga, open, children} : {manga: IManga | nu
     const mangaConnector = useContext(MangaConnectorContext).find(all => all.name == manga?.mangaConnectorName);
 
     return (
-        <Drawer anchor="bottom" size="lg" open={open}>
+        <Drawer anchor="bottom" size="lg" open={open} onClose={() => setOpen(false)}>
+            <ModalClose />
             <Stack direction="column" spacing={2} margin={"10px"}>
                 { /* Cover and Description */ }
                 <Stack direction="row" spacing={2} margin={"10px"}>

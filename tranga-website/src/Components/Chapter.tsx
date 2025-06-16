@@ -1,9 +1,23 @@
-import {ReactElement, useContext, useState} from "react";
+import React, {ReactElement, useContext, useState} from "react";
 import IChapter from "../api/types/IChapter.ts";
-import {Card, CardActions, CardContent, Chip, Link, Stack, Tooltip, Typography} from "@mui/joy";
+import {Box, Chip, Link, Stack, Typography} from "@mui/joy";
 import {MangaFromId} from "./Manga.tsx";
 import {ChapterContext} from "../api/Contexts/ChapterContext.tsx";
-import { Description } from "@mui/icons-material";
+import Drawer from "@mui/joy/Drawer";
+import ModalClose from "@mui/joy/ModalClose";
+
+export function ChapterPopupFromId({chapterId, open, setOpen, children}: { chapterId: string | null, open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>>, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }) {
+    return (
+        <Drawer open={open} onClose={() => setOpen(false)}>
+            <ModalClose />
+            {
+                chapterId !== null ?
+                    <ChapterFromId chapterId={chapterId}>{children}</ChapterFromId>
+                    : null
+            }
+        </Drawer>
+    )
+}
 
 export function ChapterFromId({chapterId, children} : { chapterId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
     const chapterContext = useContext(ChapterContext);
@@ -13,23 +27,7 @@ export function ChapterFromId({chapterId, children} : { chapterId: string, child
 
     return (
         chapter === undefined ?
-                <Card>
-                    <CardContent>
-                        <Stack direction={"row"} alignItems="center" spacing={2}>
-                            <Card>
-
-                            </Card>
-                            <Card>
-                                <CardContent>
-
-                                </CardContent>
-                                <CardActions>
-                                    {children}
-                                </CardActions>
-                            </Card>
-                        </Stack>
-                    </CardContent>
-                </Card>
+                null
             :
             <Chapter chapter={chapter}>{children}</Chapter>
     );
@@ -37,25 +35,15 @@ export function ChapterFromId({chapterId, children} : { chapterId: string, child
 
 export function Chapter({chapter, children} : { chapter: IChapter, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
     return (
-        <Card>
-            <CardContent>
-                <Stack direction={"row"} alignItems="center" spacing={2}>
-                    <MangaFromId mangaId={chapter.parentMangaId} />
-                    <Card>
-                        <CardContent>
-                                <Link level={"title-lg"} href={chapter.url}>{chapter.title}</Link>
-                                <Typography>Vol. <Chip>{chapter.volumeNumber}</Chip></Typography>
-                                <Typography>Ch. <Chip>{chapter.chapterNumber}</Chip></Typography>
-                                <Tooltip title={chapter.fileName}>
-                                    <Description />
-                                </Tooltip>
-                        </CardContent>
-                        <CardActions>
-                            {children}
-                        </CardActions>
-                    </Card>
-                </Stack>
-            </CardContent>
-        </Card>
+        <Stack direction={"row"}>
+            <MangaFromId mangaId={chapter.parentMangaId} />
+            <Box>
+                <Link level={"title-lg"} href={chapter.url}>{chapter.title}</Link>
+                <Typography>Volume <Chip>{chapter.volumeNumber}</Chip></Typography>
+                <Typography>Chapter <Chip>{chapter.chapterNumber}</Chip></Typography>
+                <Typography>Title <Chip>{chapter.title}</Chip></Typography>
+            </Box>
+            {children}
+        </Stack>
     );
 }

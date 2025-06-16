@@ -1,26 +1,24 @@
 import {
-    Card,
-    CardContent,
-    Chip,
+    Button,
     DialogContent, DialogTitle,
     Drawer,
     Input,
     Option,
     Select,
     Stack,
-    Tooltip,
+    Table,
     Typography
 } from "@mui/joy";
-import {GetAllJobs} from "../api/Job.tsx";
+import {GetJobsInState, GetJobsOfTypeAndWithState, GetJobsWithType} from "../api/Job.tsx";
 import * as React from "react";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "../api/fetchApi.tsx";
 import IJob, {JobState, JobType} from "../api/types/Jobs/IJob.ts";
-import IJobWithMangaId from "../api/types/Jobs/IJobWithMangaId.ts";
-import {MangaFromId} from "./Manga.tsx";
 import ModalClose from "@mui/joy/ModalClose";
+import {MangaPopupFromId} from "./MangaPopup.tsx";
+import IJobWithMangaId from "../api/types/Jobs/IJobWithMangaId.ts";
+import {ChapterPopupFromId} from "./Chapter.tsx";
 import IJobWithChapterId from "../api/types/Jobs/IJobWithChapterId.tsx";
-import {ChapterFromId} from "./Chapter.tsx";
 
 export default function JobsDrawer({open, connected, setOpen} : {open: boolean, connected: boolean, setOpen:React.Dispatch<React.SetStateAction<boolean>>}) {
     const apiUri = useContext(ApiUriContext);
@@ -36,35 +34,27 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
     const updateDisplayJobs = useCallback(() => {
         if(!connected)
             return;
-        GetAllJobs(apiUri).then(setAllJobs);
-    }, [apiUri, connected]);
-
+        if (filterState === null && filterType === null)
+            setAllJobs([]);
+        else if (filterState === null && filterType != null)
+            GetJobsWithType(apiUri, filterType as unknown as JobType).then(setAllJobs);
+        else if (filterState != null && filterType === null)
+            GetJobsInState(apiUri, filterState as unknown as JobState).then(setAllJobs);
+        else if (filterState != null && filterType != null)
+            GetJobsOfTypeAndWithState(apiUri, filterType as unknown as JobType, filterState as unknown as JobState).then(setAllJobs);
+    }, [connected, filterType, filterState]);
+    
     const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
-    const updateTimer = useCallback(() => {
-        if(!connected){
-            clearTimeout(timerRef.current);
-            return;
-        }else{
-            if(timerRef.current === undefined) {
-                console.log("Added timer!");
-                updateDisplayJobs();
-                timerRef.current = setInterval(() => {
-                    updateDisplayJobs();
-                }, 2000);
-            }
-        }
-    }, [open, connected]);
+    useEffect(() => {
+        clearTimeout(timerRef.current);
+        updateDisplayJobs();
+        timerRef.current = setInterval(updateDisplayJobs, 2000);
+    }, [filterState, filterType]);
 
-    const FilterJobs = (jobs? : IJob[] | undefined) : IJob[] => {
-        if(jobs === undefined)
-            return [];
-        let ret = jobs;
-        if(filterState != undefined)
-            ret = ret.filter(job => job.state == filterState);
-        if(filterType != undefined)
-            ret = ret.filter(job => job.jobType == filterType);
-        return ret.sort((a, b) => new Date(a.nextExecution).getDate() - new Date(b.nextExecution).getDate());
-    }
+    useEffect(() => {
+        if (!open || !connected)
+            clearTimeout(timerRef.current);
+    }, [open, connected]);
 
     const handleChangeState = (
         _: React.SyntheticEvent | null,
@@ -73,6 +63,7 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
         setFilterState(newValue);
         setPage(1);
     };
+    
     const handleChangeType = (
         _: React.SyntheticEvent | null,
         newValue: string | null,
@@ -80,10 +71,20 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
         setFilterType(newValue);
         setPage(1);
     };
-
-    useEffect(() => {
-        updateTimer();
-    }, [open, connected]);
+    
+    const [mangaPopupOpen, setMangaPopupOpen] = React.useState(false);
+    const [selectedMangaId, setSelectedMangaId] = useState<string | null>(null);
+    const OpenMangaPopupDrawer = (mangaId: string) => {
+        setSelectedMangaId(mangaId);
+        setMangaPopupOpen(true);
+    }
+    
+    const [chapterPopupOpen, setChapterPopupOpen] = React.useState(false);
+    const [selectedChapterId, setSelectedChapterId] = React.useState<string | null>(null);
+    const OpenChapterPopupDrawer = (chapterId: string) => {
+        setSelectedChapterId(chapterId);
+        setChapterPopupOpen(true);
+    }
 
     return (
         <Drawer size={"lg"} anchor={"left"} open={open} onClose={() => setOpen(false)}>
@@ -105,47 +106,41 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
                 <Input type={"number"}
                        value={page}
                        onChange={(e) => setPage(parseInt(e.target.value))}
-                       slotProps={{input: { min: 1, max: Math.ceil(FilterJobs(allJobs).length / pageSize)}}}
+                       slotProps={{input: { min: 1, max: Math.ceil(allJobs.length / pageSize)}}}
                        startDecorator={<Typography>Page</Typography>}
-                        endDecorator={<Typography>/{Math.ceil(FilterJobs(allJobs).length / pageSize)}</Typography>}/>
+                       endDecorator={<Typography>/{Math.ceil(allJobs.length / pageSize)}</Typography>}/>
             </Stack>
             <DialogContent>
-                <Stack direction={"column"} spacing={1}>
-                    {FilterJobs(allJobs).splice(pageSize*(page-1), pageSize).map(job => <FormatJob key={job.jobId} job={job}/>)}
-                </Stack>
+                <Table borderAxis={"xBetween"} stickyHeader>
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>State</th>
+                        <th>Last Execution</th>
+                        <th>NextExecution</th>
+                        <th>Extra</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {allJobs.slice((page-1)*pageSize, page*pageSize).map((job) => (
+                        <tr key={job.jobId}>
+                            <td>{job.jobType}</td>
+                            <td>{job.state}</td>
+                            <td>{new Date(job.lastExecution).toLocaleString()}</td>
+                            <td>{new Date(job.nextExecution).toLocaleString()}</td>
+                            <td>{ExtraContent(job, OpenMangaPopupDrawer, OpenChapterPopupDrawer)}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </Table>
             </DialogContent>
+            <MangaPopupFromId mangaId={selectedMangaId} open={mangaPopupOpen} setOpen={setMangaPopupOpen} />
+            <ChapterPopupFromId chapterId={selectedChapterId} open={chapterPopupOpen} setOpen={setChapterPopupOpen} />
         </Drawer>
     )
 }
 
-function FormatJob({job} : {job: IJob}) {
-
-    return (
-        <Card variant={"solid"}>
-            <CardContent>
-                <Tooltip title={job.jobId}>
-                    <Typography level={"title-lg"}>{job.jobType}</Typography>
-                </Tooltip>
-            </CardContent>
-            <CardContent>
-                <Stack direction={"row"} spacing={1}>
-                    <Tooltip title={"Last Execution"}>
-                        <Chip>{new Date(job.lastExecution).toLocaleString()}</Chip>
-                    </Tooltip>
-                    <Tooltip title={"Next Execution"}>
-                        <Chip>{new Date(job.nextExecution).toLocaleString()}</Chip>
-                    </Tooltip>
-                    <Chip>{job.state}</Chip>
-                </Stack>
-            </CardContent>
-            <CardContent>
-                {ExtraContent(job)}
-            </CardContent>
-        </Card>
-    );
-}
-
-function ExtraContent(job: IJob){
+function ExtraContent(job: IJob, OpenMangaPopupDrawer: (mangaId: string) => void, OpenChapterPopupDrawer: (IJobWithChapterId: string) => void){
     switch(job.jobType){
         case JobType.DownloadAvailableChaptersJob:
         case JobType.DownloadMangaCoverJob:
@@ -153,10 +148,10 @@ function ExtraContent(job: IJob){
         case JobType.UpdateChaptersDownloadedJob:
         case JobType.UpdateCoverJob:
         case JobType.MoveMangaLibraryJob:
-            return <MangaFromId key={(job as IJobWithMangaId).mangaId} mangaId={(job as IJobWithMangaId).mangaId} />;
+            return <Button onClick={() => OpenMangaPopupDrawer((job as IJobWithMangaId).mangaId)}>Open Manga</Button>
         case JobType.DownloadSingleChapterJob:
         case JobType.UpdateSingleChapterDownloadedJob:
-            return <ChapterFromId key={(job as IJobWithChapterId).chapterId} chapterId={(job as IJobWithChapterId).chapterId} />
+            return <Button onClick={() => OpenChapterPopupDrawer((job as IJobWithChapterId).chapterId)}>ShowChapter</Button>
         default:
             return null;
     }
