@@ -89,8 +89,8 @@ export default function App () {
                             <Header>
                                 <Badge color={"danger"} invisible={apiConnected} badgeContent={"!"}>
                                     <Button onClick={() => setShowSettings(true)}>Settings</Button>
-                                    <Button onClick={() => setShowJobs(true)}>Jobs</Button>
                                 </Badge>
+                                <Button onClick={() => setShowJobs(true)}>Jobs</Button>
                             </Header>
                             <Settings open={showSettings} setOpen={setShowSettings} setApiUri={setApiUri} setConnected={setApiConnected} />
                             <Search open={showSearch} setOpen={setShowSearch} />
