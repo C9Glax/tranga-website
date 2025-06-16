@@ -35,7 +35,7 @@ let currentlyRequestedEndpoints: string[] = [];
 function makeRequest(method: string, uri: string, content?: object | string | number | null | boolean) : Promise<object | void> {
     const id = method + uri;
     if(currentlyRequestedEndpoints.find(x => x == id) != undefined)
-        return Promise.reject(`Already requested: ${method} ${uri}`);
+        return Promise.reject(`DO NOT REPORT! Already requested: ${method} ${uri}`);
     currentlyRequestedEndpoints.push(id);
     return fetch(uri,
         {
