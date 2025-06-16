@@ -27,7 +27,7 @@ function makeRequestWrapper(method: string, uri: string, content?: object | stri
         .then((result) => result as Promise<object>)
         .catch((e) => {
             console.warn(e);
-            return Promise.resolve(undefined);
+            return Promise.reject(e);
         });
 }
 
