@@ -15,4 +15,5 @@ export default interface IBackendSettings {
     bwImages: boolean;
     startNewJobTimeoutMs: number;
     chapterNamingScheme: string;
+    flareSolverrUrl: string;
 }

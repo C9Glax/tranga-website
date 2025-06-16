@@ -1,4 +1,4 @@
-import {deleteData, getData, patchData} from './fetchApi.tsx';
+import {deleteData, getData, patchData, postData} from './fetchApi.tsx';
 import IBackendSettings from "./types/IBackendSettings.ts";
 import IRequestLimits from "./types/IRequestLimits.ts";
 import {RequestLimitType} from "./types/EnumRequestLimitType.ts";
@@ -77,4 +77,16 @@ export const GetChapterNamingScheme = async (apiUri: string) : Promise<string> =
 
 export const UpdateChapterNamingScheme = async (apiUri: string, value: string) => {
     return patchData(`${apiUri}/v2/Settings/ChapterNamingScheme`, value);
+}
+
+export const SetFlareSolverrUrl = async (apiUri: string, value: string) => {
+    return postData(`${apiUri}/v2/Settings/FlareSolverr/Url`, value);
+}
+
+export const ResetFlareSolverrUrl = async (apiUri: string) => {
+    return deleteData(`${apiUri}/v2/Settings/FlareSolverr/Url`);
+}
+
+export const TestFlareSolverrUrl = async (apiUri: string) => {
+    return postData(`${apiUri}/v2/Settings/FlareSolverr/Test`);
 }
