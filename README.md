@@ -33,6 +33,9 @@
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
 
+|![Main Page](Screenshots/Screenshot%202025-06-17%20at%2001-15-08%20Tranga.png)|![Settings](Screenshots/Screenshot%202025-06-17%20at%2001-15-23%20Tranga.png)|![Search Empty](Screenshots/Screenshot%202025-06-17%20at%2001-15-36%20Tranga.png)
+|---|---|---|
+|![Search Results](Screenshots/Screenshot%202025-06-17%20at%2001-16-32%20Tranga.png)|![Manga Popup](Screenshots/Screenshot%202025-06-17%20at%2001-16-43%20Tranga.png)|![Jobs Drawer](Screenshots/Screenshot%202025-06-17%20at%2001-17-37%20Tranga.png)
 
 ## About The Project
 
