@@ -109,7 +109,7 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
                         </Typography>
                     </Box>
                 </CardContent>
-                <MangaPopup manga={manga} open={expanded}>{children}</MangaPopup>
+                <MangaPopup manga={manga} open={expanded} setOpen={setExpanded}>{children}</MangaPopup>
             </Card>
         </Badge>
     );
