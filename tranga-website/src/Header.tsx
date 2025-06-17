@@ -6,7 +6,7 @@ import './Header.css';
 export default function Header({children} : {children? : ReactElement<any, any> | ReactElement<any,any>[] | undefined}) : ReactElement {
     
     return (
-        <Sheet className={"header"}>
+        <Sheet className={"header"} sx={{position: "sticky !important", zIndex: 100}}>
             <Stack direction={"row"} spacing={2} sx={{width: "100%"}}>
                 <img src={"/blahaj.png"} style={{cursor: "grab"}}/>
                 <Typography level={"h2"} sx={{
