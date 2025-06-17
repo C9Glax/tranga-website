@@ -53,7 +53,7 @@ export default function MangaList({connected, setShowSearch}: {connected: boolea
     }
 
     return(
-        <Stack direction="row" spacing={1} flexWrap={"wrap"}>
+        <Stack direction="row" spacing={1} flexWrap={"wrap"} sx={{overflowX: 'hidden', overflowY: 'auto' /* Badge overflow */}} paddingTop={"6px" /* Badge overflow */}>
             <Badge invisible sx={{margin: "8px !important"}}>
                 <Card onClick={() => setShowSearch(true)} sx={{height:"fit-content",width:"fit-content"}}>
                     <CardCover sx={{margin:"var(--Card-padding)"}}>

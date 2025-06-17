@@ -7,7 +7,7 @@ import { GitHub } from "@mui/icons-material";
 export default function Header({children} : {children? : ReactElement<any, any> | ReactElement<any,any>[] | undefined}) : ReactElement {
     
     return (
-        <Sheet className={"header"} sx={{position: "sticky !important", zIndex: 100}}>
+        <Sheet className={"header"}>
             <Stack direction={"row"} spacing={2} sx={{width: "100%", alignItems: "center"}}>
                 {children}
                 <Box sx={{flexGrow: 1}} />
