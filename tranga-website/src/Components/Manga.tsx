@@ -1,4 +1,4 @@
-import {Badge, Box, Card, CardContent, CardCover, Skeleton, Typography,} from "@mui/joy";
+import {Badge, Box, Card, CardContent, CardCover, Skeleton, Tooltip, Typography,} from "@mui/joy";
 import IManga from "../api/types/IManga.ts";
 import {CSSProperties, ReactElement, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GetMangaCoverImageUrl} from "../api/Manga.tsx";
@@ -31,7 +31,7 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
 
     return (
         manga === undefined ?
-                <Badge sx={{margin:"8px !important"}} badgeContent={<Skeleton><img width={"24pt"} height={"24pt"} src={"/blahaj.png"} /></Skeleton>} color={ReleaseStatusToPalette(MangaReleaseStatus.Completed)} size={"lg"}>
+            <Badge sx={{margin:"8px !important"}} badgeContent={<Skeleton><Tooltip title={"Loading"}><img width={"24pt"} height={"24pt"} src={"/blahaj.png"} /></Tooltip></Skeleton>} color={ReleaseStatusToPalette(MangaReleaseStatus.Completed)} size={"lg"}>
                     <Card sx={{height:"fit-content",width:"fit-content"}}>
                         <CardCover>
                             <img style={coverCss} src={"/blahaj.png"} alt="Manga Cover"/>
@@ -87,7 +87,7 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
     const mangaName = manga.name.length > maxLength ? manga.name.substring(0, maxLength-3) + "..." : manga.name;
 
     return (
-        <Badge sx={{margin:"8px !important"}} badgeContent={mangaConnector ? <img width={"24pt"} height={"24pt"} src={mangaConnector.iconUrl} /> : manga.mangaConnectorName} color={ReleaseStatusToPalette(manga.releaseStatus)} size={"lg"}>
+        <Badge sx={{margin:"8px !important"}} badgeContent={mangaConnector ? <Tooltip color={ReleaseStatusToPalette(manga.releaseStatus)} title={manga.releaseStatus}><img width={"24pt"} height={"24pt"} src={mangaConnector.iconUrl} /></Tooltip> : manga.mangaConnectorName} color={ReleaseStatusToPalette(manga.releaseStatus)} size={"lg"}>
             <Card sx={{height:"fit-content",width:"fit-content"}} onClick={(e) => {
                 const target = e.target as HTMLElement;
                 if(interactiveElements.find(x => x == target.localName) == undefined)
