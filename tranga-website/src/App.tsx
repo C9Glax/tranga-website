@@ -25,7 +25,7 @@ export default function App () {
     const [showJobs, setShowJobs] = useState<boolean>(false);
     const [apiConnected, setApiConnected] = useState<boolean>(false);
 
-    const apiUriStr = localStorage.getItem("apiUri") ?? window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+    const apiUriStr = localStorage.getItem("apiUri") ?? window.location.href.substring(0, window.location.href.lastIndexOf("/")) + "/api";
 
     const [apiUri, setApiUri] = useState<string>(apiUriStr);
     const [mangas, setMangas] = useState<IManga[]>([]);
