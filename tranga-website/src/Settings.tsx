@@ -6,7 +6,8 @@ import {
     AccordionGroup,
     AccordionSummary, CircularProgress, ColorPaletteProp,
     DialogContent,
-    DialogTitle, Input
+    DialogTitle, Input,
+    Link, Stack
 } from "@mui/joy";
 import './Settings.css';
 import * as React from "react";
@@ -20,6 +21,7 @@ import ChapterNamingScheme from "./Components/Settings/ChapterNamingScheme.tsx";
 import AprilFoolsMode from './Components/Settings/AprilFoolsMode.tsx';
 import RequestLimits from "./Components/Settings/RequestLimits.tsx";
 import FlareSolverr from "./Components/Settings/FlareSolverr.tsx";
+import {Article} from '@mui/icons-material';
 
 const checkConnection  = async (apiUri: string): Promise<boolean> =>{
     return fetch(`${apiUri}/swagger/v2/swagger.json`,
@@ -116,6 +118,9 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
                     <RequestLimits backendSettings={backendSettings} />
                     <FlareSolverr backendSettings={backendSettings} />
                 </AccordionGroup>
+                <Stack spacing={2} direction="row"> 
+                    <Link href={apiUri + "/swagger"}><Article />Swagger Doc</Link>
+                </Stack>
             </DialogContent>
         </Drawer>
     );
