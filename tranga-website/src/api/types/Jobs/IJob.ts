@@ -16,8 +16,11 @@ export enum JobType {
     RetrieveChaptersJob = "RetrieveChaptersJob",
     UpdateChaptersDownloadedJob = "UpdateChaptersDownloadedJob",
     MoveMangaLibraryJob = "MoveMangaLibraryJob",
-    UpdateSingleChapterDownloadedJob = "UpdateSingleChapterDownloadedJob",
     UpdateCoverJob = "UpdateCoverJob"
+}
+
+export function JobTypeToString(job: JobType | string): string {
+    return job.replace(/([A-Z])/g, ' $1').replace("Job", "").trim();
 }
 
 export enum JobState {
@@ -26,4 +29,8 @@ export enum JobState {
     Completed = "Completed",
     CompletedWaiting = "CompletedWaiting",
     Failed = "Failed"
+}
+
+export function JobStateToString(state: JobState | string): string {
+    return state.replace(/([A-Z])/g, ' $1').trim();
 }

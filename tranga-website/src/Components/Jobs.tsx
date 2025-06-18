@@ -9,11 +9,11 @@ import {
     Table,
     Typography
 } from "@mui/joy";
-import {GetJobsInState, GetJobsOfTypeAndWithState, GetJobsWithType} from "../api/Job.tsx";
+import {GetJobsInState, GetJobsOfTypeAndWithState, GetJobsWithType, StartJob} from "../api/Job.tsx";
 import * as React from "react";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {ApiUriContext} from "../api/fetchApi.tsx";
-import IJob, {JobState, JobType} from "../api/types/Jobs/IJob.ts";
+import IJob, {JobState, JobStateToString, JobType, JobTypeToString} from "../api/types/Jobs/IJob.ts";
 import ModalClose from "@mui/joy/ModalClose";
 import {MangaPopupFromId} from "./MangaPopup.tsx";
 import IJobWithMangaId from "../api/types/Jobs/IJobWithMangaId.ts";
@@ -85,6 +85,10 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
         setSelectedChapterId(chapterId);
         setChapterPopupOpen(true);
     }
+    
+    const ReRunJob = useCallback((jobId: string) => {
+        StartJob(apiUri, jobId, false);
+    }, [apiUri]);
 
     return (
         <Drawer size={"lg"} anchor={"left"} open={open} onClose={() => setOpen(false)}>
@@ -95,13 +99,13 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
                     <Typography>State</Typography>
                 }>
                     <Option value={null}>None</Option>
-                    {Object.keys(JobState).map((state) => <Option value={state}>{state}</Option>)}
+                    {Object.keys(JobState).map((state) => <Option value={state}>{JobStateToString(state)}</Option>)}
                 </Select>
                 <Select placeholder={"Type"} value={filterType} onChange={handleChangeType} startDecorator={
                     <Typography>Type</Typography>
                 }>
                     <Option value={null}>None</Option>
-                    {Object.keys(JobType).map((type) => <Option value={type}>{type}</Option>)}
+                    {Object.keys(JobType).map((type) => <Option value={type}>{JobTypeToString(type)}</Option>)}
                 </Select>
                 <Input type={"number"}
                        value={page}
@@ -111,26 +115,28 @@ export default function JobsDrawer({open, connected, setOpen} : {open: boolean, 
                        endDecorator={<Typography>/{Math.ceil(allJobs.length / pageSize)}</Typography>}/>
             </Stack>
             <DialogContent>
-                <Table borderAxis={"xBetween"} stickyHeader>
+                <Table borderAxis={"bothBetween"} stickyHeader sx={{tableLayout: "auto", width: "100%"}}>
                     <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>State</th>
-                        <th>Last Execution</th>
-                        <th>NextExecution</th>
-                        <th>Extra</th>
-                    </tr>
+                        <tr>
+                            <th>Type</th>
+                            <th>State</th>
+                            <th>Last Execution</th>
+                            <th>Next Execution</th>
+                            <th></th>
+                            <th>Extra</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {allJobs.slice((page-1)*pageSize, page*pageSize).map((job) => (
-                        <tr key={job.jobId}>
-                            <td>{job.jobType}</td>
-                            <td>{job.state}</td>
-                            <td>{new Date(job.lastExecution).toLocaleString()}</td>
-                            <td>{new Date(job.nextExecution).toLocaleString()}</td>
-                            <td>{ExtraContent(job, OpenMangaPopupDrawer, OpenChapterPopupDrawer)}</td>
-                        </tr>
-                    ))}
+                        {allJobs.slice((page-1)*pageSize, page*pageSize).map((job) => (
+                            <tr key={job.jobId}>
+                                <td>{JobTypeToString(job.jobType)}</td>
+                                <td>{JobStateToString(job.state)}</td>
+                                <td>{new Date(job.lastExecution).toLocaleString()}</td>
+                                <td>{new Date(job.nextExecution).toLocaleString()}</td>
+                                <td style={{whiteSpace: "nowrap"}}><Button onClick={() => ReRunJob(job.jobId)}>Re-Run</Button></td>
+                                <td>{ExtraContent(job, OpenMangaPopupDrawer, OpenChapterPopupDrawer)}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </DialogContent>
@@ -150,8 +156,7 @@ function ExtraContent(job: IJob, OpenMangaPopupDrawer: (mangaId: string) => void
         case JobType.MoveMangaLibraryJob:
             return <Button onClick={() => OpenMangaPopupDrawer((job as IJobWithMangaId).mangaId)}>Open Manga</Button>
         case JobType.DownloadSingleChapterJob:
-        case JobType.UpdateSingleChapterDownloadedJob:
-            return <Button onClick={() => OpenChapterPopupDrawer((job as IJobWithChapterId).chapterId)}>ShowChapter</Button>
+            return <Button onClick={() => OpenChapterPopupDrawer((job as IJobWithChapterId).chapterId)}>Show Chapter</Button>
         default:
             return null;
     }
