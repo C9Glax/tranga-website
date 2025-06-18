@@ -28,16 +28,11 @@ export default function MangaList({connected, setShowSearch}: {connected: boolea
     },[apiUri]);
 
     useEffect(() => {
-        getJobList();
-    }, [apiUri]);
-
-    useEffect(() => {
         updateTimer();
-        getJobList();
-    }, [connected]);
+    }, [connected, apiUri]);
 
     const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
-    const updateTimer = () => {
+    const updateTimer = useCallback(() => {
         if(!connected){
             clearTimeout(timerRef.current);
             return;
@@ -45,12 +40,10 @@ export default function MangaList({connected, setShowSearch}: {connected: boolea
             if(timerRef.current === undefined) {
                 console.log("Added timer!");
                 getJobList();
-                timerRef.current = setInterval(() => {
-                    getJobList();
-                }, 2000);
+                timerRef.current = setInterval(getJobList, 2000);
             }
         }
-    }
+    }, [getJobList, connected, timerRef]);
 
     return(
         <Stack direction="row" spacing={1} flexWrap={"wrap"} sx={{overflowX: 'hidden', overflowY: 'auto' /* Badge overflow */}} paddingTop={"6px" /* Badge overflow */}>

@@ -21,6 +21,9 @@ const coverSx : SxProps = {
 const coverCss : CSSProperties = {
     maxHeight: "calc("+CardHeight+"px + 2rem)",
     maxWidth: "calc("+CardWidth+"px + 2rem)",
+    objectFit: "cover",
+    width: "calc("+CardHeight+"px + 2rem)",
+    height: "calc("+CardHeight+"px + 2rem)",
 }
 
 export function MangaFromId({mangaId, children} : { mangaId: string, children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined }){
@@ -34,7 +37,7 @@ export function MangaFromId({mangaId, children} : { mangaId: string, children?: 
             <Badge sx={{margin:"8px !important"}} badgeContent={<Skeleton><Tooltip title={"Loading"}><img width={"24pt"} height={"24pt"} src={"/blahaj.png"} /></Tooltip></Skeleton>} color={ReleaseStatusToPalette(MangaReleaseStatus.Completed)} size={"lg"}>
                     <Card sx={{height:"fit-content",width:"fit-content"}}>
                         <CardCover>
-                            <img style={coverCss} src={"/blahaj.png"} alt="Manga Cover"/>
+                            <img loading={"lazy"} style={coverCss} src={"/blahaj.png"} alt="Manga Cover"/>
                         </CardCover>
                         <CardCover sx={{
                             background:
@@ -94,9 +97,9 @@ export function Manga({manga: manga, children} : { manga: IManga, children?: Rea
                     setExpanded(!expanded)}
             }>
                 <CardCover>
-                    <img style={coverCss} src={GetMangaCoverImageUrl(apiUri, manga.mangaId, CoverRef.current)} alt="Manga Cover"
+                    <img loading={"lazy"} style={coverCss} src={GetMangaCoverImageUrl(apiUri, manga.mangaId, CoverRef.current)} alt="Manga Cover"
                          ref={CoverRef}
-                         onLoad={LoadMangaCover}/>
+                         onError={LoadMangaCover}/>
                 </CardCover>
                 <CardCover sx={{
                     background:

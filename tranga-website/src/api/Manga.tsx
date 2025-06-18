@@ -29,9 +29,7 @@ export const DeleteManga = async (apiUri: string, mangaId: string) : Promise<voi
 }
 
 export const GetMangaCoverImageUrl = (apiUri: string, mangaId: string, ref: HTMLImageElement | undefined | null) : string => {
-    if(ref == null || ref == undefined)
-        return `${apiUri}/v2/Manga/${mangaId}/Cover?width=64&height=64`;
-    if(mangaId === DefaultManga.mangaId)
+    if(ref == null || ref == undefined || mangaId === DefaultManga.mangaId)
         return "/blahaj.png";
     return `${apiUri}/v2/Manga/${mangaId}/Cover?width=${ref.clientWidth}&height=${ref.clientHeight}`;
 }
