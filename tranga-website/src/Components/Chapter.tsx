@@ -38,7 +38,7 @@ export function Chapter({chapter, children} : { chapter: IChapter, children?: Re
         <Stack direction={"row"}>
             <MangaFromId mangaId={chapter.parentMangaId} />
             <Box>
-                <Link level={"title-lg"} href={chapter.url}>{chapter.title}</Link>
+                <Link target={"_blank"} level={"title-lg"} href={chapter.url}>{chapter.title}</Link>
                 <Typography>Volume <Chip>{chapter.volumeNumber}</Chip></Typography>
                 <Typography>Chapter <Chip>{chapter.chapterNumber}</Chip></Typography>
                 <Typography>Title <Chip>{chapter.title}</Chip></Typography>

@@ -137,7 +137,7 @@ export default function MangaPopup({manga, open, setOpen, children} : {manga: IM
                              onLoad={LoadMangaCover}/>
                     </Badge>
                     <Box>
-                        <Link href={manga?.websiteUrl} level={"h2"}>
+                        <Link target={"_blank"} href={manga?.websiteUrl} level={"h2"}>
                             {manga?.name}
                         </Link>
                         <Stack direction={"row"} flexWrap={"wrap"} useFlexGap={true} spacing={0.3} sx={{maxHeight:CardHeight*0.3+"px", overflowY:"auto", scrollbarWidth: "thin"}}>
@@ -145,7 +145,7 @@ export default function MangaPopup({manga, open, setOpen, children} : {manga: IM
                             {manga?.mangaTags?.map(tag => <Chip key={tag.tag} variant={"soft"} size={"md"} color={"primary"}>{tag.tag}</Chip>)}
                             {manga?.links?.map(link =>
                                 <Chip key={link.linkId} variant={"soft"} size={"md"} color={"warning"}>
-                                    <Link sx={{textDecoration:"underline"}} level={"body-xs"} href={link?.linkUrl}>{link?.linkProvider??"Load Failed"}</Link>
+                                    <Link target={"_blank"} sx={{textDecoration:"underline"}} level={"body-xs"} href={link?.linkUrl}>{link?.linkProvider??"Load Failed"}</Link>
                                 </Chip>
                             )}
                         </Stack>

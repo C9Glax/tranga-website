@@ -119,7 +119,7 @@ export default function Settings({open, setOpen, setApiUri, setConnected}:{open:
                     <FlareSolverr backendSettings={backendSettings} />
                 </AccordionGroup>
                 <Stack spacing={2} direction="row"> 
-                    <Link href={apiUri + "/swagger"}><Article />Swagger Doc</Link>
+                    <Link target={"_blank"} href={apiUri + "/swagger"}><Article />Swagger Doc</Link>
                 </Stack>
             </DialogContent>
         </Drawer>

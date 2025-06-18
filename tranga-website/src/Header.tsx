@@ -20,8 +20,8 @@ export default function Header({children} : {children? : ReactElement<any, any> 
                     cursor: "default"
                 }}>Tranga</Typography>
                 <Box sx={{flexGrow: 1}} />
-                <Link href={"https://github.com/C9Glax/tranga"} color={"neutral"} height={"min-content"} ><GitHub /> Server</Link>
-                <Link href={"https://github.com/C9Glax/tranga-website"} color={"neutral"} height={"min-content"} ><GitHub /> Website</Link>
+                <Link target={"_blank"} href={"https://github.com/C9Glax/tranga"} color={"neutral"} height={"min-content"} ><GitHub /> Server</Link>
+                <Link target={"_blank"} href={"https://github.com/C9Glax/tranga-website"} color={"neutral"} height={"min-content"} ><GitHub /> Website</Link>
             </Stack>
         </Sheet>
     );
