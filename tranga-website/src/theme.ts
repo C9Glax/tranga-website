@@ -1,0 +1,88 @@
+import { extendTheme } from '@mui/joy/styles';
+
+
+export const trangaTheme = extendTheme({
+    "colorSchemes": {
+        "light": {
+            "palette": {
+                "primary": {
+                    "50": "#FCE5EA",
+                    "100": "#FBDDE3",
+                    "200": "#F9CBD4",
+                    "300": "#F7BAC6",
+                    "400": "#F5A9B8",
+                    "500": "#F5A9B8",
+                    "600": "#C48793",
+                    "700": "#AC7681",
+                    "800": "#93656E",
+                    "900": "#7B555C"
+                },
+                "neutral": {
+                    "50": "#E6E6E6",
+                    "100": "#CCCCCC",
+                    "200": "#B3B3B3",
+                    "300": "#999999",
+                    "400": "#808080",
+                    "500": "#666666",
+                    "600": "#4C4C4C",
+                    "700": "#333333",
+                    "800": "#191919",
+                    "900": "#000",
+                    "plainColor": "var(--joy-palette-neutral-50)",
+                    "plainHoverBg": "var(--joy-palette-neutral-700)",
+                    "outlinedColor": "var(--joy-palette-neutral-50)",
+                },
+                "success": {
+                    "50": "#cef0fe",
+                    "100": "#bdebfd",
+                    "200": "#9de2fc",
+                    "300": "#7cd8fb",
+                    "400": "#5bcefa",
+                    "500": "#5bcefa",
+                    "600": "#49a5c8",
+                    "700": "#4090af",
+                    "800": "#2e677d",
+                    "900": "#245264"
+                },
+                "danger": {
+                    "50": "#f2c0b3",
+                    "100": "#ea9680",
+                    "200": "#e68166",
+                    "300": "#dd5733",
+                    "400": "#d52d00",
+                    "500": "#d52d00",
+                    "600": "#aa2400",
+                    "700": "#951f00",
+                    "800": "#6b1700",
+                    "900": "#400d00"
+                },
+                "warning": {
+                    "50": "#ffebdd",
+                    "100": "#ffd7bb",
+                    "200": "#ffc29a",
+                    "300": "#ffae78",
+                    "400": "#ff9a56",
+                    "500": "#ff9a56",
+                    "600": "#cc7b45",
+                    "700": "#995c34",
+                    "800": "#663e22",
+                    "900": "#331f11"
+                },
+                "background": {
+                    "body": "var(--joy-palette-neutral-900)",
+                    "surface": "var(--joy-palette-neutral-900)",
+                    "popup": "var(--joy-palette-neutral-800)"
+                },
+                "text": {
+                    "primary": "var(--joy-palette-neutral-50)",
+                    "secondary": "var(--joy-palette-success-200)",
+                    "tertiary": "var(--joy-palette-primary-200)",
+                    "icon": "var(--joy-palette-primary-50)"
+                }
+            }
+        },
+        "dark": {
+            "palette": {}
+        }
+    }
+})
