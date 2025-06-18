@@ -29,13 +29,13 @@ export const DeleteManga = async (apiUri: string, mangaId: string) : Promise<voi
 }
 
 export const GetMangaCoverImageUrl = (apiUri: string, mangaId: string, ref: HTMLImageElement | undefined | null) : string => {
-    if(ref == null || ref == undefined || mangaId === DefaultManga.mangaId)
+    if(ref == null || mangaId === DefaultManga.mangaId)
         return "/blahaj.png";
     return `${apiUri}/v2/Manga/${mangaId}/Cover?width=${ref.clientWidth}&height=${ref.clientHeight}`;
 }
 
 export const GetChapters = async (apiUri: string, mangaId: string) : Promise<IChapter[]> => {
-    if(mangaId === undefined || mangaId === null || mangaId.length < 1)
+    if(mangaId === null || mangaId.length < 1)
         return Promise.reject("mangaId was not provided");
     if(mangaId === DefaultManga.mangaId)
         return Promise.reject("Default Manga was requested");

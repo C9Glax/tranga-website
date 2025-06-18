@@ -14,22 +14,22 @@ export const GetJobsWithIds = async (apiUri: string, jobIds: string[]) : Promise
 }
 
 export const GetJobsInState = async (apiUri: string, state: JobState) : Promise<IJob[]> => {
-    if(state == null || state == undefined)
+    if(state == null)
         return Promise.reject("state was not provided");
     return await getData(`${apiUri}/v2/Job/State/${state}`) as Promise<IJob[]>;
 }
 
 export const GetJobsWithType = async (apiUri: string, jobType: JobType) : Promise<IJob[]> => {
-    if(jobType == null || jobType == undefined) {
+    if(jobType == null) {
         return Promise.reject("jobType was not provided");
     }
     return await getData(`${apiUri}/v2/Job/Type/${jobType}`) as Promise<IJob[]>;
 }
 
 export const GetJobsOfTypeAndWithState = async (apiUri: string, jobType: JobType, state: JobState) : Promise<IJob[]> => {
-    if(jobType == null || jobType == undefined)
+    if(jobType == null)
         return Promise.reject("jobType was not provided");
-    if(state == null || state == undefined)
+    if(state == null)
         return Promise.reject("state was not provided");
     return await getData(`${apiUri}/v2/Job/TypeAndState/${jobType}/${state}`) as Promise<IJob[]>;
 }

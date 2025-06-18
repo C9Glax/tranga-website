@@ -116,7 +116,7 @@ export default function MangaPopup({manga, open, setOpen, children} : {manga: IM
     }, [manga, apiUri]);
 
     const [updatingThreshold, setUpdatingThreshold] = useState<boolean>(false);
-    const updateIgnoreThreshhold = useCallback((value: number) => {
+    const updateIgnoreThreshold = useCallback((value: number) => {
         if(manga == null)
             return;
         setUpdatingThreshold(true);
@@ -176,7 +176,7 @@ export default function MangaPopup({manga, open, setOpen, children} : {manga: IM
                         }
                         sx={{width:"min-content"}}
                         size={"md"}
-                        onChange={(e) => updateIgnoreThreshhold(e.currentTarget.valueAsNumber)}
+                        onChange={(e) => updateIgnoreThreshold(e.currentTarget.valueAsNumber)}
                     />
                     {children}
                 </Stack>
