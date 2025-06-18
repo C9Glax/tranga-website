@@ -1,1 +1,0 @@
-let apiUri = `${window.location.protocol}//${window.location.host.split(':')[0]}:6531`
