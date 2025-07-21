@@ -15,6 +15,7 @@ import {createContext, Dispatch, useContext, useEffect, useState} from "react";
 import {Article} from '@mui/icons-material';
 import {TrangaSettings} from "../../apiClient/data-contracts.ts";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
+import NotificationConnectors from "./NotificationConnectors.tsx";
 
 export const SettingsContext = createContext<TrangaSettings>({});
 
@@ -26,7 +27,6 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
     
     const [apiUriColor, setApiUriColor] = useState<ColorPaletteProp>("neutral");
     const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
-
     const [apiUriAccordionOpen, setApiUriAccordionOpen] = React.useState(true);
 
     useEffect(() => {
@@ -43,6 +43,8 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
             setApiUriColor("success");
         }, 1000);
     }
+    
+    const [notificationConnectorsOpen, setNotificationConnectorsOpen] = React.useState(false);
     
     return (
         <SettingsContext value={settings}>
@@ -62,6 +64,10 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
                                     defaultValue={Api.baseUrl}
                                     onChange={apiUriChanged} />
                             </AccordionDetails>
+                        </Accordion>
+                        <Accordion>
+                            <Button onClick={() => setNotificationConnectorsOpen(true)}>Add Notification Connector</Button>
+                            <NotificationConnectors open={notificationConnectorsOpen} setOpen={setNotificationConnectorsOpen} />
                         </Accordion>
                     </AccordionGroup>
                     <Stack spacing={2} direction="row">
