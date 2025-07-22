@@ -7,7 +7,7 @@ import  {MangaConnectorLinkFromId} from "../MangaConnectorLink.tsx";
 export default function MangaConnectorBadge ({manga, children} : {manga: Manga, children? : ReactElement<any, any> | ReactElement<any,any>[] | undefined}) {
    
     return (
-        <Badge badgeContent={manga.mangaConnectorIdsIds?.map(id => <MangaConnectorLinkFromId MangaConnectorIdId={id} />)}>
+        <Badge badgeContent={manga.mangaConnectorIdsIds?.map(id => <MangaConnectorLinkFromId key={id}  MangaConnectorIdId={id} />)}>
             {children}
         </Badge>
     );

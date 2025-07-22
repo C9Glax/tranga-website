@@ -1,11 +1,12 @@
 import {Manga} from "../../apiClient/data-contracts.ts";
-import {Dispatch, ReactNode, useContext, useState} from "react";
+import {ChangeEvent, Dispatch, ReactNode, useContext, useState} from "react";
 import {Button, Checkbox, Option, Select, Stack, Typography} from "@mui/joy";
 import Drawer from "@mui/joy/Drawer";
 import ModalClose from "@mui/joy/ModalClose";
 import {MangaConnectorLinkFromId} from "../MangaConnectorLink.tsx";
 import Sheet from "@mui/joy/Sheet";
 import {FileLibraryContext} from "../../App.tsx";
+import {ApiContext} from "../../apiClient/ApiContext.tsx";
 
 export default function ({manga} : {manga: Manga}) : ReactNode{
     const [open, setOpen] = useState(false);
@@ -20,13 +21,20 @@ export default function ({manga} : {manga: Manga}) : ReactNode{
 
 function DownloadDrawer({manga, open, setOpen}: {manga: Manga, open: boolean, setOpen: Dispatch<boolean>}): ReactNode  {
     const fileLibraries = useContext(FileLibraryContext);
+    const Api = useContext(ApiContext);
+    
+    const onLibraryChange = (_ :any, value: ({} | null)) => {
+        if (value === undefined)
+            return;
+        Api.mangaChangeLibraryCreate(manga.key as string, value as string);
+    }
     
     return (
         <Drawer open={open} onClose={() => setOpen(false)}>
             <ModalClose />
             <Sheet sx={{width: "calc(95% - 60px)", margin: "30px"}}>
                 <Typography>Download to Library:</Typography>
-                <Select placeholder={"Library"}>
+                <Select placeholder={"Library"} onChange={onLibraryChange} value={manga.libraryId}>
                     {fileLibraries?.map(library => (
                         <Option value={library.key} key={library.key}><Typography>{library.libraryName}</Typography> <Typography>({library.basePath})</Typography></Option>
                     ))}
@@ -41,7 +49,17 @@ function DownloadDrawer({manga, open, setOpen}: {manga: Manga, open: boolean, se
 }
 
 function DownloadCheckBox({mangaConnectorIdId} : {mangaConnectorIdId : string}) : ReactNode {
+    const Api = useContext(ApiContext);
+    
+    const onSelected = (event: ChangeEvent<HTMLInputElement>) => {
+        Api.queryMangaMangaConnectorIdDetail(mangaConnectorIdId).then(response => {
+            if (!response.ok)
+                return;
+            Api.mangaSetAsDownloadFromCreate(response.data.objId, response.data.mangaConnectorName, event.currentTarget.checked);
+        });
+    }
+    
     return (
-        <Checkbox label={<Typography><MangaConnectorLinkFromId MangaConnectorIdId={mangaConnectorIdId} /></Typography>} />
+        <Checkbox onChange={onSelected} label={<Typography><MangaConnectorLinkFromId MangaConnectorIdId={mangaConnectorIdId} printName={true} /></Typography>} />
     );
 }

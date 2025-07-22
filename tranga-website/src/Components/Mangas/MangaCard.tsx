@@ -63,12 +63,12 @@ export function MangaModal({manga, open, setOpen, children}: {manga: Manga | und
                     <Typography level={"h4"} width={"fit-content"}>{manga?.name}</Typography>
                 </Tooltip>
                 <Stack direction={"row"} spacing={2}>
-                    <Box className={"manga-card"}>
+                    <Box key={"Cover"} className={"manga-card"}>
                         <MangaCover manga={manga} />
                     </Box>
-                    <Stack direction={"column"} sx={{width: "calc(100% - 230px)"}}>
-                        <Stack direction={"row"} flexWrap={"wrap"} useFlexGap spacing={0.5}>
-                            {manga?.mangaConnectorIdsIds?.map((idid) => <MangaConnectorLinkFromId MangaConnectorIdId={idid} />)}
+                    <Stack key={"Description"} direction={"column"} sx={{width: "calc(100% - 230px)"}}>
+                        <Stack key={"Tags"} direction={"row"} flexWrap={"wrap"} useFlexGap spacing={0.5}>
+                            {manga?.mangaConnectorIdsIds?.map((idid) => <MangaConnectorLinkFromId key={idid} MangaConnectorIdId={idid} />)}
                             {manga?.mangaTags?.map((tag) => <Chip key={tag.tag}>{tag.tag}</Chip>)}
                             {manga?.links?.map((link) => <Chip key={link.key}><Link href={link.linkUrl}>{link.linkProvider}</Link></Chip>)}
                         </Stack>
