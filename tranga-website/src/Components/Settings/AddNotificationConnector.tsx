@@ -2,7 +2,6 @@ import {ReactNode, useContext, useState} from "react";
 import { ApiContext } from "../../apiClient/ApiContext";
 import {
     Button,
-    CircularProgress,
     Input,
     Modal,
     ModalDialog,
@@ -14,14 +13,7 @@ import {
 } from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
 import {GotifyRecord, NtfyRecord, PushoverRecord} from "../../apiClient/data-contracts.ts";
-import {Close, Done} from "@mui/icons-material";
-
-enum LoadingState {
-    none,
-    loading,
-    success,
-    failure
-}
+import {LoadingState, StateColor, StateIndicator} from "../Loading.tsx";
 
 export default function ({open, setOpen} : {open: boolean, setOpen: (open: boolean) => void}) {
         
@@ -45,28 +37,6 @@ export default function ({open, setOpen} : {open: boolean, setOpen: (open: boole
 }
 
 function NotificationConnectorTab({ value, children, add, state }: { value: string, children: ReactNode, add: (data: any) => void, state: LoadingState }) {
-    const StateIndicator = (state : LoadingState) : ReactNode => {
-        switch (state) {
-            case LoadingState.loading:
-                return (<CircularProgress />);
-            case LoadingState.failure:
-                return (<Close />);
-            case LoadingState.success:
-                return (<Done />);
-            default: return null;
-        }
-    }
-    
-    // @ts-ignore
-    const StateColor = (state : LoadingState) => {
-        switch (state) {
-            case LoadingState.failure:
-                return "danger";
-            case LoadingState.success:
-                return "success";
-            default: return undefined;
-        }
-    } 
     
     const IsLoading = (state : LoadingState) : boolean => state === LoadingState.loading;
     

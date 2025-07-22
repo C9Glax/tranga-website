@@ -1,12 +1,15 @@
 import {Dispatch, KeyboardEventHandler, ReactNode, useContext, useState} from "react";
 import {
-    Badge, Button,
+    Badge,
+    Button,
     Card,
     CardContent,
-    CardCover,
+    CardCover, Chip,
     Input,
     Modal,
-    ModalDialog, Option, Select,
+    ModalDialog,
+    Option,
+    Select,
     Step,
     StepIndicator,
     Stepper,
@@ -17,6 +20,7 @@ import {MangaConnectorContext} from "../App.tsx";
 import {Manga, MangaConnector} from "../apiClient/data-contracts.ts";
 import MangaList from "./Mangas/MangaList.tsx";
 import {ApiContext} from "../apiClient/ApiContext.tsx";
+import {LoadingState, StateColor, StateIndicator} from "./Loading.tsx";
 
 export default function () : ReactNode {
     const [open, setOpen] = useState(false);
@@ -46,6 +50,8 @@ function SearchDialog ({open, setOpen} : {open: boolean, setOpen: Dispatch<boole
     const [selectedMangaConnector, setSelectedMangaConnector] = useState<MangaConnector | undefined>(undefined);
     const [searchTerm, setSearchTerm] = useState<string>();
     const [searchResults, setSearchResults] = useState<Manga[]>([]);
+
+    const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.none);
     
     const doTheSearch = () => {
         if (searchTerm === undefined || searchTerm.length < 1)
@@ -53,18 +59,26 @@ function SearchDialog ({open, setOpen} : {open: boolean, setOpen: Dispatch<boole
         if (!isUrl(searchTerm) && selectedMangaConnector === undefined)
             return;
         
+        setLoadingState(LoadingState.loading);
+        
         if (isUrl(searchTerm))
             Api.searchUrlCreate(searchTerm)
                 .then(response => {
-                    if (response.ok)
+                    if (response.ok){
                         setSearchResults([response.data]);
-                });
+                        setLoadingState(LoadingState.success);
+                    }else
+                        setLoadingState(LoadingState.failure);
+                }).catch(() => setLoadingState(LoadingState.failure));
         else
             Api.searchDetail(selectedMangaConnector!.name, searchTerm)
                 .then(response => {
-                    if(response.ok)
+                    if(response.ok){
                         setSearchResults(response.data);
-                });
+                        setLoadingState(LoadingState.success);
+                    }else
+                        setLoadingState(LoadingState.failure);
+                }).catch(() => setLoadingState(LoadingState.failure));
     }
     
     const isUrl = (url: string) => {
@@ -89,7 +103,9 @@ function SearchDialog ({open, setOpen} : {open: boolean, setOpen: Dispatch<boole
                 <Stepper orientation={"vertical"}>
                     <Step indicator={<StepIndicator>1</StepIndicator>}>
                         <Typography>Connector</Typography>
-                        <Select onChange={(_, v) => setSelectedMangaConnector(v as MangaConnector)}>
+                        <Select 
+                            disabled={loadingState == LoadingState.loading}
+                            onChange={(_, v) => setSelectedMangaConnector(v as MangaConnector)}>
                             {mangaConnectors?.map(con => (
                                 <Option value={con}>
                                     <Typography><img src={con.iconUrl} style={{maxHeight: "var(--Icon-fontSize)"}} />{con.name}</Typography>
@@ -99,13 +115,20 @@ function SearchDialog ({open, setOpen} : {open: boolean, setOpen: Dispatch<boole
                     </Step>
                     <Step indicator={<StepIndicator>2</StepIndicator>}>
                         <Typography>Search</Typography>
-                        <Input onKeyDown={keyDownCheck}
-                               onChange={(e) => setSearchTerm(e.currentTarget.value)} 
-                               endDecorator={<Button onClick={doTheSearch}>Search</Button>}
+                        <Input
+                            disabled={loadingState == LoadingState.loading}
+                            onKeyDown={keyDownCheck}
+                            onChange={(e) => setSearchTerm(e.currentTarget.value)} 
+                            endDecorator={<Button
+                                disabled={loadingState == LoadingState.loading}
+                                onClick={doTheSearch}
+                                endDecorator={StateIndicator(loadingState)}
+                                color={StateColor(loadingState)}
+                            >Search</Button>}
                         />
                     </Step>
                     <Step indicator={<StepIndicator>3</StepIndicator>}>
-                        <Typography>Result</Typography>
+                        <Typography>Result <Chip>{searchResults.length}</Chip></Typography>
                         <MangaList mangas={searchResults} />
                     </Step>
                 </Stepper>

@@ -19,6 +19,7 @@ import ImageCompression from "./ImageCompression.tsx";
 import FlareSolverr from "./FlareSolverr.tsx";
 import DownloadLanguage from "./DownloadLanguage.tsx";
 import ChapterNamingScheme from "./ChapterNamingScheme.tsx";
+import Maintenance from "./Maintenance.tsx";
 
 export const SettingsContext = createContext<TrangaSettings|undefined>(undefined);
 
@@ -73,6 +74,7 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
                             <DownloadLanguage />
                             <ChapterNamingScheme />
                             <NotificationConnectors />
+                            <Maintenance />
                         </AccordionGroup>
                     </DialogContent>
                 </ModalDialog>

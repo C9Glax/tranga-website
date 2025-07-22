@@ -207,6 +207,20 @@ export class V2<
   /**
    * No description
    *
+   * @tags Maintenance
+   * @name MaintenanceCleanupNoDownloadMangaCreate
+   * @summary Removes all API.Schema.MangaContext.Manga not marked for Download on any API.MangaConnectors.MangaConnector
+   * @request POST:/v2/Maintenance/CleanupNoDownloadManga
+   */
+  maintenanceCleanupNoDownloadMangaCreate = (params: RequestParams = {}) =>
+    this.request<void, string>({
+      path: `/v2/Maintenance/CleanupNoDownloadManga`,
+      method: "POST",
+      ...params,
+    });
+  /**
+   * No description
+   *
    * @tags Manga
    * @name MangaList
    * @summary Returns all cached API.Schema.MangaContext.Manga
@@ -255,6 +269,7 @@ export class V2<
    *
    * @tags Manga
    * @name MangaDelete
+   * @summary Delete API.Schema.MangaContext.Manga with MangaId
    * @request DELETE:/v2/Manga/{MangaId}
    */
   mangaDelete = (mangaId: string, params: RequestParams = {}) =>
@@ -859,6 +874,21 @@ export class V2<
   queryMangaDownloadingList = (params: RequestParams = {}) =>
     this.request<Manga[], any>({
       path: `/v2/Query/Manga/Downloading`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryMangaSimilarNameList
+   * @summary Returns API.Schema.MangaContext.Manga with names similar to API.Schema.MangaContext.Manga (identified by MangaId
+   * @request GET:/v2/Query/Manga/{MangaId}/SimilarName
+   */
+  queryMangaSimilarNameList = (mangaId: string, params: RequestParams = {}) =>
+    this.request<string[], ProblemDetails>({
+      path: `/v2/Query/Manga/${mangaId}/SimilarName`,
       method: "GET",
       format: "json",
       ...params,

@@ -19,7 +19,6 @@ import ModalClose from "@mui/joy/ModalClose";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import {MangaContext} from "../../App.tsx";
-import MangaDownloadDialog from "./MangaDownloadDialog.tsx";
 import {MangaConnectorLinkFromId} from "../MangaConnectorLink.tsx";
 
 export function MangaCardFromId({mangaId} : {mangaId: string}) {
@@ -29,7 +28,7 @@ export function MangaCardFromId({mangaId} : {mangaId: string}) {
     return <MangaCard manga={manga} />
 }
 
-export function MangaCard({manga} : {manga: Manga | undefined}) {
+export function MangaCard({manga, children} : {manga: Manga | undefined, children? : ReactNode}) {
     if (manga === undefined)
         return PlaceHolderCard();
 
@@ -47,7 +46,7 @@ export function MangaCard({manga} : {manga: Manga | undefined}) {
                 </CardContent>
             </Card>
             <MangaModal manga={manga} open={open} setOpen={setOpen}>
-                <MangaDownloadDialog manga={manga} />
+                {children}
             </MangaModal>
         </MangaConnectorBadge>
     );
@@ -72,12 +71,12 @@ export function MangaModal({manga, open, setOpen, children}: {manga: Manga | und
                             {manga?.mangaTags?.map((tag) => <Chip key={tag.tag}>{tag.tag}</Chip>)}
                             {manga?.links?.map((link) => <Chip key={link.key}><Link href={link.linkUrl}>{link.linkProvider}</Link></Chip>)}
                         </Stack>
-                        <Box>
+                        <Box sx={{flexGrow: 1}}>
                             <MarkdownPreview source={manga?.description} style={{background: "transparent"}}/>
                         </Box>
+                        <Stack sx={{justifySelf: "flex-end", alignSelf: "flex-end"}} spacing={2} direction={"row"}>{children}</Stack>
                     </Stack>
                 </Stack>
-                {children}
             </ModalDialog>
         </Modal>
     );
