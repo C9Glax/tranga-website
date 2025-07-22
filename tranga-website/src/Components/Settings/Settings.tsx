@@ -10,28 +10,31 @@ import {
 } from "@mui/joy";
 import './Settings.css';
 import * as React from "react";
-import {createContext, Dispatch, useContext, useEffect, useState} from "react";
+import {createContext, Dispatch, ReactNode, useContext, useEffect, useState} from "react";
 import {Article} from '@mui/icons-material';
 import {TrangaSettings} from "../../apiClient/data-contracts.ts";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
-import NotificationConnectors from "./AddNotificationConnector.tsx";
+import NotificationConnectors from "./NotificationConnectors.tsx";
 import {SxProps} from "@mui/joy/styles/types";
+import ImageCompression from "./ImageCompression.tsx";
+import FlareSolverr from "./FlareSolverr.tsx";
+import DownloadLanguage from "./DownloadLanguage.tsx";
+import ChapterNamingScheme from "./ChapterNamingScheme.tsx";
 
-export const SettingsContext = createContext<TrangaSettings>({});
+export const SettingsContext = createContext<TrangaSettings|undefined>(undefined);
 
 export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetStateAction<string>>}) {
     const Api = useContext(ApiContext);
-    const [settings, setSettings] = useState<TrangaSettings>({});
+    const [settings, setSettings] = useState<TrangaSettings>();
 
     const [open, setOpen] = React.useState(false);
     
     const [apiUriColor, setApiUriColor] = useState<ColorPaletteProp>("neutral");
     const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
-    const [apiUriAccordionOpen, setApiUriAccordionOpen] = React.useState(true);
 
     useEffect(() => {
         Api.settingsList().then((response) => {
-            setSettings(response.data)
+            setSettings(response.data);
         });
     }, []);
 
@@ -44,15 +47,13 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
         }, 1000);
     }
     
-    const [notificationConnectorsOpen, setNotificationConnectorsOpen] = React.useState(false);
-    
     const ModalStyle : SxProps = {
         width: "80%",
         height: "80%"
     }
     
     return (
-        <SettingsContext value={settings}>
+        <SettingsContext.Provider value={settings}>
             <Button onClick={() => setOpen(true)}>Settings</Button>
             <Modal open={open} onClose={() => setOpen(false)}>
                 <ModalDialog sx={ModalStyle}>
@@ -60,21 +61,19 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
                     <DialogTitle>Settings</DialogTitle>
                     <DialogContent>
                         <AccordionGroup>
-                            <Accordion expanded={apiUriAccordionOpen} onChange={(_e, expanded) => setApiUriAccordionOpen(expanded)}>
-                                <AccordionSummary>ApiUri</AccordionSummary>
-                                <AccordionDetails>
-                                    <Input
-                                        color={apiUriColor}
-                                        placeholder={"http(s)://"}
-                                        type={"url"}
-                                        defaultValue={Api.baseUrl}
-                                        onChange={apiUriChanged} />
-                                </AccordionDetails>
-                            </Accordion>
-                            <Accordion>
-                                <Button onClick={() => setNotificationConnectorsOpen(true)}>Add Notification Connector</Button>
-                                <NotificationConnectors open={notificationConnectorsOpen} setOpen={setNotificationConnectorsOpen} />
-                            </Accordion>
+                            <SettingsItem title={"ApiUri"}>
+                                <Input
+                                    color={apiUriColor}
+                                    placeholder={"http(s)://"}
+                                    type={"url"}
+                                    defaultValue={Api.baseUrl}
+                                    onChange={apiUriChanged} />
+                            </SettingsItem>
+                            <ImageCompression />
+                            <FlareSolverr />
+                            <DownloadLanguage />
+                            <ChapterNamingScheme />
+                            <NotificationConnectors />
                         </AccordionGroup>
                         <Stack spacing={2} direction="row">
                             <Link target={"_blank"} href={Api.baseUrl + "/swagger"}><Article />Swagger Doc</Link>
@@ -82,6 +81,17 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
                     </DialogContent>
                 </ModalDialog>
             </Modal>
-        </SettingsContext>
+        </SettingsContext.Provider>
+    );
+}
+
+export function SettingsItem({title, children} : {title: string, children: ReactNode}) {
+    return (
+        <Accordion>
+            <AccordionSummary>{title}</AccordionSummary>
+            <AccordionDetails>
+                {children}
+            </AccordionDetails>
+        </Accordion>
     );
 }
