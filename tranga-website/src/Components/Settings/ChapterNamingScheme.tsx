@@ -29,7 +29,7 @@ export default function () : ReactNode {
     return (
         <SettingsItem title={"Chapter Naming Scheme"}>
             <MarkdownPreview style={{backgroundColor: "transparent"}} source={"Placeholders:\n   * %M Obj Name\n   * %V Volume\n   * %C Chapter\n   * %T Title\n   * %A Author (first in list)\n   * %I Chapter Internal ID\n   * %i Obj Internal ID\n   * %Y Year (Obj)\n   *\n   * ?_(...) replace _ with a value from above:\n   * Everything inside the braces will only be added if the value of %_ is not null"} />
-            <Input color={scheme} value={settings?.chapterNamingScheme as string} placeholder={"Scheme"} onChange={schemeChanged} />
+            <Input color={scheme} defaultValue={settings?.chapterNamingScheme as string} placeholder={"Scheme"} onChange={schemeChanged} />
         </SettingsItem>
     );
 }

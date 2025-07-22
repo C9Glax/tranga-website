@@ -27,7 +27,7 @@ export default function () : ReactNode {
 
     return (
         <SettingsItem title={"Download Language"}>
-            <Input color={color} value={settings?.downloadLanguage as string} placeholder={"Language code (f.e. 'en')"} onChange={languageChanged} />
+            <Input color={color} defaultValue={settings?.downloadLanguage as string} placeholder={"Language code (f.e. 'en')"} onChange={languageChanged} />
         </SettingsItem>
     );
 }

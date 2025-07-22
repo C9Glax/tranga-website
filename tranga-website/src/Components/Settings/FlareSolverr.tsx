@@ -27,7 +27,7 @@ export default function () : ReactNode {
     
     return (
         <SettingsItem title={"FlareSolverr"}>
-            <Input color={uriColor} value={settings?.flareSolverrUrl as string} type={"url"} placeholder={"URL"} onChange={uriChanged} />
+            <Input color={uriColor} defaultValue={settings?.flareSolverrUrl as string} type={"url"} placeholder={"URL"} onChange={uriChanged} />
         </SettingsItem>
     );
 }
