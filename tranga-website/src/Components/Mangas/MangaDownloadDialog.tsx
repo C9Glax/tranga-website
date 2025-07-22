@@ -54,7 +54,6 @@ function DownloadCheckBox({mangaConnectorIdId} : {mangaConnectorIdId : string}) 
 
     useEffect(() => {
         Api.queryMangaMangaConnectorIdDetail(mangaConnectorIdId).then(response => {
-            console.log(response);
             if (response.ok)
                 setUseForDownloading(response.data.useForDownload as boolean);
         })
