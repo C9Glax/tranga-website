@@ -7,6 +7,7 @@ import {MangaConnectorLinkFromId} from "../MangaConnectorLink.tsx";
 import Sheet from "@mui/joy/Sheet";
 import {FileLibraryContext} from "../../App.tsx";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
+import {LoadingState, StateIndicator} from "../Loading.tsx";
 
 export default function ({manga} : {manga: Manga}) : ReactNode{
     const [open, setOpen] = useState(false);
@@ -51,28 +52,49 @@ function DownloadDrawer({manga, open, setOpen}: {manga: Manga, open: boolean, se
 function DownloadCheckBox({mangaConnectorIdId} : {mangaConnectorIdId : string}) : ReactNode {
     const Api = useContext(ApiContext);
     const [useForDownloading, setUseForDownloading] = useState<boolean>(false);
-
+    const [loading, setLoading] = useState<LoadingState>(LoadingState.none);
+    
     useEffect(() => {
+        setLoading(LoadingState.loading);
         Api.queryMangaMangaConnectorIdDetail(mangaConnectorIdId).then(response => {
-            if (response.ok)
+            if (response.ok){
                 setUseForDownloading(response.data.useForDownload as boolean);
-        })
+                setLoading(LoadingState.none);
+            }else 
+                setLoading(LoadingState.failure);
+        }).catch(_ => setLoading(LoadingState.failure));
     }, []);
     
     const onSelected = (event: ChangeEvent<HTMLInputElement>) => {
+        setLoading(LoadingState.loading);
         const val = event.currentTarget.checked;
         Api.queryMangaMangaConnectorIdDetail(mangaConnectorIdId).then(response => {
-            if (!response.ok)
+            if (!response.ok){
+                setLoading(LoadingState.failure);
                 return;
+            }
             Api.mangaSetAsDownloadFromCreate(response.data.objId, response.data.mangaConnectorName, val)
                 .then(response => {
-                    if (response.ok)
+                    if (response.ok){
                         setUseForDownloading(val);
-                });
-        });
+                        setLoading(LoadingState.success);
+                    }else
+                        setLoading(LoadingState.failure);
+                }).catch(_ => setLoading(LoadingState.failure));
+        }).catch(_ => setLoading(LoadingState.failure));
     }
     
     return (
-        <Checkbox checked={useForDownloading} onChange={onSelected} label={<Typography><MangaConnectorLinkFromId MangaConnectorIdId={mangaConnectorIdId} printName={true} /></Typography>} />
+        <Checkbox
+            indeterminateIcon={StateIndicator(LoadingState.loading)}
+            indeterminate={loading === LoadingState.loading}
+            disabled={loading === LoadingState.loading}
+            checked={useForDownloading}
+            onChange={onSelected}
+            label={
+                <Typography>
+                    <MangaConnectorLinkFromId MangaConnectorIdId={mangaConnectorIdId} printName={true} />
+                </Typography>
+        } />
     );
 }
