@@ -7,6 +7,7 @@ import {V2} from "./apiClient/V2.ts";
 import { ApiContext } from './apiClient/ApiContext.tsx';
 import MangaList from "./Components/Mangas/MangaList.tsx";
 import {FileLibrary, Manga, MangaConnector} from "./apiClient/data-contracts.ts";
+import Search from "./Components/Search.tsx";
 
 export const MangaConnectorContext = createContext<MangaConnector[]>([]);
 export const MangaContext = createContext<Manga[]>([]);
@@ -63,7 +64,9 @@ export default function App () {
                                 <Settings setApiUri={setApiUri} />
                             </Header>
                             <Sheet className={"app-content"}>
-                                <MangaList />
+                                <MangaList mangas={manga}>
+                                    <Search />
+                                </MangaList>
                             </Sheet>
                         </Sheet>
                     </MangaContext.Provider>
