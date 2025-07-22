@@ -6,10 +6,11 @@ import {createContext, useEffect, useState} from "react";
 import {V2} from "./apiClient/V2.ts";
 import { ApiContext } from './apiClient/ApiContext.tsx';
 import MangaList from "./Components/Mangas/MangaList.tsx";
-import {Manga, MangaConnector} from "./apiClient/data-contracts.ts";
+import {FileLibrary, Manga, MangaConnector} from "./apiClient/data-contracts.ts";
 
 export const MangaConnectorContext = createContext<MangaConnector[]>([]);
 export const MangaContext = createContext<Manga[]>([]);
+export const FileLibraryContext = createContext<FileLibrary[]>([]);
 
 export default function App () {
     const apiUriStr = localStorage.getItem("apiUri") ?? window.location.href.substring(0, window.location.href.lastIndexOf("/")) + "/api";
@@ -18,12 +19,18 @@ export default function App () {
 
     const [mangaConnectors, setMangaConnectors] = useState<MangaConnector[]>([]);
     const [manga, setManga] = useState<Manga[]>([]);
+    const [fileLibraries, setFileLibraries] = useState<FileLibrary[]>([]);
     
     useEffect(() => {
         Api.mangaConnectorList().then(response => {
             if (response.ok)
                 setMangaConnectors(response.data);
         });
+        
+        Api.fileLibraryList().then(response => {
+            if (response.ok)
+                setFileLibraries(response.data);
+        })
         
         Api.mangaList().then(response => {
             if (!response.ok)
@@ -48,18 +55,20 @@ export default function App () {
 
     return (
         <ApiContext.Provider value={Api}>
-            <MangaConnectorContext.Provider  value={mangaConnectors}>
-                <MangaContext.Provider value={manga}>
-                    <Sheet className={"app"}>
-                        <Header>
-                            <Settings setApiUri={setApiUri} />
-                        </Header>
-                        <Sheet className={"app-content"}>
-                            <MangaList />
+            <FileLibraryContext value={fileLibraries}>
+                <MangaConnectorContext.Provider value={mangaConnectors}>
+                    <MangaContext.Provider value={manga}>
+                        <Sheet className={"app"}>
+                            <Header>
+                                <Settings setApiUri={setApiUri} />
+                            </Header>
+                            <Sheet className={"app-content"}>
+                                <MangaList />
+                            </Sheet>
                         </Sheet>
-                    </Sheet>
-                </MangaContext.Provider>
-            </MangaConnectorContext.Provider>
+                    </MangaContext.Provider>
+                </MangaConnectorContext.Provider>
+            </FileLibraryContext>
         </ApiContext.Provider>
     );
 }

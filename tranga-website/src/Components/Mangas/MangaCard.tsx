@@ -12,13 +12,15 @@ import {
     Typography
 } from "@mui/joy";
 import {Manga} from "../../apiClient/data-contracts.ts";
-import {Dispatch, SetStateAction, useContext, useState} from "react";
+import {Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
 import "./MangaCard.css";
 import MangaConnectorBadge from "./MangaConnectorBadge.tsx";
 import ModalClose from "@mui/joy/ModalClose";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import {MangaContext} from "../../App.tsx";
+import MangaDownloadDialog from "./MangaDownloadDialog.tsx";
+import {MangaConnectorLinkFromId} from "../MangaConnectorLink.tsx";
 
 export function MangaCardFromId({mangaId} : {mangaId: string}) {
     const mangas = useContext(MangaContext);
@@ -44,12 +46,14 @@ export function MangaCard({manga} : {manga: Manga | undefined}) {
                     <Typography level={"title-lg"}>{manga?.name}</Typography>
                 </CardContent>
             </Card>
-            <MangaModal manga={manga} open={open} setOpen={setOpen} />
+            <MangaModal manga={manga} open={open} setOpen={setOpen}>
+                <MangaDownloadDialog manga={manga} />
+            </MangaModal>
         </MangaConnectorBadge>
     );
 }
 
-function MangaModal({manga, open, setOpen}: {manga: Manga | undefined, open: boolean, setOpen: Dispatch<SetStateAction<boolean>>}) {
+export function MangaModal({manga, open, setOpen, children}: {manga: Manga | undefined, open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, children?: ReactNode}) {
 
     return (
         <Modal open={open} onClose={() => setOpen(false)} className={"manga-modal"}>
@@ -64,14 +68,16 @@ function MangaModal({manga, open, setOpen}: {manga: Manga | undefined, open: boo
                     </Box>
                     <Stack direction={"column"} sx={{width: "calc(100% - 230px)"}}>
                         <Stack direction={"row"} flexWrap={"wrap"} useFlexGap spacing={0.5}>
+                            {manga?.mangaConnectorIdsIds?.map((idid) => <MangaConnectorLinkFromId MangaConnectorIdId={idid} />)}
                             {manga?.mangaTags?.map((tag) => <Chip key={tag.tag}>{tag.tag}</Chip>)}
                             {manga?.links?.map((link) => <Chip key={link.key}><Link href={link.linkUrl}>{link.linkProvider}</Link></Chip>)}
                         </Stack>
                         <Box>
-                            <MarkdownPreview source={manga?.description}/>
+                            <MarkdownPreview source={manga?.description} style={{background: "transparent"}}/>
                         </Box>
                     </Stack>
                 </Stack>
+                {children}
             </ModalDialog>
         </Modal>
     );

@@ -106,6 +106,32 @@ export interface Chapter {
   key?: string | null;
 }
 
+export interface ChapterMangaConnectorId {
+  /**
+   * @minLength 0
+   * @maxLength 64
+   */
+  objId: string;
+  /**
+   * @minLength 0
+   * @maxLength 32
+   */
+  mangaConnectorName: string;
+  /**
+   * @minLength 0
+   * @maxLength 256
+   */
+  idOnConnectorSite: string;
+  /**
+   * @format uri
+   * @minLength 0
+   * @maxLength 512
+   */
+  websiteUrl?: string | null;
+  useForDownload?: boolean;
+  key?: string | null;
+}
+
 export interface FileLibrary {
   /**
    * @minLength 0
@@ -193,6 +219,7 @@ export interface Manga {
   originalLanguage?: string | null;
   chapterIds?: string[] | null;
   idsOnMangaConnectors?: Record<string, string>;
+  mangaConnectorIdsIds?: string[] | null;
   key?: string | null;
 }
 
@@ -218,6 +245,32 @@ export interface MangaConnector {
    */
   baseUris: string[];
   enabled: boolean;
+}
+
+export interface MangaMangaConnectorId {
+  /**
+   * @minLength 0
+   * @maxLength 64
+   */
+  objId: string;
+  /**
+   * @minLength 0
+   * @maxLength 32
+   */
+  mangaConnectorName: string;
+  /**
+   * @minLength 0
+   * @maxLength 256
+   */
+  idOnConnectorSite: string;
+  /**
+   * @format uri
+   * @minLength 0
+   * @maxLength 512
+   */
+  websiteUrl?: string | null;
+  useForDownload?: boolean;
+  key?: string | null;
 }
 
 export interface MangaTag {

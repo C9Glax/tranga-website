@@ -14,11 +14,13 @@ import {
   Author,
   BaseWorker,
   Chapter,
+  ChapterMangaConnectorId,
   FileLibrary,
   GotifyRecord,
   LibraryConnector,
   Manga,
   MangaConnector,
+  MangaMangaConnectorId,
   MetadataEntry,
   MetadataSearchResult,
   NotificationConnector,
@@ -474,6 +476,36 @@ export class V2<
   /**
    * No description
    *
+   * @tags Manga
+   * @name MangaWithAuthorIdDetail
+   * @summary Returns all API.Schema.MangaContext.Manga which where Authored by API.Schema.MangaContext.Author with AuthorId
+   * @request GET:/v2/Manga/WithAuthorId/{AuthorId}
+   */
+  mangaWithAuthorIdDetail = (authorId: string, params: RequestParams = {}) =>
+    this.request<Manga[], void>({
+      path: `/v2/Manga/WithAuthorId/${authorId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Manga
+   * @name MangaWithTagDetail
+   * @summary Returns all API.Schema.MangaContext.Manga with !:Tag
+   * @request GET:/v2/Manga/WithTag/{Tag}
+   */
+  mangaWithTagDetail = (tag: string, params: RequestParams = {}) =>
+    this.request<Manga[], void>({
+      path: `/v2/Manga/WithTag/${tag}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
    * @tags MangaConnector
    * @name MangaConnectorList
    * @summary Get all API.MangaConnectors.MangaConnector (Scanlation-Sites)
@@ -787,46 +819,49 @@ export class V2<
    * No description
    *
    * @tags Query
-   * @name QueryMangasWithAuthorIdDetail
-   * @summary Returns all API.Schema.MangaContext.Manga which where Authored by API.Schema.MangaContext.Author with AuthorId
-   * @request GET:/v2/Query/Mangas/WithAuthorId/{AuthorId}
-   */
-  queryMangasWithAuthorIdDetail = (
-    authorId: string,
-    params: RequestParams = {},
-  ) =>
-    this.request<Manga[], void>({
-      path: `/v2/Query/Mangas/WithAuthorId/${authorId}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryMangasWithTagDetail
-   * @summary Returns all API.Schema.MangaContext.Manga with !:Tag
-   * @request GET:/v2/Query/Mangas/WithTag/{Tag}
-   */
-  queryMangasWithTagDetail = (tag: string, params: RequestParams = {}) =>
-    this.request<Manga[], void>({
-      path: `/v2/Query/Mangas/WithTag/${tag}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryChapterDetail
    * @summary Returns API.Schema.MangaContext.Chapter with ChapterId
    * @request GET:/v2/Query/Chapter/{ChapterId}
    */
   queryChapterDetail = (chapterId: string, params: RequestParams = {}) =>
-    this.request<Chapter, void>({
+    this.request<Chapter, ProblemDetails>({
       path: `/v2/Query/Chapter/${chapterId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryMangaMangaConnectorIdDetail
+   * @summary Returns the API.Schema.MangaContext.MangaConnectorId`1 with API.Schema.MangaContext.MangaConnectorId`1.Key
+   * @request GET:/v2/Query/Manga/MangaConnectorId/{MangaConnectorIdId}
+   */
+  queryMangaMangaConnectorIdDetail = (
+    mangaConnectorIdId: string,
+    params: RequestParams = {},
+  ) =>
+    this.request<MangaMangaConnectorId, ProblemDetails>({
+      path: `/v2/Query/Manga/MangaConnectorId/${mangaConnectorIdId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryChapterMangaConnectorIdDetail
+   * @summary Returns the API.Schema.MangaContext.MangaConnectorId`1 with API.Schema.MangaContext.MangaConnectorId`1.Key
+   * @request GET:/v2/Query/chapter/MangaConnectorId/{MangaConnectorIdId}
+   */
+  queryChapterMangaConnectorIdDetail = (
+    mangaConnectorIdId: string,
+    params: RequestParams = {},
+  ) =>
+    this.request<ChapterMangaConnectorId, ProblemDetails>({
+      path: `/v2/Query/chapter/MangaConnectorId/${mangaConnectorIdId}`,
       method: "GET",
       format: "json",
       ...params,
