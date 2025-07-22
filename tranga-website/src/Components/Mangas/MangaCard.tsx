@@ -13,18 +13,16 @@ import {
 } from "@mui/joy";
 import {Manga} from "../../apiClient/data-contracts.ts";
 import {Dispatch, SetStateAction, useContext, useState} from "react";
-import {MangaContext} from "../../apiClient/MangaContext.tsx";
 import "./MangaCard.css";
 import MangaConnectorBadge from "./MangaConnectorBadge.tsx";
 import ModalClose from "@mui/joy/ModalClose";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import {MangaContext} from "../../App.tsx";
 
 export function MangaCardFromId({mangaId} : {mangaId: string}) {
-    const Mangas = useContext(MangaContext);
-    const [manga, setManga] = useState<Manga | undefined>(undefined);
-
-    Mangas.GetManga(mangaId).then(setManga);
+    const mangas = useContext(MangaContext);
+    const manga = mangas.find(manga => manga.key === mangaId);
     
     return <MangaCard manga={manga} />
 }

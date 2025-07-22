@@ -15,7 +15,7 @@ import {createContext, Dispatch, useContext, useEffect, useState} from "react";
 import {Article} from '@mui/icons-material';
 import {TrangaSettings} from "../../apiClient/data-contracts.ts";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
-import NotificationConnectors from "./NotificationConnectors.tsx";
+import NotificationConnectors from "./AddNotificationConnector.tsx";
 
 export const SettingsContext = createContext<TrangaSettings>({});
 

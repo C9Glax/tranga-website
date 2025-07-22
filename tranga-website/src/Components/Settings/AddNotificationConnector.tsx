@@ -1,8 +1,27 @@
 import {ReactNode, useContext, useState} from "react";
 import { ApiContext } from "../../apiClient/ApiContext";
-import {Button, Input, Modal, ModalDialog, Tab, TabList, TabPanel, Tabs} from "@mui/joy";
+import {
+    Button,
+    CircularProgress,
+    Input,
+    Modal,
+    ModalDialog,
+    Stack,
+    Tab,
+    TabList,
+    TabPanel,
+    Tabs
+} from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
 import {GotifyRecord, NtfyRecord, PushoverRecord} from "../../apiClient/data-contracts.ts";
+import {Close, Done} from "@mui/icons-material";
+
+enum LoadingState {
+    none,
+    loading,
+    success,
+    failure
+}
 
 export default function ({open, setOpen} : {open: boolean, setOpen: (open: boolean) => void}) {
         
@@ -25,11 +44,38 @@ export default function ({open, setOpen} : {open: boolean, setOpen: (open: boole
     );
 }
 
-function NotificationConnectorTab({ value, children, add }: { value: string, children: ReactNode, add: (data: any) => void }) {
+function NotificationConnectorTab({ value, children, add, state }: { value: string, children: ReactNode, add: (data: any) => void, state: LoadingState }) {
+    const StateIndicator = (state : LoadingState) : ReactNode => {
+        switch (state) {
+            case LoadingState.loading:
+                return (<CircularProgress />);
+            case LoadingState.failure:
+                return (<Close />);
+            case LoadingState.success:
+                return (<Done />);
+            default: return null;
+        }
+    }
+    
+    // @ts-ignore
+    const StateColor = (state : LoadingState) => {
+        switch (state) {
+            case LoadingState.failure:
+                return "danger";
+            case LoadingState.success:
+                return "success";
+            default: return undefined;
+        }
+    } 
+    
+    const IsLoading = (state : LoadingState) : boolean => state === LoadingState.loading;
+    
     return (
         <TabPanel value={value}>
-            {children}
-            <Button onClick={add}>Add</Button>
+            <Stack spacing={1}>
+                {children}
+                <Button onClick={add} endDecorator={StateIndicator(state)} loading={IsLoading(state)} disabled={IsLoading(state)} color={StateColor(state)}>Add</Button>
+            </Stack>
         </TabPanel>
     );
 }
@@ -37,9 +83,22 @@ function NotificationConnectorTab({ value, children, add }: { value: string, chi
 function Gotify() {
     const Api = useContext(ApiContext);
     const [gotifyData, setGotifyData] = useState<GotifyRecord>({});
+    const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.none);
+
+    const Add = () => {
+        setLoadingState(LoadingState.loading);
+        Api.notificationConnectorGotifyUpdate(gotifyData)
+            .then((response) => {
+                if (response.ok)
+                    setLoadingState(LoadingState.success);
+                else
+                    setLoadingState(LoadingState.failure);
+            })
+            .catch(_ => setLoadingState(LoadingState.failure));
+    }
     
     return (
-        <NotificationConnectorTab value={"gotify"} add={() => Api.notificationConnectorGotifyUpdate(gotifyData)}>
+        <NotificationConnectorTab value={"gotify"} add={Add} state={loadingState}>
             <Input placeholder={"Name"} value={gotifyData.name as string} onChange={(e) => setGotifyData({...gotifyData, name: e.target.value})} />
             <Input placeholder={"https://[...]/message"} value={gotifyData.endpoint as string} onChange={(e) => setGotifyData({...gotifyData, endpoint: e.target.value})} />
             <Input placeholder={"Apptoken"} type={"password"} value={gotifyData.appToken as string} onChange={(e) => setGotifyData({...gotifyData, appToken: e.target.value})} />
@@ -51,9 +110,22 @@ function Gotify() {
 function Ntfy() {
     const Api = useContext(ApiContext);
     const [ntfyData, setNtfyData] = useState<NtfyRecord>({});
+    const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.none);
+
+    const Add = () => {
+        setLoadingState(LoadingState.loading);
+        Api.notificationConnectorNtfyUpdate(ntfyData)
+            .then((response) => {
+                if (response.ok)
+                    setLoadingState(LoadingState.success);
+                else
+                    setLoadingState(LoadingState.failure);
+            })
+            .catch(_ => setLoadingState(LoadingState.failure));
+    }
 
     return (
-        <NotificationConnectorTab value={"ntfy"} add={() => Api.notificationConnectorNtfyUpdate(ntfyData)}>
+        <NotificationConnectorTab value={"ntfy"} add={Add} state={loadingState}>
             <Input placeholder={"Name"} value={ntfyData.name as string} onChange={(e) => setNtfyData({...ntfyData, name: e.target.value})} />
             <Input placeholder={"Endpoint"} value={ntfyData.endpoint as string} onChange={(e) => setNtfyData({...ntfyData, endpoint: e.target.value})} />
             <Input placeholder={"Topic"} value={ntfyData.topic as string} onChange={(e) => setNtfyData({...ntfyData, topic: e.target.value})} />
@@ -67,9 +139,22 @@ function Ntfy() {
 function Pushover() {
     const Api = useContext(ApiContext);
     const [pushoverData, setPushoverData] = useState<PushoverRecord>({});
+    const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.none);
+    
+    const Add = () => {
+        setLoadingState(LoadingState.loading);
+        Api.notificationConnectorPushoverUpdate(pushoverData)
+            .then((response) => {
+                if (response.ok)
+                    setLoadingState(LoadingState.success);
+                else
+                    setLoadingState(LoadingState.failure);
+            })
+            .catch(_ => setLoadingState(LoadingState.failure));
+    }
 
     return (
-        <NotificationConnectorTab value={"pushover"} add={() => Api.notificationConnectorPushoverUpdate(pushoverData)}>
+        <NotificationConnectorTab value={"pushover"} add={Add} state={loadingState}>
             <Input placeholder={"Name"} value={pushoverData.name as string} onChange={(e) => setPushoverData({...pushoverData, name: e.target.value})} />
             <Input placeholder={"User"} value={pushoverData.user as string} onChange={(e) => setPushoverData({...pushoverData, user: e.target.value})} />
             <Input placeholder={"AppToken"} type={"password"} value={pushoverData.appToken as string} onChange={(e) => setPushoverData({...pushoverData, appToken: e.target.value})} />

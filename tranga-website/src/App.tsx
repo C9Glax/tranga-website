@@ -4,12 +4,12 @@ import Settings from "./Components/Settings/Settings.tsx";
 import Header from "./Header.tsx";
 import {createContext, useEffect, useState} from "react";
 import {V2} from "./apiClient/V2.ts";
-import {GetManga, MangaContext } from './apiClient/MangaContext.tsx';
 import { ApiContext } from './apiClient/ApiContext.tsx';
 import MangaList from "./Components/Mangas/MangaList.tsx";
-import {MangaConnector} from "./apiClient/data-contracts.ts";
+import {Manga, MangaConnector} from "./apiClient/data-contracts.ts";
 
 export const MangaConnectorContext = createContext<MangaConnector[]>([]);
+export const MangaContext = createContext<Manga[]>([]);
 
 export default function App () {
     const apiUriStr = localStorage.getItem("apiUri") ?? window.location.href.substring(0, window.location.href.lastIndexOf("/")) + "/api";
@@ -17,10 +17,24 @@ export default function App () {
     const [Api, setApi] = useState<V2>(new V2());
 
     const [mangaConnectors, setMangaConnectors] = useState<MangaConnector[]>([]);
+    const [manga, setManga] = useState<Manga[]>([]);
+    
     useEffect(() => {
         Api.mangaConnectorList().then(response => {
             if (response.ok)
                 setMangaConnectors(response.data);
+        });
+        
+        Api.mangaList().then(response => {
+            if (!response.ok)
+            {
+                setManga([]);
+                return;
+            }
+            Api.mangaWithIDsCreate(response.data).then(response => {
+                if (response.ok)
+                    setManga(response.data);
+            })
         })
     }, [Api]);
     
@@ -35,7 +49,7 @@ export default function App () {
     return (
         <ApiContext.Provider value={Api}>
             <MangaConnectorContext.Provider  value={mangaConnectors}>
-                <MangaContext.Provider value={{GetManga: GetManga}}>
+                <MangaContext.Provider value={manga}>
                     <Sheet className={"app"}>
                         <Header>
                             <Settings setApiUri={setApiUri} />
