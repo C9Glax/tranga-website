@@ -852,16 +852,31 @@ export class V2<
    * No description
    *
    * @tags Query
+   * @name QueryMangaDownloadingList
+   * @summary Returns all API.Schema.MangaContext.Manga that are being downloaded from at least one API.MangaConnectors.MangaConnector
+   * @request GET:/v2/Query/Manga/Downloading
+   */
+  queryMangaDownloadingList = (params: RequestParams = {}) =>
+    this.request<Manga[], any>({
+      path: `/v2/Query/Manga/Downloading`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryChapterMangaConnectorIdDetail
    * @summary Returns the API.Schema.MangaContext.MangaConnectorId`1 with API.Schema.MangaContext.MangaConnectorId`1.Key
-   * @request GET:/v2/Query/chapter/MangaConnectorId/{MangaConnectorIdId}
+   * @request GET:/v2/Query/Chapter/MangaConnectorId/{MangaConnectorIdId}
    */
   queryChapterMangaConnectorIdDetail = (
     mangaConnectorIdId: string,
     params: RequestParams = {},
   ) =>
     this.request<ChapterMangaConnectorId, ProblemDetails>({
-      path: `/v2/Query/chapter/MangaConnectorId/${mangaConnectorIdId}`,
+      path: `/v2/Query/Chapter/MangaConnectorId/${mangaConnectorIdId}`,
       method: "GET",
       format: "json",
       ...params,

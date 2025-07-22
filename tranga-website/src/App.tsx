@@ -36,17 +36,11 @@ export default function App () {
                 setFileLibraries(response.data);
         })
         
-        Api.mangaList().then(response => {
-            if (!response.ok)
-            {
-                setManga([]);
-                return;
-            }
-            Api.mangaWithIDsCreate(response.data).then(response => {
+        Api.queryMangaDownloadingList()
+            .then(response => {
                 if (response.ok)
                     setManga(response.data);
-            })
-        })
+            });
     }, []);
     
     

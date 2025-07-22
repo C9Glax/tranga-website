@@ -1,5 +1,5 @@
 import {Manga} from "../../apiClient/data-contracts.ts";
-import {ChangeEvent, Dispatch, ReactNode, useContext, useState} from "react";
+import {ChangeEvent, Dispatch, ReactNode, useContext, useEffect, useState} from "react";
 import {Button, Checkbox, Option, Select, Stack, Typography} from "@mui/joy";
 import Drawer from "@mui/joy/Drawer";
 import ModalClose from "@mui/joy/ModalClose";
@@ -50,16 +50,30 @@ function DownloadDrawer({manga, open, setOpen}: {manga: Manga, open: boolean, se
 
 function DownloadCheckBox({mangaConnectorIdId} : {mangaConnectorIdId : string}) : ReactNode {
     const Api = useContext(ApiContext);
+    const [useForDownloading, setUseForDownloading] = useState<boolean>(false);
+
+    useEffect(() => {
+        Api.queryMangaMangaConnectorIdDetail(mangaConnectorIdId).then(response => {
+            console.log(response);
+            if (response.ok)
+                setUseForDownloading(response.data.useForDownload as boolean);
+        })
+    }, []);
     
     const onSelected = (event: ChangeEvent<HTMLInputElement>) => {
+        const val = event.currentTarget.checked;
         Api.queryMangaMangaConnectorIdDetail(mangaConnectorIdId).then(response => {
             if (!response.ok)
                 return;
-            Api.mangaSetAsDownloadFromCreate(response.data.objId, response.data.mangaConnectorName, event.currentTarget.checked);
+            Api.mangaSetAsDownloadFromCreate(response.data.objId, response.data.mangaConnectorName, val)
+                .then(response => {
+                    if (response.ok)
+                        setUseForDownloading(val);
+                });
         });
     }
     
     return (
-        <Checkbox onChange={onSelected} label={<Typography><MangaConnectorLinkFromId MangaConnectorIdId={mangaConnectorIdId} printName={true} /></Typography>} />
+        <Checkbox checked={useForDownloading} onChange={onSelected} label={<Typography><MangaConnectorLinkFromId MangaConnectorIdId={mangaConnectorIdId} printName={true} /></Typography>} />
     );
 }
