@@ -6,12 +6,11 @@ import {
     AccordionSummary, Button, ColorPaletteProp,
     DialogContent,
     DialogTitle, Input,
-    Link, Modal, ModalDialog, Stack
+    Modal, ModalDialog
 } from "@mui/joy";
 import './Settings.css';
 import * as React from "react";
 import {createContext, Dispatch, ReactNode, useContext, useEffect, useState} from "react";
-import {Article} from '@mui/icons-material';
 import {TrangaSettings} from "../../apiClient/data-contracts.ts";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
 import NotificationConnectors from "./NotificationConnectors.tsx";
@@ -75,9 +74,6 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
                             <ChapterNamingScheme />
                             <NotificationConnectors />
                         </AccordionGroup>
-                        <Stack spacing={2} direction="row">
-                            <Link target={"_blank"} href={Api.baseUrl + "/swagger"}><Article />Swagger Doc</Link>
-                        </Stack>
                     </DialogContent>
                 </ModalDialog>
             </Modal>
