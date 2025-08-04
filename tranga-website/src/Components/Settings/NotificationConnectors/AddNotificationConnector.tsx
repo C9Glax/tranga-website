@@ -1,5 +1,5 @@
 import {ReactNode, useContext, useState} from "react";
-import { ApiContext } from "../../apiClient/ApiContext";
+import { ApiContext } from "../../../apiClient/ApiContext.tsx";
 import {
     Button, Card,
     Input,
@@ -12,8 +12,8 @@ import {
     Tabs, Typography
 } from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
-import {GotifyRecord, NtfyRecord, PushoverRecord} from "../../apiClient/data-contracts.ts";
-import {LoadingState, StateColor, StateIndicator} from "../Loading.tsx";
+import {GotifyRecord, NtfyRecord, PushoverRecord} from "../../../apiClient/data-contracts.ts";
+import {LoadingState, StateColor, StateIndicator} from "../../Loading.tsx";
 import * as React from "react";
 import ListNotificationConnector from "./ListNotificationConnector.tsx";
 

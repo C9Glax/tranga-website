@@ -1,6 +1,6 @@
-import {ApiContext} from "../../apiClient/ApiContext.tsx";
+import {ApiContext} from "../../../apiClient/ApiContext.tsx";
 import {useContext, useEffect, useState} from "react";
-import { NotificationConnector } from "../../apiClient/data-contracts.ts";
+import { NotificationConnector } from "../../../apiClient/data-contracts.ts";
 import {Card, Chip, Input, Stack, Table, Textarea, Typography} from "@mui/joy";
 
 export default function (){
