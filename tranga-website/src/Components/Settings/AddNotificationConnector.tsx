@@ -15,6 +15,7 @@ import ModalClose from "@mui/joy/ModalClose";
 import {GotifyRecord, NtfyRecord, PushoverRecord} from "../../apiClient/data-contracts.ts";
 import {LoadingState, StateColor, StateIndicator} from "../Loading.tsx";
 import * as React from "react";
+import ListNotificationConnector from "./ListNotificationConnector.tsx";
 
 export default function () {
     const [notificationConnectorsOpen, setNotificationConnectorsOpen] = React.useState(false);
@@ -23,6 +24,7 @@ export default function () {
         <Card>
             <Typography>Notification Connectors</Typography>
             <Button onClick={() => setNotificationConnectorsOpen(true)}>Add</Button>
+            <ListNotificationConnector />
             <Modal open={notificationConnectorsOpen} onClose={() => setNotificationConnectorsOpen(false)}>
                 <ModalDialog>
                     <ModalClose />
