@@ -38,8 +38,12 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
     const apiUriChanged = (e : React.ChangeEvent<HTMLInputElement>) => {
         clearTimeout(timerRef.current);
         setApiUriColor("warning");
+
+        const val = e.target.value;
+        const value = val.endsWith("/") ? val.substring(0, val.length - 1) : val;
+
         timerRef.current = setTimeout(() => {
-            setApiUri(e.target.value);
+            setApiUri(value);
             setApiUriColor("success");
         }, 1000);
     }
