@@ -1,7 +1,7 @@
 import {ReactNode, useContext, useState} from "react";
-import {SettingsContext, SettingsItem} from "./Settings.tsx";
+import {SettingsContext} from "./Settings.tsx";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
-import {ColorPaletteProp, Input} from "@mui/joy";
+import {Card, ColorPaletteProp, Input, Typography} from "@mui/joy";
 import * as React from "react";
 
 export default function () : ReactNode {
@@ -26,8 +26,9 @@ export default function () : ReactNode {
     }
 
     return (
-        <SettingsItem title={"Download Language"}>
+        <Card>
+            <Typography>Download Language</Typography>
             <Input color={color} defaultValue={settings?.downloadLanguage as string} placeholder={"Language code (f.e. 'en')"} onChange={languageChanged} />
-        </SettingsItem>
+        </Card>
     );
 }

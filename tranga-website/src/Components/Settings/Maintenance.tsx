@@ -19,9 +19,7 @@ export default function () {
             }).catch(_ => setUnusedMangaState(LoadingState.failure));
     }
     
-    
     return (
-
         <SettingsItem title={"Maintenance"}>
             <Button
                 disabled={unusedMangaState == LoadingState.loading}

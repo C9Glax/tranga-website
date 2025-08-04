@@ -6,20 +6,17 @@ import {
     AccordionSummary, Button, ColorPaletteProp,
     DialogContent,
     DialogTitle, Input,
-    Modal, ModalDialog
+    Modal, ModalDialog, Stack
 } from "@mui/joy";
 import './Settings.css';
 import * as React from "react";
 import {createContext, Dispatch, ReactNode, useContext, useEffect, useState} from "react";
 import {TrangaSettings} from "../../apiClient/data-contracts.ts";
 import {ApiContext} from "../../apiClient/ApiContext.tsx";
-import NotificationConnectors from "./NotificationConnectors.tsx";
 import {SxProps} from "@mui/joy/styles/types";
-import ImageCompression from "./ImageCompression.tsx";
-import FlareSolverr from "./FlareSolverr.tsx";
-import DownloadLanguage from "./DownloadLanguage.tsx";
-import ChapterNamingScheme from "./ChapterNamingScheme.tsx";
 import Maintenance from "./Maintenance.tsx";
+import Services from "./Services.tsx";
+import Download from './Download.tsx';
 
 export const SettingsContext = createContext<TrangaSettings|undefined>(undefined);
 
@@ -69,11 +66,8 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
                                     defaultValue={Api.baseUrl}
                                     onChange={apiUriChanged} />
                             </SettingsItem>
-                            <ImageCompression />
-                            <FlareSolverr />
-                            <DownloadLanguage />
-                            <ChapterNamingScheme />
-                            <NotificationConnectors />
+                            <Download />
+                            <Services />
                             <Maintenance />
                         </AccordionGroup>
                     </DialogContent>
@@ -83,12 +77,17 @@ export default function Settings({setApiUri} : {setApiUri: Dispatch<React.SetSta
     );
 }
 
-export function SettingsItem({title, children} : {title: string, children: ReactNode}) {
+export function SettingsItem({title, children, defaultExpanded, direction} : {title: string, children?: ReactNode, defaultExpanded?: boolean, direction?: "row" | "column"}) {
+    const [expanded, setExpanded] = React.useState(defaultExpanded??false);
+    const stackDirection = direction ?? "column";
+
     return (
-        <Accordion>
+        <Accordion expanded={expanded} onChange={(_, expanded) => setExpanded(expanded)}>
             <AccordionSummary>{title}</AccordionSummary>
             <AccordionDetails>
-                {children}
+                <Stack direction={stackDirection} spacing={1}>
+                    {children}
+                </Stack>
             </AccordionDetails>
         </Accordion>
     );

@@ -1,7 +1,7 @@
 import {ReactNode, useContext, useState} from "react";
 import { ApiContext } from "../../apiClient/ApiContext";
 import {
-    Button,
+    Button, Card,
     Input,
     Modal,
     ModalDialog,
@@ -9,30 +9,36 @@ import {
     Tab,
     TabList,
     TabPanel,
-    Tabs
+    Tabs, Typography
 } from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
 import {GotifyRecord, NtfyRecord, PushoverRecord} from "../../apiClient/data-contracts.ts";
 import {LoadingState, StateColor, StateIndicator} from "../Loading.tsx";
+import * as React from "react";
 
-export default function ({open, setOpen} : {open: boolean, setOpen: (open: boolean) => void}) {
+export default function () {
+    const [notificationConnectorsOpen, setNotificationConnectorsOpen] = React.useState(false);
         
     return (
-        <Modal open={open} onClose={() => setOpen(false)}>
-            <ModalDialog>
-                <ModalClose />
-                <Tabs sx={{width:'95%'}} defaultValue={"gotify"}>
-                    <TabList>
-                        <Tab value={"gotify"}>Gotify</Tab>
-                        <Tab value={"ntfy"}>Ntfy</Tab>
-                        <Tab value={"pushover"}>Pushover</Tab>
-                    </TabList>
-                    <Gotify />
-                    <Ntfy />
-                    <Pushover />
-                </Tabs>
-            </ModalDialog>
-        </Modal>
+        <Card>
+            <Typography>Notification Connectors</Typography>
+            <Button onClick={() => setNotificationConnectorsOpen(true)}>Add</Button>
+            <Modal open={notificationConnectorsOpen} onClose={() => setNotificationConnectorsOpen(false)}>
+                <ModalDialog>
+                    <ModalClose />
+                    <Tabs sx={{width:'95%'}} defaultValue={"gotify"}>
+                        <TabList>
+                            <Tab value={"gotify"}>Gotify</Tab>
+                            <Tab value={"ntfy"}>Ntfy</Tab>
+                            <Tab value={"pushover"}>Pushover</Tab>
+                        </TabList>
+                        <Gotify />
+                        <Ntfy />
+                        <Pushover />
+                    </Tabs>
+                </ModalDialog>
+            </Modal>
+        </Card>
     );
 }
 
