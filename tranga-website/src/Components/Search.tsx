@@ -100,10 +100,12 @@ function SearchDialog ({open, setOpen} : {open: boolean, setOpen: Dispatch<boole
         <Modal sx={{width: "100%", height: "100%"}} open={open} onClose={() => setOpen(false)}>
             <ModalDialog sx={{width: "80%"}}>
                 <ModalClose />
+                <Typography level={"h1"}>Search or add Manga</Typography>
                 <Stepper orientation={"vertical"}>
                     <Step indicator={<StepIndicator>1</StepIndicator>}>
                         <Typography>Connector</Typography>
-                        <Select 
+                        <Select
+                            placeholder={"Select Connector 'Global' to search on all Connectors"}
                             disabled={loadingState == LoadingState.loading}
                             onChange={(_, v) => setSelectedMangaConnector(v as MangaConnector)}>
                             {mangaConnectors?.map(con => (
@@ -118,7 +120,8 @@ function SearchDialog ({open, setOpen} : {open: boolean, setOpen: Dispatch<boole
                         <Input
                             disabled={loadingState == LoadingState.loading}
                             onKeyDown={keyDownCheck}
-                            onChange={(e) => setSearchTerm(e.currentTarget.value)} 
+                            onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                            placeholder={"Enter search-term or supported Connector-Url"}
                             endDecorator={<Button
                                 disabled={loadingState == LoadingState.loading}
                                 onClick={doTheSearch}
