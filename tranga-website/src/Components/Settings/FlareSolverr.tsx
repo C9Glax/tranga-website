@@ -13,9 +13,10 @@ export default function () : ReactNode {
     const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
     const uriChanged = (e : React.ChangeEvent<HTMLInputElement>) => {
         clearTimeout(timerRef.current);
+        setUriValue(e.target.value);
         setUriColor("warning");
         timerRef.current = setTimeout(() => {
-            setUriValue(e.target.value);
+            changeUri();
         }, 1000);
     }
 
