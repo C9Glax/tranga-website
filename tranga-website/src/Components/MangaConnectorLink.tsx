@@ -43,7 +43,7 @@ export default function MangaConnectorLink({
       imageRef.current.setHTMLUnsafe(
         `<img ref=${imageRef} src=${mangaConnector?.iconUrl} style=${imageStyle}/>`,
       );
-  }, []);
+  }, [MangaConnectorId, imageStyle, mangaConnector, mangaConnectorContext]);
 
   return (
     <Tooltip
@@ -96,7 +96,7 @@ export function MangaConnectorLinkFromId({
           );
       },
     );
-  }, []);
+  }, [Api, MangaConnectorIdId, imageStyle, printName]);
 
   return node;
 }

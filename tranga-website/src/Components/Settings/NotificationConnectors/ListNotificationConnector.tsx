@@ -18,14 +18,10 @@ export default function () {
   >([]);
 
   useEffect(() => {
-    getConnectors();
-  }, []);
-
-  const getConnectors = () => {
     Api.notificationConnectorList().then((r) => {
       if (r.ok) setNotificationConnectors(r.data);
     });
-  };
+  }, [Api]);
 
   return (
     <Stack direction={"column"} spacing={1}>

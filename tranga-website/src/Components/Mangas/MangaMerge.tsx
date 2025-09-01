@@ -34,7 +34,7 @@ export default function ({
           if (response.ok) setSimilar(response.data);
         });
     });
-  }, [open]);
+  }, [Api, manga, open]);
 
   const exit = (manga: Manga) => {
     setOpen(false);

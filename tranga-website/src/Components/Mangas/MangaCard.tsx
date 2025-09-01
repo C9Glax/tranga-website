@@ -36,9 +36,9 @@ export function MangaCard({
   manga: MinimalManga | undefined;
   children?: ReactNode;
 }) {
-  if (manga === undefined) return PlaceHolderCard();
-
   const [open, setOpen] = useState(false);
+
+  if (manga === undefined) return PlaceHolderCard();
 
   return (
     <MangaConnectorBadge manga={manga}>
@@ -73,7 +73,7 @@ export function MangaModal({
   const [manga, setManga] = useState<Manga>();
   useEffect(() => {
     getManga(minimalManga.key).then(setManga);
-  }, []);
+  }, [getManga, minimalManga]);
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} className={"manga-modal"}>

@@ -1,6 +1,6 @@
 import Sheet from "@mui/joy/Sheet";
 import { Link, Stack, Typography } from "@mui/joy";
-import { ReactElement, useContext } from "react";
+import { ReactElement, ReactNode, useContext } from "react";
 import "./Header.css";
 import { Article, GitHub } from "@mui/icons-material";
 import { ApiContext } from "./apiClient/ApiContext.tsx";
@@ -8,7 +8,7 @@ import { ApiContext } from "./apiClient/ApiContext.tsx";
 export default function Header({
   children,
 }: {
-  children?: ReactElement<any, any> | ReactElement<any, any>[] | undefined;
+  children?: ReactNode;
 }): ReactElement {
   const Api = useContext(ApiContext);
 

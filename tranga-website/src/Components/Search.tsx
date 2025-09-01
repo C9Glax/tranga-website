@@ -103,7 +103,7 @@ function SearchDialog({
     try {
       new URL(url);
       return true;
-    } catch (Error) {
+    } catch {
       return false;
     }
   };

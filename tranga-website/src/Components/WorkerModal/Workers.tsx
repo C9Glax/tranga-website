@@ -17,7 +17,7 @@ export default function (): ReactNode {
         setWorkers(response.data);
       }
     });
-  }, []);
+  }, [Api]);
 
   return (
     <>

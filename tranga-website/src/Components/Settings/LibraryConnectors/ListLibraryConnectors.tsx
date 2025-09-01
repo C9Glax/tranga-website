@@ -10,14 +10,10 @@ export default function () {
   >([]);
 
   useEffect(() => {
-    getConnectors();
-  }, []);
-
-  const getConnectors = () => {
     Api.libraryConnectorList().then((r) => {
       if (r.ok) setLibraryConnectors(r.data);
     });
-  };
+  }, [Api]);
 
   return (
     <Stack direction={"column"} spacing={1}>

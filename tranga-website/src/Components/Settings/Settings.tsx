@@ -51,7 +51,7 @@ export default function Settings({
     Api.settingsList().then((response) => {
       setSettings(response.data);
     });
-  }, []);
+  }, [Api]);
 
   const apiUriChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     clearTimeout(timerRef.current);

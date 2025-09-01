@@ -18,6 +18,7 @@ import {
   PushoverRecord,
 } from "../../../apiClient/data-contracts.ts";
 import { LoadingState, StateColor, StateIndicator } from "../../Loading.tsx";
+import * as React from "react";
 
 export default function ({
   open,
@@ -53,7 +54,7 @@ function NotificationConnectorTab({
 }: {
   value: string;
   children: ReactNode;
-  add: (data: any) => void;
+  add: React.MouseEventHandler<HTMLAnchorElement> | undefined;
   state: LoadingState;
 }) {
   const IsLoading = (state: LoadingState): boolean =>

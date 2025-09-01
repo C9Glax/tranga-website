@@ -26,7 +26,7 @@ const Api = new V2({ baseUrl: apiUri });
 const manga: Manga[] = [];
 const promises: Map<string, Promise<Manga | undefined>> = new Map();
 const getManga = async (key: string): Promise<Manga | undefined> => {
-  let result = manga.find((m) => m.key === key);
+  const result = manga.find((m) => m.key === key);
   if (result) return result;
   if (promises.has(key)) return promises.get(key);
   const newPromise = retrieveManga(key);

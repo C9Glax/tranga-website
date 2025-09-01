@@ -15,6 +15,7 @@ import Sheet from "@mui/joy/Sheet";
 import { FileLibraryContext, MangaContext } from "../../App.tsx";
 import { ApiContext } from "../../apiClient/ApiContext.tsx";
 import { LoadingState, StateIndicator } from "../Loading.tsx";
+import * as React from "react";
 
 export default function ({ mangaId }: { mangaId: string }): ReactNode {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function ({ mangaId }: { mangaId: string }): ReactNode {
   const [manga, setManga] = useState<Manga>();
   useEffect(() => {
     getManga(mangaId).then(setManga);
-  }, []);
+  }, [getManga, mangaId]);
 
   return (
     <>
@@ -44,10 +45,13 @@ function DownloadDrawer({
   const fileLibraries = useContext(FileLibraryContext);
   const Api = useContext(ApiContext);
 
-  const onLibraryChange = (_: any, value: {} | null) => {
+  const onLibraryChange = (
+    _: React.MouseEvent | React.KeyboardEvent | React.FocusEvent | null,
+    value: string | null,
+  ) => {
     if (!value) return;
     if (!manga) return;
-    Api.mangaChangeLibraryCreate(manga.key as string, value as string);
+    Api.mangaChangeLibraryCreate(manga.key, value);
   };
 
   return (
@@ -97,7 +101,7 @@ function DownloadCheckBox({
         } else setLoading(LoadingState.failure);
       })
       .catch((_) => setLoading(LoadingState.failure));
-  }, []);
+  }, [Api, mangaConnectorIdId]);
 
   const onSelected = (event: ChangeEvent<HTMLInputElement>) => {
     setLoading(LoadingState.loading);
