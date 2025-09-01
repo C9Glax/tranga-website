@@ -1,29 +1,25 @@
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
 // @ts-ignore
-import '@fontsource/inter';
-import { CssVarsProvider } from '@mui/joy/styles';
-import CssBaseline from '@mui/joy/CssBaseline';
-import {StrictMode} from "react";
-import {trangaTheme} from "./theme.ts";
+import "@fontsource/inter";
+import { CssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/joy/CssBaseline";
+import { StrictMode } from "react";
+import { trangaTheme } from "./theme.ts";
 
 export default function MyApp() {
-    return (
-        <StrictMode>
-            <CssVarsProvider theme={trangaTheme}>
-                {/* must be used under CssVarsProvider */}
-                <CssBaseline />
+  return (
+    <StrictMode>
+      <CssVarsProvider theme={trangaTheme}>
+        {/* must be used under CssVarsProvider */}
+        <CssBaseline />
 
-                {/* The rest of your application */}
-                <App />
-            </CssVarsProvider>
-        </StrictMode>
-    );
+        {/* The rest of your application */}
+        <App />
+      </CssVarsProvider>
+    </StrictMode>
+  );
 }
 
-
-
-createRoot(document.getElementById('root')!).render(
-    <MyApp />
-);
+createRoot(document.getElementById("root")!).render(<MyApp />);

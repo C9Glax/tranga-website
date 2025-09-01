@@ -1,11 +1,11 @@
 .header {
-    position: sticky !important;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    padding: 10px;
-    display: flex;
-    flex-flow: row nowrap;
+  position: sticky !important;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  display: flex;
+  flex-flow: row nowrap;
 }
