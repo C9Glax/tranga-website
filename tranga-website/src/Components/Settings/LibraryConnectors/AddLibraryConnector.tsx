@@ -1,6 +1,6 @@
 import {Modal, ModalDialog, Tab, TabList, Tabs} from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
-import * as React from "react";
+import {Dispatch} from "react";
 
 export default function ({open, setOpen} : {open: boolean, setOpen: Dispatch<boolean>}) {
     return (

@@ -45,7 +45,7 @@ export class V2<
    * @request GET:/v2/FileLibrary
    */
   fileLibraryList = (params: RequestParams = {}) =>
-    this.request<FileLibrary[], any>({
+    this.request<FileLibrary[], void>({
       path: `/v2/FileLibrary`,
       method: "GET",
       format: "json",
@@ -56,7 +56,7 @@ export class V2<
    *
    * @tags FileLibrary
    * @name FileLibraryUpdate
-   * @summary Creates new !:FileLibraryId
+   * @summary Creates new API.Schema.MangaContext.FileLibrary
    * @request PUT:/v2/FileLibrary
    */
   fileLibraryUpdate = (data: FileLibrary, params: RequestParams = {}) =>
@@ -145,7 +145,7 @@ export class V2<
    * @request GET:/v2/LibraryConnector
    */
   libraryConnectorList = (params: RequestParams = {}) =>
-    this.request<LibraryConnector[], any>({
+    this.request<LibraryConnector[], void>({
       path: `/v2/LibraryConnector`,
       method: "GET",
       format: "json",
@@ -193,6 +193,7 @@ export class V2<
    *
    * @tags LibraryConnector
    * @name LibraryConnectorDelete
+   * @summary Deletes API.Schema.LibraryContext.LibraryConnectors.LibraryConnector with LibraryConnectorId
    * @request DELETE:/v2/LibraryConnector/{LibraryConnectorId}
    */
   libraryConnectorDelete = (
@@ -227,7 +228,7 @@ export class V2<
    * @request GET:/v2/Manga
    */
   mangaList = (params: RequestParams = {}) =>
-    this.request<Manga[], any>({
+    this.request<Manga[], void>({
       path: `/v2/Manga`,
       method: "GET",
       format: "json",
@@ -242,7 +243,7 @@ export class V2<
    * @request GET:/v2/Manga/Keys
    */
   mangaKeysList = (params: RequestParams = {}) =>
-    this.request<string[], any>({
+    this.request<string[], void>({
       path: `/v2/Manga/Keys`,
       method: "GET",
       format: "json",
@@ -257,7 +258,7 @@ export class V2<
    * @request GET:/v2/Manga/Downloading
    */
   mangaDownloadingList = (params: RequestParams = {}) =>
-    this.request<Manga[], any>({
+    this.request<Manga[], void>({
       path: `/v2/Manga/Downloading`,
       method: "GET",
       format: "json",
@@ -268,10 +269,11 @@ export class V2<
    *
    * @tags Manga
    * @name MangaWithIDsCreate
+   * @summary Returns all cached API.Schema.MangaContext.Manga with MangaIds
    * @request POST:/v2/Manga/WithIDs
    */
   mangaWithIDsCreate = (data: string[], params: RequestParams = {}) =>
-    this.request<Manga[], any>({
+    this.request<Manga[], void>({
       path: `/v2/Manga/WithIDs`,
       method: "POST",
       body: data,
@@ -653,7 +655,7 @@ export class V2<
    * @request GET:/v2/MetadataFetcher/Links
    */
   metadataFetcherLinksList = (params: RequestParams = {}) =>
-    this.request<MetadataEntry[], any>({
+    this.request<MetadataEntry[], void>({
       path: `/v2/MetadataFetcher/Links`,
       method: "GET",
       format: "json",
@@ -730,7 +732,7 @@ export class V2<
    * @request GET:/v2/NotificationConnector
    */
   notificationConnectorList = (params: RequestParams = {}) =>
-    this.request<NotificationConnector[], any>({
+    this.request<NotificationConnector[], void>({
       path: `/v2/NotificationConnector`,
       method: "GET",
       format: "json",
@@ -902,7 +904,7 @@ export class V2<
    * @request GET:/v2/Query/Manga/{MangaId}/SimilarName
    */
   queryMangaSimilarNameList = (mangaId: string, params: RequestParams = {}) =>
-    this.request<string[], ProblemDetails>({
+    this.request<string[], ProblemDetails | void>({
       path: `/v2/Query/Manga/${mangaId}/SimilarName`,
       method: "GET",
       format: "json",

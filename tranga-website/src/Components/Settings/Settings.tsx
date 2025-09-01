@@ -24,7 +24,6 @@ import {
 } from "react";
 import { TrangaSettings } from "../../apiClient/data-contracts.ts";
 import { ApiContext } from "../../apiClient/ApiContext.tsx";
-import NotificationConnectors from "./NotificationConnectors.tsx";
 import { SxProps } from "@mui/joy/styles/types";
 import ImageCompression from "./ImageCompression.tsx";
 import FlareSolverr from "./FlareSolverr.tsx";
@@ -91,7 +90,6 @@ export default function Settings({
               <FlareSolverr />
               <DownloadLanguage />
               <ChapterNamingScheme />
-              <NotificationConnectors />
               <Maintenance />
             </AccordionGroup>
           </DialogContent>

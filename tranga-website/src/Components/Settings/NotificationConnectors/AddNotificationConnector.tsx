@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useState } from "react";
-import { ApiContext } from "../../apiClient/ApiContext";
+import { ApiContext } from "../../../apiClient/ApiContext";
 import {
   Button,
   Input,
@@ -16,8 +16,8 @@ import {
   GotifyRecord,
   NtfyRecord,
   PushoverRecord,
-} from "../../apiClient/data-contracts.ts";
-import { LoadingState, StateColor, StateIndicator } from "../Loading.tsx";
+} from "../../../apiClient/data-contracts.ts";
+import { LoadingState, StateColor, StateIndicator } from "../../Loading.tsx";
 
 export default function ({
   open,
