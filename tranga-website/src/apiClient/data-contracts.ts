@@ -52,7 +52,11 @@ export interface AltTitle {
    * @maxLength 256
    */
   title: string;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface Author {
@@ -61,20 +65,24 @@ export interface Author {
    * @maxLength 128
    */
   authorName: string;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface BaseWorker {
   /** Workers this Worker depends on being completed before running. */
   dependsOn?: BaseWorker[] | null;
-  /** Dependencies and dependencies of dependencies. See also API.Workers.BaseWorker.DependsOn. */
-  allDependencies?: BaseWorker[] | null;
-  /** API.Workers.BaseWorker.AllDependencies and Self. */
-  dependenciesAndSelf?: BaseWorker[] | null;
   /** API.Workers.BaseWorker.DependsOn where API.Workers.WorkerExecutionState is less than Completed. */
   missingDependencies?: BaseWorker[] | null;
   allDependenciesFulfilled?: boolean;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface Chapter {
@@ -103,7 +111,11 @@ export interface Chapter {
   fileName: string;
   downloaded: boolean;
   fullArchiveFilePath?: string | null;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface ChapterMangaConnectorId {
@@ -129,7 +141,11 @@ export interface ChapterMangaConnectorId {
    */
   websiteUrl?: string | null;
   useForDownload?: boolean;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface FileLibrary {
@@ -143,7 +159,11 @@ export interface FileLibrary {
    * @maxLength 512
    */
   libraryName: string;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface GotifyRecord {
@@ -167,7 +187,11 @@ export interface LibraryConnector {
    * @maxLength 256
    */
   auth: string;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface Link {
@@ -182,7 +206,11 @@ export interface Link {
    * @maxLength 2048
    */
   linkUrl: string;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface Manga {
@@ -220,7 +248,11 @@ export interface Manga {
   chapterIds?: string[] | null;
   idsOnMangaConnectors?: Record<string, string>;
   mangaConnectorIdsIds?: string[] | null;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface MangaConnector {
@@ -270,7 +302,11 @@ export interface MangaMangaConnectorId {
    */
   websiteUrl?: string | null;
   useForDownload?: boolean;
-  key?: string | null;
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
 }
 
 export interface MangaTag {

@@ -13,6 +13,7 @@ import {
 } from "./apiClient/data-contracts.ts";
 import Search from "./Components/Search.tsx";
 import { Typography } from "@mui/joy";
+import Workers from "./Components/WorkerModal/Workers.tsx";
 
 export const MangaConnectorContext = createContext<MangaConnector[]>([]);
 export const MangaContext = createContext<Manga[]>([]);
@@ -43,7 +44,7 @@ export default function App() {
       if (response.ok) setFileLibraries(response.data);
     });
 
-    Api.queryMangaDownloadingList().then((response) => {
+    Api.mangaDownloadingList().then((response) => {
       if (response.ok) setManga(response.data);
     });
   }, []);
@@ -67,6 +68,7 @@ export default function App() {
               <Sheet className={"app"}>
                 <Header>
                   <Settings setApiUri={setApiUri} />
+                  <Workers />
                 </Header>
                 <Sheet className={"app-content"}>
                   <MangaList mangas={manga}>

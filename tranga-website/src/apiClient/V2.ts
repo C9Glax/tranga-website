@@ -227,8 +227,38 @@ export class V2<
    * @request GET:/v2/Manga
    */
   mangaList = (params: RequestParams = {}) =>
-    this.request<string[], any>({
+    this.request<Manga[], any>({
       path: `/v2/Manga`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Manga
+   * @name MangaKeysList
+   * @summary Returns all cached API.Schema.MangaContext.Manga.Keys
+   * @request GET:/v2/Manga/Keys
+   */
+  mangaKeysList = (params: RequestParams = {}) =>
+    this.request<string[], any>({
+      path: `/v2/Manga/Keys`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Manga
+   * @name MangaDownloadingList
+   * @summary Returns all API.Schema.MangaContext.Manga that are being downloaded from at least one API.MangaConnectors.MangaConnector
+   * @request GET:/v2/Manga/Downloading
+   */
+  mangaDownloadingList = (params: RequestParams = {}) =>
+    this.request<Manga[], any>({
+      path: `/v2/Manga/Downloading`,
       method: "GET",
       format: "json",
       ...params,
@@ -867,23 +897,8 @@ export class V2<
    * No description
    *
    * @tags Query
-   * @name QueryMangaDownloadingList
-   * @summary Returns all API.Schema.MangaContext.Manga that are being downloaded from at least one API.MangaConnectors.MangaConnector
-   * @request GET:/v2/Query/Manga/Downloading
-   */
-  queryMangaDownloadingList = (params: RequestParams = {}) =>
-    this.request<Manga[], any>({
-      path: `/v2/Query/Manga/Downloading`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryMangaSimilarNameList
-   * @summary Returns API.Schema.MangaContext.Manga with names similar to API.Schema.MangaContext.Manga (identified by MangaId
+   * @summary Returns API.Schema.MangaContext.Manga with names similar to API.Schema.MangaContext.Manga (identified by MangaId)
    * @request GET:/v2/Query/Manga/{MangaId}/SimilarName
    */
   queryMangaSimilarNameList = (mangaId: string, params: RequestParams = {}) =>
@@ -1283,11 +1298,11 @@ export class V2<
    *
    * @tags Worker
    * @name WorkerList
-   * @summary Returns all API.Workers.BaseWorker.Keys
+   * @summary Returns all API.Workers.BaseWorker
    * @request GET:/v2/Worker
    */
   workerList = (params: RequestParams = {}) =>
-    this.request<string[], any>({
+    this.request<BaseWorker[], any>({
       path: `/v2/Worker`,
       method: "GET",
       format: "json",
@@ -1297,16 +1312,14 @@ export class V2<
    * No description
    *
    * @tags Worker
-   * @name WorkerWithIDsCreate
-   * @summary Returns API.Workers.BaseWorker with requested WorkerIds
-   * @request POST:/v2/Worker/WithIDs
+   * @name WorkerKeysList
+   * @summary Returns all API.Workers.BaseWorker.Keys
+   * @request GET:/v2/Worker/Keys
    */
-  workerWithIDsCreate = (data: string[], params: RequestParams = {}) =>
-    this.request<BaseWorker[], any>({
-      path: `/v2/Worker/WithIDs`,
-      method: "POST",
-      body: data,
-      type: ContentType.Json,
+  workerKeysList = (params: RequestParams = {}) =>
+    this.request<string[], any>({
+      path: `/v2/Worker/Keys`,
+      method: "GET",
       format: "json",
       ...params,
     });
