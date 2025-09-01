@@ -4,7 +4,7 @@
 }
 
 .manga-cover-blur {
-    background: linear-gradient(135deg, rgba(245, 169, 184, 0.9) 20%, rgba(91, 206, 250, 0.6));
+    background: linear-gradient(135deg, rgba(245, 169, 184, 0.85) 40%, rgba(91, 206, 250, 0.3));
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);)
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
