@@ -12,12 +12,13 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-import { Manga } from "../../apiClient/data-contracts.ts";
+import { Manga, MinimalManga } from "../../apiClient/data-contracts.ts";
 import {
   Dispatch,
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import "./MangaCard.css";
@@ -28,18 +29,11 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import { MangaContext } from "../../App.tsx";
 import { MangaConnectorLinkFromId } from "../MangaConnectorLink.tsx";
 
-export function MangaCardFromId({ mangaId }: { mangaId: string }) {
-  const mangas = useContext(MangaContext);
-  const manga = mangas.find((manga) => manga.key === mangaId);
-
-  return <MangaCard manga={manga} />;
-}
-
 export function MangaCard({
   manga,
   children,
 }: {
-  manga: Manga | undefined;
+  manga: MinimalManga | undefined;
   children?: ReactNode;
 }) {
   if (manga === undefined) return PlaceHolderCard();
@@ -50,14 +44,14 @@ export function MangaCard({
     <MangaConnectorBadge manga={manga}>
       <Card className={"manga-card"} onClick={() => setOpen(true)}>
         <CardCover className={"manga-cover"}>
-          <MangaCover manga={manga} />
+          <MangaCover mangaId={manga?.key} />
         </CardCover>
         <CardCover className={"manga-cover-blur"} />
         <CardContent className={"manga-content"}>
           <Typography level={"title-lg"}>{manga?.name}</Typography>
         </CardContent>
       </Card>
-      <MangaModal manga={manga} open={open} setOpen={setOpen}>
+      <MangaModal minimalManga={manga} open={open} setOpen={setOpen}>
         {children}
       </MangaModal>
     </MangaConnectorBadge>
@@ -65,16 +59,22 @@ export function MangaCard({
 }
 
 export function MangaModal({
-  manga,
+  minimalManga,
   open,
   setOpen,
   children,
 }: {
-  manga: Manga | undefined;
+  minimalManga: MinimalManga;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   children?: ReactNode;
 }) {
+  const { getManga } = useContext(MangaContext);
+  const [manga, setManga] = useState<Manga>();
+  useEffect(() => {
+    getManga(minimalManga.key).then(setManga);
+  }, []);
+
   return (
     <Modal open={open} onClose={() => setOpen(false)} className={"manga-modal"}>
       <ModalDialog style={{ width: "100%" }}>
@@ -89,12 +89,12 @@ export function MangaModal({
           }
         >
           <Typography level={"h4"} width={"fit-content"}>
-            {manga?.name}
+            {manga?.name ?? minimalManga.name}
           </Typography>
         </Tooltip>
         <Stack direction={"row"} spacing={2}>
           <Box key={"Cover"} className={"manga-card"}>
-            <MangaCover manga={manga} />
+            <MangaCover mangaId={minimalManga.key} />
           </Box>
           <Stack
             key={"Description"}
@@ -125,8 +125,12 @@ export function MangaModal({
             </Stack>
             <Box sx={{ flexGrow: 1 }}>
               <MarkdownPreview
-                source={manga?.description}
-                style={{ background: "transparent" }}
+                source={manga?.description ?? "Loading..."}
+                style={{
+                  background: "transparent",
+                  maxHeight: "50vh",
+                  overflowY: "auto",
+                }}
               />
             </Box>
             <Stack
@@ -134,7 +138,7 @@ export function MangaModal({
               spacing={2}
               direction={"row"}
             >
-              {children}
+              {manga ? children : null}
             </Stack>
           </Stack>
         </Stack>
@@ -156,10 +160,10 @@ function PlaceHolderCard() {
   );
 }
 
-function MangaCover({ manga }: { manga: Manga | undefined }) {
+function MangaCover({ mangaId }: { mangaId?: string }) {
   const api = useContext(ApiContext);
-  const uri = manga
-    ? `${api.baseUrl}/v2/Manga/${manga?.key}/Cover`
+  const uri = mangaId
+    ? `${api.baseUrl}/v2/Manga/${mangaId}/Cover`
     : "blahaj.png";
 
   return (

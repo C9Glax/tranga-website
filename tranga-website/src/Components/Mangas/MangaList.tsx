@@ -2,15 +2,15 @@ import { ReactNode } from "react";
 import { MangaCard } from "./MangaCard.tsx";
 import { Stack } from "@mui/joy";
 import "./MangaList.css";
-import { Manga } from "../../apiClient/data-contracts.ts";
+import { MinimalManga } from "../../apiClient/data-contracts.ts";
 import MangaDownloadDialog from "./MangaDownloadDialog.tsx";
 import MangaMerge from "./MangaMerge.tsx";
 
 export default function MangaList({
-  mangas,
+  manga,
   children,
 }: {
-  mangas: Manga[];
+  manga: MinimalManga[];
   children?: ReactNode;
 }) {
   return (
@@ -27,10 +27,10 @@ export default function MangaList({
       }}
     >
       {children}
-      {mangas?.map((manga) => (
-        <MangaCard key={manga.key} manga={manga}>
-          <MangaDownloadDialog manga={manga} />
-          <MangaMerge manga={manga} />
+      {manga?.map((minimalManga) => (
+        <MangaCard key={minimalManga.key} manga={minimalManga}>
+          <MangaDownloadDialog mangaId={minimalManga.key} />
+          <MangaMerge manga={minimalManga} />
         </MangaCard>
       ))}
     </Stack>

@@ -16,7 +16,6 @@ import "./Settings.css";
 import * as React from "react";
 import {
   createContext,
-  Dispatch,
   ReactNode,
   useContext,
   useEffect,
@@ -38,7 +37,7 @@ export const SettingsContext = createContext<TrangaSettings | undefined>(
 export default function Settings({
   setApiUri,
 }: {
-  setApiUri: Dispatch<React.SetStateAction<string>>;
+  setApiUri: (uri: string) => void;
 }) {
   const Api = useContext(ApiContext);
   const [settings, setSettings] = useState<TrangaSettings>();

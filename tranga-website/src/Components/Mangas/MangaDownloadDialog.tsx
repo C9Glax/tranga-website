@@ -12,12 +12,17 @@ import Drawer from "@mui/joy/Drawer";
 import ModalClose from "@mui/joy/ModalClose";
 import { MangaConnectorLinkFromId } from "../MangaConnectorLink.tsx";
 import Sheet from "@mui/joy/Sheet";
-import { FileLibraryContext } from "../../App.tsx";
+import { FileLibraryContext, MangaContext } from "../../App.tsx";
 import { ApiContext } from "../../apiClient/ApiContext.tsx";
 import { LoadingState, StateIndicator } from "../Loading.tsx";
 
-export default function ({ manga }: { manga: Manga }): ReactNode {
+export default function ({ mangaId }: { mangaId: string }): ReactNode {
   const [open, setOpen] = useState(false);
+  const { getManga } = useContext(MangaContext);
+  const [manga, setManga] = useState<Manga>();
+  useEffect(() => {
+    getManga(mangaId).then(setManga);
+  }, []);
 
   return (
     <>
@@ -32,7 +37,7 @@ function DownloadDrawer({
   open,
   setOpen,
 }: {
-  manga: Manga;
+  manga: Manga | undefined;
   open: boolean;
   setOpen: Dispatch<boolean>;
 }): ReactNode {
@@ -40,7 +45,8 @@ function DownloadDrawer({
   const Api = useContext(ApiContext);
 
   const onLibraryChange = (_: any, value: {} | null) => {
-    if (value === undefined) return;
+    if (!value) return;
+    if (!manga) return;
     Api.mangaChangeLibraryCreate(manga.key as string, value as string);
   };
 
@@ -52,7 +58,7 @@ function DownloadDrawer({
         <Select
           placeholder={"Library"}
           onChange={onLibraryChange}
-          value={manga.libraryId}
+          value={manga?.libraryId}
         >
           {fileLibraries?.map((library) => (
             <Option value={library.key} key={library.key}>
@@ -63,7 +69,7 @@ function DownloadDrawer({
         </Select>
         <Typography>Download from:</Typography>
         <Stack>
-          {manga.mangaConnectorIdsIds?.map((id) => (
+          {manga?.mangaConnectorIdsIds?.map((id) => (
             <DownloadCheckBox key={id} mangaConnectorIdId={id} />
           ))}
         </Stack>

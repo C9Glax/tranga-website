@@ -1,8 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
 // @ts-nocheck
-// noinspection JSValidateJSDoc,JSUnusedGlobalSymbols
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -25,6 +23,7 @@ import {
   MangaMangaConnectorId,
   MetadataEntry,
   MetadataSearchResult,
+  MinimalManga,
   NotificationConnector,
   NtfyRecord,
   ProblemDetails,
@@ -230,7 +229,7 @@ export class V2<
    * @request GET:/v2/Manga
    */
   mangaList = (params: RequestParams = {}) =>
-    this.request<Manga[], void>({
+    this.request<MinimalManga[], void>({
       path: `/v2/Manga`,
       method: "GET",
       format: "json",
@@ -260,7 +259,7 @@ export class V2<
    * @request GET:/v2/Manga/Downloading
    */
   mangaDownloadingList = (params: RequestParams = {}) =>
-    this.request<Manga[], void>({
+    this.request<MinimalManga[], void>({
       path: `/v2/Manga/Downloading`,
       method: "GET",
       format: "json",
@@ -943,7 +942,7 @@ export class V2<
     query: string,
     params: RequestParams = {},
   ) =>
-    this.request<Manga[], ProblemDetails | void>({
+    this.request<MinimalManga[], ProblemDetails | void>({
       path: `/v2/Search/${mangaConnectorName}/${query}`,
       method: "GET",
       format: "json",
@@ -958,7 +957,7 @@ export class V2<
    * @request POST:/v2/Search/Url
    */
   searchUrlCreate = (data: string, params: RequestParams = {}) =>
-    this.request<Manga, void | ProblemDetails>({
+    this.request<MinimalManga, void | ProblemDetails>({
       path: `/v2/Search/Url`,
       method: "POST",
       body: data,

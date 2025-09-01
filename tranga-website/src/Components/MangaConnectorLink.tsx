@@ -57,7 +57,12 @@ export default function MangaConnectorLink({
       }
     >
       <Link href={MangaConnectorId.websiteUrl as string}>
-        <img ref={imageRef} src={mangaConnector?.iconUrl} style={imageStyle} />
+        <img
+          ref={imageRef}
+          src={mangaConnector?.iconUrl}
+          style={imageStyle}
+          className={"manga-card-badge-icon"}
+        />
         {printName ? <Typography>{mangaConnector?.name}</Typography> : null}
       </Link>
     </Tooltip>

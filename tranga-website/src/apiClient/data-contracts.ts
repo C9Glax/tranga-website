@@ -331,6 +331,20 @@ export interface MetadataSearchResult {
   coverUrl?: string | null;
 }
 
+export interface MinimalManga {
+  /**
+   * @minLength 16
+   * @maxLength 64
+   */
+  key: string;
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  description: string;
+  releaseStatus: MangaReleaseStatus;
+  mangaConnectorIds?: MangaMangaConnectorId[] | null;
+}
+
 export interface NotificationConnector {
   /**
    * @minLength 0

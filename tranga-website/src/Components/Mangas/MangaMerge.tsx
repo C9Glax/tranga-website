@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { Manga } from "../../apiClient/data-contracts.ts";
+import { Manga, MinimalManga } from "../../apiClient/data-contracts.ts";
 import Drawer from "@mui/joy/Drawer";
 import ModalClose from "@mui/joy/ModalClose";
 import { ApiContext } from "../../apiClient/ApiContext.tsx";
@@ -16,10 +16,14 @@ import {
 import { KeyboardDoubleArrowRight, Warning } from "@mui/icons-material";
 import { LoadingState, StateIndicator } from "../Loading.tsx";
 
-export default function ({ manga }: { manga: Manga | undefined }): ReactNode {
+export default function ({
+  manga,
+}: {
+  manga: MinimalManga | undefined;
+}): ReactNode {
   const Api = useContext(ApiContext);
 
-  const [similar, setSimilar] = useState<Manga[]>([]);
+  const [similar, setSimilar] = useState<Manga[]>();
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ export default function ({ manga }: { manga: Manga | undefined }): ReactNode {
 
   const exit = (manga: Manga) => {
     setOpen(false);
-    setSimilar(similar.filter((m) => m.key != manga.key));
+    setSimilar(similar?.filter((m) => m.key != manga.key));
   };
 
   return (
@@ -47,16 +51,19 @@ export default function ({ manga }: { manga: Manga | undefined }): ReactNode {
         anchor={"bottom"}
       >
         <ModalClose />
+        <Typography>Merge targets: {similar?.length ?? 0}</Typography>
         <Stack direction={"row"} spacing={2} flexWrap={"wrap"} useFlexGap>
-          {similar.map((similarManga) => (
-            <MangaCard manga={similarManga}>
-              <ConfirmationModal
-                manga={manga as Manga}
-                similarManga={similarManga}
-                exit={() => exit(similarManga)}
-              />
-            </MangaCard>
-          ))}
+          {similar
+            ? similar?.map((similarManga) => (
+                <MangaCard manga={similarManga}>
+                  <ConfirmationModal
+                    manga={manga as Manga}
+                    similarManga={similarManga}
+                    exit={() => exit(similarManga)}
+                  />
+                </MangaCard>
+              ))
+            : "Loading..."}
         </Stack>
       </Drawer>
     </>

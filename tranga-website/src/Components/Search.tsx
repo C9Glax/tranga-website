@@ -24,7 +24,7 @@ import {
 } from "@mui/joy";
 import ModalClose from "@mui/joy/ModalClose";
 import { MangaConnectorContext } from "../App.tsx";
-import { Manga, MangaConnector } from "../apiClient/data-contracts.ts";
+import { MangaConnector, MinimalManga } from "../apiClient/data-contracts.ts";
 import MangaList from "./Mangas/MangaList.tsx";
 import { ApiContext } from "../apiClient/ApiContext.tsx";
 import { LoadingState, StateColor, StateIndicator } from "./Loading.tsx";
@@ -67,7 +67,7 @@ function SearchDialog({
     MangaConnector | undefined
   >(undefined);
   const [searchTerm, setSearchTerm] = useState<string>();
-  const [searchResults, setSearchResults] = useState<Manga[]>([]);
+  const [searchResults, setSearchResults] = useState<MinimalManga[]>([]);
 
   const [loadingState, setLoadingState] = useState<LoadingState>(
     LoadingState.none,
@@ -166,7 +166,7 @@ function SearchDialog({
             <Typography>
               Result <Chip>{searchResults.length}</Chip>
             </Typography>
-            <MangaList mangas={searchResults} />
+            <MangaList manga={searchResults} />
           </Step>
         </Stepper>
       </ModalDialog>

@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, useContext, useState } from "react";
+import { Dispatch, ReactNode, useContext, useEffect, useState } from "react";
 import Drawer from "@mui/joy/Drawer";
 import { Button, Option, Select, Table } from "@mui/joy";
 import { BaseWorker } from "../../apiClient/data-contracts.ts";
@@ -10,11 +10,14 @@ export default function (): ReactNode {
 
   const [workers, setWorkers] = useState<BaseWorker[]>([]);
   const Api = useContext(ApiContext);
-  Api.workerList().then((response) => {
-    if (response.ok) {
-      setWorkers(response.data);
-    }
-  });
+
+  useEffect(() => {
+    Api.workerList().then((response) => {
+      if (response.ok) {
+        setWorkers(response.data);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -52,7 +55,7 @@ function WorkerDrawer({
         <tbody>
           {workers.map((worker) => {
             return (
-              <tr>
+              <tr key={worker.key}>
                 <td>{worker.key}</td>
                 <td>{worker.allDependenciesFulfilled ? "yes" : "no"}</td>
                 <td>
