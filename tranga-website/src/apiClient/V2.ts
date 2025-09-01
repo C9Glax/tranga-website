@@ -1,6 +1,8 @@
 /* eslint-disable */
 /* tslint:disable */
 // @ts-nocheck
+// noinspection JSValidateJSDoc,JSUnusedGlobalSymbols
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
