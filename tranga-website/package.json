@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --fix",
-    "swagger-api": "swagger-typescript-api generate -p http://127.0.0.1:6531/swagger/v2/swagger.json -o ./src/apiClient --modular",
+    "swagger-api": "swagger-typescript-api generate -p http://127.0.0.1:6531/swagger/v2/swagger.json -o ./src/apiClient --modular && prettier ./src/apiClient --write",
     "prettier:check": "prettier . --check",
     "prettier": "prettier . --write"
   },
