@@ -1,37 +1,32 @@
-import { ReactNode, useContext, useState } from "react";
-import { SettingsContext, SettingsItem } from "./Settings.tsx";
-import { ColorPaletteProp, Input } from "@mui/joy";
-import * as React from "react";
-import { ApiContext } from "../../apiClient/ApiContext.tsx";
+import { ReactNode, useContext } from 'react'
+import { SettingsContext, SettingsItem } from './Settings.tsx'
+import { ApiContext } from '../../contexts/ApiContext.tsx'
+import TInput from '../Inputs/TInput.tsx'
 
-export default function (): ReactNode {
-  const settings = useContext(SettingsContext);
-  const Api = useContext(ApiContext);
+export default function FlareSolverr(): ReactNode {
+    const settings = useContext(SettingsContext)
+    const Api = useContext(ApiContext)
 
-  const [uriColor, setUriColor] = useState<ColorPaletteProp>("neutral");
-  const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
-  const uriChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    clearTimeout(timerRef.current);
-    setUriColor("warning");
-    timerRef.current = setTimeout(() => {
-      Api.settingsFlareSolverrUrlCreate(e.target.value)
-        .then((response) => {
-          if (response.ok) setUriColor("success");
-          else setUriColor("danger");
-        })
-        .catch(() => setUriColor("danger"));
-    }, 1000);
-  };
+    const uriChanged = async (
+        value: string | number | readonly string[] | undefined
+    ) => {
+        if (typeof value != 'string') return Promise.reject()
+        try {
+            const response = await Api.settingsFlareSolverrUrlCreate(value)
+            if (response.ok) return Promise.resolve()
+            else return Promise.reject()
+        } catch (reason) {
+            return await Promise.reject(reason)
+        }
+    }
 
-  return (
-    <SettingsItem title={"FlareSolverr"}>
-      <Input
-        color={uriColor}
-        defaultValue={settings?.flareSolverrUrl as string}
-        type={"url"}
-        placeholder={"URL"}
-        onChange={uriChanged}
-      />
-    </SettingsItem>
-  );
+    return (
+        <SettingsItem title={'FlareSolverr'}>
+            <TInput
+                placeholder={'FlareSolverr URL'}
+                defaultValue={settings?.flareSolverrUrl as string}
+                completionAction={uriChanged}
+            />
+        </SettingsItem>
+    )
 }

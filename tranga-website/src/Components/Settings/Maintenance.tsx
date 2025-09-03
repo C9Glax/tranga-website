@@ -1,33 +1,26 @@
-import { Button } from "@mui/joy";
-import { SettingsItem } from "./Settings.tsx";
-import { useContext, useState } from "react";
-import { ApiContext } from "../../apiClient/ApiContext.tsx";
-import { LoadingState, StateColor, StateIndicator } from "../Loading.tsx";
+import { SettingsItem } from './Settings.tsx'
+import { useContext } from 'react'
+import { ApiContext } from '../../contexts/ApiContext.tsx'
+import TButton from '../Inputs/TButton.tsx'
 
-export default function () {
-  const Api = useContext(ApiContext);
+export default function Maintenance() {
+    const Api = useContext(ApiContext)
 
-  const [unusedMangaState, setUnusedMangaState] = useState(LoadingState.none);
-  const cleanUnusedManga = () => {
-    setUnusedMangaState(LoadingState.loading);
-    Api.maintenanceCleanupNoDownloadMangaCreate()
-      .then((r) => {
-        if (r.ok) setUnusedMangaState(LoadingState.success);
-        else setUnusedMangaState(LoadingState.failure);
-      })
-      .catch((_) => setUnusedMangaState(LoadingState.failure));
-  };
+    const cleanUnusedManga = async (): Promise<void> => {
+        try {
+            const result = await Api.maintenanceCleanupNoDownloadMangaCreate()
+            if (result.ok) return Promise.resolve()
+            else return Promise.reject()
+        } catch (reason) {
+            return await Promise.reject(reason)
+        }
+    }
 
-  return (
-    <SettingsItem title={"Maintenance"}>
-      <Button
-        disabled={unusedMangaState == LoadingState.loading}
-        color={StateColor(unusedMangaState)}
-        endDecorator={StateIndicator(unusedMangaState)}
-        onClick={cleanUnusedManga}
-      >
-        Cleanup unused Manga
-      </Button>
-    </SettingsItem>
-  );
+    return (
+        <SettingsItem title={'Maintenance'}>
+            <TButton completionAction={cleanUnusedManga}>
+                Cleanup unused Manga
+            </TButton>
+        </SettingsItem>
+    )
 }

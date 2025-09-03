@@ -1,13 +1,13 @@
 .app {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  width: 100%;
-  left: 0;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 100%;
+    left: 0;
 }
 
 .app-content {
-  position: absolute;
-  width: 100%;
-  left: 0;
+    position: absolute;
+    width: 100%;
+    left: 0;
 }

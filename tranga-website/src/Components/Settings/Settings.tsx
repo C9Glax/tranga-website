@@ -1,114 +1,107 @@
-import ModalClose from "@mui/joy/ModalClose";
+import ModalClose from '@mui/joy/ModalClose'
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionGroup,
-  AccordionSummary,
-  Button,
-  ColorPaletteProp,
-  DialogContent,
-  DialogTitle,
-  Input,
-  Modal,
-  ModalDialog,
-} from "@mui/joy";
-import "./Settings.css";
-import * as React from "react";
+    Accordion,
+    AccordionDetails,
+    AccordionGroup,
+    AccordionSummary,
+    Button,
+    DialogContent,
+    DialogTitle,
+    Modal,
+    ModalDialog,
+} from '@mui/joy'
+import './Settings.css'
+import * as React from 'react'
 import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { TrangaSettings } from "../../apiClient/data-contracts.ts";
-import { ApiContext } from "../../apiClient/ApiContext.tsx";
-import { SxProps } from "@mui/joy/styles/types";
-import ImageCompression from "./ImageCompression.tsx";
-import FlareSolverr from "./FlareSolverr.tsx";
-import DownloadLanguage from "./DownloadLanguage.tsx";
-import ChapterNamingScheme from "./ChapterNamingScheme.tsx";
-import Maintenance from "./Maintenance.tsx";
+    createContext,
+    ReactNode,
+    useContext,
+    useEffect,
+    useState,
+} from 'react'
+import { SxProps } from '@mui/joy/styles/types'
+import ImageCompression from './ImageCompression.tsx'
+import FlareSolverr from './FlareSolverr.tsx'
+import DownloadLanguage from './DownloadLanguage.tsx'
+import ChapterNamingScheme from './ChapterNamingScheme.tsx'
+import Maintenance from './Maintenance.tsx'
+import { ApiContext } from '../../contexts/ApiContext.tsx'
+import { TrangaSettings } from '../../api/data-contracts.ts'
+import TInput from '../Inputs/TInput.tsx'
 
 export const SettingsContext = createContext<TrangaSettings | undefined>(
-  undefined,
-);
+    undefined
+)
 
 export default function Settings({
-  setApiUri,
+    setApiUri,
 }: {
-  setApiUri: (uri: string) => void;
+    setApiUri: (uri: string) => void
 }) {
-  const Api = useContext(ApiContext);
-  const [settings, setSettings] = useState<TrangaSettings>();
+    const Api = useContext(ApiContext)
+    const [settings, setSettings] = useState<TrangaSettings>()
 
-  const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
 
-  const [apiUriColor, setApiUriColor] = useState<ColorPaletteProp>("neutral");
-  const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+    useEffect(() => {
+        Api.settingsList().then((response) => {
+            setSettings(response.data)
+        })
+    }, [Api])
 
-  useEffect(() => {
-    Api.settingsList().then((response) => {
-      setSettings(response.data);
-    });
-  }, [Api]);
+    const apiUriChanged = (
+        value: string | number | readonly string[] | undefined
+    ) => {
+        if (typeof value != 'string') return Promise.reject()
+        setApiUri(value)
+        return Promise.resolve()
+    }
 
-  const apiUriChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    clearTimeout(timerRef.current);
-    setApiUriColor("warning");
-    timerRef.current = setTimeout(() => {
-      setApiUri(e.target.value);
-      setApiUriColor("success");
-    }, 1000);
-  };
+    const ModalStyle: SxProps = {
+        width: '80%',
+        height: '80%',
+    }
 
-  const ModalStyle: SxProps = {
-    width: "80%",
-    height: "80%",
-  };
-
-  return (
-    <SettingsContext.Provider value={settings}>
-      <Button onClick={() => setOpen(true)}>Settings</Button>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog sx={ModalStyle}>
-          <ModalClose />
-          <DialogTitle>Settings</DialogTitle>
-          <DialogContent>
-            <AccordionGroup>
-              <SettingsItem title={"ApiUri"}>
-                <Input
-                  color={apiUriColor}
-                  placeholder={"http(s)://"}
-                  type={"url"}
-                  defaultValue={Api.baseUrl}
-                  onChange={apiUriChanged}
-                />
-              </SettingsItem>
-              <ImageCompression />
-              <FlareSolverr />
-              <DownloadLanguage />
-              <ChapterNamingScheme />
-              <Maintenance />
-            </AccordionGroup>
-          </DialogContent>
-        </ModalDialog>
-      </Modal>
-    </SettingsContext.Provider>
-  );
+    return (
+        <SettingsContext.Provider value={settings}>
+            <Button onClick={() => setOpen(true)}>Settings</Button>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <ModalDialog sx={ModalStyle}>
+                    <ModalClose />
+                    <DialogTitle>Settings</DialogTitle>
+                    <DialogContent>
+                        <AccordionGroup>
+                            <SettingsItem title={'ApiUri'}>
+                                <TInput
+                                    placeholder={'http(s)://'}
+                                    defaultValue={Api.baseUrl}
+                                    completionAction={apiUriChanged}
+                                />
+                            </SettingsItem>
+                            <ImageCompression />
+                            <FlareSolverr />
+                            <DownloadLanguage />
+                            <ChapterNamingScheme />
+                            <Maintenance />
+                        </AccordionGroup>
+                    </DialogContent>
+                </ModalDialog>
+            </Modal>
+        </SettingsContext.Provider>
+    )
 }
 
 export function SettingsItem({
-  title,
-  children,
+    title,
+    children,
 }: {
-  title: string;
-  children: ReactNode;
+    title: string
+    children: ReactNode
 }) {
-  return (
-    <Accordion>
-      <AccordionSummary>{title}</AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
-    </Accordion>
-  );
+    return (
+        <Accordion>
+            <AccordionSummary>{title}</AccordionSummary>
+            <AccordionDetails>{children}</AccordionDetails>
+        </Accordion>
+    )
 }
