@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, useContext, useState } from 'react'
+import {Dispatch, ReactNode, useContext, useEffect, useState} from 'react'
 import {
     List,
     ListItem,
@@ -58,6 +58,13 @@ export default function Search({
                 .catch(Promise.reject)
         }
     }
+
+    useEffect(() => {
+        if (open){
+            setSelectedConnector(undefined);
+            setSearchResults([]);
+        }
+    }, [open]);
 
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
