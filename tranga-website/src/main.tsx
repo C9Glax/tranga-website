@@ -1,12 +1,12 @@
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.tsx';
 // @ts-expect-error font
-import '@fontsource/inter'
-import { CssVarsProvider } from '@mui/joy/styles'
-import CssBaseline from '@mui/joy/CssBaseline'
-import { StrictMode } from 'react'
-import { trangaTheme } from './theme.ts'
+import '@fontsource/inter';
+import { CssVarsProvider } from '@mui/joy/styles';
+import CssBaseline from '@mui/joy/CssBaseline';
+import { StrictMode } from 'react';
+import { trangaTheme } from './theme.ts';
 
 export default function MyApp() {
     return (
@@ -19,7 +19,7 @@ export default function MyApp() {
                 <App />
             </CssVarsProvider>
         </StrictMode>
-    )
+    );
 }
 
-createRoot(document.getElementById('root')!).render(<MyApp />)
+createRoot(document.getElementById('root')!).render(<MyApp />);

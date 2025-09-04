@@ -47,12 +47,12 @@ export interface AltTitle {
      * Language of the Title
      * @minLength 1
      */
-    language: string
+    language: string;
     /**
      * Title
      * @minLength 1
      */
-    title: string
+    title: string;
 }
 
 /** The API.Schema.MangaContext.Author DTO */
@@ -61,13 +61,13 @@ export interface Author {
      * Name of the Author.
      * @minLength 1
      */
-    name: string
+    name: string;
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 /** API.Schema.MangaContext.Chapter DTO */
@@ -76,32 +76,32 @@ export interface Chapter {
      * Identifier of the Manga this Chapter belongs to
      * @minLength 1
      */
-    mangaId: string
+    mangaId: string;
     /**
      * Volume number
      * @format int32
      */
-    volume: number
+    volume: number;
     /**
      * Chapter number
      * @minLength 1
      */
-    chapterNumber: string
+    chapterNumber: string;
     /**
      * Title of the Chapter
      * @minLength 1
      */
-    title: string
+    title: string;
     /** Whether Chapter is Downloaded (on disk) */
-    downloaded: boolean
+    downloaded: boolean;
     /** Ids of the Manga on MangaConnectors */
-    mangaConnectorIds: MangaConnectorId[]
+    mangaConnectorIds: MangaConnectorId[];
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 export interface FileLibrary {
@@ -109,45 +109,45 @@ export interface FileLibrary {
      * @minLength 0
      * @maxLength 256
      */
-    basePath: string
+    basePath: string;
     /**
      * @minLength 0
      * @maxLength 512
      */
-    libraryName: string
+    libraryName: string;
     /**
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 export interface GotifyRecord {
-    name?: string | null
-    endpoint?: string | null
-    appToken?: string | null
+    name?: string | null;
+    endpoint?: string | null;
+    appToken?: string | null;
     /** @format int32 */
-    priority?: number
+    priority?: number;
 }
 
 export interface LibraryConnector {
-    libraryType: LibraryType
+    libraryType: LibraryType;
     /**
      * @format uri
      * @minLength 0
      * @maxLength 256
      */
-    baseUrl: string
+    baseUrl: string;
     /**
      * @minLength 0
      * @maxLength 256
      */
-    auth: string
+    auth: string;
     /**
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 /** API.Schema.MangaContext.Link DTO */
@@ -156,18 +156,18 @@ export interface Link {
      * Name of the Provider
      * @minLength 1
      */
-    provider: string
+    provider: string;
     /**
      * Url
      * @minLength 1
      */
-    url: string
+    url: string;
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 /** API.Schema.MangaContext.Manga DTO */
@@ -176,67 +176,67 @@ export interface Manga {
      * Chapter cutoff for Downloads (Chapters before this will not be downloaded)
      * @format float
      */
-    ignoreChaptersBefore: number
+    ignoreChaptersBefore: number;
     /**
      * Release Year
      * @format int32
      */
-    year?: number | null
+    year?: number | null;
     /** Release Language */
-    originalLanguage?: string | null
+    originalLanguage?: string | null;
     /** Keys of ChapterDTOs */
-    chapterIds: string[]
+    chapterIds: string[];
     /** Author-names */
-    authors: Author[]
+    authors: Author[];
     /** Manga Tags */
-    tags: string[]
+    tags: string[];
     /** Links for more Metadata */
-    links: Link[]
+    links: Link[];
     /** Alt Titles of Manga */
-    altTitles: AltTitle[]
+    altTitles: AltTitle[];
     /**
      * Id of the Library the Manga gets downloaded to
      * @minLength 1
      */
-    fileLibraryId: string
+    fileLibraryId: string;
     /**
      * Name of the Manga
      * @minLength 1
      */
-    name: string
+    name: string;
     /**
      * Description of the Manga
      * @minLength 1
      */
-    description: string
-    releaseStatus: MangaReleaseStatus
+    description: string;
+    releaseStatus: MangaReleaseStatus;
     /** Ids of the Manga on MangaConnectors */
-    mangaConnectorIds: MangaConnectorId[]
+    mangaConnectorIds: MangaConnectorId[];
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 export interface MangaConnector {
-    name?: string | null
+    name?: string | null;
     /** Whether Connector is used for Searches and Downloads */
-    enabled: boolean
+    enabled: boolean;
     /** Languages supported by the Connector */
-    supportedLanguages: string[]
+    supportedLanguages: string[];
     /**
      * Url of the Website Icon
      * @minLength 1
      */
-    iconUrl: string
+    iconUrl: string;
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 /** API.Schema.MangaContext.MangaConnectorId`1 DTO */
@@ -245,36 +245,36 @@ export interface MangaConnectorId {
      * Name of the Connector
      * @minLength 1
      */
-    mangaConnectorName: string
+    mangaConnectorName: string;
     /**
      * Key of the referenced DTO
      * @minLength 1
      */
-    foreignKey: string
+    foreignKey: string;
     /** Website Link for reference, if any */
-    websiteUrl?: string | null
+    websiteUrl?: string | null;
     /** Whether this Link is used for downloads */
-    useForDownload: boolean
+    useForDownload: boolean;
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 export interface MetadataEntry {
-    mangaId?: string | null
-    metadataFetcherName?: string | null
-    identifier?: string | null
+    mangaId?: string | null;
+    metadataFetcherName?: string | null;
+    identifier?: string | null;
 }
 
 export interface MetadataSearchResult {
-    identifier?: string | null
-    name?: string | null
-    url?: string | null
-    description?: string | null
-    coverUrl?: string | null
+    identifier?: string | null;
+    name?: string | null;
+    url?: string | null;
+    description?: string | null;
+    coverUrl?: string | null;
 }
 
 /** Shortened Version of API.Controllers.DTOs.Manga */
@@ -283,21 +283,21 @@ export interface MinimalManga {
      * Name of the Manga
      * @minLength 1
      */
-    name: string
+    name: string;
     /**
      * Description of the Manga
      * @minLength 1
      */
-    description: string
-    releaseStatus: MangaReleaseStatus
+    description: string;
+    releaseStatus: MangaReleaseStatus;
     /** Ids of the Manga on MangaConnectors */
-    mangaConnectorIds: MangaConnectorId[]
+    mangaConnectorIds: MangaConnectorId[];
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }
 
 export interface NotificationConnector {
@@ -305,59 +305,59 @@ export interface NotificationConnector {
      * @minLength 0
      * @maxLength 64
      */
-    name: string
+    name: string;
     /**
      * @format uri
      * @minLength 0
      * @maxLength 2048
      */
-    url: string
-    headers: Record<string, string>
+    url: string;
+    headers: Record<string, string>;
     /**
      * @minLength 0
      * @maxLength 8
      */
-    httpMethod: string
+    httpMethod: string;
     /**
      * @minLength 0
      * @maxLength 4096
      */
-    body: string
+    body: string;
 }
 
 export interface NtfyRecord {
-    name?: string | null
-    endpoint?: string | null
-    username?: string | null
-    password?: string | null
-    topic?: string | null
+    name?: string | null;
+    endpoint?: string | null;
+    username?: string | null;
+    password?: string | null;
+    topic?: string | null;
     /** @format int32 */
-    priority?: number
+    priority?: number;
 }
 
 export interface ProblemDetails {
-    type?: string | null
-    title?: string | null
+    type?: string | null;
+    title?: string | null;
     /** @format int32 */
-    status?: number | null
-    detail?: string | null
-    instance?: string | null
-    [key: string]: any
+    status?: number | null;
+    detail?: string | null;
+    instance?: string | null;
+    [key: string]: any;
 }
 
 export interface PushoverRecord {
-    name?: string | null
-    appToken?: string | null
-    user?: string | null
+    name?: string | null;
+    appToken?: string | null;
+    user?: string | null;
 }
 
 export interface TrangaSettings {
-    downloadLocation?: string | null
-    userAgent?: string | null
+    downloadLocation?: string | null;
+    userAgent?: string | null;
     /** @format int32 */
-    imageCompression?: number
-    blackWhiteImages?: boolean
-    flareSolverrUrl?: string | null
+    imageCompression?: number;
+    blackWhiteImages?: boolean;
+    flareSolverrUrl?: string | null;
     /**
      * Placeholders:
      * %M Obj Name
@@ -372,39 +372,39 @@ export interface TrangaSettings {
      * ?_(...) replace _ with a value from above:
      * Everything inside the braces will only be added if the value of %_ is not null
      */
-    chapterNamingScheme?: string | null
+    chapterNamingScheme?: string | null;
     /** @format int32 */
-    workCycleTimeoutMs?: number
+    workCycleTimeoutMs?: number;
     requestLimits?: {
         /** @format int32 */
-        Default?: number
+        Default?: number;
         /** @format int32 */
-        MangaDexFeed?: number
+        MangaDexFeed?: number;
         /** @format int32 */
-        MangaImage?: number
+        MangaImage?: number;
         /** @format int32 */
-        MangaCover?: number
+        MangaCover?: number;
         /** @format int32 */
-        MangaDexImage?: number
+        MangaDexImage?: number;
         /** @format int32 */
-        MangaInfo?: number
-    } | null
-    downloadLanguage?: string | null
+        MangaInfo?: number;
+    } | null;
+    downloadLanguage?: string | null;
 }
 
 /** API.Workers.BaseWorker DTO */
 export interface Worker {
     /** Workers this worker depends on having ran. */
-    dependencies: string[]
+    dependencies: string[];
     /** Workers that have not yet ran, that need to run for this Worker to run. */
-    missingDependencies: string[]
+    missingDependencies: string[];
     /** Worker can run. */
-    dependenciesFulfilled: boolean
-    state: WorkerExecutionState
+    dependenciesFulfilled: boolean;
+    state: WorkerExecutionState;
     /**
      * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
-    key: string
+    key: string;
 }

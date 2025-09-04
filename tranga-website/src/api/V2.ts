@@ -30,8 +30,8 @@ import {
     TrangaSettings,
     Worker,
     WorkerExecutionState,
-} from './data-contracts'
-import { ContentType, HttpClient, RequestParams } from './http-client'
+} from './data-contracts';
+import { ContentType, HttpClient, RequestParams } from './http-client';
 
 export class V2<
     SecurityDataType = unknown,
@@ -50,7 +50,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -66,7 +66,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -81,7 +81,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -95,7 +95,7 @@ export class V2<
             path: `/v2/FileLibrary/${fileLibraryId}`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -115,7 +115,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -135,7 +135,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -150,7 +150,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -169,7 +169,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -187,7 +187,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -204,7 +204,7 @@ export class V2<
             path: `/v2/LibraryConnector/${libraryConnectorId}`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -218,7 +218,7 @@ export class V2<
             path: `/v2/Maintenance/CleanupNoDownloadManga`,
             method: 'POST',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -233,7 +233,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -248,7 +248,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -263,7 +263,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -280,7 +280,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -295,7 +295,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -309,7 +309,7 @@ export class V2<
             path: `/v2/Manga/${mangaId}`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -327,7 +327,7 @@ export class V2<
             path: `/v2/Manga/${mangaIdFrom}/MergeInto/${mangaIdInto}`,
             method: 'PATCH',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -343,12 +343,12 @@ export class V2<
              * If width is provided, height needs to also be provided
              * @format int32
              */
-            width?: number
+            width?: number;
             /**
              * If height is provided, width needs to also be provided
              * @format int32
              */
-            height?: number
+            height?: number;
         },
         params: RequestParams = {}
     ) =>
@@ -358,7 +358,7 @@ export class V2<
             query: query,
             format: 'blob',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -373,7 +373,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -391,7 +391,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -409,7 +409,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -427,7 +427,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -445,7 +445,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -465,7 +465,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -483,7 +483,7 @@ export class V2<
             path: `/v2/Manga/${mangaId}/ChangeLibrary/${libraryId}`,
             method: 'POST',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -502,7 +502,7 @@ export class V2<
             path: `/v2/Manga/${mangaId}/SetAsDownloadFrom/${mangaConnectorName}/${isRequested}`,
             method: 'POST',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -521,7 +521,7 @@ export class V2<
             method: 'POST',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -536,7 +536,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -551,7 +551,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -566,7 +566,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -584,7 +584,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -599,7 +599,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -614,7 +614,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -632,7 +632,7 @@ export class V2<
             path: `/v2/MangaConnector/${mangaConnectorName}/SetEnabled/${enabled}`,
             method: 'PATCH',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -647,7 +647,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -662,7 +662,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -684,7 +684,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -706,7 +706,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -724,7 +724,7 @@ export class V2<
             path: `/v2/MetadataFetcher/${metadataFetcherName}/Unlink/${mangaId}`,
             method: 'POST',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -739,7 +739,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * @description Formatting placeholders: "%title" and "%text" can be placed in url, header-values and body and will be replaced when notifications are sent
      *
@@ -759,7 +759,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -774,7 +774,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -788,7 +788,7 @@ export class V2<
             path: `/v2/NotificationConnector/${name}`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * @description Priority needs to be between 0 and 10
      *
@@ -808,7 +808,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * @description Priority needs to be between 1 and 5
      *
@@ -828,7 +828,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * @description https://pushover.net/api
      *
@@ -848,7 +848,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -863,7 +863,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -878,7 +878,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -896,7 +896,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -911,7 +911,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -929,7 +929,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -948,7 +948,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -965,7 +965,7 @@ export class V2<
             type: ContentType.Json,
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -980,7 +980,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -994,7 +994,7 @@ export class V2<
             path: `/v2/Settings/UserAgent`,
             method: 'GET',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1013,7 +1013,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1027,7 +1027,7 @@ export class V2<
             path: `/v2/Settings/UserAgent`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1040,17 +1040,17 @@ export class V2<
         this.request<
             {
                 /** @format int32 */
-                Default?: number
+                Default?: number;
                 /** @format int32 */
-                MangaDexFeed?: number
+                MangaDexFeed?: number;
                 /** @format int32 */
-                MangaImage?: number
+                MangaImage?: number;
                 /** @format int32 */
-                MangaCover?: number
+                MangaCover?: number;
                 /** @format int32 */
-                MangaDexImage?: number
+                MangaDexImage?: number;
                 /** @format int32 */
-                MangaInfo?: number
+                MangaInfo?: number;
             },
             any
         >({
@@ -1058,7 +1058,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * @description <h1>NOT IMPLEMENTED</h1>
      *
@@ -1072,7 +1072,7 @@ export class V2<
             path: `/v2/Settings/RequestLimits`,
             method: 'PATCH',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1087,7 +1087,7 @@ export class V2<
             method: 'DELETE',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1109,7 +1109,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1129,7 +1129,7 @@ export class V2<
             method: 'DELETE',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1143,7 +1143,7 @@ export class V2<
             path: `/v2/Settings/ImageCompressionLevel`,
             method: 'GET',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1160,7 +1160,7 @@ export class V2<
             path: `/v2/Settings/ImageCompressionLevel/${level}`,
             method: 'PATCH',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1174,7 +1174,7 @@ export class V2<
             path: `/v2/Settings/BWImages`,
             method: 'GET',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1191,7 +1191,7 @@ export class V2<
             path: `/v2/Settings/BWImages/${enabled}`,
             method: 'PATCH',
             ...params,
-        })
+        });
     /**
      * @description Placeholders: %M Obj Name %V Volume %C Chapter %T Title %A Author (first in list) %I Chapter Internal ID %i Obj Internal ID %Y Year (Obj) ?_(...) replace _ with a value from above: Everything inside the braces will only be added if the value of %_ is not null
      *
@@ -1205,7 +1205,7 @@ export class V2<
             path: `/v2/Settings/ChapterNamingScheme`,
             method: 'GET',
             ...params,
-        })
+        });
     /**
      * @description Placeholders: %M Obj Name %V Volume %C Chapter %T Title %A Author (first in list) %Y Year (Obj) ?_(...) replace _ with a value from above: Everything inside the braces will only be added if the value of %_ is not null
      *
@@ -1224,7 +1224,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1243,7 +1243,7 @@ export class V2<
             body: data,
             type: ContentType.Json,
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1257,7 +1257,7 @@ export class V2<
             path: `/v2/Settings/FlareSolverr/Url`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1271,7 +1271,7 @@ export class V2<
             path: `/v2/Settings/FlareSolverr/Test`,
             method: 'POST',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1285,7 +1285,7 @@ export class V2<
             path: `/v2/Settings/DownloadLanguage`,
             method: 'GET',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1302,7 +1302,7 @@ export class V2<
             path: `/v2/Settings/DownloadLanguage/${language}`,
             method: 'PATCH',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1317,7 +1317,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1332,7 +1332,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1350,7 +1350,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1365,7 +1365,7 @@ export class V2<
             method: 'GET',
             format: 'json',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1379,7 +1379,7 @@ export class V2<
             path: `/v2/Worker/${workerId}`,
             method: 'DELETE',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1393,7 +1393,7 @@ export class V2<
             path: `/v2/Worker/${workerId}/Start`,
             method: 'POST',
             ...params,
-        })
+        });
     /**
      * No description
      *
@@ -1407,5 +1407,5 @@ export class V2<
             path: `/v2/Worker/${workerId}/Stop`,
             method: 'POST',
             ...params,
-        })
+        });
 }

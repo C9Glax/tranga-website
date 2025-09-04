@@ -1,4 +1,4 @@
-import { ColorPaletteProp } from '@mui/joy'
+import { ColorPaletteProp } from '@mui/joy';
 
 export enum TState {
     clean,
@@ -11,30 +11,30 @@ export enum TState {
 export const TDisabled = (state: TState): boolean => {
     switch (state) {
         case TState.busy:
-            return true
+            return true;
         default:
-            return false
+            return false;
     }
-}
+};
 
 export const TColor = (state: TState): ColorPaletteProp => {
     switch (state) {
         case TState.clean:
-            return 'primary'
+            return 'primary';
         case TState.dirty:
-            return 'warning'
+            return 'warning';
         case TState.busy:
-            return 'neutral'
+            return 'neutral';
         case TState.success:
-            return 'success'
+            return 'success';
         case TState.failure:
-            return 'warning'
+            return 'warning';
     }
-}
+};
 
 export default interface TProps {
-    disabled?: boolean
+    disabled?: boolean;
     completionAction?: (
         value?: string | number | readonly string[]
-    ) => Promise<void>
+    ) => Promise<void>;
 }

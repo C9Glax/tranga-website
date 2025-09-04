@@ -1,25 +1,25 @@
-import { ReactNode, useContext } from 'react'
-import { SettingsContext, SettingsItem } from './Settings.tsx'
-import { ApiContext } from '../../contexts/ApiContext.tsx'
-import TInput from '../Inputs/TInput.tsx'
+import { ReactNode, useContext } from 'react';
+import { SettingsContext, SettingsItem } from './Settings.tsx';
+import { ApiContext } from '../../contexts/ApiContext.tsx';
+import TInput from '../Inputs/TInput.tsx';
 
 export default function DownloadLanguage(): ReactNode {
-    const settings = useContext(SettingsContext)
-    const Api = useContext(ApiContext)
+    const settings = useContext(SettingsContext);
+    const Api = useContext(ApiContext);
 
     const languageChanged = async (
         value: string | number | readonly string[] | undefined
     ) => {
-        if (typeof value != 'string') return Promise.reject()
+        if (typeof value != 'string') return Promise.reject();
         try {
             const response =
-                await Api.settingsDownloadLanguagePartialUpdate(value)
-            if (response.ok) return Promise.resolve()
-            else return Promise.reject()
+                await Api.settingsDownloadLanguagePartialUpdate(value);
+            if (response.ok) return Promise.resolve();
+            else return Promise.reject();
         } catch {
-            return await Promise.reject()
+            return await Promise.reject();
         }
-    }
+    };
 
     return (
         <SettingsItem title={'Download Language'}>
@@ -29,5 +29,5 @@ export default function DownloadLanguage(): ReactNode {
                 completionAction={languageChanged}
             />
         </SettingsItem>
-    )
+    );
 }

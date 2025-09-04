@@ -1,4 +1,4 @@
-import { extendTheme } from '@mui/joy/styles'
+import { extendTheme } from '@mui/joy/styles';
 
 export const trangaTheme = extendTheme({
     colorSchemes: {
@@ -80,8 +80,6 @@ export const trangaTheme = extendTheme({
                 },
             },
         },
-        dark: {
-            palette: {},
-        },
+        dark: { palette: {} },
     },
-})
+});

@@ -1,4 +1,4 @@
-import ModalClose from '@mui/joy/ModalClose'
+import ModalClose from '@mui/joy/ModalClose';
 import {
     Accordion,
     AccordionDetails,
@@ -9,63 +9,62 @@ import {
     DialogTitle,
     Modal,
     ModalDialog,
-} from '@mui/joy'
-import './Settings.css'
-import * as React from 'react'
+} from '@mui/joy';
+import './Settings.css';
+import * as React from 'react';
 import {
     createContext,
     ReactNode,
     useContext,
     useEffect,
     useState,
-} from 'react'
-import { SxProps } from '@mui/joy/styles/types'
-import ImageCompression from './ImageCompression.tsx'
-import FlareSolverr from './FlareSolverr.tsx'
-import DownloadLanguage from './DownloadLanguage.tsx'
-import ChapterNamingScheme from './ChapterNamingScheme.tsx'
-import Maintenance from './Maintenance.tsx'
-import { ApiContext } from '../../contexts/ApiContext.tsx'
-import { TrangaSettings } from '../../api/data-contracts.ts'
-import TInput from '../Inputs/TInput.tsx'
+} from 'react';
+import { SxProps } from '@mui/joy/styles/types';
+import ImageCompression from './ImageCompression.tsx';
+import FlareSolverr from './FlareSolverr.tsx';
+import DownloadLanguage from './DownloadLanguage.tsx';
+import ChapterNamingScheme from './ChapterNamingScheme.tsx';
+import Maintenance from './Maintenance.tsx';
+import { ApiContext } from '../../contexts/ApiContext.tsx';
+import { TrangaSettings } from '../../api/data-contracts.ts';
+import TInput from '../Inputs/TInput.tsx';
 
 export const SettingsContext = createContext<TrangaSettings | undefined>(
     undefined
-)
+);
 
 export default function Settings({
     setApiUri,
 }: {
-    setApiUri: (uri: string) => void
+    setApiUri: (uri: string) => void;
 }) {
-    const Api = useContext(ApiContext)
-    const [settings, setSettings] = useState<TrangaSettings>()
+    const Api = useContext(ApiContext);
+    const [settings, setSettings] = useState<TrangaSettings>();
 
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         Api.settingsList().then((response) => {
-            setSettings(response.data)
-        })
-    }, [Api])
+            setSettings(response.data);
+        });
+    }, [Api]);
 
     const apiUriChanged = (
         value: string | number | readonly string[] | undefined
     ) => {
-        if (typeof value != 'string') return Promise.reject()
-        setApiUri(value)
-        return Promise.resolve()
-    }
+        if (typeof value != 'string') return Promise.reject();
+        setApiUri(value);
+        return Promise.resolve();
+    };
 
-    const ModalStyle: SxProps = {
-        width: '80%',
-        height: '80%',
-    }
+    const ModalStyle: SxProps = { width: '80%', height: '80%' };
 
     return (
         <SettingsContext.Provider value={settings}>
             <Button onClick={() => setOpen(true)}>Settings</Button>
-            <Modal open={open} onClose={() => setOpen(false)}>
+            <Modal
+                open={open}
+                onClose={() => setOpen(false)}>
                 <ModalDialog sx={ModalStyle}>
                     <ModalClose />
                     <DialogTitle>Settings</DialogTitle>
@@ -88,20 +87,20 @@ export default function Settings({
                 </ModalDialog>
             </Modal>
         </SettingsContext.Provider>
-    )
+    );
 }
 
 export function SettingsItem({
     title,
     children,
 }: {
-    title: string
-    children: ReactNode
+    title: string;
+    children: ReactNode;
 }) {
     return (
         <Accordion>
             <AccordionSummary>{title}</AccordionSummary>
             <AccordionDetails>{children}</AccordionDetails>
         </Accordion>
-    )
+    );
 }

@@ -1,5 +1,5 @@
-import { Manga } from './api/data-contracts.ts'
-import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react'
+import { Manga } from './api/data-contracts.ts';
+import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
 import {
     Card,
     CardCover,
@@ -9,30 +9,32 @@ import {
     Stack,
     Typography,
     useTheme,
-} from '@mui/joy'
-import ModalClose from '@mui/joy/ModalClose'
-import { ApiContext } from './contexts/ApiContext.tsx'
-import { MangaContext } from './contexts/MangaContext.tsx'
-import './Components/Mangas/MangaCard.css'
-import MarkdownPreview from '@uiw/react-markdown-preview'
+} from '@mui/joy';
+import ModalClose from '@mui/joy/ModalClose';
+import { ApiContext } from './contexts/ApiContext.tsx';
+import { MangaContext } from './contexts/MangaContext.tsx';
+import './Components/Mangas/MangaCard.css';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export default function MangaDetail(props: MangaDetailProps): ReactNode {
-    const Api = useContext(ApiContext)
-    const Manga = useContext(MangaContext)
+    const Api = useContext(ApiContext);
+    const Manga = useContext(MangaContext);
 
-    const [manga, setManga] = useState<Manga | undefined>(props.manga)
+    const [manga, setManga] = useState<Manga | undefined>(props.manga);
 
     useEffect(() => {
-        if (!props.open) return
-        if (!props.mangaKey) return
-        if (props.manga != undefined) return
-        Manga.GetManga(props.mangaKey).then(setManga)
-    }, [Api, Manga, props])
+        if (!props.open) return;
+        if (!props.mangaKey) return;
+        if (props.manga != undefined) return;
+        Manga.GetManga(props.mangaKey).then(setManga);
+    }, [Api, Manga, props]);
 
-    const theme = useTheme()
+    const theme = useTheme();
 
     return (
-        <Modal open={props.open} onClose={() => props.setOpen(false)}>
+        <Modal
+            open={props.open}
+            onClose={() => props.setOpen(false)}>
             <ModalDialog>
                 <ModalClose />
                 <div
@@ -40,9 +42,10 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                         display: 'flex',
                         flexWrap: 'wrap',
                         flexDirection: 'row',
-                    }}
-                >
-                    <Typography level={'h3'} sx={{ width: '100%' }}>
+                    }}>
+                    <Typography
+                        level={'h3'}
+                        sx={{ width: '100%' }}>
                         {manga?.name}
                     </Typography>
                     <Card className={'manga-card'}>
@@ -59,9 +62,11 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                     <Stack
                         direction={'column'}
                         gap={2}
-                        sx={{ maxWidth: 'calc(100% - 230px)', margin: '5px' }}
-                    >
-                        <Stack direction={'row'} gap={0.5} flexWrap={'wrap'}>
+                        sx={{ maxWidth: 'calc(100% - 230px)', margin: '5px' }}>
+                        <Stack
+                            direction={'row'}
+                            gap={0.5}
+                            flexWrap={'wrap'}>
                             {manga?.tags.map((tag) => (
                                 <Chip
                                     key={tag}
@@ -69,8 +74,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                                     sx={{
                                         backgroundColor:
                                             theme.palette.primary.plainColor,
-                                    }}
-                                >
+                                    }}>
                                     {tag}
                                 </Chip>
                             ))}
@@ -81,8 +85,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                                     sx={{
                                         backgroundColor:
                                             theme.palette.success.plainColor,
-                                    }}
-                                >
+                                    }}>
                                     {author.name}
                                 </Chip>
                             ))}
@@ -93,8 +96,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                                     sx={{
                                         backgroundColor:
                                             theme.palette.neutral.plainColor,
-                                    }}
-                                >
+                                    }}>
                                     <a href={link.url}>{link.provider}</a>
                                 </Chip>
                             ))}
@@ -116,20 +118,19 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                             alignItems: 'flex-end',
                         }}
                         flexWrap={'nowrap'}
-                        gap={1}
-                    >
+                        gap={1}>
                         {props.actions}
                     </Stack>
                 </div>
             </ModalDialog>
         </Modal>
-    )
+    );
 }
 
 export interface MangaDetailProps {
-    manga?: Manga
-    mangaKey?: string
-    open: boolean
-    setOpen: Dispatch<boolean>
-    actions?: ReactNode[]
+    manga?: Manga;
+    mangaKey?: string;
+    open: boolean;
+    setOpen: Dispatch<boolean>;
+    actions?: ReactNode[];
 }

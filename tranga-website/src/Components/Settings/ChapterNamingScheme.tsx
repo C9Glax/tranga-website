@@ -1,26 +1,26 @@
-import { ReactNode, useContext } from 'react'
-import { SettingsContext, SettingsItem } from './Settings.tsx'
-import { ApiContext } from '../../contexts/ApiContext.tsx'
-import MarkdownPreview from '@uiw/react-markdown-preview'
-import TInput from '../Inputs/TInput.tsx'
+import { ReactNode, useContext } from 'react';
+import { SettingsContext, SettingsItem } from './Settings.tsx';
+import { ApiContext } from '../../contexts/ApiContext.tsx';
+import MarkdownPreview from '@uiw/react-markdown-preview';
+import TInput from '../Inputs/TInput.tsx';
 
 export default function ChapterNamingScheme(): ReactNode {
-    const settings = useContext(SettingsContext)
-    const Api = useContext(ApiContext)
+    const settings = useContext(SettingsContext);
+    const Api = useContext(ApiContext);
 
     const schemeChanged = async (
         value: string | number | readonly string[] | undefined
     ) => {
-        if (typeof value != 'string') return Promise.reject()
+        if (typeof value != 'string') return Promise.reject();
         try {
             const response =
-                await Api.settingsChapterNamingSchemePartialUpdate(value)
-            if (response.ok) return Promise.resolve()
-            else return Promise.reject()
+                await Api.settingsChapterNamingSchemePartialUpdate(value);
+            if (response.ok) return Promise.resolve();
+            else return Promise.reject();
         } catch {
-            return await Promise.reject()
+            return await Promise.reject();
         }
-    }
+    };
 
     return (
         <SettingsItem title={'Chapter Naming Scheme'}>
@@ -37,5 +37,5 @@ export default function ChapterNamingScheme(): ReactNode {
                 actionDelay={5000}
             />
         </SettingsItem>
-    )
+    );
 }

@@ -6,19 +6,19 @@ import {
     ColorPaletteProp,
     Skeleton,
     Typography,
-} from '@mui/joy'
-import { EventHandler, ReactNode, useContext } from 'react'
-import './MangaCard.css'
-import MangaConnectorIcon from './MangaConnectorIcon.tsx'
+} from '@mui/joy';
+import { EventHandler, ReactNode, useContext } from 'react';
+import './MangaCard.css';
+import MangaConnectorIcon from './MangaConnectorIcon.tsx';
 import {
     Manga,
     MangaReleaseStatus,
     MinimalManga,
-} from '../../api/data-contracts.ts'
-import { ApiContext } from '../../contexts/ApiContext.tsx'
+} from '../../api/data-contracts.ts';
+import { ApiContext } from '../../contexts/ApiContext.tsx';
 
 export default function MangaCard(props: MangaCardProps): ReactNode {
-    const Api = useContext(ApiContext)
+    const Api = useContext(ApiContext);
 
     return (
         <Badge
@@ -30,9 +30,10 @@ export default function MangaCard(props: MangaCardProps): ReactNode {
             className={'manga-card-badge'}
             color={releaseColor(
                 props.manga?.releaseStatus ?? MangaReleaseStatus.Unreleased
-            )}
-        >
-            <Card className={'manga-card'} onClick={props.onClick}>
+            )}>
+            <Card
+                className={'manga-card'}
+                onClick={props.onClick}>
                 <CardCover className={'manga-card-cover'}>
                     <img
                         src={
@@ -52,31 +53,31 @@ export default function MangaCard(props: MangaCardProps): ReactNode {
                 </CardContent>
             </Card>
         </Badge>
-    )
+    );
 }
 
 export interface MangaCardProps {
-    manga?: Manga | MinimalManga
-    onClick?: EventHandler<any>
+    manga?: Manga | MinimalManga;
+    onClick?: EventHandler<any>;
 }
 
 const stringWithRandomLength = (): string => {
-    return 'wow'
-}
+    return 'wow';
+};
 
 const releaseColor = (status: MangaReleaseStatus): ColorPaletteProp => {
     switch (status) {
         case MangaReleaseStatus.Cancelled:
-            return 'danger'
+            return 'danger';
         case MangaReleaseStatus.Completed:
-            return 'success'
+            return 'success';
         case MangaReleaseStatus.Unreleased:
-            return 'neutral'
+            return 'neutral';
         case MangaReleaseStatus.Continuing:
-            return 'primary'
+            return 'primary';
         case MangaReleaseStatus.OnHiatus:
-            return 'neutral'
+            return 'neutral';
         default:
-            return 'neutral'
+            return 'neutral';
     }
-}
+};

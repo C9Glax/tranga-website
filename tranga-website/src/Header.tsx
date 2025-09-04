@@ -1,16 +1,16 @@
-import Sheet from '@mui/joy/Sheet'
-import { Link, Stack, Typography } from '@mui/joy'
-import { ReactElement, ReactNode, useContext } from 'react'
-import './Header.css'
-import { Article, GitHub } from '@mui/icons-material'
-import { ApiContext } from './contexts/ApiContext.tsx'
+import Sheet from '@mui/joy/Sheet';
+import { Link, Stack, Typography } from '@mui/joy';
+import { ReactElement, ReactNode, useContext } from 'react';
+import './Header.css';
+import { Article, GitHub } from '@mui/icons-material';
+import { ApiContext } from './contexts/ApiContext.tsx';
 
 export default function Header({
     children,
 }: {
-    children?: ReactNode
+    children?: ReactNode;
 }): ReactElement {
-    const Api = useContext(ApiContext)
+    const Api = useContext(ApiContext);
 
     return (
         <Sheet className={'header'}>
@@ -22,13 +22,11 @@ export default function Header({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                 }}
-                useFlexGap
-            >
+                useFlexGap>
                 <Stack
                     sx={{ flexGrow: 1, flexBasis: 1 }}
                     direction={'row'}
-                    spacing={2}
-                >
+                    spacing={2}>
                     {children}
                 </Stack>
                 <Stack
@@ -38,8 +36,7 @@ export default function Header({
                         flexBasis: 1,
                         justifyContent: 'center',
                     }}
-                    direction={'row'}
-                >
+                    direction={'row'}>
                     <img
                         src={'/blahaj.png'}
                         style={{ cursor: 'grab', maxHeight: '100%' }}
@@ -53,8 +50,7 @@ export default function Header({
                             WebkitTextFillColor: 'transparent',
                             fontWeight: 'bold',
                             cursor: 'default',
-                        }}
-                    >
+                        }}>
                         Tranga
                     </Typography>
                 </Stack>
@@ -65,35 +61,31 @@ export default function Header({
                         justifyContent: 'flex-end',
                     }}
                     direction={'row'}
-                    spacing={2}
-                >
+                    spacing={2}>
                     <Link
                         target={'_blank'}
                         href={'https://github.com/C9Glax/tranga'}
                         color={'neutral'}
-                        height={'min-content'}
-                    >
+                        height={'min-content'}>
                         <GitHub /> Server
                     </Link>
                     <Link
                         target={'_blank'}
                         href={'https://github.com/C9Glax/tranga-website'}
                         color={'neutral'}
-                        height={'min-content'}
-                    >
+                        height={'min-content'}>
                         <GitHub /> Website
                     </Link>
                     <Link
                         target={'_blank'}
                         href={Api.baseUrl + '/swagger'}
                         color={'neutral'}
-                        height={'min-content'}
-                    >
+                        height={'min-content'}>
                         <Article />
                         Swagger
                     </Link>
                 </Stack>
             </Stack>
         </Sheet>
-    )
+    );
 }
