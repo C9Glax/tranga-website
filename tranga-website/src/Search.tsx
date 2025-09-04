@@ -16,60 +16,64 @@ import MangaConnectorIcon from './Components/Mangas/MangaConnectorIcon.tsx'
 import TInput from './Components/Inputs/TInput.tsx'
 import { ApiContext } from './contexts/ApiContext.tsx'
 import { MangaCardList } from './Components/Mangas/MangaList.tsx'
-import { MangaConnector, MinimalManga } from './api/data-contracts.ts'
+import {MangaConnector, MinimalManga} from './api/data-contracts.ts'
+import MangaDetail from "./MangaDetail.tsx";
 
-export default function Search({
-    open,
-    setOpen,
-}: {
-    open: boolean
-    setOpen: Dispatch<boolean>
-}): ReactNode {
+export function Search(props: SearchModalProps): ReactNode {
     const Api = useContext(ApiContext)
     const MangaConnectors = useContext(MangaConnectorContext)
 
-    const [selectedConnector, setSelectedConnector] = useState<MangaConnector>()
-
-    const [searchResults, setSearchResults] = useState<MinimalManga[]>([])
-
-    const startSearch = (
-        value: string | number | readonly string[] | undefined
-    ): Promise<void> => {
-        if (typeof value != 'string') return Promise.reject()
-        setSearchResults([])
-        if (isUrl(value)) {
-            return Api.searchUrlCreate(value)
-                .then((result) => {
-                    if (result.ok) {
-                        setSearchResults([result.data])
-                        return Promise.resolve()
-                    } else return Promise.reject()
-                })
-                .catch(Promise.reject)
-        } else {
-            if (!selectedConnector) return Promise.reject()
-            return Api.searchDetail(selectedConnector?.key, value)
-                .then((result) => {
-                    if (result.ok) {
-                        setSearchResults(result.data)
-                        return Promise.resolve()
-                    } else return Promise.reject()
-                })
-                .catch(Promise.reject)
-        }
-    }
-
     useEffect(() => {
-        if (open){
+        if (props.open) {
             setSelectedConnector(undefined);
             setSearchResults([]);
         }
     }, [open]);
 
+    const [selectedConnector, setSelectedConnector] = useState<MangaConnector>()
+    const [searchResults, setSearchResults] = useState<MinimalManga[]>([])
+
+    const startSearch = async (
+        value: string | number | readonly string[] | undefined
+    ): Promise<void> => {
+        if (typeof value != 'string') return Promise.reject()
+        setSearchResults([])
+        if (isUrl(value)) {
+            try {
+                let result = await Api.searchUrlCreate(value);
+                if (result.ok) {
+                    setSearchResults([result.data])
+                    return Promise.resolve()
+                } else return Promise.reject()
+            } catch (reason) {
+                return await Promise.reject(reason);
+            }
+        } else {
+            if (!selectedConnector) return Promise.reject()
+            try {
+                let result2 = await Api.searchDetail(selectedConnector?.key, value);
+                if (result2.ok) {
+                    setSearchResults(result2.data)
+                    return Promise.resolve()
+                } else return Promise.reject()
+            } catch (reason1) {
+                return await Promise.reject(reason1);
+            }
+        }
+    }
+    
+    const [selectedManga, setSelectedManga] = useState<MinimalManga | undefined>(undefined);
+    const [mangaDetailOpen, setMangaDetailOpen] = useState(false);
+    
+    function openMangaDetail(manga: MinimalManga) {
+        setSelectedManga(manga);
+        setMangaDetailOpen(true);
+    }
+
     return (
-        <Modal open={open} onClose={() => setOpen(false)}>
-            <ModalDialog sx={{ width: '90vw' }}>
-                <ModalClose />
+        <Modal open={props.open} onClose={() => props.setOpen(false)}>
+            <ModalDialog sx={{width: '90vw'}}>
+                <ModalClose/>
                 <Stepper>
                     <Step
                         orientation={'vertical'}
@@ -81,6 +85,7 @@ export default function Search({
                         <List>
                             {MangaConnectors.map((c) => (
                                 <ListItem
+                                    key={c.key}
                                     onClick={() => setSelectedConnector(c)}
                                 >
                                     <ListItemDecorator>
@@ -91,7 +96,7 @@ export default function Search({
                                     <Typography
                                         sx={
                                             c.key == selectedConnector?.key
-                                                ? { fontWeight: 'bold' }
+                                                ? {fontWeight: 'bold'}
                                                 : {}
                                         }
                                     >
@@ -114,10 +119,16 @@ export default function Search({
                         />
                     </Step>
                 </Stepper>
-                <MangaCardList manga={searchResults} />
+                <MangaCardList manga={searchResults} mangaOnClick={openMangaDetail}/>
+                <MangaDetail mangaKey={selectedManga?.key} open={mangaDetailOpen} setOpen={setMangaDetailOpen} />
             </ModalDialog>
         </Modal>
     )
+}
+
+export interface SearchModalProps {
+    open: boolean;
+    setOpen: Dispatch<boolean>;
 }
 
 function isUrl(str: string): boolean {

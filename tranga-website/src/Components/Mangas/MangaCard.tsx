@@ -6,51 +6,30 @@ import {
     Skeleton,
     Typography,
 } from '@mui/joy'
-import { EventHandler, ReactNode, useContext, useEffect, useState } from 'react'
+import { EventHandler, ReactNode, useContext } from 'react'
 import './MangaCard.css'
 import MangaConnectorIcon from './MangaConnectorIcon.tsx'
 import { Manga, MinimalManga } from '../../api/data-contracts.ts'
 import { ApiContext } from '../../contexts/ApiContext.tsx'
 
-export default function MangaCard({
-    mangaDetail,
-    key,
-    onClick,
-}: {
-    mangaDetail?: Manga | MinimalManga
-    key?: string
-    onClick?: EventHandler<any>
-}): ReactNode {
-    const Api = useContext(ApiContext)
-
-    const [manga, setManga] = useState<Manga | MinimalManga | undefined>(
-        mangaDetail
-    )
-
-    useEffect(() => {
-        if (!key) return
-        Api.mangaDetail(key).then((data) => {
-            if (data.ok) {
-                setManga(data.data)
-            }
-        })
-    }, [Api, key])
+export default function MangaCard(props: MangaCardProps): ReactNode {
+    const Api = useContext(ApiContext);
 
     return (
         <Badge
-            badgeContent={manga?.mangaConnectorIds.map((id) => (
+            badgeContent={props.manga?.mangaConnectorIds.map((id) => (
                 <MangaConnectorIcon mangaConnectorName={id.mangaConnectorName} />
             ))}
             className={'manga-card-badge'}
         >
-            <Card className={'manga-card'} onClick={onClick}>
+            <Card className={'manga-card'} onClick={props.onClick}>
                 <CardCover className={'manga-card-cover'}>
-                    <img src={manga && manga.key != "Search" ? `${Api.baseUrl}/v2/Manga/${manga?.key}/Cover` : '/blahaj.png'} />
+                    <img src={props.manga && props.manga.key != "Search" ? `${Api.baseUrl}/v2/Manga/${props.manga?.key}/Cover` : '/blahaj.png'} />
                 </CardCover>
                 <CardCover className={'manga-card-cover-blur'} />   
                 <CardContent className={'manga-card-content'}>
                     <Typography level={'h4'}>
-                        {manga?.name ?? (   
+                        {props.manga?.name ?? (   
                             <Skeleton>{stringWithRandomLength()}</Skeleton>
                         )}
                     </Typography>
@@ -58,6 +37,11 @@ export default function MangaCard({
             </Card>
         </Badge>
     )
+}
+
+export interface MangaCardProps {
+    manga?: Manga | MinimalManga
+    onClick?: EventHandler<any>
 }
 
 const stringWithRandomLength = (): string => {

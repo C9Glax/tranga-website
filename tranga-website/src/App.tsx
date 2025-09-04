@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { ApiConfig } from './api/http-client.ts'
 import MangaProvider from './contexts/MangaContext.tsx'
 import MangaList from './Components/Mangas/MangaList.tsx'
-import Search from './Search.tsx'
+import {Search} from './Search.tsx'
 import MangaConnectorProvider from './contexts/MangaConnectorContext.tsx'
 
 export default function App() {

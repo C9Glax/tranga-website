@@ -1,6 +1,6 @@
 import { Stack } from '@mui/joy'
 import './MangaList.css'
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import {Dispatch, ReactNode, useContext, useEffect, useState} from 'react'
 import {
     Manga,
     MangaReleaseStatus,
@@ -29,7 +29,7 @@ export default function MangaList({
         <MangaCardList manga={downloadingManga}>
             <MangaCard
                 onClick={openSearch}
-                mangaDetail={{
+                manga={{
                     name: 'Search',
                     description: 'Search for a new Manga',
                     releaseStatus: MangaReleaseStatus.Continuing,
@@ -41,13 +41,7 @@ export default function MangaList({
     )
 }
 
-export function MangaCardList({
-    manga,
-    children,
-}: {
-    manga: (Manga | MinimalManga)[]
-    children?: ReactNode
-}): ReactNode {
+export function MangaCardList(props: MangaCardListProps): ReactNode {
     return (
         <Stack
             className={'manga-list'}
@@ -60,13 +54,16 @@ export function MangaCardList({
                 justifyItems: 'space-between',
             }}
         >
-            {children}
-            {manga.map((m) => (
-                <>
-                    <MangaCard mangaDetail={m} />
-                    <span style={{ flexGrow: 1 }} />
-                </>
+            {props.children}
+            {props.manga.map((m) => (
+                <MangaCard key={m.key} manga={m} onClick={() => { if(props.mangaOnClick) props.mangaOnClick(m); } } />
             ))}
         </Stack>
     )
+}
+
+export interface MangaCardListProps {
+    manga: (Manga | MinimalManga)[]
+    children?: ReactNode
+    mangaOnClick?: Dispatch<Manga | MinimalManga>
 }

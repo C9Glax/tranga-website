@@ -17,7 +17,6 @@ export default function MangaConnectorIcon({
     );
 
     useEffect(() => {
-        console.log(mangaConnector, mangaConnectorName);
         if (mangaConnector) {
             setConnector(mangaConnector)
             return;
