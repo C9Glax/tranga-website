@@ -5,29 +5,30 @@ import { ApiContext } from '../../contexts/ApiContext.tsx'
 
 export default function MangaConnectorIcon({
     mangaConnector,
-    key,
+    mangaConnectorName,
 }: {
     mangaConnector?: MangaConnector
-    key?: string
+    mangaConnectorName?: string
 }): ReactNode {
     const Api = useContext(ApiContext)
 
     const [connector, setConnector] = useState<MangaConnector | undefined>(
         mangaConnector
-    )
+    );
 
     useEffect(() => {
+        console.log(mangaConnector, mangaConnectorName);
         if (mangaConnector) {
             setConnector(mangaConnector)
-            return
+            return;
         }
-        if (!key) return
-        Api.mangaConnectorDetail(key).then((result) => {
+        if (!mangaConnectorName) return;
+        Api.mangaConnectorDetail(mangaConnectorName).then((result) => {
             if (result.ok) {
                 setConnector(result.data)
             }
-        })
-    }, [Api, key, mangaConnector])
+        });
+    }, [Api, mangaConnectorName, mangaConnector]);
 
     return (
         <Tooltip title={connector?.name ?? 'loading'}>

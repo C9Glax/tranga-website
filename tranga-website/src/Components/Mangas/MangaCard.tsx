@@ -39,7 +39,7 @@ export default function MangaCard({
     return (
         <Badge
             badgeContent={manga?.mangaConnectorIds.map((id) => (
-                <MangaConnectorIcon key={id.mangaConnectorName} />
+                <MangaConnectorIcon mangaConnectorName={id.mangaConnectorName} />
             ))}
             className={'manga-card-badge'}
         >
