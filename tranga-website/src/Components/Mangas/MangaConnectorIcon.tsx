@@ -36,6 +36,7 @@ export default function MangaConnectorIcon({
                 src={connector?.iconUrl ?? '/blahaj.png'}
                 width={'25px'}
                 height={'25px'}
+                style={{borderRadius: '100%'}}
             />
         </Tooltip>
     )
