@@ -1,10 +1,13 @@
 @keyframes spin {
-    from {transform: translate(-50%, -50%) rotate(0);}
-    to   {transform: translate(-50%, -50%) rotate(360deg);}
+    from {
+        transform: translate(-50%, -50%) rotate(0);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
-
-.t-loadable[aria-disabled="true"] {
+.t-loadable[aria-disabled='true'] {
     --border-radius: 5px;
     --border-size: 2px;
     --border-bg: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
@@ -12,7 +15,7 @@
     position: relative;
     overflow: hidden;
     border-radius: var(--border-radius);
-    border: none;    
+    border: none;
     z-index: 0;
 
     &::before {
@@ -29,10 +32,10 @@
         z-index: -1 !important;
         animation: spin 5s linear infinite;
     }
-    &--reverse::before{
+    &--reverse::before {
         animation-direction: reverse;
     }
-    &::after{
+    &::after {
         content: '';
         position: absolute;
         inset: var(--border-size);
@@ -42,10 +45,10 @@
     }
 }
 
-.t-loadable[aria-disabled="true"]:has(input)::after {
+.t-loadable[aria-disabled='true']:has(input)::after {
     background: black;
 }
 
-.t-loadable[aria-disabled="true"]:is(button) {
+.t-loadable[aria-disabled='true']:is(button) {
     color: var(--joy-palette-text-primary);
 }

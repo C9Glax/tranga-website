@@ -1,6 +1,6 @@
 import { Stack } from '@mui/joy'
 import './MangaList.css'
-import {Dispatch, ReactNode, useContext, useEffect, useState} from 'react'
+import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react'
 import {
     Manga,
     MangaReleaseStatus,
@@ -56,7 +56,13 @@ export function MangaCardList(props: MangaCardListProps): ReactNode {
         >
             {props.children}
             {props.manga.map((m) => (
-                <MangaCard key={m.key} manga={m} onClick={() => { if(props.mangaOnClick) props.mangaOnClick(m); } } />
+                <MangaCard
+                    key={m.key}
+                    manga={m}
+                    onClick={() => {
+                        if (props.mangaOnClick) props.mangaOnClick(m)
+                    }}
+                />
             ))}
         </Stack>
     )

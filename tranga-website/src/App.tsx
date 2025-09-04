@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react'
 import { ApiConfig } from './api/http-client.ts'
 import MangaProvider from './contexts/MangaContext.tsx'
 import MangaList from './Components/Mangas/MangaList.tsx'
-import {Search} from './Search.tsx'
+import { Search } from './Search.tsx'
 import MangaConnectorProvider from './contexts/MangaConnectorContext.tsx'
-import LibraryProvider from "./contexts/FileLibraryContext.tsx";
+import LibraryProvider from './contexts/FileLibraryContext.tsx'
 
 export default function App() {
     const [apiUri, setApiUri] = useState<string>(
@@ -35,8 +35,13 @@ export default function App() {
                                 <Settings setApiUri={setApiUri} />
                             </Header>
                             <Sheet className={'app-content'}>
-                                <MangaList openSearch={() => setSearchOpen(true)} />
-                                <Search open={searchOpen} setOpen={setSearchOpen} />
+                                <MangaList
+                                    openSearch={() => setSearchOpen(true)}
+                                />
+                                <Search
+                                    open={searchOpen}
+                                    setOpen={setSearchOpen}
+                                />
                             </Sheet>
                         </Sheet>
                     </MangaProvider>

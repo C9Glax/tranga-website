@@ -1,4 +1,4 @@
-import {Dispatch, ReactNode, useContext, useEffect, useState} from 'react'
+import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react'
 import {
     Button,
     List,
@@ -17,9 +17,9 @@ import MangaConnectorIcon from './Components/Mangas/MangaConnectorIcon.tsx'
 import TInput from './Components/Inputs/TInput.tsx'
 import { ApiContext } from './contexts/ApiContext.tsx'
 import { MangaCardList } from './Components/Mangas/MangaList.tsx'
-import {MangaConnector, MinimalManga} from './api/data-contracts.ts'
-import MangaDetail from "./MangaDetail.tsx";
-import MangaDownloadDrawer from "./MangaDownloadDrawer.tsx";
+import { MangaConnector, MinimalManga } from './api/data-contracts.ts'
+import MangaDetail from './MangaDetail.tsx'
+import MangaDownloadDrawer from './MangaDownloadDrawer.tsx'
 
 export function Search(props: SearchModalProps): ReactNode {
     const Api = useContext(ApiContext)
@@ -27,10 +27,10 @@ export function Search(props: SearchModalProps): ReactNode {
 
     useEffect(() => {
         if (props.open) {
-            setSelectedConnector(undefined);
-            setSearchResults([]);
+            setSelectedConnector(undefined)
+            setSearchResults([])
         }
-    }, [open]);
+    }, [props])
 
     const [selectedConnector, setSelectedConnector] = useState<MangaConnector>()
     const [searchResults, setSearchResults] = useState<MinimalManga[]>([])
@@ -42,46 +42,52 @@ export function Search(props: SearchModalProps): ReactNode {
         setSearchResults([])
         if (isUrl(value)) {
             try {
-                let result = await Api.searchUrlCreate(value);
+                const result = await Api.searchUrlCreate(value)
                 if (result.ok) {
                     setSearchResults([result.data])
                     return Promise.resolve()
                 } else return Promise.reject()
             } catch (reason) {
-                return await Promise.reject(reason);
+                return await Promise.reject(reason)
             }
         } else {
             if (!selectedConnector) return Promise.reject()
             try {
-                let result2 = await Api.searchDetail(selectedConnector?.key, value);
+                const result2 = await Api.searchDetail(
+                    selectedConnector?.key,
+                    value
+                )
                 if (result2.ok) {
                     setSearchResults(result2.data)
                     return Promise.resolve()
                 } else return Promise.reject()
             } catch (reason1) {
-                return await Promise.reject(reason1);
+                return await Promise.reject(reason1)
             }
         }
     }
-    
-    const [selectedManga, setSelectedManga] = useState<MinimalManga | undefined>(undefined);
-    const [mangaDetailOpen, setMangaDetailOpen] = useState(false);
-    const [mangaDownloadDrawerOpen, setMangaDownloadDrawerOpen] = useState(false);
-    
+
+    const [selectedManga, setSelectedManga] = useState<
+        MinimalManga | undefined
+    >(undefined)
+    const [mangaDetailOpen, setMangaDetailOpen] = useState(false)
+    const [mangaDownloadDrawerOpen, setMangaDownloadDrawerOpen] =
+        useState(false)
+
     function openMangaDetail(manga: MinimalManga) {
-        setSelectedManga(manga);
-        setMangaDetailOpen(true);
+        setSelectedManga(manga)
+        setMangaDetailOpen(true)
     }
-    
+
     function openMangaDownloadDrawer() {
-        setMangaDetailOpen(false);
-        setMangaDownloadDrawerOpen(true);
+        setMangaDetailOpen(false)
+        setMangaDownloadDrawerOpen(true)
     }
 
     return (
         <Modal open={props.open} onClose={() => props.setOpen(false)}>
-            <ModalDialog sx={{width: '90vw'}}>
-                <ModalClose/>
+            <ModalDialog sx={{ width: '90vw' }}>
+                <ModalClose />
                 <Stepper>
                     <Step
                         orientation={'vertical'}
@@ -104,7 +110,7 @@ export function Search(props: SearchModalProps): ReactNode {
                                     <Typography
                                         sx={
                                             c.key == selectedConnector?.key
-                                                ? {fontWeight: 'bold'}
+                                                ? { fontWeight: 'bold' }
                                                 : {}
                                         }
                                     >
@@ -127,19 +133,33 @@ export function Search(props: SearchModalProps): ReactNode {
                         />
                     </Step>
                 </Stepper>
-                <MangaCardList manga={searchResults} mangaOnClick={openMangaDetail}/>
-                <MangaDetail mangaKey={selectedManga?.key} open={mangaDetailOpen} setOpen={setMangaDetailOpen} actions={[
-                    <Button onClick={openMangaDownloadDrawer}>Download</Button>
-                ]} />
-                <MangaDownloadDrawer open={mangaDownloadDrawerOpen} setOpen={setMangaDownloadDrawerOpen} mangaKey={selectedManga?.key} />
+                <MangaCardList
+                    manga={searchResults}
+                    mangaOnClick={openMangaDetail}
+                />
+                <MangaDetail
+                    mangaKey={selectedManga?.key}
+                    open={mangaDetailOpen}
+                    setOpen={setMangaDetailOpen}
+                    actions={[
+                        <Button onClick={openMangaDownloadDrawer}>
+                            Download
+                        </Button>,
+                    ]}
+                />
+                <MangaDownloadDrawer
+                    open={mangaDownloadDrawerOpen}
+                    setOpen={setMangaDownloadDrawerOpen}
+                    mangaKey={selectedManga?.key}
+                />
             </ModalDialog>
         </Modal>
     )
 }
 
 export interface SearchModalProps {
-    open: boolean;
-    setOpen: Dispatch<boolean>;
+    open: boolean
+    setOpen: Dispatch<boolean>
 }
 
 function isUrl(str: string): boolean {

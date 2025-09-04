@@ -5,12 +5,16 @@ import {
     useEffect,
     useState,
 } from 'react'
-import {FileLibrary} from '../api/data-contracts.ts'
+import { FileLibrary } from '../api/data-contracts.ts'
 import { ApiContext } from './ApiContext.tsx'
 
-export const FileLibraryContext = createContext<FileLibrary[]>([]);
+export const FileLibraryContext = createContext<FileLibrary[]>([])
 
-export default function LibraryProvider({ children }: { children: ReactNode }) : ReactNode {
+export default function LibraryProvider({
+    children,
+}: {
+    children: ReactNode
+}): ReactNode {
     const Api = useContext(ApiContext)
 
     const [state, setState] = useState<FileLibrary[]>([])
@@ -22,8 +26,6 @@ export default function LibraryProvider({ children }: { children: ReactNode }) :
             }
         })
     }, [Api])
-    
-    return (
-        <FileLibraryContext value={state}>{children}</FileLibraryContext>
-    );
+
+    return <FileLibraryContext value={state}>{children}</FileLibraryContext>
 }

@@ -14,20 +14,20 @@ export default function MangaConnectorIcon({
 
     const [connector, setConnector] = useState<MangaConnector | undefined>(
         mangaConnector
-    );
+    )
 
     useEffect(() => {
         if (mangaConnector) {
             setConnector(mangaConnector)
-            return;
+            return
         }
-        if (!mangaConnectorName) return;
+        if (!mangaConnectorName) return
         Api.mangaConnectorDetail(mangaConnectorName).then((result) => {
             if (result.ok) {
                 setConnector(result.data)
             }
-        });
-    }, [Api, mangaConnectorName, mangaConnector]);
+        })
+    }, [Api, mangaConnectorName, mangaConnector])
 
     return (
         <Tooltip title={connector?.name ?? 'loading'}>
@@ -35,7 +35,7 @@ export default function MangaConnectorIcon({
                 src={connector?.iconUrl ?? '/blahaj.png'}
                 width={'25px'}
                 height={'25px'}
-                style={{borderRadius: '100%'}}
+                style={{ borderRadius: '100%' }}
             />
         </Tooltip>
     )
