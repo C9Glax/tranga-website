@@ -1,7 +1,8 @@
-import { Button, CircularProgress, Input } from '@mui/joy'
+import { Button, Input } from '@mui/joy'
 import { MouseEventHandler, useEffect, useState } from 'react'
 import * as React from 'react'
 import TProps, { TColor, TDisabled, TState } from './TProps.ts'
+import './loadingBorder.css'
 
 export default function TInput(props: TInputProps) {
     const [state, setState] = useState<TState>(TState.clean)
@@ -63,7 +64,7 @@ export default function TInput(props: TInputProps) {
             value={value}
             onChange={inputValueChanged}
             onKeyDown={keyDownHandler}
-            startDecorator={TDisabled(state) ? <CircularProgress /> : null}
+            className={'t-loadable'}
             endDecorator={
                 props.submitButtonHidden ? null : (
                     <Button

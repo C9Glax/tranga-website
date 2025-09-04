@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from '@mui/joy'
+import { Button } from '@mui/joy'
 import TProps, { TColor, TDisabled, TState } from './TProps.ts'
 import { MouseEventHandler, ReactNode, useState } from 'react'
 
@@ -21,7 +21,7 @@ export default function TButton(props: TButtonProps) {
             disabled={props.disabled ?? TDisabled(state)}
             aria-disabled={props.disabled ?? TDisabled(state)}
             onClick={clicked}
-            startDecorator={TDisabled(state) ? <CircularProgress /> : null}
+            className={'t-loadable'}
         >
             {props.children}
         </Button>
