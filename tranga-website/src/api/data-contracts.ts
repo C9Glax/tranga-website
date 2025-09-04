@@ -195,6 +195,11 @@ export interface Manga {
     /** Alt Titles of Manga */
     altTitles: AltTitle[]
     /**
+     * Id of the Library the Manga gets downloaded to
+     * @minLength 1
+     */
+    fileLibraryId: string
+    /**
      * Name of the Manga
      * @minLength 1
      */

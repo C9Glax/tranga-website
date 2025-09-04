@@ -12,7 +12,7 @@ import {
     Typography,
 } from '@mui/joy'
 import ModalClose from '@mui/joy/ModalClose'
-import { Manga, MangaConnectorId } from './api/data-contracts.ts'
+import { FileLibrary, Manga, MangaConnectorId } from './api/data-contracts.ts'
 import { ApiContext } from './contexts/ApiContext.tsx'
 import { MangaContext } from './contexts/MangaContext.tsx'
 import { FileLibraryContext } from './contexts/FileLibraryContext.tsx'
@@ -27,6 +27,7 @@ export default function MangaDownloadDrawer(
     const Libraries = useContext(FileLibraryContext)
 
     const [manga, setManga] = useState<Manga | undefined>(props.manga)
+    const [library, setLibrary] = useState<FileLibrary | undefined>()
     const [downloadFromMap, setDownloadFromMap] = useState<
         Map<MangaConnectorId, boolean>
     >(new Map())
@@ -40,23 +41,41 @@ export default function MangaDownloadDrawer(
 
     useEffect(() => {
         const newMap = new Map()
+        setLibrary(
+            Libraries.find((library) => library.key == manga?.fileLibraryId)
+        )
         manga?.mangaConnectorIds.forEach((id) => {
             newMap.set(id, id.useForDownload)
         })
         setDownloadFromMap(newMap)
     }, [manga])
 
-    const setDownload = (): Promise<void> => {
+    const setDownload = async (): Promise<void> => {
         if (!manga) return Promise.reject()
-        downloadFromMap.forEach(async (download, id) => {
-            const result = await Api.mangaSetAsDownloadFromCreate(
-                manga?.key,
-                id.mangaConnectorName,
-                download
+        if (library) {
+            const s = await Api.mangaChangeLibraryCreate(
+                manga.key,
+                library?.key
             )
-            if (!result.ok) return Promise.reject()
-        })
+                .then((result) => result.ok)
+                .catch(() => false)
+            if (!s) return Promise.reject()
+        }
+        for (const kv of downloadFromMap) {
+            const s = await Api.mangaSetAsDownloadFromCreate(
+                manga?.key,
+                kv[0].mangaConnectorName,
+                kv[1]
+            )
+                .then((result) => result.ok)
+                .catch(() => false)
+            if (!s) return Promise.reject()
+        }
         return Promise.resolve()
+    }
+
+    const onLibraryChange = (_: any, value: string | null) => {
+        setLibrary(Libraries.find((library) => library.key == value))
     }
 
     return (
@@ -75,7 +94,11 @@ export default function MangaDownloadDrawer(
                         <Typography>
                             Select a Library to Download to:
                         </Typography>
-                        <Select placeholder={'Select a Library'}>
+                        <Select
+                            placeholder={'Select a Library'}
+                            value={library?.key}
+                            onChange={onLibraryChange}
+                        >
                             {Libraries.map((l) => (
                                 <Option key={l.key} value={l.key}>
                                     {l.libraryName} ({l.basePath})
