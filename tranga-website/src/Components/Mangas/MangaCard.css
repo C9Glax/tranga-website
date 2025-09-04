@@ -12,13 +12,13 @@
 
 .manga-card-cover-blur {
     background: linear-gradient(
-        135deg,
-        rgba(245, 169, 184, 0.85) 40%,
+        150deg,
+        rgba(245, 169, 184, 0.80) 50%,
         rgba(91, 206, 250, 0.3)
     );
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(2px) brightness(70%);
+    -webkit-backdrop-filter: blur(2px) brightness(70%);
 }
 
 .manga-card-content {

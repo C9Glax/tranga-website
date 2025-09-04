@@ -45,12 +45,12 @@ export default function MangaCard({
         >
             <Card className={'manga-card'} onClick={onClick}>
                 <CardCover className={'manga-card-cover'}>
-                    <img src={'/blahaj.png'} />
+                    <img src={manga && manga.key != "Search" ? `${Api.baseUrl}/v2/Manga/${manga?.key}/Cover` : '/blahaj.png'} />
                 </CardCover>
-                <CardCover className={'manga-card-cover-blur'} />
+                <CardCover className={'manga-card-cover-blur'} />   
                 <CardContent className={'manga-card-content'}>
                     <Typography level={'h4'}>
-                        {manga?.name ?? (
+                        {manga?.name ?? (   
                             <Skeleton>{stringWithRandomLength()}</Skeleton>
                         )}
                     </Typography>
