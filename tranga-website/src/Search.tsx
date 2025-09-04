@@ -1,5 +1,6 @@
 import {Dispatch, ReactNode, useContext, useEffect, useState} from 'react'
 import {
+    Button,
     List,
     ListItem,
     ListItemDecorator,
@@ -18,6 +19,7 @@ import { ApiContext } from './contexts/ApiContext.tsx'
 import { MangaCardList } from './Components/Mangas/MangaList.tsx'
 import {MangaConnector, MinimalManga} from './api/data-contracts.ts'
 import MangaDetail from "./MangaDetail.tsx";
+import MangaDownloadDrawer from "./MangaDownloadDrawer.tsx";
 
 export function Search(props: SearchModalProps): ReactNode {
     const Api = useContext(ApiContext)
@@ -64,10 +66,16 @@ export function Search(props: SearchModalProps): ReactNode {
     
     const [selectedManga, setSelectedManga] = useState<MinimalManga | undefined>(undefined);
     const [mangaDetailOpen, setMangaDetailOpen] = useState(false);
+    const [mangaDownloadDrawerOpen, setMangaDownloadDrawerOpen] = useState(false);
     
     function openMangaDetail(manga: MinimalManga) {
         setSelectedManga(manga);
         setMangaDetailOpen(true);
+    }
+    
+    function openMangaDownloadDrawer() {
+        setMangaDetailOpen(false);
+        setMangaDownloadDrawerOpen(true);
     }
 
     return (
@@ -120,7 +128,10 @@ export function Search(props: SearchModalProps): ReactNode {
                     </Step>
                 </Stepper>
                 <MangaCardList manga={searchResults} mangaOnClick={openMangaDetail}/>
-                <MangaDetail mangaKey={selectedManga?.key} open={mangaDetailOpen} setOpen={setMangaDetailOpen} />
+                <MangaDetail mangaKey={selectedManga?.key} open={mangaDetailOpen} setOpen={setMangaDetailOpen} actions={[
+                    <Button onClick={openMangaDownloadDrawer}>Download</Button>
+                ]} />
+                <MangaDownloadDrawer open={mangaDownloadDrawerOpen} setOpen={setMangaDownloadDrawerOpen} mangaKey={selectedManga?.key} />
             </ModalDialog>
         </Modal>
     )

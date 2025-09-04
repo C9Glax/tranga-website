@@ -33,7 +33,7 @@ export default function MangaDetail (props: MangaDetailProps) : ReactNode {
                             <img src={manga ? `${Api.baseUrl}/v2/Manga/${manga.key}/Cover` : '/blahaj.png'} />
                         </CardCover>
                     </Card>
-                    <Stack direction={'column'} gap={2} sx={{maxWidth: 'calc(100% - 230px)', margin: '0 5px'}}>
+                    <Stack direction={'column'} gap={2} sx={{maxWidth: 'calc(100% - 230px)', margin: '5px'}}>
                         <Stack direction={'row'} gap={0.5} flexWrap={'wrap'}>
                             {manga?.tags.map(tag => <Chip key={tag} size={"sm"} sx={{backgroundColor: theme.palette.primary.plainColor}}>{tag}</Chip>)}
                             {manga?.authors.map(author => <Chip key={author.key} size={'sm'} sx={{backgroundColor: theme.palette.success.plainColor}}>{author.name}</Chip> )}
@@ -41,7 +41,7 @@ export default function MangaDetail (props: MangaDetailProps) : ReactNode {
                         </Stack>
                         <MarkdownPreview source={manga?.description} style={{backgroundColor: "transparent", color: theme.palette.text.primary, overflowY: "auto"}}/>
                     </Stack>
-                    <Stack sx={{width: '100%'}} flexWrap={'nowrap'} gap={1}>
+                    <Stack sx={{flexGrow: 1, flexBasis: 0, margin: '5px 0', alignItems: 'flex-end'}} flexWrap={'nowrap'} gap={1}>
                         {props.actions}
                     </Stack>
                 </div>

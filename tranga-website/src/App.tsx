@@ -8,6 +8,7 @@ import MangaProvider from './contexts/MangaContext.tsx'
 import MangaList from './Components/Mangas/MangaList.tsx'
 import {Search} from './Search.tsx'
 import MangaConnectorProvider from './contexts/MangaConnectorContext.tsx'
+import LibraryProvider from "./contexts/FileLibraryContext.tsx";
 
 export default function App() {
     const [apiUri, setApiUri] = useState<string>(
@@ -27,17 +28,19 @@ export default function App() {
     return (
         <ApiProvider apiConfig={apiConfig}>
             <MangaConnectorProvider>
-                <MangaProvider>
-                    <Sheet className={'app'}>
-                        <Header>
-                            <Settings setApiUri={setApiUri} />
-                        </Header>
-                        <Sheet className={'app-content'}>
-                            <MangaList openSearch={() => setSearchOpen(true)} />
-                            <Search open={searchOpen} setOpen={setSearchOpen} />
+                <LibraryProvider>
+                    <MangaProvider>
+                        <Sheet className={'app'}>
+                            <Header>
+                                <Settings setApiUri={setApiUri} />
+                            </Header>
+                            <Sheet className={'app-content'}>
+                                <MangaList openSearch={() => setSearchOpen(true)} />
+                                <Search open={searchOpen} setOpen={setSearchOpen} />
+                            </Sheet>
                         </Sheet>
-                    </Sheet>
-                </MangaProvider>
+                    </MangaProvider>
+                </LibraryProvider>
             </MangaConnectorProvider>
         </ApiProvider>
     )
