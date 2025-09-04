@@ -1,56 +1,51 @@
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
+@keyframes spin {
+    from {transform: translate(-50%, -50%) rotate(0);}
+    to   {transform: translate(-50%, -50%) rotate(360deg);}
 }
 
-@keyframes rotate {
-    100% {
-        transform: rotate(1turn);
-    }
-}
 
-.t-loadable {
+.t-loadable[aria-disabled="true"] {
+    --border-radius: 5px;
+    --border-size: 2px;
+    --border-bg: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+
     position: relative;
-    border: none;   
-    border-radius: 4px;
     overflow: hidden;
+    border-radius: var(--border-radius);
+    border: none;    
+    z-index: 0;
 
     &::before {
         content: '';
-        position: absolute !important;
-        z-index: -2 !important;
-        transform-origin: 50% 50%;
-        left: -100vw !important;
-        top: -100vh !important;
-        width: 200vw !important;
-        height: 200vh !important;
-        background-repeat: no-repeat !important;
-        background-image: linear-gradient(
-            var(--joy-palette-primary-200),
-            var(--joy-palette-primary-200)
-        );
-        animation: rotate 4s linear infinite;
+        display: block;
+        background: var(--border-bg);
+        width: calc(100% * 1.41421356237);
+        padding-bottom: calc(100% * 1.41421356237);
+        position: absolute;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%);
+        border-radius: 100%;
+        z-index: -1 !important;
+        animation: spin 5s linear infinite;
     }
-
-    &::after {
+    &--reverse::before{
+        animation-direction: reverse;
+    }
+    &::after{
         content: '';
         position: absolute;
+        inset: var(--border-size);
         z-index: -1;
-        left: 2px;
-        top: 2px;
-        width: calc(100% - 4px);
-        height: calc(100% - 4px);
-        background: black;
-        border-radius: 3px;
+        border-radius: calc(var(--border-radius) - var(--border-size));
+        background: var(--joy-palette-primary-500);
     }
 }
 
-.t-loadable[aria-disabled='true'] {
-    &::before {
-        background-image: linear-gradient(
-            var(--joy-palette-danger-300),
-            var(--joy-palette-success-600)
-        );
-    }
+.t-loadable[aria-disabled="true"]:has(input)::after {
+    background: black;
+}
+
+.t-loadable[aria-disabled="true"]:is(button) {
+    color: var(--joy-palette-text-primary);
 }

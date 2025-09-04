@@ -71,6 +71,7 @@ export default function TInput(props: TInputProps) {
                         onClick={submitClicked}
                         disabled={props.disabled ?? TDisabled(state)}
                         aria-disabled={props.disabled ?? TDisabled(state)}
+                        className={'t-loadable'}
                     >
                         {props.submitButtonText ?? 'Submit'}
                     </Button>
