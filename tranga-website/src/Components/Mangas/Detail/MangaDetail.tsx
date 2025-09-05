@@ -7,6 +7,7 @@ import { MangaContext } from '../../../contexts/MangaContext.tsx';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { DownloadSection } from './DownloadSection.tsx';
 import ChaptersSection from './ChaptersSection.tsx';
+import { LibrarySection } from './LibrarySection.tsx';
 
 export default function MangaDetail(props: MangaDetailProps): ReactNode {
     const Api = useContext(ApiContext);
@@ -101,6 +102,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                     downloadOpen={props.downloadOpen ?? false}
                     manga={manga}
                 />
+                <LibrarySection manga={manga} />
                 <ChaptersSection manga={manga} />
             </ModalDialog>
         </Modal>
