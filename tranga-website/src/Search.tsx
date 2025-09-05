@@ -98,7 +98,7 @@ export function Search(props: SearchModalProps): ReactNode {
                         <Typography level={'title-lg'}>Enter a search term or URL</Typography>
                         <TInput
                             placeholder={'Manga-name or URL'}
-                            completionAction={startSearch}
+                            onSubmit={startSearch}
                         />
                     </Step>
                 </Stepper>

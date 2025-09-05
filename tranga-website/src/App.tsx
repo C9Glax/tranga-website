@@ -70,7 +70,7 @@ export function App() {
                                     setOpen={setDownloadDrawerOpen}
                                     mangaKey={selectedMangaKey}
                                     downloadOpen={downloadSectionOpen}>
-                                    <TButton completionAction={() => removeManga(selectedMangaKey)}>
+                                    <TButton onClick={() => removeManga(selectedMangaKey)}>
                                         Remove
                                     </TButton>
                                 </MangaDetail>

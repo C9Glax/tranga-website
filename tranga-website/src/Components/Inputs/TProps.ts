@@ -34,5 +34,4 @@ export const TColor = (state: TState): ColorPaletteProp => {
 
 export default interface TProps {
     disabled?: boolean;
-    completionAction?: (value?: string | number | readonly string[]) => Promise<void>;
 }

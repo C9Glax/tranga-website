@@ -8,9 +8,9 @@ export default function TButton(props: TButtonProps) {
     const clicked: MouseEventHandler<HTMLAnchorElement> = (e) => {
         setState(TState.busy);
         e.preventDefault();
-        if (props.completionAction)
+        if (props.onClick)
             props
-                .completionAction(undefined)
+                .onClick()
                 .then(() => setState(TState.success))
                 .catch(() => setState(TState.failure));
     };
@@ -29,4 +29,5 @@ export default function TButton(props: TButtonProps) {
 
 export interface TButtonProps extends TProps {
     children?: ReactNode;
+    onClick?: () => Promise<void>;
 }

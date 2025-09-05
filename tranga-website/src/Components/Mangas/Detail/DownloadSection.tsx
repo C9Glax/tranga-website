@@ -11,14 +11,60 @@ import {
     Stack,
     Typography,
 } from '@mui/joy';
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import TButton from '../../Inputs/TButton.tsx';
 import MangaConnectorIcon from '../MangaConnectorIcon.tsx';
 import { FileLibrary, Manga, MangaConnectorId } from '../../../api/data-contracts.ts';
 import { FileLibraryContext } from '../../../contexts/FileLibraryContext.tsx';
+import { ApiContext } from '../../../contexts/ApiContext.tsx';
 
-export default function DownloadSection(props: DownloadSectionProps): ReactNode {
+export function DownloadSection(props: DownloadSectionProps): ReactNode {
+    const Api = useContext(ApiContext);
     const Libraries = useContext(FileLibraryContext);
+
+    const [manga, setManga] = useState<Manga>();
+    const [library, setLibrary] = useState<FileLibrary | undefined>();
+    const [downloadFromMap, setDownloadFromMap] = useState<Map<MangaConnectorId, boolean>>(
+        new Map()
+    );
+
+    useEffect(() => {
+        const newMap = new Map();
+        setLibrary(Libraries.find((library) => library.key == manga?.fileLibraryId));
+        manga?.mangaConnectorIds.forEach((id) => {
+            newMap.set(id, id.useForDownload);
+        });
+        setDownloadFromMap(newMap);
+    }, [manga, Libraries]);
+
+    useEffect(() => {
+        setManga(props.manga);
+    }, [props]);
+
+    const onLibraryChange = (_: any, value: string | null) => {
+        setLibrary(Libraries.find((library) => library.key == value));
+    };
+
+    const setDownload = async (): Promise<void> => {
+        if (!manga) return Promise.reject();
+        if (library) {
+            const s = await Api.mangaChangeLibraryCreate(manga.key, library?.key)
+                .then((result) => result.ok)
+                .catch(() => false);
+            if (!s) return Promise.reject();
+        }
+        for (const kv of downloadFromMap) {
+            const s = await Api.mangaSetAsDownloadFromCreate(
+                manga?.key,
+                kv[0].mangaConnectorName,
+                kv[1]
+            )
+                .then((result) => result.ok)
+                .catch(() => false);
+            if (!s) return Promise.reject();
+        }
+        return Promise.resolve();
+    };
 
     return (
         <Accordion defaultExpanded={props.downloadOpen}>
@@ -34,8 +80,8 @@ export default function DownloadSection(props: DownloadSectionProps): ReactNode 
                         <Typography>Select a Library to Download to:</Typography>
                         <Select
                             placeholder={'Select a Library'}
-                            value={props.library?.key}
-                            onChange={props.onLibraryChange}>
+                            value={library?.key}
+                            onChange={onLibraryChange}>
                             {Libraries.map((l) => (
                                 <Option
                                     key={l.key}
@@ -54,9 +100,7 @@ export default function DownloadSection(props: DownloadSectionProps): ReactNode 
                                 <ListItem key={id.key}>
                                     <Checkbox
                                         defaultChecked={id.useForDownload}
-                                        onChange={(c) =>
-                                            props.downloadFromMap.set(id, c.target.checked)
-                                        }
+                                        onChange={(c) => downloadFromMap.set(id, c.target.checked)}
                                         label={
                                             <div
                                                 style={{
@@ -75,7 +119,7 @@ export default function DownloadSection(props: DownloadSectionProps): ReactNode 
                             ))}
                         </List>
                     </Box>
-                    <TButton completionAction={props.setDownload}>Download All</TButton>
+                    <TButton onClick={setDownload}>Download All</TButton>
                 </Stack>
             </AccordionDetails>
         </Accordion>
@@ -84,8 +128,4 @@ export default function DownloadSection(props: DownloadSectionProps): ReactNode 
 export interface DownloadSectionProps {
     manga?: Manga;
     downloadOpen: boolean;
-    library?: FileLibrary;
-    onLibraryChange: (_: any, value: string | null) => void;
-    downloadFromMap: Map<MangaConnectorId, boolean>;
-    setDownload: () => Promise<void>;
 }

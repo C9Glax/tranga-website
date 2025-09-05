@@ -23,7 +23,7 @@ export default function FlareSolverr(): ReactNode {
             <TInput
                 placeholder={'FlareSolverr URL'}
                 defaultValue={settings?.flareSolverrUrl as string}
-                completionAction={uriChanged}
+                onSubmit={uriChanged}
             />
         </SettingsItem>
     );

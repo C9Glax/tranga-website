@@ -23,7 +23,7 @@ export default function DownloadLanguage(): ReactNode {
             <TInput
                 defaultValue={settings?.downloadLanguage as string}
                 placeholder={"Language code (f.e. 'en')"}
-                completionAction={languageChanged}
+                onSubmit={languageChanged}
             />
         </SettingsItem>
     );

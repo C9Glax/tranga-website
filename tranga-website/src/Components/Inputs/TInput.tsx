@@ -6,12 +6,10 @@ import './loadingBorder.css';
 
 export default function TInput(props: TInputProps) {
     const [state, setState] = useState<TState>(TState.clean);
-    const [value, setValue] = useState<string | number | readonly string[] | undefined>(
+    const [value, setValue] = useState<string | number | undefined>(props.defaultValue);
+    const [initialValue, setInitialValue] = useState<string | number | undefined>(
         props.defaultValue
     );
-    const [initialValue, setInitialValue] = useState<
-        string | number | readonly string[] | undefined
-    >(props.defaultValue);
 
     const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -39,9 +37,9 @@ export default function TInput(props: TInputProps) {
     const submit = () => {
         setState(TState.busy);
         clearTimeout(timerRef.current);
-        if (props.completionAction)
+        if (props.onSubmit)
             props
-                .completionAction(value)
+                .onSubmit(value)
                 .then(() => {
                     setState(TState.success);
                     setInitialValue(value);
@@ -82,9 +80,10 @@ export default function TInput(props: TInputProps) {
 
 export interface TInputProps extends TProps {
     placeholder?: string;
-    defaultValue?: string | number | readonly string[];
+    defaultValue?: string | number;
     actionDelay?: number;
     autoSubmit?: boolean;
     submitButtonHidden?: boolean;
     submitButtonText?: string;
+    onSubmit?: (value?: string | number) => Promise<void>;
 }

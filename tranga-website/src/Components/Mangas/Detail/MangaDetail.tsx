@@ -1,66 +1,26 @@
 import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
 import { Card, CardCover, Chip, Modal, ModalDialog, Stack, Typography, useTheme } from '@mui/joy';
 import ModalClose from '@mui/joy/ModalClose';
-import { FileLibrary, Manga, MangaConnectorId } from '../../../api/data-contracts.ts';
+import { Manga } from '../../../api/data-contracts.ts';
 import { ApiContext } from '../../../contexts/ApiContext.tsx';
 import { MangaContext } from '../../../contexts/MangaContext.tsx';
-import { FileLibraryContext } from '../../../contexts/FileLibraryContext.tsx';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import DownloadSection from './DownloadSection.tsx';
+import { DownloadSection } from './DownloadSection.tsx';
+import ChaptersSection from './ChaptersSection.tsx';
 
 export default function MangaDetail(props: MangaDetailProps): ReactNode {
     const Api = useContext(ApiContext);
     const Manga = useContext(MangaContext);
-    const Libraries = useContext(FileLibraryContext);
     const theme = useTheme();
 
     const [manga, setManga] = useState<Manga | undefined>(props.manga);
-    const [library, setLibrary] = useState<FileLibrary | undefined>();
-    const [downloadFromMap, setDownloadFromMap] = useState<Map<MangaConnectorId, boolean>>(
-        new Map()
-    );
 
     useEffect(() => {
         if (!props.open) return;
         if (!props.mangaKey) return;
         if (props.manga != undefined) return;
-        setLibrary(undefined);
         Manga.GetManga(props.mangaKey).then(setManga);
     }, [Api, Manga, props]);
-
-    useEffect(() => {
-        const newMap = new Map();
-        setLibrary(Libraries.find((library) => library.key == manga?.fileLibraryId));
-        manga?.mangaConnectorIds.forEach((id) => {
-            newMap.set(id, id.useForDownload);
-        });
-        setDownloadFromMap(newMap);
-    }, [manga, Libraries]);
-
-    const setDownload = async (): Promise<void> => {
-        if (!manga) return Promise.reject();
-        if (library) {
-            const s = await Api.mangaChangeLibraryCreate(manga.key, library?.key)
-                .then((result) => result.ok)
-                .catch(() => false);
-            if (!s) return Promise.reject();
-        }
-        for (const kv of downloadFromMap) {
-            const s = await Api.mangaSetAsDownloadFromCreate(
-                manga?.key,
-                kv[0].mangaConnectorName,
-                kv[1]
-            )
-                .then((result) => result.ok)
-                .catch(() => false);
-            if (!s) return Promise.reject();
-        }
-        return Promise.resolve();
-    };
-
-    const onLibraryChange = (_: any, value: string | null) => {
-        setLibrary(Libraries.find((library) => library.key == value));
-    };
 
     return (
         <Modal
@@ -139,11 +99,9 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                 </Stack>
                 <DownloadSection
                     downloadOpen={props.downloadOpen ?? false}
-                    library={library}
-                    onLibraryChange={onLibraryChange}
-                    downloadFromMap={downloadFromMap}
-                    setDownload={setDownload}
+                    manga={manga}
                 />
+                <ChaptersSection manga={manga} />
             </ModalDialog>
         </Modal>
     );

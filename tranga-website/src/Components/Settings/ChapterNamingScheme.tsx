@@ -30,7 +30,7 @@ export default function ChapterNamingScheme(): ReactNode {
             <TInput
                 defaultValue={settings?.chapterNamingScheme as string}
                 placeholder={'Scheme'}
-                completionAction={schemeChanged}
+                onSubmit={schemeChanged}
                 actionDelay={5000}
             />
         </SettingsItem>

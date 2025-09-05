@@ -60,7 +60,7 @@ export default function Settings({ setApiUri }: { setApiUri: (uri: string) => vo
                                 <TInput
                                     placeholder={'http(s)://'}
                                     defaultValue={Api.baseUrl}
-                                    completionAction={apiUriChanged}
+                                    onSubmit={apiUriChanged}
                                 />
                             </SettingsItem>
                             <ImageCompression />
