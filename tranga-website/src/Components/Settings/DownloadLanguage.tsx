@@ -7,13 +7,10 @@ export default function DownloadLanguage(): ReactNode {
     const settings = useContext(SettingsContext);
     const Api = useContext(ApiContext);
 
-    const languageChanged = async (
-        value: string | number | readonly string[] | undefined
-    ) => {
+    const languageChanged = async (value: string | number | readonly string[] | undefined) => {
         if (typeof value != 'string') return Promise.reject();
         try {
-            const response =
-                await Api.settingsDownloadLanguagePartialUpdate(value);
+            const response = await Api.settingsDownloadLanguagePartialUpdate(value);
             if (response.ok) return Promise.resolve();
             else return Promise.reject();
         } catch {

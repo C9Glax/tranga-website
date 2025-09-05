@@ -7,9 +7,7 @@ export default function FlareSolverr(): ReactNode {
     const settings = useContext(SettingsContext);
     const Api = useContext(ApiContext);
 
-    const uriChanged = async (
-        value: string | number | readonly string[] | undefined
-    ) => {
+    const uriChanged = async (value: string | number | readonly string[] | undefined) => {
         if (typeof value != 'string') return Promise.reject();
         try {
             const response = await Api.settingsFlareSolverrUrlCreate(value);

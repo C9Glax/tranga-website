@@ -3,20 +3,14 @@ import { ApiContext } from './ApiContext.tsx';
 import { Manga } from '../api/data-contracts.ts';
 import { V2 } from '../api/V2.ts';
 
-export const MangaContext = createContext<M>({
-    GetManga: () => Promise.reject(),
-});
+export const MangaContext = createContext<M>({ GetManga: () => Promise.reject() });
 const manga: Map<string, Manga> = new Map();
 const promises: Map<string, Promise<Manga | undefined>> = new Map();
 
 export default function MangaProvider({ children }: { children: ReactNode }) {
     const Api = useContext(ApiContext);
 
-    return (
-        <MangaContext value={{ GetManga: (k) => getManga(k, Api) }}>
-            {children}
-        </MangaContext>
-    );
+    return <MangaContext value={{ GetManga: (k) => getManga(k, Api) }}>{children}</MangaContext>;
 }
 
 function getManga(key: string, Api: V2): Promise<Manga | undefined> {

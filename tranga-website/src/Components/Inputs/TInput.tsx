@@ -6,9 +6,9 @@ import './loadingBorder.css';
 
 export default function TInput(props: TInputProps) {
     const [state, setState] = useState<TState>(TState.clean);
-    const [value, setValue] = useState<
-        string | number | readonly string[] | undefined
-    >(props.defaultValue);
+    const [value, setValue] = useState<string | number | readonly string[] | undefined>(
+        props.defaultValue
+    );
     const [initialValue, setInitialValue] = useState<
         string | number | readonly string[] | undefined
     >(props.defaultValue);

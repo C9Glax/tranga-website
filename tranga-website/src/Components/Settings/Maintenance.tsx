@@ -18,9 +18,7 @@ export default function Maintenance() {
 
     return (
         <SettingsItem title={'Maintenance'}>
-            <TButton completionAction={cleanUnusedManga}>
-                Cleanup unused Manga
-            </TButton>
+            <TButton completionAction={cleanUnusedManga}>Cleanup unused Manga</TButton>
         </SettingsItem>
     );
 }

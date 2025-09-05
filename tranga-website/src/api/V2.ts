@@ -33,9 +33,7 @@ import {
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
-export class V2<
-    SecurityDataType = unknown,
-> extends HttpClient<SecurityDataType> {
+export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
@@ -159,10 +157,7 @@ export class V2<
      * @summary Creates a new API.Schema.LibraryContext.LibraryConnectors.LibraryConnector
      * @request PUT:/v2/LibraryConnector
      */
-    libraryConnectorUpdate = (
-        data: LibraryConnector,
-        params: RequestParams = {}
-    ) =>
+    libraryConnectorUpdate = (data: LibraryConnector, params: RequestParams = {}) =>
         this.request<string, string>({
             path: `/v2/LibraryConnector`,
             method: 'PUT',
@@ -178,10 +173,7 @@ export class V2<
      * @summary Returns API.Schema.LibraryContext.LibraryConnectors.LibraryConnector with LibraryConnectorId
      * @request GET:/v2/LibraryConnector/{LibraryConnectorId}
      */
-    libraryConnectorDetail = (
-        libraryConnectorId: string,
-        params: RequestParams = {}
-    ) =>
+    libraryConnectorDetail = (libraryConnectorId: string, params: RequestParams = {}) =>
         this.request<LibraryConnector, string>({
             path: `/v2/LibraryConnector/${libraryConnectorId}`,
             method: 'GET',
@@ -196,10 +188,7 @@ export class V2<
      * @summary Deletes API.Schema.LibraryContext.LibraryConnectors.LibraryConnector with LibraryConnectorId
      * @request DELETE:/v2/LibraryConnector/{LibraryConnectorId}
      */
-    libraryConnectorDelete = (
-        libraryConnectorId: string,
-        params: RequestParams = {}
-    ) =>
+    libraryConnectorDelete = (libraryConnectorId: string, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/LibraryConnector/${libraryConnectorId}`,
             method: 'DELETE',
@@ -305,11 +294,7 @@ export class V2<
      * @request DELETE:/v2/Manga/{MangaId}
      */
     mangaDelete = (mangaId: string, params: RequestParams = {}) =>
-        this.request<void, string>({
-            path: `/v2/Manga/${mangaId}`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, string>({ path: `/v2/Manga/${mangaId}`, method: 'DELETE', ...params });
     /**
      * No description
      *
@@ -382,10 +367,7 @@ export class V2<
      * @summary Returns all downloaded API.Controllers.DTOs.Chapter for API.Controllers.DTOs.Manga with MangaId
      * @request GET:/v2/Manga/{MangaId}/Chapters/Downloaded
      */
-    mangaChaptersDownloadedList = (
-        mangaId: string,
-        params: RequestParams = {}
-    ) =>
+    mangaChaptersDownloadedList = (mangaId: string, params: RequestParams = {}) =>
         this.request<Chapter[], string>({
             path: `/v2/Manga/${mangaId}/Chapters/Downloaded`,
             method: 'GET',
@@ -400,10 +382,7 @@ export class V2<
      * @summary Returns all API.Controllers.DTOs.Chapter not downloaded for API.Controllers.DTOs.Manga with MangaId
      * @request GET:/v2/Manga/{MangaId}/Chapters/NotDownloaded
      */
-    mangaChaptersNotDownloadedList = (
-        mangaId: string,
-        params: RequestParams = {}
-    ) =>
+    mangaChaptersNotDownloadedList = (mangaId: string, params: RequestParams = {}) =>
         this.request<Chapter[], string>({
             path: `/v2/Manga/${mangaId}/Chapters/NotDownloaded`,
             method: 'GET',
@@ -418,10 +397,7 @@ export class V2<
      * @summary Returns the latest API.Controllers.DTOs.Chapter of requested API.Controllers.DTOs.Manga available on API.MangaConnectors.MangaConnector
      * @request GET:/v2/Manga/{MangaId}/Chapter/LatestAvailable
      */
-    mangaChapterLatestAvailableList = (
-        mangaId: string,
-        params: RequestParams = {}
-    ) =>
+    mangaChapterLatestAvailableList = (mangaId: string, params: RequestParams = {}) =>
         this.request<number, string | void>({
             path: `/v2/Manga/${mangaId}/Chapter/LatestAvailable`,
             method: 'GET',
@@ -436,10 +412,7 @@ export class V2<
      * @summary Returns the latest API.Controllers.DTOs.Chapter of requested API.Controllers.DTOs.Manga that is downloaded
      * @request GET:/v2/Manga/{MangaId}/Chapter/LatestDownloaded
      */
-    mangaChapterLatestDownloadedList = (
-        mangaId: string,
-        params: RequestParams = {}
-    ) =>
+    mangaChapterLatestDownloadedList = (mangaId: string, params: RequestParams = {}) =>
         this.request<Chapter, string | ProblemDetails | void>({
             path: `/v2/Manga/${mangaId}/Chapter/LatestDownloaded`,
             method: 'GET',
@@ -474,11 +447,7 @@ export class V2<
      * @summary Move API.Controllers.DTOs.Manga to different API.Schema.MangaContext.FileLibrary
      * @request POST:/v2/Manga/{MangaId}/ChangeLibrary/{LibraryId}
      */
-    mangaChangeLibraryCreate = (
-        mangaId: string,
-        libraryId: string,
-        params: RequestParams = {}
-    ) =>
+    mangaChangeLibraryCreate = (mangaId: string, libraryId: string, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/Manga/${mangaId}/ChangeLibrary/${libraryId}`,
             method: 'POST',
@@ -575,10 +544,7 @@ export class V2<
      * @summary Returns the API.MangaConnectors.MangaConnector (Scanlation-Sites) with the requested Name
      * @request GET:/v2/MangaConnector/{MangaConnectorName}
      */
-    mangaConnectorDetail = (
-        mangaConnectorName: string,
-        params: RequestParams = {}
-    ) =>
+    mangaConnectorDetail = (mangaConnectorName: string, params: RequestParams = {}) =>
         this.request<MangaConnector, string>({
             path: `/v2/MangaConnector/${mangaConnectorName}`,
             method: 'GET',
@@ -748,10 +714,7 @@ export class V2<
      * @summary Creates a new API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
      * @request PUT:/v2/NotificationConnector
      */
-    notificationConnectorUpdate = (
-        data: NotificationConnector,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorUpdate = (data: NotificationConnector, params: RequestParams = {}) =>
         this.request<string, string>({
             path: `/v2/NotificationConnector`,
             method: 'PUT',
@@ -797,10 +760,7 @@ export class V2<
      * @summary Creates a new Gotify-API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Gotify
      */
-    notificationConnectorGotifyUpdate = (
-        data: GotifyRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorGotifyUpdate = (data: GotifyRecord, params: RequestParams = {}) =>
         this.request<string, string>({
             path: `/v2/NotificationConnector/Gotify`,
             method: 'PUT',
@@ -817,10 +777,7 @@ export class V2<
      * @summary Creates a new Ntfy-API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Ntfy
      */
-    notificationConnectorNtfyUpdate = (
-        data: NtfyRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorNtfyUpdate = (data: NtfyRecord, params: RequestParams = {}) =>
         this.request<string, string>({
             path: `/v2/NotificationConnector/Ntfy`,
             method: 'PUT',
@@ -837,10 +794,7 @@ export class V2<
      * @summary Creates a new Pushover-API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Pushover
      */
-    notificationConnectorPushoverUpdate = (
-        data: PushoverRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorPushoverUpdate = (data: PushoverRecord, params: RequestParams = {}) =>
         this.request<string, string>({
             path: `/v2/NotificationConnector/Pushover`,
             method: 'PUT',
@@ -887,10 +841,7 @@ export class V2<
      * @summary Returns the API.Schema.MangaContext.MangaConnectorId`1 with API.Schema.MangaContext.MangaConnectorId`1.Key
      * @request GET:/v2/Query/Manga/MangaConnectorId/{MangaConnectorIdId}
      */
-    queryMangaMangaConnectorIdDetail = (
-        mangaConnectorIdId: string,
-        params: RequestParams = {}
-    ) =>
+    queryMangaMangaConnectorIdDetail = (mangaConnectorIdId: string, params: RequestParams = {}) =>
         this.request<MangaConnectorId, string>({
             path: `/v2/Query/Manga/MangaConnectorId/${mangaConnectorIdId}`,
             method: 'GET',
@@ -920,10 +871,7 @@ export class V2<
      * @summary Returns the API.Schema.MangaContext.MangaConnectorId`1 with API.Schema.MangaContext.MangaConnectorId`1.Key
      * @request GET:/v2/Query/Chapter/MangaConnectorId/{MangaConnectorIdId}
      */
-    queryChapterMangaConnectorIdDetail = (
-        mangaConnectorIdId: string,
-        params: RequestParams = {}
-    ) =>
+    queryChapterMangaConnectorIdDetail = (mangaConnectorIdId: string, params: RequestParams = {}) =>
         this.request<MangaConnectorId, string>({
             path: `/v2/Query/Chapter/MangaConnectorId/${mangaConnectorIdId}`,
             method: 'GET',
@@ -938,11 +886,7 @@ export class V2<
      * @summary Initiate a search for a API.Schema.MangaContext.Manga on API.Controllers.DTOs.MangaConnector with searchTerm
      * @request GET:/v2/Search/{MangaConnectorName}/{Query}
      */
-    searchDetail = (
-        mangaConnectorName: string,
-        query: string,
-        params: RequestParams = {}
-    ) =>
+    searchDetail = (mangaConnectorName: string, query: string, params: RequestParams = {}) =>
         this.request<MinimalManga[], string | ProblemDetails | void>({
             path: `/v2/Search/${mangaConnectorName}/${query}`,
             method: 'GET',
@@ -990,11 +934,7 @@ export class V2<
      * @request GET:/v2/Settings/UserAgent
      */
     settingsUserAgentList = (params: RequestParams = {}) =>
-        this.request<string, any>({
-            path: `/v2/Settings/UserAgent`,
-            method: 'GET',
-            ...params,
-        });
+        this.request<string, any>({ path: `/v2/Settings/UserAgent`, method: 'GET', ...params });
     /**
      * No description
      *
@@ -1003,10 +943,7 @@ export class V2<
      * @summary Set a new UserAgent
      * @request PATCH:/v2/Settings/UserAgent
      */
-    settingsUserAgentPartialUpdate = (
-        data: string,
-        params: RequestParams = {}
-    ) =>
+    settingsUserAgentPartialUpdate = (data: string, params: RequestParams = {}) =>
         this.request<void, any>({
             path: `/v2/Settings/UserAgent`,
             method: 'PATCH',
@@ -1023,11 +960,7 @@ export class V2<
      * @request DELETE:/v2/Settings/UserAgent
      */
     settingsUserAgentDelete = (params: RequestParams = {}) =>
-        this.request<void, any>({
-            path: `/v2/Settings/UserAgent`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, any>({ path: `/v2/Settings/UserAgent`, method: 'DELETE', ...params });
     /**
      * No description
      *
@@ -1053,12 +986,7 @@ export class V2<
                 MangaInfo?: number;
             },
             any
-        >({
-            path: `/v2/Settings/RequestLimits`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        >({ path: `/v2/Settings/RequestLimits`, method: 'GET', format: 'json', ...params });
     /**
      * @description <h1>NOT IMPLEMENTED</h1>
      *
@@ -1068,11 +996,7 @@ export class V2<
      * @request PATCH:/v2/Settings/RequestLimits
      */
     settingsRequestLimitsPartialUpdate = (params: RequestParams = {}) =>
-        this.request<any, void>({
-            path: `/v2/Settings/RequestLimits`,
-            method: 'PATCH',
-            ...params,
-        });
+        this.request<any, void>({ path: `/v2/Settings/RequestLimits`, method: 'PATCH', ...params });
     /**
      * No description
      *
@@ -1120,10 +1044,7 @@ export class V2<
      * @originalName settingsRequestLimitsDelete
      * @duplicate
      */
-    settingsRequestLimitsDelete2 = (
-        requestType: RequestType,
-        params: RequestParams = {}
-    ) =>
+    settingsRequestLimitsDelete2 = (requestType: RequestType, params: RequestParams = {}) =>
         this.request<string, any>({
             path: `/v2/Settings/RequestLimits/${requestType}`,
             method: 'DELETE',
@@ -1152,10 +1073,7 @@ export class V2<
      * @summary Set the Image-Compression-Level for Images
      * @request PATCH:/v2/Settings/ImageCompressionLevel/{level}
      */
-    settingsImageCompressionLevelPartialUpdate = (
-        level: number,
-        params: RequestParams = {}
-    ) =>
+    settingsImageCompressionLevelPartialUpdate = (level: number, params: RequestParams = {}) =>
         this.request<void, ProblemDetails>({
             path: `/v2/Settings/ImageCompressionLevel/${level}`,
             method: 'PATCH',
@@ -1170,11 +1088,7 @@ export class V2<
      * @request GET:/v2/Settings/BWImages
      */
     settingsBwImagesList = (params: RequestParams = {}) =>
-        this.request<boolean, any>({
-            path: `/v2/Settings/BWImages`,
-            method: 'GET',
-            ...params,
-        });
+        this.request<boolean, any>({ path: `/v2/Settings/BWImages`, method: 'GET', ...params });
     /**
      * No description
      *
@@ -1183,10 +1097,7 @@ export class V2<
      * @summary Enable/Disable conversion of Images to Black and White
      * @request PATCH:/v2/Settings/BWImages/{enabled}
      */
-    settingsBwImagesPartialUpdate = (
-        enabled: boolean,
-        params: RequestParams = {}
-    ) =>
+    settingsBwImagesPartialUpdate = (enabled: boolean, params: RequestParams = {}) =>
         this.request<void, any>({
             path: `/v2/Settings/BWImages/${enabled}`,
             method: 'PATCH',
@@ -1214,10 +1125,7 @@ export class V2<
      * @summary Sets the Chapter Naming Scheme
      * @request PATCH:/v2/Settings/ChapterNamingScheme
      */
-    settingsChapterNamingSchemePartialUpdate = (
-        data: string,
-        params: RequestParams = {}
-    ) =>
+    settingsChapterNamingSchemePartialUpdate = (data: string, params: RequestParams = {}) =>
         this.request<void, any>({
             path: `/v2/Settings/ChapterNamingScheme`,
             method: 'PATCH',
@@ -1233,10 +1141,7 @@ export class V2<
      * @summary Sets the FlareSolverr-URL
      * @request POST:/v2/Settings/FlareSolverr/Url
      */
-    settingsFlareSolverrUrlCreate = (
-        data: string,
-        params: RequestParams = {}
-    ) =>
+    settingsFlareSolverrUrlCreate = (data: string, params: RequestParams = {}) =>
         this.request<void, any>({
             path: `/v2/Settings/FlareSolverr/Url`,
             method: 'POST',
@@ -1294,10 +1199,7 @@ export class V2<
      * @summary Sets the language in which Manga are downloaded
      * @request PATCH:/v2/Settings/DownloadLanguage/{Language}
      */
-    settingsDownloadLanguagePartialUpdate = (
-        language: string,
-        params: RequestParams = {}
-    ) =>
+    settingsDownloadLanguagePartialUpdate = (language: string, params: RequestParams = {}) =>
         this.request<void, any>({
             path: `/v2/Settings/DownloadLanguage/${language}`,
             method: 'PATCH',
@@ -1341,10 +1243,7 @@ export class V2<
      * @summary Get all API.Workers.BaseWorker in requested API.Workers.WorkerExecutionState
      * @request GET:/v2/Worker/State/{State}
      */
-    workerStateDetail = (
-        state: WorkerExecutionState,
-        params: RequestParams = {}
-    ) =>
+    workerStateDetail = (state: WorkerExecutionState, params: RequestParams = {}) =>
         this.request<Worker[], any>({
             path: `/v2/Worker/State/${state}`,
             method: 'GET',
@@ -1375,11 +1274,7 @@ export class V2<
      * @request DELETE:/v2/Worker/{WorkerId}
      */
     workerDelete = (workerId: string, params: RequestParams = {}) =>
-        this.request<void, string>({
-            path: `/v2/Worker/${workerId}`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, string>({ path: `/v2/Worker/${workerId}`, method: 'DELETE', ...params });
     /**
      * No description
      *

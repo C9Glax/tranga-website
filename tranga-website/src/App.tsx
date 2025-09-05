@@ -9,14 +9,12 @@ import MangaList from './Components/Mangas/MangaList.tsx';
 import { Search } from './Search.tsx';
 import MangaConnectorProvider from './contexts/MangaConnectorContext.tsx';
 import LibraryProvider from './contexts/FileLibraryContext.tsx';
+import MangaDetail from './MangaDetail.tsx';
 
 export default function App() {
     const [apiUri, setApiUri] = useState<string>(
         localStorage.getItem('apiUri') ??
-            window.location.href.substring(
-                0,
-                window.location.href.lastIndexOf('/')
-            ) + '/api'
+            window.location.href.substring(0, window.location.href.lastIndexOf('/')) + '/api'
     );
     const [apiConfig, setApiConfig] = useState<ApiConfig>({ baseUrl: apiUri });
     useEffect(() => {
@@ -24,6 +22,14 @@ export default function App() {
     }, [apiUri]);
 
     const [searchOpen, setSearchOpen] = useState<boolean>(false);
+    const [downloadDrawerOpen, setDownloadDrawerOpen] = useState(false);
+    const [selectedMangaKey, setSelectedMangaKey] = useState<string>();
+    const [downloadSectionOpen, setDownloadSectionOpen] = useState(false);
+    function openMangaDownloadDrawer(mangaKey: string, downloadSectionOpen?: boolean) {
+        setDownloadDrawerOpen(true);
+        setSelectedMangaKey(mangaKey);
+        setDownloadSectionOpen(downloadSectionOpen ?? false);
+    }
 
     return (
         <ApiProvider apiConfig={apiConfig}>
@@ -36,11 +42,19 @@ export default function App() {
                             </Header>
                             <Sheet className={'app-content'}>
                                 <MangaList
+                                    mangaOnClick={(m) => openMangaDownloadDrawer(m.key)}
                                     openSearch={() => setSearchOpen(true)}
                                 />
                                 <Search
                                     open={searchOpen}
                                     setOpen={setSearchOpen}
+                                    mangaOnClick={(m) => openMangaDownloadDrawer(m.key, true)}
+                                />
+                                <MangaDetail
+                                    open={downloadDrawerOpen}
+                                    setOpen={setDownloadDrawerOpen}
+                                    mangaKey={selectedMangaKey}
+                                    downloadOpen={downloadSectionOpen}
                                 />
                             </Sheet>
                         </Sheet>

@@ -1,6 +1,5 @@
 import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
 import {
-    Button,
     List,
     ListItem,
     ListItemDecorator,
@@ -18,8 +17,6 @@ import TInput from './Components/Inputs/TInput.tsx';
 import { ApiContext } from './contexts/ApiContext.tsx';
 import { MangaCardList } from './Components/Mangas/MangaList.tsx';
 import { MangaConnector, MinimalManga } from './api/data-contracts.ts';
-import MangaDetail from './MangaDetail.tsx';
-import MangaDownloadDrawer from './MangaDownloadDrawer.tsx';
 
 export function Search(props: SearchModalProps): ReactNode {
     const Api = useContext(ApiContext);
@@ -32,8 +29,7 @@ export function Search(props: SearchModalProps): ReactNode {
         }
     }, [props]);
 
-    const [selectedConnector, setSelectedConnector] =
-        useState<MangaConnector>();
+    const [selectedConnector, setSelectedConnector] = useState<MangaConnector>();
     const [searchResults, setSearchResults] = useState<MinimalManga[]>([]);
 
     const startSearch = async (
@@ -54,10 +50,7 @@ export function Search(props: SearchModalProps): ReactNode {
         } else {
             if (!selectedConnector) return Promise.reject();
             try {
-                const result2 = await Api.searchDetail(
-                    selectedConnector?.key,
-                    value
-                );
+                const result2 = await Api.searchDetail(selectedConnector?.key, value);
                 if (result2.ok) {
                     setSearchResults(result2.data);
                     return Promise.resolve();
@@ -67,23 +60,6 @@ export function Search(props: SearchModalProps): ReactNode {
             }
         }
     };
-
-    const [selectedManga, setSelectedManga] = useState<
-        MinimalManga | undefined
-    >(undefined);
-    const [mangaDetailOpen, setMangaDetailOpen] = useState(false);
-    const [mangaDownloadDrawerOpen, setMangaDownloadDrawerOpen] =
-        useState(false);
-
-    function openMangaDetail(manga: MinimalManga) {
-        setSelectedManga(manga);
-        setMangaDetailOpen(true);
-    }
-
-    function openMangaDownloadDrawer() {
-        setMangaDetailOpen(false);
-        setMangaDownloadDrawerOpen(true);
-    }
 
     return (
         <Modal
@@ -95,18 +71,14 @@ export function Search(props: SearchModalProps): ReactNode {
                     <Step
                         orientation={'vertical'}
                         indicator={<StepIndicator>1</StepIndicator>}>
-                        <Typography level={'title-lg'}>
-                            Select a connector
-                        </Typography>
+                        <Typography level={'title-lg'}>Select a connector</Typography>
                         <List>
                             {MangaConnectors.map((c) => (
                                 <ListItem
                                     key={c.key}
                                     onClick={() => setSelectedConnector(c)}>
                                     <ListItemDecorator>
-                                        <MangaConnectorIcon
-                                            mangaConnector={c}
-                                        />
+                                        <MangaConnectorIcon mangaConnector={c} />
                                     </ListItemDecorator>
                                     <Typography
                                         sx={
@@ -123,9 +95,7 @@ export function Search(props: SearchModalProps): ReactNode {
                     <Step
                         orientation={'vertical'}
                         indicator={<StepIndicator>2</StepIndicator>}>
-                        <Typography level={'title-lg'}>
-                            Enter a search term or URL
-                        </Typography>
+                        <Typography level={'title-lg'}>Enter a search term or URL</Typography>
                         <TInput
                             placeholder={'Manga-name or URL'}
                             completionAction={startSearch}
@@ -134,22 +104,7 @@ export function Search(props: SearchModalProps): ReactNode {
                 </Stepper>
                 <MangaCardList
                     manga={searchResults}
-                    mangaOnClick={openMangaDetail}
-                />
-                <MangaDetail
-                    mangaKey={selectedManga?.key}
-                    open={mangaDetailOpen}
-                    setOpen={setMangaDetailOpen}
-                    actions={[
-                        <Button onClick={openMangaDownloadDrawer}>
-                            Download
-                        </Button>,
-                    ]}
-                />
-                <MangaDownloadDrawer
-                    open={mangaDownloadDrawerOpen}
-                    setOpen={setMangaDownloadDrawerOpen}
-                    mangaKey={selectedManga?.key}
+                    mangaOnClick={props.mangaOnClick}
                 />
             </ModalDialog>
         </Modal>
@@ -159,6 +114,7 @@ export function Search(props: SearchModalProps): ReactNode {
 export interface SearchModalProps {
     open: boolean;
     setOpen: Dispatch<boolean>;
+    mangaOnClick?: (manga: MinimalManga) => void;
 }
 
 function isUrl(str: string): boolean {

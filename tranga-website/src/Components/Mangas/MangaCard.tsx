@@ -10,11 +10,7 @@ import {
 import { EventHandler, ReactNode, useContext } from 'react';
 import './MangaCard.css';
 import MangaConnectorIcon from './MangaConnectorIcon.tsx';
-import {
-    Manga,
-    MangaReleaseStatus,
-    MinimalManga,
-} from '../../api/data-contracts.ts';
+import { Manga, MangaReleaseStatus, MinimalManga } from '../../api/data-contracts.ts';
 import { ApiContext } from '../../contexts/ApiContext.tsx';
 
 export default function MangaCard(props: MangaCardProps): ReactNode {
@@ -23,14 +19,10 @@ export default function MangaCard(props: MangaCardProps): ReactNode {
     return (
         <Badge
             badgeContent={props.manga?.mangaConnectorIds.map((id) => (
-                <MangaConnectorIcon
-                    mangaConnectorName={id.mangaConnectorName}
-                />
+                <MangaConnectorIcon mangaConnectorName={id.mangaConnectorName} />
             ))}
             className={'manga-card-badge'}
-            color={releaseColor(
-                props.manga?.releaseStatus ?? MangaReleaseStatus.Unreleased
-            )}>
+            color={releaseColor(props.manga?.releaseStatus ?? MangaReleaseStatus.Unreleased)}>
             <Card
                 className={'manga-card'}
                 onClick={props.onClick}>
@@ -46,9 +38,7 @@ export default function MangaCard(props: MangaCardProps): ReactNode {
                 <CardCover className={'manga-card-cover-blur'} />
                 <CardContent className={'manga-card-content'}>
                     <Typography level={'h4'}>
-                        {props.manga?.name ?? (
-                            <Skeleton>{stringWithRandomLength()}</Skeleton>
-                        )}
+                        {props.manga?.name ?? <Skeleton>{stringWithRandomLength()}</Skeleton>}
                     </Typography>
                 </CardContent>
             </Card>

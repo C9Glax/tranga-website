@@ -12,13 +12,7 @@ import {
 } from '@mui/joy';
 import './Settings.css';
 import * as React from 'react';
-import {
-    createContext,
-    ReactNode,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { SxProps } from '@mui/joy/styles/types';
 import ImageCompression from './ImageCompression.tsx';
 import FlareSolverr from './FlareSolverr.tsx';
@@ -29,15 +23,9 @@ import { ApiContext } from '../../contexts/ApiContext.tsx';
 import { TrangaSettings } from '../../api/data-contracts.ts';
 import TInput from '../Inputs/TInput.tsx';
 
-export const SettingsContext = createContext<TrangaSettings | undefined>(
-    undefined
-);
+export const SettingsContext = createContext<TrangaSettings | undefined>(undefined);
 
-export default function Settings({
-    setApiUri,
-}: {
-    setApiUri: (uri: string) => void;
-}) {
+export default function Settings({ setApiUri }: { setApiUri: (uri: string) => void }) {
     const Api = useContext(ApiContext);
     const [settings, setSettings] = useState<TrangaSettings>();
 
@@ -49,9 +37,7 @@ export default function Settings({
         });
     }, [Api]);
 
-    const apiUriChanged = (
-        value: string | number | readonly string[] | undefined
-    ) => {
+    const apiUriChanged = (value: string | number | readonly string[] | undefined) => {
         if (typeof value != 'string') return Promise.reject();
         setApiUri(value);
         return Promise.resolve();
@@ -90,13 +76,7 @@ export default function Settings({
     );
 }
 
-export function SettingsItem({
-    title,
-    children,
-}: {
-    title: string;
-    children: ReactNode;
-}) {
+export function SettingsItem({ title, children }: { title: string; children: ReactNode }) {
     return (
         <Accordion>
             <AccordionSummary>{title}</AccordionSummary>

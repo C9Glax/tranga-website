@@ -8,13 +8,10 @@ export default function ChapterNamingScheme(): ReactNode {
     const settings = useContext(SettingsContext);
     const Api = useContext(ApiContext);
 
-    const schemeChanged = async (
-        value: string | number | readonly string[] | undefined
-    ) => {
+    const schemeChanged = async (value: string | number | readonly string[] | undefined) => {
         if (typeof value != 'string') return Promise.reject();
         try {
-            const response =
-                await Api.settingsChapterNamingSchemePartialUpdate(value);
+            const response = await Api.settingsChapterNamingSchemePartialUpdate(value);
             if (response.ok) return Promise.resolve();
             else return Promise.reject();
         } catch {

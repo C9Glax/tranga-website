@@ -5,11 +5,7 @@ import './Header.css';
 import { Article, GitHub } from '@mui/icons-material';
 import { ApiContext } from './contexts/ApiContext.tsx';
 
-export default function Header({
-    children,
-}: {
-    children?: ReactNode;
-}): ReactElement {
+export default function Header({ children }: { children?: ReactNode }): ReactElement {
     const Api = useContext(ApiContext);
 
     return (
@@ -17,11 +13,7 @@ export default function Header({
             <Stack
                 direction={'row'}
                 spacing={2}
-                sx={{
-                    width: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                }}
+                sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
                 useFlexGap>
                 <Stack
                     sx={{ flexGrow: 1, flexBasis: 1 }}
@@ -30,12 +22,7 @@ export default function Header({
                     {children}
                 </Stack>
                 <Stack
-                    sx={{
-                        flexGrow: 1,
-                        height: '100%',
-                        flexBasis: 1,
-                        justifyContent: 'center',
-                    }}
+                    sx={{ flexGrow: 1, height: '100%', flexBasis: 1, justifyContent: 'center' }}
                     direction={'row'}>
                     <img
                         src={'/blahaj.png'}
@@ -55,11 +42,7 @@ export default function Header({
                     </Typography>
                 </Stack>
                 <Stack
-                    sx={{
-                        flexGrow: 1,
-                        flexBasis: 1,
-                        justifyContent: 'flex-end',
-                    }}
+                    sx={{ flexGrow: 1, flexBasis: 1, justifyContent: 'flex-end' }}
                     direction={'row'}
                     spacing={2}>
                     <Link

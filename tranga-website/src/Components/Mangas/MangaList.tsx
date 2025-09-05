@@ -1,36 +1,39 @@
 import { Stack } from '@mui/joy';
 import './MangaList.css';
 import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
-import {
-    Manga,
-    MangaReleaseStatus,
-    MinimalManga,
-} from '../../api/data-contracts.ts';
+import { Manga, MangaReleaseStatus, MinimalManga } from '../../api/data-contracts.ts';
 import { ApiContext } from '../../contexts/ApiContext.tsx';
 import MangaCard from './MangaCard.tsx';
 
-export default function MangaList({
-    openSearch,
-}: {
-    openSearch: () => void;
-}): ReactNode {
+export default function MangaList(props: MangaListProps): ReactNode {
     const Api = useContext(ApiContext);
-    const [downloadingManga, setDownloadingManga] = useState<MinimalManga[]>(
-        []
-    );
+    const [downloadingManga, setDownloadingManga] = useState<MinimalManga[]>([]);
 
+    const [interval, setIntervalState] = useState<number>();
     useEffect(() => {
+        if (interval) {
+            clearInterval(interval);
+            setIntervalState(undefined);
+        }
+        if (!Api) return;
+        updateDownloadingManga();
+        setIntervalState(setInterval(updateDownloadingManga, 5000));
+    }, [Api]);
+
+    const updateDownloadingManga = () => {
         Api.mangaDownloadingList().then((data) => {
             if (data.ok) {
                 setDownloadingManga(data.data);
             }
         });
-    }, [Api]);
+    };
 
     return (
-        <MangaCardList manga={downloadingManga}>
+        <MangaCardList
+            manga={downloadingManga}
+            mangaOnClick={props.mangaOnClick}>
             <MangaCard
-                onClick={openSearch}
+                onClick={props.openSearch}
                 manga={{
                     name: 'Search',
                     description: 'Search for a new Manga',
@@ -41,6 +44,11 @@ export default function MangaList({
             />
         </MangaCardList>
     );
+}
+
+export interface MangaListProps {
+    openSearch: () => void;
+    mangaOnClick?: Dispatch<Manga | MinimalManga>;
 }
 
 export function MangaCardList(props: MangaCardListProps): ReactNode {

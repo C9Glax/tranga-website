@@ -12,9 +12,7 @@ export default function MangaConnectorIcon({
 }): ReactNode {
     const Api = useContext(ApiContext);
 
-    const [connector, setConnector] = useState<MangaConnector | undefined>(
-        mangaConnector
-    );
+    const [connector, setConnector] = useState<MangaConnector | undefined>(mangaConnector);
 
     useEffect(() => {
         if (mangaConnector) {
