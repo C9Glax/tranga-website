@@ -1,31 +1,21 @@
 import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
     Card,
     CardCover,
-    Checkbox,
     Chip,
-    List,
-    ListItem,
     Modal,
     ModalDialog,
-    Option,
-    Select,
     Stack,
     Typography,
     useTheme,
 } from '@mui/joy';
 import ModalClose from '@mui/joy/ModalClose';
-import { FileLibrary, Manga, MangaConnectorId } from './api/data-contracts.ts';
-import { ApiContext } from './contexts/ApiContext.tsx';
-import { MangaContext } from './contexts/MangaContext.tsx';
-import { FileLibraryContext } from './contexts/FileLibraryContext.tsx';
-import MangaConnectorIcon from './Components/Mangas/MangaConnectorIcon.tsx';
-import TButton from './Components/Inputs/TButton.tsx';
+import { FileLibrary, Manga, MangaConnectorId } from '../../../api/data-contracts.ts';
+import { ApiContext } from '../../../contexts/ApiContext.tsx';
+import { MangaContext } from '../../../contexts/MangaContext.tsx';
+import { FileLibraryContext } from '../../../contexts/FileLibraryContext.tsx';
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import DownloadSection from "./DownloadSection.tsx";
 
 export default function MangaDetail(props: MangaDetailProps): ReactNode {
     const Api = useContext(ApiContext);
@@ -151,69 +141,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                         />
                     </Stack>
                 </Stack>
-
-                <Accordion defaultExpanded={props.downloadOpen}>
-                    <AccordionSummary>
-                        <Typography level={'h3'}>Download</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Stack
-                            direction={'column'}
-                            gap={2}
-                            sx={{ flexBasis: 0 }}>
-                            <Box>
-                                <Typography>Select a Library to Download to:</Typography>
-                                <Select
-                                    placeholder={'Select a Library'}
-                                    value={library?.key}
-                                    onChange={onLibraryChange}>
-                                    {Libraries.map((l) => (
-                                        <Option
-                                            key={l.key}
-                                            value={l.key}>
-                                            {l.libraryName} ({l.basePath})
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Box>
-                            <Box>
-                                <Typography>
-                                    Select which connectors you want to download this Manga from:
-                                </Typography>
-                                <List>
-                                    {manga?.mangaConnectorIds.map((id) => (
-                                        <ListItem key={id.key}>
-                                            <Checkbox
-                                                defaultChecked={id.useForDownload}
-                                                onChange={(c) =>
-                                                    downloadFromMap.set(id, c.target.checked)
-                                                }
-                                                label={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: 5,
-                                                        }}>
-                                                        <MangaConnectorIcon
-                                                            mangaConnectorName={
-                                                                id.mangaConnectorName
-                                                            }
-                                                        />
-                                                        <Typography>
-                                                            {id.mangaConnectorName}
-                                                        </Typography>
-                                                    </div>
-                                                }
-                                            />
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </Box>
-                            <TButton completionAction={setDownload}>Download All</TButton>
-                        </Stack>
-                    </AccordionDetails>
-                </Accordion>
+                <DownloadSection downloadOpen={props.downloadOpen??false} library={library} onLibraryChange={onLibraryChange} downloadFromMap={downloadFromMap} setDownload={setDownload} />
             </ModalDialog>
         </Modal>
     );

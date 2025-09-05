@@ -9,7 +9,7 @@ import MangaList from './Components/Mangas/MangaList.tsx';
 import { Search } from './Search.tsx';
 import MangaConnectorProvider from './contexts/MangaConnectorContext.tsx';
 import LibraryProvider from './contexts/FileLibraryContext.tsx';
-import MangaDetail from './MangaDetail.tsx';
+import MangaDetail from './Components/Mangas/Detail/MangaDetail.tsx';
 
 export default function App() {
     const [apiUri, setApiUri] = useState<string>(
