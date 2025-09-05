@@ -41,6 +41,13 @@ export enum LibraryType {
     Kavita = 'Kavita',
 }
 
+export enum CoverSize {
+    Original = 'Original',
+    Large = 'Large',
+    Medium = 'Medium',
+    Small = 'Small',
+}
+
 /** API.Schema.MangaContext.AltTitle DTO */
 export interface AltTitle {
     /**
@@ -390,6 +397,10 @@ export interface TrangaSettings {
         MangaInfo?: number;
     } | null;
     downloadLanguage?: string | null;
+    /** @format int32 */
+    maxConcurrentDownloads?: number;
+    /** @format int32 */
+    maxConcurrentWorkers?: number;
 }
 
 /** API.Workers.BaseWorker DTO */

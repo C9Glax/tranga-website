@@ -30,7 +30,7 @@ export default function MangaCard(props: MangaCardProps): ReactNode {
                     <img
                         src={
                             props.manga && props.manga.key != 'Search'
-                                ? `${Api.baseUrl}/v2/Manga/${props.manga?.key}/Cover`
+                                ? `${Api.baseUrl}/v2/Manga/${props.manga?.key}/Cover/Medium`
                                 : '/blahaj.png'
                         }
                     />

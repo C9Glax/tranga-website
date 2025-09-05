@@ -13,6 +13,7 @@
 import {
     Author,
     Chapter,
+    CoverSize,
     FileLibrary,
     GotifyRecord,
     LibraryConnector,
@@ -317,30 +318,14 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * No description
      *
      * @tags Manga
-     * @name MangaCoverList
+     * @name MangaCoverDetail
      * @summary Returns Cover of API.Controllers.DTOs.Manga with MangaId
-     * @request GET:/v2/Manga/{MangaId}/Cover
+     * @request GET:/v2/Manga/{MangaId}/Cover/{CoverSize}
      */
-    mangaCoverList = (
-        mangaId: string,
-        query?: {
-            /**
-             * If width is provided, height needs to also be provided
-             * @format int32
-             */
-            width?: number;
-            /**
-             * If height is provided, width needs to also be provided
-             * @format int32
-             */
-            height?: number;
-        },
-        params: RequestParams = {}
-    ) =>
-        this.request<string, ProblemDetails | string | void>({
-            path: `/v2/Manga/${mangaId}/Cover`,
+    mangaCoverDetail = (mangaId: string, coverSize: CoverSize, params: RequestParams = {}) =>
+        this.request<File, ProblemDetails | string | void>({
+            path: `/v2/Manga/${mangaId}/Cover/${coverSize}`,
             method: 'GET',
-            query: query,
             format: 'blob',
             ...params,
         });

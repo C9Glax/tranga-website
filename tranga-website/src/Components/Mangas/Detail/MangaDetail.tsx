@@ -44,7 +44,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                             <img
                                 src={
                                     manga
-                                        ? `${Api.baseUrl}/v2/Manga/${manga.key}/Cover`
+                                        ? `${Api.baseUrl}/v2/Manga/${manga.key}/Cover/Medium`
                                         : '/blahaj.png'
                                 }
                             />
