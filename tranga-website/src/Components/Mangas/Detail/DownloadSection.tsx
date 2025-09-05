@@ -5,20 +5,21 @@ import {
     Box,
     Checkbox,
     List,
-    ListItem, Option,
+    ListItem,
+    Option,
     Select,
     Stack,
-    Typography
-} from "@mui/joy";
-import {ReactNode, useContext} from "react";
-import TButton from "../../Inputs/TButton.tsx";
-import MangaConnectorIcon from "../MangaConnectorIcon.tsx";
-import {FileLibrary, Manga, MangaConnectorId} from "../../../api/data-contracts.ts";
-import {FileLibraryContext} from "../../../contexts/FileLibraryContext.tsx";
+    Typography,
+} from '@mui/joy';
+import { ReactNode, useContext } from 'react';
+import TButton from '../../Inputs/TButton.tsx';
+import MangaConnectorIcon from '../MangaConnectorIcon.tsx';
+import { FileLibrary, Manga, MangaConnectorId } from '../../../api/data-contracts.ts';
+import { FileLibraryContext } from '../../../contexts/FileLibraryContext.tsx';
 
-export default function DownloadSection (props: DownloadSectionProps) : ReactNode {
+export default function DownloadSection(props: DownloadSectionProps): ReactNode {
     const Libraries = useContext(FileLibraryContext);
-    
+
     return (
         <Accordion defaultExpanded={props.downloadOpen}>
             <AccordionSummary>
@@ -64,13 +65,9 @@ export default function DownloadSection (props: DownloadSectionProps) : ReactNod
                                                     gap: 5,
                                                 }}>
                                                 <MangaConnectorIcon
-                                                    mangaConnectorName={
-                                                        id.mangaConnectorName
-                                                    }
+                                                    mangaConnectorName={id.mangaConnectorName}
                                                 />
-                                                <Typography>
-                                                    {id.mangaConnectorName}
-                                                </Typography>
+                                                <Typography>{id.mangaConnectorName}</Typography>
                                             </div>
                                         }
                                     />

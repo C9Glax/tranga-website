@@ -1,21 +1,12 @@
 import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
-import {
-    Card,
-    CardCover,
-    Chip,
-    Modal,
-    ModalDialog,
-    Stack,
-    Typography,
-    useTheme,
-} from '@mui/joy';
+import { Card, CardCover, Chip, Modal, ModalDialog, Stack, Typography, useTheme } from '@mui/joy';
 import ModalClose from '@mui/joy/ModalClose';
 import { FileLibrary, Manga, MangaConnectorId } from '../../../api/data-contracts.ts';
 import { ApiContext } from '../../../contexts/ApiContext.tsx';
 import { MangaContext } from '../../../contexts/MangaContext.tsx';
 import { FileLibraryContext } from '../../../contexts/FileLibraryContext.tsx';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import DownloadSection from "./DownloadSection.tsx";
+import DownloadSection from './DownloadSection.tsx';
 
 export default function MangaDetail(props: MangaDetailProps): ReactNode {
     const Api = useContext(ApiContext);
@@ -139,9 +130,20 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                                 overflowY: 'auto',
                             }}
                         />
+                        <Stack
+                            direction={'row-reverse'}
+                            gap={1}>
+                            {props.children}
+                        </Stack>
                     </Stack>
                 </Stack>
-                <DownloadSection downloadOpen={props.downloadOpen??false} library={library} onLibraryChange={onLibraryChange} downloadFromMap={downloadFromMap} setDownload={setDownload} />
+                <DownloadSection
+                    downloadOpen={props.downloadOpen ?? false}
+                    library={library}
+                    onLibraryChange={onLibraryChange}
+                    downloadFromMap={downloadFromMap}
+                    setDownload={setDownload}
+                />
             </ModalDialog>
         </Modal>
     );
@@ -153,4 +155,5 @@ export interface MangaDetailProps {
     open: boolean;
     setOpen: Dispatch<boolean>;
     downloadOpen?: boolean;
+    children?: ReactNode;
 }
