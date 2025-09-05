@@ -31,6 +31,7 @@ export default function ChaptersSection(props: ChaptersSectionProps): ReactNode 
     };
 
     const setDownloadingFrom = (id: MangaConnectorId, value: boolean): Promise<void> => {
+        console.log(id,  value);
         return Promise.reject();
     };
 
