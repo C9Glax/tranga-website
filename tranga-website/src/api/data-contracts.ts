@@ -111,46 +111,170 @@ export interface Chapter {
     key: string;
 }
 
-export interface FileLibrary {
+export interface CreateGotifyConnectorRecord {
     /**
-     * @minLength 0
-     * @maxLength 256
+     * The Name of the Notification Connector
+     * @minLength 1
+     */
+    name: string;
+    /**
+     * The Url of the Instance
+     * @format uri
+     * @minLength 1
+     */
+    url: string;
+    /**
+     * The Apptoken used for authentication
+     * @minLength 1
+     */
+    appToken: string;
+    /**
+     * The Priority of Notifications
+     * @format int32
+     */
+    priority: number;
+}
+
+export interface CreateLibraryConnectorRecord {
+    libraryType: LibraryType;
+    /**
+     * The Url of the Library instance
+     * @format uri
+     * @minLength 1
+     */
+    url: string;
+    /**
+     * The Username to authenticate to the Library instance
+     * @minLength 1
+     */
+    username: string;
+    /**
+     * The Password to authenticate to the Library instance
+     * @minLength 1
+     */
+    password: string;
+}
+
+export interface CreateLibraryRecord {
+    /**
+     * The directory Path of the library
+     * @minLength 1
      */
     basePath: string;
     /**
-     * @minLength 0
-     * @maxLength 512
+     * The Name of the library
+     * @minLength 1
+     */
+    libraryName: string;
+}
+
+export interface CreateNotificationConnectorRecord {
+    /**
+     * The Name of the Notification Connector
+     * @minLength 1
+     */
+    name: string;
+    /**
+     * The Url of the Instance
+     * @format uri
+     * @minLength 1
+     */
+    url: string;
+    /**
+     * The HTTP Request Method to use for notifications
+     * @minLength 1
+     */
+    httpMethod: string;
+    /**
+     * The Request Body to use to send notifications
+     * @minLength 1
+     */
+    body: string;
+    /** The Request Headers to use to send notifications */
+    headers: Record<string, string>;
+}
+
+export interface CreateNtfyConnectorRecord {
+    /**
+     * The Name of the Notification Connector
+     * @minLength 1
+     */
+    name: string;
+    /**
+     * The Url of the Instance
+     * @format uri
+     * @minLength 1
+     */
+    url: string;
+    /**
+     * The Priority of Notifications
+     * @format int32
+     */
+    priority: number;
+    /**
+     * The Username used for authentication
+     * @minLength 1
+     */
+    username: string;
+    /**
+     * The Password used for authentication
+     * @minLength 1
+     */
+    password: string;
+    /**
+     * The Topic of Notifications
+     * @minLength 1
+     */
+    topic: string;
+}
+
+export interface CreatePushoverConnectorRecord {
+    /**
+     * The Name of the Notification Connector
+     * @minLength 1
+     */
+    name: string;
+    /**
+     * The Apptoken used for authentication
+     * @minLength 1
+     */
+    appToken: string;
+    /**
+     * The Username used for authentication
+     * @minLength 1
+     */
+    username: string;
+}
+
+export interface FileLibrary {
+    /**
+     * The directory Path of the library
+     * @minLength 1
+     */
+    basePath: string;
+    /**
+     * The Name of the library
+     * @minLength 1
      */
     libraryName: string;
     /**
+     * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
     key: string;
 }
 
-export interface GotifyRecord {
-    name?: string | null;
-    endpoint?: string | null;
-    appToken?: string | null;
-    /** @format int32 */
-    priority?: number;
-}
-
 export interface LibraryConnector {
-    libraryType: LibraryType;
     /**
+     * The Url of the Library instance
      * @format uri
-     * @minLength 0
-     * @maxLength 256
+     * @minLength 1
      */
     baseUrl: string;
+    type: LibraryType;
     /**
-     * @minLength 0
-     * @maxLength 256
-     */
-    auth: string;
-    /**
+     * Unique Identifier of the DTO
      * @minLength 16
      * @maxLength 64
      */
@@ -309,37 +433,34 @@ export interface MinimalManga {
 
 export interface NotificationConnector {
     /**
-     * @minLength 0
-     * @maxLength 64
+     * The Name of the Notification Connector
+     * @minLength 1
      */
     name: string;
     /**
+     * The Url of the Instance
      * @format uri
-     * @minLength 0
-     * @maxLength 2048
+     * @minLength 1
      */
     url: string;
-    headers: Record<string, string>;
     /**
-     * @minLength 0
-     * @maxLength 8
+     * The HTTP Request Method to use for notifications
+     * @minLength 1
      */
     httpMethod: string;
     /**
-     * @minLength 0
-     * @maxLength 4096
+     * The Request Body to use to send notifications
+     * @minLength 1
      */
     body: string;
-}
-
-export interface NtfyRecord {
-    name?: string | null;
-    endpoint?: string | null;
-    username?: string | null;
-    password?: string | null;
-    topic?: string | null;
-    /** @format int32 */
-    priority?: number;
+    /** The Request Headers to use to send notifications */
+    headers: Record<string, string>;
+    /**
+     * Unique Identifier of the DTO
+     * @minLength 16
+     * @maxLength 64
+     */
+    key: string;
 }
 
 export interface ProblemDetails {
@@ -350,12 +471,6 @@ export interface ProblemDetails {
     detail?: string | null;
     instance?: string | null;
     [key: string]: any;
-}
-
-export interface PushoverRecord {
-    name?: string | null;
-    appToken?: string | null;
-    user?: string | null;
 }
 
 export interface TrangaSettings {

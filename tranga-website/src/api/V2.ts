@@ -14,8 +14,13 @@ import {
     Author,
     Chapter,
     CoverSize,
+    CreateGotifyConnectorRecord,
+    CreateLibraryConnectorRecord,
+    CreateLibraryRecord,
+    CreateNotificationConnectorRecord,
+    CreateNtfyConnectorRecord,
+    CreatePushoverConnectorRecord,
     FileLibrary,
-    GotifyRecord,
     LibraryConnector,
     Manga,
     MangaConnector,
@@ -24,9 +29,7 @@ import {
     MetadataSearchResult,
     MinimalManga,
     NotificationConnector,
-    NtfyRecord,
     ProblemDetails,
-    PushoverRecord,
     RequestType,
     TrangaSettings,
     Worker,
@@ -40,7 +43,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags FileLibrary
      * @name FileLibraryList
-     * @summary Returns all API.Schema.MangaContext.FileLibrary
+     * @summary Returns all API.Controllers.DTOs.FileLibrary
      * @request GET:/v2/FileLibrary
      */
     fileLibraryList = (params: RequestParams = {}) =>
@@ -55,10 +58,10 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags FileLibrary
      * @name FileLibraryUpdate
-     * @summary Creates new API.Schema.MangaContext.FileLibrary
+     * @summary Creates new API.Controllers.DTOs.FileLibrary
      * @request PUT:/v2/FileLibrary
      */
-    fileLibraryUpdate = (data: FileLibrary, params: RequestParams = {}) =>
+    fileLibraryUpdate = (data: CreateLibraryRecord, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/FileLibrary`,
             method: 'PUT',
@@ -71,7 +74,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags FileLibrary
      * @name FileLibraryDetail
-     * @summary Returns API.Schema.MangaContext.FileLibrary with FileLibraryId
+     * @summary Returns API.Controllers.DTOs.FileLibrary with FileLibraryId
      * @request GET:/v2/FileLibrary/{FileLibraryId}
      */
     fileLibraryDetail = (fileLibraryId: string, params: RequestParams = {}) =>
@@ -140,7 +143,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags LibraryConnector
      * @name LibraryConnectorList
-     * @summary Gets all configured API.Schema.LibraryContext.LibraryConnectors.LibraryConnector
+     * @summary Gets all configured API.Controllers.DTOs.LibraryConnector
      * @request GET:/v2/LibraryConnector
      */
     libraryConnectorList = (params: RequestParams = {}) =>
@@ -155,10 +158,10 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags LibraryConnector
      * @name LibraryConnectorUpdate
-     * @summary Creates a new API.Schema.LibraryContext.LibraryConnectors.LibraryConnector
+     * @summary Creates a new API.Controllers.DTOs.LibraryConnector
      * @request PUT:/v2/LibraryConnector
      */
-    libraryConnectorUpdate = (data: LibraryConnector, params: RequestParams = {}) =>
+    libraryConnectorUpdate = (data: CreateLibraryConnectorRecord, params: RequestParams = {}) =>
         this.request<string, string>({
             path: `/v2/LibraryConnector`,
             method: 'PUT',
@@ -171,7 +174,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags LibraryConnector
      * @name LibraryConnectorDetail
-     * @summary Returns API.Schema.LibraryContext.LibraryConnectors.LibraryConnector with LibraryConnectorId
+     * @summary Returns API.Controllers.DTOs.LibraryConnector with LibraryConnectorId
      * @request GET:/v2/LibraryConnector/{LibraryConnectorId}
      */
     libraryConnectorDetail = (libraryConnectorId: string, params: RequestParams = {}) =>
@@ -186,7 +189,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags LibraryConnector
      * @name LibraryConnectorDelete
-     * @summary Deletes API.Schema.LibraryContext.LibraryConnectors.LibraryConnector with LibraryConnectorId
+     * @summary Deletes API.Controllers.DTOs.LibraryConnector with LibraryConnectorId
      * @request DELETE:/v2/LibraryConnector/{LibraryConnectorId}
      */
     libraryConnectorDelete = (libraryConnectorId: string, params: RequestParams = {}) =>
@@ -429,7 +432,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags Manga
      * @name MangaChangeLibraryCreate
-     * @summary Move API.Controllers.DTOs.Manga to different API.Schema.MangaContext.FileLibrary
+     * @summary Move API.Controllers.DTOs.Manga to different API.Controllers.DTOs.FileLibrary
      * @request POST:/v2/Manga/{MangaId}/ChangeLibrary/{LibraryId}
      */
     mangaChangeLibraryCreate = (mangaId: string, libraryId: string, params: RequestParams = {}) =>
@@ -681,7 +684,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorList
-     * @summary Gets all configured API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
+     * @summary Gets all configured API.Controllers.DTOs.NotificationConnector
      * @request GET:/v2/NotificationConnector
      */
     notificationConnectorList = (params: RequestParams = {}) =>
@@ -696,16 +699,18 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorUpdate
-     * @summary Creates a new API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
+     * @summary Creates a new API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector
      */
-    notificationConnectorUpdate = (data: NotificationConnector, params: RequestParams = {}) =>
-        this.request<string, string>({
+    notificationConnectorUpdate = (
+        data: CreateNotificationConnectorRecord,
+        params: RequestParams = {}
+    ) =>
+        this.request<void, string>({
             path: `/v2/NotificationConnector`,
             method: 'PUT',
             body: data,
             type: ContentType.Json,
-            format: 'json',
             ...params,
         });
     /**
@@ -713,7 +718,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorDetail
-     * @summary Returns API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector with requested Name
+     * @summary Returns API.Controllers.DTOs.NotificationConnector with requested Name
      * @request GET:/v2/NotificationConnector/{Name}
      */
     notificationConnectorDetail = (name: string, params: RequestParams = {}) =>
@@ -728,7 +733,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorDelete
-     * @summary Deletes the API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector with the requested Name
+     * @summary Deletes the API.Controllers.DTOs.NotificationConnector with the requested Name
      * @request DELETE:/v2/NotificationConnector/{Name}
      */
     notificationConnectorDelete = (name: string, params: RequestParams = {}) =>
@@ -742,16 +747,18 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorGotifyUpdate
-     * @summary Creates a new Gotify-API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
+     * @summary Creates a new Gotify-API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Gotify
      */
-    notificationConnectorGotifyUpdate = (data: GotifyRecord, params: RequestParams = {}) =>
-        this.request<string, string>({
+    notificationConnectorGotifyUpdate = (
+        data: CreateGotifyConnectorRecord,
+        params: RequestParams = {}
+    ) =>
+        this.request<void, string>({
             path: `/v2/NotificationConnector/Gotify`,
             method: 'PUT',
             body: data,
             type: ContentType.Json,
-            format: 'json',
             ...params,
         });
     /**
@@ -759,16 +766,18 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorNtfyUpdate
-     * @summary Creates a new Ntfy-API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
+     * @summary Creates a new Ntfy-API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Ntfy
      */
-    notificationConnectorNtfyUpdate = (data: NtfyRecord, params: RequestParams = {}) =>
-        this.request<string, string>({
+    notificationConnectorNtfyUpdate = (
+        data: CreateNtfyConnectorRecord,
+        params: RequestParams = {}
+    ) =>
+        this.request<void, string>({
             path: `/v2/NotificationConnector/Ntfy`,
             method: 'PUT',
             body: data,
             type: ContentType.Json,
-            format: 'json',
             ...params,
         });
     /**
@@ -776,16 +785,18 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      *
      * @tags NotificationConnector
      * @name NotificationConnectorPushoverUpdate
-     * @summary Creates a new Pushover-API.Schema.NotificationsContext.NotificationConnectors.NotificationConnector
+     * @summary Creates a new Pushover-API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Pushover
      */
-    notificationConnectorPushoverUpdate = (data: PushoverRecord, params: RequestParams = {}) =>
-        this.request<string, string>({
+    notificationConnectorPushoverUpdate = (
+        data: CreatePushoverConnectorRecord,
+        params: RequestParams = {}
+    ) =>
+        this.request<void, string>({
             path: `/v2/NotificationConnector/Pushover`,
             method: 'PUT',
             body: data,
             type: ContentType.Json,
-            format: 'json',
             ...params,
         });
     /**
