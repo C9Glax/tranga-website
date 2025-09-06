@@ -22,8 +22,12 @@
       <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-cuttingedge.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
     </tr>
     <tr>
-      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/vite-react-ts?label=vite-react-ts"></th>
-      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-vite-react-ts.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
+      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/testing?label=testing"></th>
+      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-testing.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
+    </tr>
+    <tr>
+      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/oldstable?label=oldstable"></th>
+      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-oldstable.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
     </tr>
   </table>
 </div>
@@ -33,9 +37,9 @@
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
 
-| ![Main Page](Screenshots/Screenshot%202025-06-17%20at%2001-15-08%20Tranga.png)      | ![Settings](Screenshots/Screenshot%202025-06-17%20at%2001-15-23%20Tranga.png)    | ![Search Empty](Screenshots/Screenshot%202025-06-17%20at%2001-15-36%20Tranga.png) |
-|-------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| ![Search Results](Screenshots/Screenshot%202025-06-17%20at%2001-16-32%20Tranga.png) | ![Manga Popup](Screenshots/Screenshot%202025-06-17%20at%2001-16-43%20Tranga.png) | ![Jobs Drawer](Screenshots/Screenshot%202025-06-17%20at%2001-17-37%20Tranga.png)  |
+| ![Main Page](Screenshots/Overview.png) | ![Search](Screenshots/Search%20Modal.png) | ![Manga Detail](Screenshots/Manga%20Detail.png) |
+|----------------------------------------|-------------------------------------------|-------------------------------------------------|
+| Overview                               | Search Dialog                             | Manga Detail                                    |
 
 ## About The Project
 
