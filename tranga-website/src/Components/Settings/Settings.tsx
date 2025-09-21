@@ -8,7 +8,7 @@ import {
     DialogContent,
     DialogTitle,
     Modal,
-    ModalDialog,
+    ModalDialog, Stack,
 } from '@mui/joy';
 import './Settings.css';
 import * as React from 'react';
@@ -22,6 +22,7 @@ import Maintenance from './Maintenance.tsx';
 import { ApiContext } from '../../contexts/ApiContext.tsx';
 import { TrangaSettings } from '../../api/data-contracts.ts';
 import TInput from '../Inputs/TInput.tsx';
+import LibraryRefresh from "./LibraryRefresh.tsx";
 
 export const SettingsContext = createContext<TrangaSettings | undefined>(undefined);
 
@@ -68,6 +69,7 @@ export default function Settings({ setApiUri }: { setApiUri: (uri: string) => vo
                             <DownloadLanguage />
                             <ChapterNamingScheme />
                             <Maintenance />
+                            <LibraryRefresh />
                         </AccordionGroup>
                     </DialogContent>
                 </ModalDialog>
@@ -80,7 +82,11 @@ export function SettingsItem({ title, children }: { title: string; children: Rea
     return (
         <Accordion>
             <AccordionSummary>{title}</AccordionSummary>
-            <AccordionDetails>{children}</AccordionDetails>
+            <AccordionDetails>
+                <Stack gap={1} direction="column">
+                    {children}
+                </Stack>
+            </AccordionDetails>
         </Accordion>
     );
 }
