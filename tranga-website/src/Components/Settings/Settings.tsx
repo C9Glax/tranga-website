@@ -8,7 +8,7 @@ import {
     DialogContent,
     DialogTitle,
     Modal,
-    ModalDialog,
+    ModalDialog, Stack,
 } from '@mui/joy';
 import './Settings.css';
 import * as React from 'react';
@@ -82,7 +82,11 @@ export function SettingsItem({ title, children }: { title: string; children: Rea
     return (
         <Accordion>
             <AccordionSummary>{title}</AccordionSummary>
-            <AccordionDetails>{children}</AccordionDetails>
+            <AccordionDetails>
+                <Stack gap={1} direction="column">
+                    {children}
+                </Stack>
+            </AccordionDetails>
         </Accordion>
     );
 }

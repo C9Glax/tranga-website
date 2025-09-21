@@ -3,7 +3,7 @@ import {SettingsContext, SettingsItem} from './Settings.tsx';
 import {ApiContext} from '../../contexts/ApiContext.tsx';
 import TButton from "../Inputs/TButton.tsx";
 import {LibraryRefreshSetting, PatchLibraryRefreshRecord} from "../../api/data-contracts.ts";
-import {Input, Radio, RadioGroup} from "@mui/joy";
+import {Input, Radio, RadioGroup, Typography} from "@mui/joy";
 
 export default function LibraryRefresh(): ReactNode {
     const settings = useContext(SettingsContext);
@@ -35,11 +35,13 @@ export default function LibraryRefresh(): ReactNode {
 
     return (
         <SettingsItem title={'Library Refresh'}>
+            <Typography level={"body-md"}>Refresh after</Typography>
             <RadioGroup defaultValue={value.setting} onChange={onSettingChanged}>
                 {Object.keys(LibraryRefreshSetting).map(e => (
-                    <Radio value={e}>{e}</Radio>
+                    <Radio value={e} label={e} />
                 ))}
             </RadioGroup>
+            <Typography level={"body-md"}>When {LibraryRefreshSetting.WhileDownloading} refresh every x-minutes:</Typography>
             <Input defaultValue={value.refreshLibraryWhileDownloadingEveryMinutes??undefined} onChange={onMinutesChanged} type={"number"} />
             <TButton onClick={updateSetting}>Update</TButton>
         </SettingsItem>
