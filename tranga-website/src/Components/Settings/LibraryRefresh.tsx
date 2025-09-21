@@ -36,13 +36,13 @@ export default function LibraryRefresh(): ReactNode {
     return (
         <SettingsItem title={'Library Refresh'}>
             <Typography level={"body-md"}>Refresh after</Typography>
-            <RadioGroup defaultValue={value.setting} onChange={onSettingChanged}>
+            <RadioGroup value={value.setting} onChange={onSettingChanged}>
                 {Object.keys(LibraryRefreshSetting).map(e => (
-                    <Radio value={e} label={e} />
+                    <Radio key={e} value={e} label={e} />
                 ))}
             </RadioGroup>
             <Typography level={"body-md"}>When {LibraryRefreshSetting.WhileDownloading} refresh every x-minutes:</Typography>
-            <Input defaultValue={value.refreshLibraryWhileDownloadingEveryMinutes??undefined} onChange={onMinutesChanged} type={"number"} />
+            <Input value={value.refreshLibraryWhileDownloadingEveryMinutes??undefined} onChange={onMinutesChanged} type={"number"} />
             <TButton onClick={updateSetting}>Update</TButton>
         </SettingsItem>
     );
