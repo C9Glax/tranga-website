@@ -41,6 +41,13 @@ export enum LibraryType {
     Kavita = 'Kavita',
 }
 
+export enum LibraryRefreshSetting {
+    AfterAllFinished = 'AfterAllFinished',
+    AfterMangaFinished = 'AfterMangaFinished',
+    AfterEveryChapter = 'AfterEveryChapter',
+    WhileDownloading = 'WhileDownloading',
+}
+
 export enum CoverSize {
     Original = 'Original',
     Large = 'Large',
@@ -463,6 +470,15 @@ export interface NotificationConnector {
     key: string;
 }
 
+export interface PatchLibraryRefreshRecord {
+    setting: LibraryRefreshSetting;
+    /**
+     * When API.Workers.LibraryRefreshSetting.WhileDownloading is selected, update the time between refreshes
+     * @format int32
+     */
+    refreshLibraryWhileDownloadingEveryMinutes?: number | null;
+}
+
 export interface ProblemDetails {
     type?: string | null;
     title?: string | null;
@@ -474,7 +490,7 @@ export interface ProblemDetails {
 }
 
 export interface TrangaSettings {
-    downloadLocation?: string | null;
+    defaultDownloadLocation?: string | null;
     userAgent?: string | null;
     /** @format int32 */
     imageCompression?: number;
@@ -516,6 +532,9 @@ export interface TrangaSettings {
     maxConcurrentDownloads?: number;
     /** @format int32 */
     maxConcurrentWorkers?: number;
+    libraryRefreshSetting?: LibraryRefreshSetting;
+    /** @format int32 */
+    refreshLibraryWhileDownloadingEveryMinutes?: number;
 }
 
 /** API.Workers.BaseWorker DTO */

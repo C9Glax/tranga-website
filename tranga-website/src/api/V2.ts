@@ -29,6 +29,7 @@ import {
     MetadataSearchResult,
     MinimalManga,
     NotificationConnector,
+    PatchLibraryRefreshRecord,
     ProblemDetails,
     RequestType,
     TrangaSettings,
@@ -1199,6 +1200,25 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
         this.request<void, any>({
             path: `/v2/Settings/DownloadLanguage/${language}`,
             method: 'PATCH',
+            ...params,
+        });
+    /**
+     * No description
+     *
+     * @tags Settings
+     * @name SettingsLibraryRefreshPartialUpdate
+     * @summary Sets the time when Libraries are refreshed
+     * @request PATCH:/v2/Settings/LibraryRefresh
+     */
+    settingsLibraryRefreshPartialUpdate = (
+        data: PatchLibraryRefreshRecord,
+        params: RequestParams = {}
+    ) =>
+        this.request<void, any>({
+            path: `/v2/Settings/LibraryRefresh`,
+            method: 'PATCH',
+            body: data,
+            type: ContentType.Json,
             ...params,
         });
     /**
