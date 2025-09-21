@@ -48,12 +48,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/FileLibrary
      */
     fileLibraryList = (params: RequestParams = {}) =>
-        this.request<FileLibrary[], void>({
-            path: `/v2/FileLibrary`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<FileLibrary[], void>({ path: `/v2/FileLibrary`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -94,11 +89,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request DELETE:/v2/FileLibrary/{FileLibraryId}
      */
     fileLibraryDelete = (fileLibraryId: string, params: RequestParams = {}) =>
-        this.request<void, string>({
-            path: `/v2/FileLibrary/${fileLibraryId}`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, string>({ path: `/v2/FileLibrary/${fileLibraryId}`, method: 'DELETE', ...params });
     /**
      * No description
      *
@@ -107,11 +98,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Changes the !:FileLibraryId.BasePath with FileLibraryId
      * @request PATCH:/v2/FileLibrary/{FileLibraryId}/ChangeBasePath
      */
-    fileLibraryChangeBasePathPartialUpdate = (
-        fileLibraryId: string,
-        data: string,
-        params: RequestParams = {}
-    ) =>
+    fileLibraryChangeBasePathPartialUpdate = (fileLibraryId: string, data: string, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/FileLibrary/${fileLibraryId}/ChangeBasePath`,
             method: 'PATCH',
@@ -127,11 +114,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Changes the !:FileLibraryId.LibraryName with FileLibraryId
      * @request PATCH:/v2/FileLibrary/{FileLibraryId}/ChangeName
      */
-    fileLibraryChangeNamePartialUpdate = (
-        fileLibraryId: string,
-        data: string,
-        params: RequestParams = {}
-    ) =>
+    fileLibraryChangeNamePartialUpdate = (fileLibraryId: string, data: string, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/FileLibrary/${fileLibraryId}/ChangeName`,
             method: 'PATCH',
@@ -194,11 +177,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request DELETE:/v2/LibraryConnector/{LibraryConnectorId}
      */
     libraryConnectorDelete = (libraryConnectorId: string, params: RequestParams = {}) =>
-        this.request<void, string>({
-            path: `/v2/LibraryConnector/${libraryConnectorId}`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, string>({ path: `/v2/LibraryConnector/${libraryConnectorId}`, method: 'DELETE', ...params });
     /**
      * No description
      *
@@ -208,11 +187,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request POST:/v2/Maintenance/CleanupNoDownloadManga
      */
     maintenanceCleanupNoDownloadMangaCreate = (params: RequestParams = {}) =>
-        this.request<void, string>({
-            path: `/v2/Maintenance/CleanupNoDownloadManga`,
-            method: 'POST',
-            ...params,
-        });
+        this.request<void, string>({ path: `/v2/Maintenance/CleanupNoDownloadManga`, method: 'POST', ...params });
     /**
      * No description
      *
@@ -222,12 +197,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Manga
      */
     mangaList = (params: RequestParams = {}) =>
-        this.request<MinimalManga[], void>({
-            path: `/v2/Manga`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<MinimalManga[], void>({ path: `/v2/Manga`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -237,12 +207,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Manga/Keys
      */
     mangaKeysList = (params: RequestParams = {}) =>
-        this.request<string[], void>({
-            path: `/v2/Manga/Keys`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<string[], void>({ path: `/v2/Manga/Keys`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -252,12 +217,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Manga/Downloading
      */
     mangaDownloadingList = (params: RequestParams = {}) =>
-        this.request<MinimalManga[], void>({
-            path: `/v2/Manga/Downloading`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<MinimalManga[], void>({ path: `/v2/Manga/Downloading`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -284,12 +244,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Manga/{MangaId}
      */
     mangaDetail = (mangaId: string, params: RequestParams = {}) =>
-        this.request<Manga, string>({
-            path: `/v2/Manga/${mangaId}`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<Manga, string>({ path: `/v2/Manga/${mangaId}`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -308,11 +263,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Merge two API.Controllers.DTOs.Manga into one. THIS IS NOT REVERSIBLE!
      * @request PATCH:/v2/Manga/{MangaIdFrom}/MergeInto/{MangaIdInto}
      */
-    mangaMergeIntoPartialUpdate = (
-        mangaIdFrom: string,
-        mangaIdInto: string,
-        params: RequestParams = {}
-    ) =>
+    mangaMergeIntoPartialUpdate = (mangaIdFrom: string, mangaIdInto: string, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/Manga/${mangaIdFrom}/MergeInto/${mangaIdInto}`,
             method: 'PATCH',
@@ -416,11 +367,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Configure the API.Controllers.DTOs.Chapter cut-off for API.Controllers.DTOs.Manga
      * @request PATCH:/v2/Manga/{MangaId}/IgnoreChaptersBefore
      */
-    mangaIgnoreChaptersBeforePartialUpdate = (
-        mangaId: string,
-        data: number,
-        params: RequestParams = {}
-    ) =>
+    mangaIgnoreChaptersBeforePartialUpdate = (mangaId: string, data: number, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/Manga/${mangaId}/IgnoreChaptersBefore`,
             method: 'PATCH',
@@ -469,11 +416,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Initiate a search for API.Schema.MangaContext.Manga on a different API.MangaConnectors.MangaConnector
      * @request POST:/v2/Manga/{MangaId}/SearchOn/{MangaConnectorName}
      */
-    mangaSearchOnCreate = (
-        mangaId: string,
-        mangaConnectorName: string,
-        params: RequestParams = {}
-    ) =>
+    mangaSearchOnCreate = (mangaId: string, mangaConnectorName: string, params: RequestParams = {}) =>
         this.request<MinimalManga[], string | ProblemDetails | void>({
             path: `/v2/Manga/${mangaId}/SearchOn/${mangaConnectorName}`,
             method: 'POST',
@@ -519,12 +462,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/MangaConnector
      */
     mangaConnectorList = (params: RequestParams = {}) =>
-        this.request<MangaConnector[], any>({
-            path: `/v2/MangaConnector`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<MangaConnector[], any>({ path: `/v2/MangaConnector`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -597,12 +535,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/MetadataFetcher
      */
     metadataFetcherList = (params: RequestParams = {}) =>
-        this.request<string[], any>({
-            path: `/v2/MetadataFetcher`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<string[], any>({ path: `/v2/MetadataFetcher`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -670,11 +603,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Un-Links API.Schema.MangaContext.MetadataFetchers.MetadataFetcher (Metadata-Sites) from API.Schema.MangaContext.Manga
      * @request POST:/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}
      */
-    metadataFetcherUnlinkCreate = (
-        mangaId: string,
-        metadataFetcherName: string,
-        params: RequestParams = {}
-    ) =>
+    metadataFetcherUnlinkCreate = (mangaId: string, metadataFetcherName: string, params: RequestParams = {}) =>
         this.request<void, ProblemDetails | string>({
             path: `/v2/MetadataFetcher/${metadataFetcherName}/Unlink/${mangaId}`,
             method: 'POST',
@@ -703,10 +632,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Creates a new API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector
      */
-    notificationConnectorUpdate = (
-        data: CreateNotificationConnectorRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorUpdate = (data: CreateNotificationConnectorRecord, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/NotificationConnector`,
             method: 'PUT',
@@ -738,11 +664,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request DELETE:/v2/NotificationConnector/{Name}
      */
     notificationConnectorDelete = (name: string, params: RequestParams = {}) =>
-        this.request<void, string>({
-            path: `/v2/NotificationConnector/${name}`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, string>({ path: `/v2/NotificationConnector/${name}`, method: 'DELETE', ...params });
     /**
      * @description Priority needs to be between 0 and 10
      *
@@ -751,10 +673,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Creates a new Gotify-API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Gotify
      */
-    notificationConnectorGotifyUpdate = (
-        data: CreateGotifyConnectorRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorGotifyUpdate = (data: CreateGotifyConnectorRecord, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/NotificationConnector/Gotify`,
             method: 'PUT',
@@ -770,10 +689,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Creates a new Ntfy-API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Ntfy
      */
-    notificationConnectorNtfyUpdate = (
-        data: CreateNtfyConnectorRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorNtfyUpdate = (data: CreateNtfyConnectorRecord, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/NotificationConnector/Ntfy`,
             method: 'PUT',
@@ -789,10 +705,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Creates a new Pushover-API.Controllers.DTOs.NotificationConnector
      * @request PUT:/v2/NotificationConnector/Pushover
      */
-    notificationConnectorPushoverUpdate = (
-        data: CreatePushoverConnectorRecord,
-        params: RequestParams = {}
-    ) =>
+    notificationConnectorPushoverUpdate = (data: CreatePushoverConnectorRecord, params: RequestParams = {}) =>
         this.request<void, string>({
             path: `/v2/NotificationConnector/Pushover`,
             method: 'PUT',
@@ -916,12 +829,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Settings
      */
     settingsList = (params: RequestParams = {}) =>
-        this.request<TrangaSettings, any>({
-            path: `/v2/Settings`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<TrangaSettings, any>({ path: `/v2/Settings`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -1003,12 +911,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request DELETE:/v2/Settings/RequestLimits
      */
     settingsRequestLimitsDelete = (params: RequestParams = {}) =>
-        this.request<string, any>({
-            path: `/v2/Settings/RequestLimits`,
-            method: 'DELETE',
-            format: 'json',
-            ...params,
-        });
+        this.request<string, any>({ path: `/v2/Settings/RequestLimits`, method: 'DELETE', format: 'json', ...params });
     /**
      * No description
      *
@@ -1019,11 +922,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @originalName settingsRequestLimitsPartialUpdate
      * @duplicate
      */
-    settingsRequestLimitsPartialUpdate2 = (
-        requestType: RequestType,
-        data: number,
-        params: RequestParams = {}
-    ) =>
+    settingsRequestLimitsPartialUpdate2 = (requestType: RequestType, data: number, params: RequestParams = {}) =>
         this.request<void, ProblemDetails>({
             path: `/v2/Settings/RequestLimits/${requestType}`,
             method: 'PATCH',
@@ -1057,11 +956,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Settings/ImageCompressionLevel
      */
     settingsImageCompressionLevelList = (params: RequestParams = {}) =>
-        this.request<number, any>({
-            path: `/v2/Settings/ImageCompressionLevel`,
-            method: 'GET',
-            ...params,
-        });
+        this.request<number, any>({ path: `/v2/Settings/ImageCompressionLevel`, method: 'GET', ...params });
     /**
      * No description
      *
@@ -1095,11 +990,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request PATCH:/v2/Settings/BWImages/{enabled}
      */
     settingsBwImagesPartialUpdate = (enabled: boolean, params: RequestParams = {}) =>
-        this.request<void, any>({
-            path: `/v2/Settings/BWImages/${enabled}`,
-            method: 'PATCH',
-            ...params,
-        });
+        this.request<void, any>({ path: `/v2/Settings/BWImages/${enabled}`, method: 'PATCH', ...params });
     /**
      * @description Placeholders: %M Obj Name %V Volume %C Chapter %T Title %A Author (first in list) %I Chapter Internal ID %i Obj Internal ID %Y Year (Obj) ?_(...) replace _ with a value from above: Everything inside the braces will only be added if the value of %_ is not null
      *
@@ -1109,11 +1000,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Settings/ChapterNamingScheme
      */
     settingsChapterNamingSchemeList = (params: RequestParams = {}) =>
-        this.request<string, any>({
-            path: `/v2/Settings/ChapterNamingScheme`,
-            method: 'GET',
-            ...params,
-        });
+        this.request<string, any>({ path: `/v2/Settings/ChapterNamingScheme`, method: 'GET', ...params });
     /**
      * @description Placeholders: %M Obj Name %V Volume %C Chapter %T Title %A Author (first in list) %Y Year (Obj) ?_(...) replace _ with a value from above: Everything inside the braces will only be added if the value of %_ is not null
      *
@@ -1155,11 +1042,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request DELETE:/v2/Settings/FlareSolverr/Url
      */
     settingsFlareSolverrUrlDelete = (params: RequestParams = {}) =>
-        this.request<void, any>({
-            path: `/v2/Settings/FlareSolverr/Url`,
-            method: 'DELETE',
-            ...params,
-        });
+        this.request<void, any>({ path: `/v2/Settings/FlareSolverr/Url`, method: 'DELETE', ...params });
     /**
      * No description
      *
@@ -1169,11 +1052,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request POST:/v2/Settings/FlareSolverr/Test
      */
     settingsFlareSolverrTestCreate = (params: RequestParams = {}) =>
-        this.request<void, void>({
-            path: `/v2/Settings/FlareSolverr/Test`,
-            method: 'POST',
-            ...params,
-        });
+        this.request<void, void>({ path: `/v2/Settings/FlareSolverr/Test`, method: 'POST', ...params });
     /**
      * No description
      *
@@ -1183,11 +1062,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Settings/DownloadLanguage
      */
     settingsDownloadLanguageList = (params: RequestParams = {}) =>
-        this.request<string, any>({
-            path: `/v2/Settings/DownloadLanguage`,
-            method: 'GET',
-            ...params,
-        });
+        this.request<string, any>({ path: `/v2/Settings/DownloadLanguage`, method: 'GET', ...params });
     /**
      * No description
      *
@@ -1197,11 +1072,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request PATCH:/v2/Settings/DownloadLanguage/{Language}
      */
     settingsDownloadLanguagePartialUpdate = (language: string, params: RequestParams = {}) =>
-        this.request<void, any>({
-            path: `/v2/Settings/DownloadLanguage/${language}`,
-            method: 'PATCH',
-            ...params,
-        });
+        this.request<void, any>({ path: `/v2/Settings/DownloadLanguage/${language}`, method: 'PATCH', ...params });
     /**
      * No description
      *
@@ -1210,10 +1081,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @summary Sets the time when Libraries are refreshed
      * @request PATCH:/v2/Settings/LibraryRefresh
      */
-    settingsLibraryRefreshPartialUpdate = (
-        data: PatchLibraryRefreshRecord,
-        params: RequestParams = {}
-    ) =>
+    settingsLibraryRefreshPartialUpdate = (data: PatchLibraryRefreshRecord, params: RequestParams = {}) =>
         this.request<void, any>({
             path: `/v2/Settings/LibraryRefresh`,
             method: 'PATCH',
@@ -1230,12 +1098,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Worker
      */
     workerList = (params: RequestParams = {}) =>
-        this.request<Worker[], any>({
-            path: `/v2/Worker`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<Worker[], any>({ path: `/v2/Worker`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -1245,12 +1108,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Worker/Keys
      */
     workerKeysList = (params: RequestParams = {}) =>
-        this.request<string[], any>({
-            path: `/v2/Worker/Keys`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<string[], any>({ path: `/v2/Worker/Keys`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -1260,12 +1118,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Worker/State/{State}
      */
     workerStateDetail = (state: WorkerExecutionState, params: RequestParams = {}) =>
-        this.request<Worker[], any>({
-            path: `/v2/Worker/State/${state}`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<Worker[], any>({ path: `/v2/Worker/State/${state}`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -1275,12 +1128,7 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request GET:/v2/Worker/{WorkerId}
      */
     workerDetail = (workerId: string, params: RequestParams = {}) =>
-        this.request<Worker, string>({
-            path: `/v2/Worker/${workerId}`,
-            method: 'GET',
-            format: 'json',
-            ...params,
-        });
+        this.request<Worker, string>({ path: `/v2/Worker/${workerId}`, method: 'GET', format: 'json', ...params });
     /**
      * No description
      *
@@ -1314,9 +1162,5 @@ export class V2<SecurityDataType = unknown> extends HttpClient<SecurityDataType>
      * @request POST:/v2/Worker/{WorkerId}/Stop
      */
     workerStopCreate = (workerId: string, params: RequestParams = {}) =>
-        this.request<void, string | ProblemDetails>({
-            path: `/v2/Worker/${workerId}/Stop`,
-            method: 'POST',
-            ...params,
-        });
+        this.request<void, string | ProblemDetails>({ path: `/v2/Worker/${workerId}/Stop`, method: 'POST', ...params });
 }

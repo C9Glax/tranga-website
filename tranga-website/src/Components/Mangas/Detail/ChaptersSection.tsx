@@ -1,6 +1,6 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { Chapter, Manga, MangaConnector, MangaConnectorId } from '../../../api/data-contracts.ts';
-import { Accordion, AccordionDetails, AccordionSummary, Table, Typography } from '@mui/joy';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Table, Typography } from '@mui/joy';
 import { ApiContext } from '../../../contexts/ApiContext.tsx';
 import { MangaConnectorContext } from '../../../contexts/MangaConnectorContext.tsx';
 import MangaConnectorIcon from '../MangaConnectorIcon.tsx';
@@ -36,39 +36,43 @@ export default function ChaptersSection(props: ChaptersSectionProps): ReactNode 
     };
 
     return (
-        <Accordion sx={{ maxHeight: '50vh' }}>
+        <Accordion sx={{ maxHeight: '50vh' }}
+                   expanded={props.expanded}
+                   onChange={(_, expanded) => props.onExpanded(expanded)}>
             <AccordionSummary>
                 <Typography level={'h3'}>Chapters</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Typography level={'body-md'}>Set source for chapter</Typography>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>Vol</th>
-                            <th>Ch</th>
-                            <th>Title</th>
-                            {MangaConnectors.map((con) => (
-                                <th>
-                                    <MangaConnectorIcon mangaConnector={con} />
-                                    {con.name}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {chapters.map((ch) => (
+                <Box sx={{ overflowY: 'scroll' }}>
+                    <Table stickyHeader={true}>
+                        <thead>
                             <tr>
-                                <td>{ch.volume}</td>
-                                <td>{ch.chapterNumber}</td>
-                                <td>{ch.title}</td>
+                                <th>Vol</th>
+                                <th>Ch</th>
+                                <th>Title</th>
                                 {MangaConnectors.map((con) => (
-                                    <td>{chapterConnectorCheckbox(ch, con)}</td>
+                                    <th>
+                                        <MangaConnectorIcon mangaConnector={con} />
+                                        {con.name}
+                                    </th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {chapters.map((ch) => (
+                                <tr>
+                                    <td>{ch.volume}</td>
+                                    <td>{ch.chapterNumber}</td>
+                                    <td>{ch.title}</td>
+                                    {MangaConnectors.map((con) => (
+                                        <td>{chapterConnectorCheckbox(ch, con)}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Box>
             </AccordionDetails>
         </Accordion>
     );
@@ -76,4 +80,6 @@ export default function ChaptersSection(props: ChaptersSectionProps): ReactNode 
 
 export interface ChaptersSectionProps {
     manga?: Manga;
+    expanded: boolean;
+    onExpanded: (expanded: boolean) => void;
 }

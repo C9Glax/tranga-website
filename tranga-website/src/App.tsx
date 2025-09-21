@@ -38,7 +38,7 @@ export function App() {
     const removeManga = async (mangaKey?: string): Promise<void> => {
         if (!mangaKey) return Promise.reject();
         try {
-            let r = await Api.mangaDelete(mangaKey);
+            const r = await Api.mangaDelete(mangaKey);
             if (r.ok) return Promise.resolve();
             else return Promise.reject();
         } catch (reason) {
@@ -70,9 +70,7 @@ export function App() {
                                     setOpen={setDownloadDrawerOpen}
                                     mangaKey={selectedMangaKey}
                                     downloadOpen={downloadSectionOpen}>
-                                    <TButton onClick={() => removeManga(selectedMangaKey)}>
-                                        Remove
-                                    </TButton>
+                                    <TButton onClick={() => removeManga(selectedMangaKey)}>Remove</TButton>
                                 </MangaDetail>
                             </Sheet>
                         </Sheet>

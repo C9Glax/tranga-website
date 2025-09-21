@@ -1,12 +1,4 @@
-import {
-    Badge,
-    Card,
-    CardContent,
-    CardCover,
-    ColorPaletteProp,
-    Skeleton,
-    Typography,
-} from '@mui/joy';
+import { Badge, Card, CardContent, CardCover, ColorPaletteProp, Skeleton, Typography } from '@mui/joy';
 import { EventHandler, ReactNode, useContext } from 'react';
 import './MangaCard.css';
 import MangaConnectorIcon from './MangaConnectorIcon.tsx';

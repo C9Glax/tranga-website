@@ -37,9 +37,7 @@ export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' 
 export interface ApiConfig<SecurityDataType = unknown> {
     baseUrl?: string;
     baseApiParams?: Omit<RequestParams, 'baseUrl' | 'cancelToken' | 'signal'>;
-    securityWorker?: (
-        securityData: SecurityDataType | null
-    ) => Promise<RequestParams | void> | RequestParams | void;
+    securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
     customFetch?: typeof fetch;
 }
 
@@ -99,9 +97,7 @@ export class HttpClient<SecurityDataType = unknown> {
         const keys = Object.keys(query).filter((key) => 'undefined' !== typeof query[key]);
         return keys
             .map((key) =>
-                Array.isArray(query[key])
-                    ? this.addArrayQueryParam(query, key)
-                    : this.addQueryParam(query, key)
+                Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)
             )
             .join('&');
     }
@@ -113,13 +109,9 @@ export class HttpClient<SecurityDataType = unknown> {
 
     private contentFormatters: Record<ContentType, (input: any) => any> = {
         [ContentType.Json]: (input: any) =>
-            input !== null && (typeof input === 'object' || typeof input === 'string')
-                ? JSON.stringify(input)
-                : input,
+            input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input,
         [ContentType.JsonApi]: (input: any) =>
-            input !== null && (typeof input === 'object' || typeof input === 'string')
-                ? JSON.stringify(input)
-                : input,
+            input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input,
         [ContentType.Text]: (input: any) =>
             input !== null && typeof input !== 'string' ? JSON.stringify(input) : input,
         [ContentType.FormData]: (input: any) =>
@@ -195,20 +187,15 @@ export class HttpClient<SecurityDataType = unknown> {
         const payloadFormatter = this.contentFormatters[type || ContentType.Json];
         const responseFormat = format || requestParams.format;
 
-        return this.customFetch(
-            `${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`,
-            {
-                ...requestParams,
-                headers: {
-                    ...(requestParams.headers || {}),
-                    ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
-                },
-                signal:
-                    (cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal) ||
-                    null,
-                body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
-            }
-        ).then(async (response) => {
+        return this.customFetch(`${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`, {
+            ...requestParams,
+            headers: {
+                ...(requestParams.headers || {}),
+                ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
+            },
+            signal: (cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal) || null,
+            body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
+        }).then(async (response) => {
             const r = response.clone() as HttpResponse<T, E>;
             r.data = null as unknown as T;
             r.error = null as unknown as E;

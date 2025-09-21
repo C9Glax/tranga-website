@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, useContext, useEffect, useState } from 'react';
-import { Card, CardCover, Chip, Modal, ModalDialog, Stack, Typography, useTheme } from '@mui/joy';
+import { AccordionGroup, Card, CardCover, Chip, Modal, ModalDialog, Stack, Typography, useTheme } from '@mui/joy';
 import ModalClose from '@mui/joy/ModalClose';
 import { Manga } from '../../../api/data-contracts.ts';
 import { ApiContext } from '../../../contexts/ApiContext.tsx';
@@ -23,6 +23,8 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
         Manga.GetManga(props.mangaKey).then(setManga);
     }, [Api, Manga, props]);
 
+    const [expanded, setExpanded] = useState(props.downloadOpen ? 1 : 0);
+
     return (
         <Modal
             open={props.open}
@@ -41,13 +43,7 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                         className={'manga-card'}
                         sx={{ flexShrink: 0 }}>
                         <CardCover className={'manga-card-cover'}>
-                            <img
-                                src={
-                                    manga
-                                        ? `${Api.baseUrl}/v2/Manga/${manga.key}/Cover/Medium`
-                                        : '/blahaj.png'
-                                }
-                            />
+                            <img src={manga ? `${Api.baseUrl}/v2/Manga/${manga.key}/Cover/Medium` : '/blahaj.png'} />
                         </CardCover>
                     </Card>
                     <Stack
@@ -98,12 +94,32 @@ export default function MangaDetail(props: MangaDetailProps): ReactNode {
                         </Stack>
                     </Stack>
                 </Stack>
-                <DownloadSection
-                    downloadOpen={props.downloadOpen ?? false}
-                    manga={manga}
-                />
-                <LibrarySection manga={manga} />
-                <ChaptersSection manga={manga} />
+                <AccordionGroup>
+                    <DownloadSection
+                        expanded={expanded == 1}
+                        onExpanded={(e) => {
+                            if (e) setExpanded(1);
+                            else setExpanded(0);
+                        }}
+                        manga={manga}
+                    />
+                    <LibrarySection
+                        expanded={expanded == 2}
+                        onExpanded={(e) => {
+                            if (e) setExpanded(2);
+                            else setExpanded(0);
+                        }}
+                        manga={manga}
+                    />
+                    <ChaptersSection
+                        expanded={expanded == 3}
+                        onExpanded={(e) => {
+                            if (e) setExpanded(3);
+                            else setExpanded(0);
+                        }}
+                        manga={manga}
+                    />
+                </AccordionGroup>
             </ModalDialog>
         </Modal>
     );

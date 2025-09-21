@@ -7,9 +7,7 @@ import './loadingBorder.css';
 export default function TInput(props: TInputProps) {
     const [state, setState] = useState<TState>(TState.clean);
     const [value, setValue] = useState<string | number | undefined>(props.defaultValue);
-    const [initialValue, setInitialValue] = useState<string | number | undefined>(
-        props.defaultValue
-    );
+    const [initialValue, setInitialValue] = useState<string | number | undefined>(props.defaultValue);
 
     const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
 

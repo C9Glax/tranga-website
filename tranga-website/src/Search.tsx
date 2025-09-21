@@ -32,9 +32,7 @@ export function Search(props: SearchModalProps): ReactNode {
     const [selectedConnector, setSelectedConnector] = useState<MangaConnector>();
     const [searchResults, setSearchResults] = useState<MinimalManga[]>([]);
 
-    const startSearch = async (
-        value: string | number | readonly string[] | undefined
-    ): Promise<void> => {
+    const startSearch = async (value: string | number | readonly string[] | undefined): Promise<void> => {
         if (typeof value != 'string') return Promise.reject();
         setSearchResults([]);
         if (isUrl(value)) {
@@ -80,12 +78,7 @@ export function Search(props: SearchModalProps): ReactNode {
                                     <ListItemDecorator>
                                         <MangaConnectorIcon mangaConnector={c} />
                                     </ListItemDecorator>
-                                    <Typography
-                                        sx={
-                                            c.key == selectedConnector?.key
-                                                ? { fontWeight: 'bold' }
-                                                : {}
-                                        }>
+                                    <Typography sx={c.key == selectedConnector?.key ? { fontWeight: 'bold' } : {}}>
                                         {c.name}
                                     </Typography>
                                 </ListItem>

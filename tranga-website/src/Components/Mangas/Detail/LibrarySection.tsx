@@ -1,14 +1,6 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { FileLibrary, Manga } from '../../../api/data-contracts.ts';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Option,
-    Select,
-    Stack,
-    Typography,
-} from '@mui/joy';
+import { Accordion, AccordionDetails, AccordionSummary, Option, Select, Stack, Typography } from '@mui/joy';
 import { ApiContext } from '../../../contexts/ApiContext.tsx';
 import { FileLibraryContext } from '../../../contexts/FileLibraryContext.tsx';
 import TButton from '../../Inputs/TButton.tsx';
@@ -31,7 +23,7 @@ export function LibrarySection(props: LibrarySectionProps): ReactNode {
     const submit = async (): Promise<void> => {
         if (!props.manga || !library) return Promise.reject();
         try {
-            let result = await Api.mangaChangeLibraryCreate(props.manga?.key, library?.key);
+            const result = await Api.mangaChangeLibraryCreate(props.manga?.key, library?.key);
             if (!result.ok) return Promise.reject();
             else return Promise.resolve();
         } catch (reason) {
@@ -40,7 +32,9 @@ export function LibrarySection(props: LibrarySectionProps): ReactNode {
     };
 
     return (
-        <Accordion sx={{ maxHeight: '50vh' }}>
+        <Accordion sx={{ maxHeight: '50vh' }}
+                   expanded={props.expanded}
+                   onChange={(_, expanded) => props.onExpanded(expanded)}>
             <AccordionSummary>
                 <Typography level={'h3'}>Library</Typography>
             </AccordionSummary>
@@ -70,4 +64,6 @@ export function LibrarySection(props: LibrarySectionProps): ReactNode {
 
 export interface LibrarySectionProps {
     manga?: Manga;
+    expanded: boolean;
+    onExpanded: (expanded: boolean) => void;
 }

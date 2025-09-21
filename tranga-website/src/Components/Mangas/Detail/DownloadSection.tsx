@@ -24,9 +24,7 @@ export function DownloadSection(props: DownloadSectionProps): ReactNode {
 
     const [manga, setManga] = useState<Manga>();
     const [library, setLibrary] = useState<FileLibrary | undefined>();
-    const [downloadFromMap, setDownloadFromMap] = useState<Map<MangaConnectorId, boolean>>(
-        new Map()
-    );
+    const [downloadFromMap, setDownloadFromMap] = useState<Map<MangaConnectorId, boolean>>(new Map());
 
     useEffect(() => {
         const newMap = new Map();
@@ -54,11 +52,7 @@ export function DownloadSection(props: DownloadSectionProps): ReactNode {
             if (!s) return Promise.reject();
         }
         for (const kv of downloadFromMap) {
-            const s = await Api.mangaSetAsDownloadFromCreate(
-                manga?.key,
-                kv[0].mangaConnectorName,
-                kv[1]
-            )
+            const s = await Api.mangaSetAsDownloadFromCreate(manga?.key, kv[0].mangaConnectorName, kv[1])
                 .then((result) => result.ok)
                 .catch(() => false);
             if (!s) return Promise.reject();
@@ -67,7 +61,9 @@ export function DownloadSection(props: DownloadSectionProps): ReactNode {
     };
 
     return (
-        <Accordion defaultExpanded={props.downloadOpen}>
+        <Accordion
+            expanded={props.expanded}
+            onChange={(_, expanded) => props.onExpanded(expanded)}>
             <AccordionSummary>
                 <Typography level={'h3'}>Download</Typography>
             </AccordionSummary>
@@ -92,9 +88,7 @@ export function DownloadSection(props: DownloadSectionProps): ReactNode {
                         </Select>
                     </Box>
                     <Box>
-                        <Typography>
-                            Select which connectors you want to download this Manga from:
-                        </Typography>
+                        <Typography>Select which connectors you want to download this Manga from:</Typography>
                         <List>
                             {props.manga?.mangaConnectorIds.map((id) => (
                                 <ListItem key={id.key}>
@@ -102,15 +96,8 @@ export function DownloadSection(props: DownloadSectionProps): ReactNode {
                                         defaultChecked={id.useForDownload}
                                         onChange={(c) => downloadFromMap.set(id, c.target.checked)}
                                         label={
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: 5,
-                                                }}>
-                                                <MangaConnectorIcon
-                                                    mangaConnectorName={id.mangaConnectorName}
-                                                />
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                                                <MangaConnectorIcon mangaConnectorName={id.mangaConnectorName} />
                                                 <Typography>{id.mangaConnectorName}</Typography>
                                             </div>
                                         }
@@ -127,5 +114,6 @@ export function DownloadSection(props: DownloadSectionProps): ReactNode {
 }
 export interface DownloadSectionProps {
     manga?: Manga;
-    downloadOpen: boolean;
+    expanded: boolean;
+    onExpanded: (expanded: boolean) => void;
 }
