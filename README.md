@@ -13,22 +13,7 @@
   ![GitHub License](https://img.shields.io/github/license/C9glax/tranga-website)
 
   <table>
-    <tr>
-      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/master?label=master"></th>
-      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-master.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
-    </tr>
-    <tr>
-      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/cuttingedge?label=cuttingedge"></th>
-      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-cuttingedge.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
-    </tr>
-    <tr>
-      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/testing?label=testing"></th>
-      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-testing.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
-    </tr>
-    <tr>
-      <th><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/c9glax/tranga-website/oldstable?label=oldstable"></th>
-      <td><img alt="Last Run" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fc9glax%2Ftranga-website%2Factions%2Fworkflows%2Fdocker-image-oldstable.yml%2Fruns%3Fper_page%3D1&query=workflow_runs%5B0%5D.created_at&label=Last%20Run"></td>
-    </tr>
+    
   </table>
 </div>
 
