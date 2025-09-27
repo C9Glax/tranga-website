@@ -1,9 +1,5 @@
 <template>
-    <MangaDetailPage :manga="manga">
-        <ChaptersList v-if="manga" :manga-id="manga.key" />
-        <template #actions>
-            <UButton variant="soft" color="warning" icon="i-lucide-trash" />
-        </template>
+    <MangaDetailPage :manga="manga" back-path="/search">
     </MangaDetailPage>
 </template>
 

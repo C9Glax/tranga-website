@@ -12,17 +12,14 @@
             <p class="p-3 text-xl font-semibold max-h-full overflow-clip">{{ manga?.name }}</p>
         </div>
         <LazyNuxtImg
-            v-if="manga || mangaId"
-            :src="`${$config.public.openFetch.api.baseURL}v2/Manga/${manga ? manga.key : mangaId}/Cover/Medium`"
+            :src="`${$config.public.openFetch.api.baseURL}v2/Manga/${manga.key}/Cover/Medium`"
             class="w-full h-full object-cover" />
-        <USkeleton v-else class="w-full h-full object-cover" />
     </div>
 </template>
 
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
-type Manga = components['schemas']['Manga'];
 type MinimalManga = components['schemas']['MinimalManga'];
-
-defineProps<{ manga?: Manga | MinimalManga; mangaId?: string; blur?: boolean }>();
+type Manga = components['schemas']['Manga'];
+defineProps<{ manga: Manga | MinimalManga; blur?: boolean }>();
 </script>

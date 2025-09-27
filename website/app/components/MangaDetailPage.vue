@@ -1,8 +1,9 @@
 <template>
-    <UPage class="p-4 h-full">
+    <UPage class="h-full">
         <template #left>
-            <div class="flex flex-col gap-2 border-r-2 pr-4">
-                <MangaCover :manga="manga" class="self-center" />
+            <div class="flex flex-col gap-2 p-4 bg-elevated">
+                <MangaCover v-if="manga" :manga="manga" class="self-center" />
+                <USkeleton v-else class="w-[240px] h-[350px]" />
                 <p v-if="manga" class="font-semibold text-xl">
                     {{ manga.name }}
                     <MangaconnectorIcon v-for="m in manga.mangaConnectorIds" v-bind="m" />
@@ -22,12 +23,18 @@
                 <USkeleton v-else class="w-full h-30" />
             </div>
         </template>
-        <UPageBody class="mt-0 relative">
-            <div>
-                <UButton variant="soft" to="/" icon="i-lucide-arrow-left">Back</UButton>
-                <p v-if="title" class="text-3xl">{{ title }}</p>
-            </div>
+        <UPageBody class="relative pr-4">
+            <div class="w-full flex flex-row justify-between">
+                <div>
+                    <UButton variant="soft" :to="backPath??'/'" icon="i-lucide-arrow-left">Back</UButton>
+                    <p v-if="title" class="text-3xl">{{ title }}</p>
+                </div>
+                <div>
+                    <slot name="actions">
 
+                    </slot>
+                </div>
+            </div>
             <slot />
         </UPageBody>
     </UPage>
@@ -40,6 +47,7 @@ type Manga = components['schemas']['Manga'];
 export interface MangaDetailPageProps {
     manga?: Manga;
     title?: string;
+    backPath?: string;
 }
 
 defineProps<MangaDetailPageProps>();
