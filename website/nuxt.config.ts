@@ -13,4 +13,5 @@ export default defineNuxtConfig({
             api: { schema: 'http://127.0.0.1:6531/swagger/v2/swagger.json', baseURL: 'http://127.0.0.1:6531/' },
         },
     },
+    ssr: true,
 });

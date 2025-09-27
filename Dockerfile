@@ -2,15 +2,15 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY ./tranga-website /app
+COPY ./website /app
 RUN npm install
-RUN npm run build
+RUN npm run generate
 
 # Serve stage
 FROM nginx:alpine3.17-slim
 
 # Copy built files from Vite's dist folder
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/.output/public /usr/share/nginx/html
 #COPY --from=builder /app/tranga-website/media /usr/share/nginx/html/media
 COPY ./nginx /etc/nginx
 
