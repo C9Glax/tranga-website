@@ -24,18 +24,24 @@
                 </div>
             </UCard>
         </div>
-        <p v-if="searchResult" class="text-lg">Result for '{{ searchQuery }}'</p>
-        <div v-if="searchResult" class="relative flex flex-row flex-wrap gap-6 mt-0">
-            <MangaCard
-                v-for="(m, i) in searchResult"
-                :manga="m"
-                :expanded="i === expanded"
-                @click="expanded = expanded === i ? -1 : i">
-                <template #actions="manga">
-                    <UButton :to="`manga/${manga.key}`">Download</UButton>
-                </template>
-            </MangaCard>
-        </div>
+    </UPageSection>
+    <UPageSection v-if="searchResult.length > 0" :ui="{ container: 'py-0 sm:py-0 lg:py-0' }">
+        <template #description>
+            <p class="text-lg">Result for '{{ searchQuery }}'</p>
+        </template>
+        <template #default>
+            <div class="relative flex flex-row flex-wrap gap-6 mt-0">
+                <MangaCard
+                    v-for="(m, i) in searchResult"
+                    :manga="m"
+                    :expanded="i === expanded"
+                    @click="expanded = expanded === i ? -1 : i">
+                    <template #actions="manga">
+                        <UButton :to="`download/${manga.key}`">Download</UButton>
+                    </template>
+                </MangaCard>
+            </div>
+        </template>
     </UPageSection>
 </template>
 
@@ -48,7 +54,7 @@ type MinimalManga = components['schemas']['MinimalManga'];
 const { data: connectors } = useApi('/v2/MangaConnector');
 
 const query = ref<string>();
-const connector = ref<MangaConnector>();
+const connector = useState<MangaConnector>();
 const activeStep = ref(0);
 const busy = ref<boolean>(false);
 watch(query, (v) => {
@@ -70,9 +76,9 @@ const connectorClick = (c: MangaConnector) => {
     performSearch();
 };
 
-const searchResult = ref<MinimalManga[]>();
-const expanded = ref(-1);
-const searchQuery = ref<string>('');
+const searchResult = useState<MinimalManga[]>(() => []);
+const expanded = useState(() => -1);
+const searchQuery = useState<string>(() => '');
 const performSearch = () => {
     if (!query.value) return;
     busy.value = true;
@@ -89,12 +95,12 @@ const config = useRuntimeConfig();
 
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
-        return await $fetch(new Request(`${config.public.openFetch.api.baseURL}v2/Search/Url`), {
+        return await $fetch<MinimalManga>(new Request(`${config.public.openFetch.api.baseURL}v2/Search/Url`), {
             method: 'POST',
-            body: query,
-        });
+            body: JSON.stringify(query),
+        }).then(x => [x]);
     } else if (connector.value) {
-        return await $fetch(
+        return await $fetch<MinimalManga[]>(
             new Request(`${config.public.openFetch.api.baseURL}v2/Search/${connector.value.name}/${query}`)
         );
     }
