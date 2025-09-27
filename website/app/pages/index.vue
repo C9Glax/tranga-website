@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-const { data: manga } = useApi('/v2/Manga/Downloading');
+const { data: manga } = useApi('/v2/Manga');
 const expanded = ref(-1);
 </script>
 

@@ -1,6 +1,5 @@
 <template>
-    <MangaDetailPage :manga="manga" back-path="/search">
-    </MangaDetailPage>
+    <MangaDetailPage :manga="manga" back-path="/search"> </MangaDetailPage>
 </template>
 
 <script setup lang="ts">

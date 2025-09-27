@@ -98,7 +98,7 @@ const search = async (query: string): Promise<MinimalManga[]> => {
         return await $fetch<MinimalManga>(new Request(`${config.public.openFetch.api.baseURL}v2/Search/Url`), {
             method: 'POST',
             body: JSON.stringify(query),
-        }).then(x => [x]);
+        }).then((x) => [x]);
     } else if (connector.value) {
         return await $fetch<MinimalManga[]>(
             new Request(`${config.public.openFetch.api.baseURL}v2/Search/${connector.value.name}/${query}`)

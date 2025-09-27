@@ -26,13 +26,12 @@
         <UPageBody class="relative pr-4">
             <div class="w-full flex flex-row justify-between">
                 <div>
-                    <UButton variant="soft" :to="backPath??'/'" icon="i-lucide-arrow-left">Back</UButton>
+                    <UButton variant="soft" :to="backPath ?? '/'" icon="i-lucide-arrow-left">Back</UButton>
                     <p v-if="title" class="text-3xl">{{ title }}</p>
                 </div>
-                <div>
-                    <slot name="actions">
-
-                    </slot>
+                <div v-if="manga" class="flex flex-row gap-2">
+                    <UButton trailing-icon="i-lucide-merge" :to="`${manga.key}/merge/`">Merge</UButton>
+                    <slot name="actions" />
                 </div>
             </div>
             <slot />
