@@ -11,7 +11,7 @@
             <template #default>
                 <NuxtLink to="/">
                     <div class="h-full flex gap-2 items-center">
-                        <img src="/blahaj.png" class="h-lh cursor-grab" />
+                        <img src="/blahaj.png" class="h-lh cursor-grab" >
                         <p
                             style="
                                 background: linear-gradient(110deg, var(--color-pink), var(--color-blue));

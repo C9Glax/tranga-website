@@ -7,7 +7,7 @@
             :title="l.libraryName"
             :description="l.basePath"
             orientation="horizontal">
-            <UButton color="warning" @click="deleteLibrary(l)" :loading="busy">Delete</UButton>
+            <UButton color="warning" :loading="busy" @click="deleteLibrary(l)">Delete</UButton>
         </UPageCard>
     </UPageList>
 </template>

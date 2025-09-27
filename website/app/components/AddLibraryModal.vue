@@ -8,7 +8,7 @@
                 <UFormField label="Directory Path" required>
                     <UInput v-model="path" placeholder="Path for the library" class="w-full" :disabled="busy" />
                 </UFormField>
-                <UButton icon="i-lucide-plus" @click="onAddClick" :loading="busy">Add</UButton>
+                <UButton icon="i-lucide-plus" :loading="busy" @click="onAddClick">Add</UButton>
             </div>
         </template>
     </UModal>

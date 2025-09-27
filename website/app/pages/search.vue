@@ -9,15 +9,15 @@
                     <div class="flex gap-1 w-full justify-center">
                         <UButton
                             v-for="c in connectors"
-                            @click="connectorClick(c)"
                             :color="connector?.key == c.key ? 'success' : 'neutral'"
-                            :disabled="busy">
+                            :disabled="busy"
+                            @click="connectorClick(c)">
                             <template #leading>
                                 <NuxtImg :src="c.iconUrl" class="h-lh" />
                             </template>
                             {{ c.name }}
                         </UButton>
-                        <UButton color="secondary" :disabled="busy" @click="performSearch" :loading="busy"
+                        <UButton color="secondary" :disabled="busy" :loading="busy" @click="performSearch"
                             >Search</UButton
                         >
                     </div>
