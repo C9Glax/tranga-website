@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ApiModel } from '#nuxt-api-party'
+import type { ApiModel } from '#nuxt-api-party';
 type MinimalManga = ApiModel<'MinimalManga'>;
 type Manga = ApiModel<'Manga'>;
 defineProps<{ manga: Manga | MinimalManga; blur?: boolean }>();

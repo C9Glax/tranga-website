@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ApiModel } from '#nuxt-api-party'
+import type { ApiModel } from '#nuxt-api-party';
 import type { PageCardProps } from '#ui/components/PageCard.vue';
 type Manga = ApiModel<'Manga'>;
 type MinimalManga = ApiModel<'MinimalManga'>;

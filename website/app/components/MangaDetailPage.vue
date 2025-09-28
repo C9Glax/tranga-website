@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ApiModel } from '#nuxt-api-party'
+import type { ApiModel } from '#nuxt-api-party';
 type Manga = ApiModel<'Manga'>;
 
 export interface MangaDetailPageProps {

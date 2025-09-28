@@ -24,6 +24,12 @@ const route = useRoute();
 const targetId = route.params.targetId as string;
 const mangaId = route.params.mangaId as string;
 
-const { data: target } = await useApiData('/v2/Manga/{MangaId}', { path: { MangaId: targetId }, key: FetchKeys.Manga.Id(targetId) });
-const { data: manga } = await useApiData('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
+const { data: target } = await useApiData('/v2/Manga/{MangaId}', {
+    path: { MangaId: targetId },
+    key: FetchKeys.Manga.Id(targetId),
+});
+const { data: manga } = await useApiData('/v2/Manga/{MangaId}', {
+    path: { MangaId: mangaId },
+    key: FetchKeys.Manga.Id(mangaId),
+});
 </script>

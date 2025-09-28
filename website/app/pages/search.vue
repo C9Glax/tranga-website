@@ -46,9 +46,9 @@
 </template>
 
 <script setup lang="ts">
-import {$api, type ApiModel} from '#nuxt-api-party'
+import { $api, type ApiModel } from '#nuxt-api-party';
 import type { StepperItem } from '@nuxt/ui';
-type MangaConnector = ApiModel<"MangaConnector">;
+type MangaConnector = ApiModel<'MangaConnector'>;
 type MinimalManga = ApiModel<'MinimalManga'>;
 
 const { data: connectors } = await useApiData('/v2/MangaConnector', { FetchKeys: FetchKeys.MangaConnector.All });
@@ -95,10 +95,15 @@ const config = useRuntimeConfig();
 
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
-        return await $api<'/v2/Search/Url', MinimalManga>('/v2/Search/Url', { body: JSON.stringify(query), method: "POST" })
-            .then((x) => [x]);
+        return await $api<'/v2/Search/Url', MinimalManga>('/v2/Search/Url', {
+            body: JSON.stringify(query),
+            method: 'POST',
+        }).then((x) => [x]);
     } else if (connector.value) {
-        return await $api('/v2/Search/{MangaConnectorName}/{Query}', { path: { MangaConnectorName: connector.value.name, query: query }, method: "POST" });
+        return await $api('/v2/Search/{MangaConnectorName}/{Query}', {
+            path: { MangaConnectorName: connector.value.name, query: query },
+            method: 'POST',
+        });
     }
     return Promise.reject();
 };

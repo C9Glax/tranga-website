@@ -19,7 +19,7 @@
 import { LazyAddLibraryModal } from '#components';
 
 import FileLibraries from '~/components/FileLibraries.vue';
-import {refreshNuxtData} from "#app";
+import { refreshNuxtData } from '#app';
 const overlay = useOverlay();
 const config = useRuntimeConfig();
 
@@ -30,6 +30,6 @@ const cleanUpDatabase = async () => {
     cleanUpDatabaseBusy.value = true;
     await $api('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' })
         .then(() => refreshNuxtData(Keys.Manga.All))
-        .finally(() => cleanUpDatabaseBusy.value = false);
+        .finally(() => (cleanUpDatabaseBusy.value = false));
 };
 </script>
