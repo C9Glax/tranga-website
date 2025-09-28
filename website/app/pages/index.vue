@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-const { data: manga } = useApi('/v2/Manga');
+const { data: manga } = await useApiData('/v2/Manga', { key: FetchKeys.Manga.All });
 const expanded = ref(-1);
 </script>
 

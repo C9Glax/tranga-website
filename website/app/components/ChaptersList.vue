@@ -31,12 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import { id } from '#ui/locale';
 
 export interface ChaptersListProps {
     mangaId: string;
 }
 const props = defineProps<ChaptersListProps>();
 
-const { data: chapters } = useApi('/v2/Manga/{MangaId}/Chapters', { path: { MangaId: props.mangaId } });
+const { data: chapters } = await useApiData('/v2/Manga/{MangaId}/Chapters', { path: { MangaId: props.mangaId }, key: FetchKeys.Chapters.All });
 </script>

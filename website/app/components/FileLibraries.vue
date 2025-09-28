@@ -1,8 +1,8 @@
 <template>
-    <UPageList divide>
+    <UPageList class="gap-2">
         <UPageCard
             v-for="l in fileLibraries"
-            variant="ghost"
+            variant="soft"
             icon="i-lucide-library-big"
             :title="l.libraryName"
             :description="l.basePath"
@@ -13,19 +13,15 @@
 </template>
 
 <script setup lang="ts">
-import type { components } from '#open-fetch-schemas/api';
-type FileLibrary = components['schemas']['FileLibrary'];
-const { data: fileLibraries, refresh } = useApi('/v2/FileLibrary');
+import type { ApiModel } from '#nuxt-api-party'
+type FileLibrary = ApiModel<"FileLibrary">;
+const { data: fileLibraries } = await useApiData('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
 
-const config = useRuntimeConfig();
 const busy = ref(false);
-const deleteLibrary = (l: FileLibrary) => {
+const deleteLibrary = async (l: FileLibrary) => {
     busy.value = true;
-    $fetch(new Request(`${config.public.openFetch.api.baseURL}v2/FileLibrary/${l.key}`), { method: 'DELETE' }).finally(
-        () => {
-            refresh();
-            busy.value = false;
-        }
-    );
+    await $api('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: l.key }, method: 'DELETE' })
+        .then(() => refreshNuxtData(FetchKeys.FileLibraries))
+        .finally(() => busy.value = false)
 };
 </script>

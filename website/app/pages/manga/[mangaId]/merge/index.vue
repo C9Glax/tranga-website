@@ -10,6 +10,6 @@
 <script setup lang="ts">
 const route = useRoute();
 
-const { data: manga } = useApi('/v2/Manga/{MangaId}', { path: { MangaId: route.params.mangaId as string } });
-const { data: mangas } = useApi('/v2/Manga');
+const { data: manga } = await useApiData('/v2/Manga/{MangaId}', { path: { MangaId: route.params.mangaId as string }, key: FetchKeys.Manga.Id(mangaId) });
+const { data: mangas } = await useApiData('/v2/Manga', { key: FetchKeys.Manga.All });
 </script>

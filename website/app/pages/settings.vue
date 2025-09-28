@@ -1,8 +1,10 @@
 <template>
-    <UPageSection title="Settings"/>
+    <UPageSection title="Settings" />
     <UPageSection title="Libraries" orientation="horizontal">
+        <template #footer>
+            <UButton icon="i-lucide-plus" class="w-fit" @click="() => addLibraryModal.open()">Add</UButton>
+        </template>
         <FileLibraries />
-        <UButton icon="i-lucide-plus" class="w-fit" @click="() => addLibraryModal.open()">Add</UButton>
     </UPageSection>
     <UPageSection title="Maintenance" orientation="horizontal">
         <div class="flex flex-col gap-1 items-end basis-1">
@@ -17,16 +19,17 @@
 import { LazyAddLibraryModal } from '#components';
 
 import FileLibraries from '~/components/FileLibraries.vue';
+import {refreshNuxtData} from "#app";
 const overlay = useOverlay();
 const config = useRuntimeConfig();
 
 const addLibraryModal = overlay.create(LazyAddLibraryModal);
 
 const cleanUpDatabaseBusy = ref(false);
-const cleanUpDatabase = () => {
+const cleanUpDatabase = async () => {
     cleanUpDatabaseBusy.value = true;
-    $fetch(`${config.public.openFetch.api.baseURL}v2/Maintenance/CleanupNoDownloadManga`).finally(
-        () => (cleanUpDatabaseBusy.value = false)
-    );
+    await $api('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' })
+        .then(() => refreshNuxtData(Keys.Manga.All))
+        .finally(() => cleanUpDatabaseBusy.value = false);
 };
 </script>

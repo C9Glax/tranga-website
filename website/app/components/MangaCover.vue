@@ -12,14 +12,14 @@
             <p class="p-3 text-xl font-semibold max-h-full overflow-clip">{{ manga?.name }}</p>
         </div>
         <LazyNuxtImg
-            :src="`${$config.public.openFetch.api.baseURL}v2/Manga/${manga.key}/Cover/Medium`"
+            :src="`${$config.public.apiParty.endpoints.Api!.url}v2/Manga/${manga.key}/Cover/Medium`"
             class="w-full h-full object-cover" />
     </div>
 </template>
 
 <script setup lang="ts">
-import type { components } from '#open-fetch-schemas/api';
-type MinimalManga = components['schemas']['MinimalManga'];
-type Manga = components['schemas']['Manga'];
+import type { ApiModel } from '#nuxt-api-party'
+type MinimalManga = ApiModel<'MinimalManga'>;
+type Manga = ApiModel<'Manga'>;
 defineProps<{ manga: Manga | MinimalManga; blur?: boolean }>();
 </script>

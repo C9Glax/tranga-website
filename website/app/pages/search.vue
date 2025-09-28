@@ -46,12 +46,12 @@
 </template>
 
 <script setup lang="ts">
-import type { components } from '#open-fetch-schemas/api';
+import {$api, type ApiModel} from '#nuxt-api-party'
 import type { StepperItem } from '@nuxt/ui';
-type MangaConnector = components['schemas']['MangaConnector'];
-type MinimalManga = components['schemas']['MinimalManga'];
+type MangaConnector = ApiModel<"MangaConnector">;
+type MinimalManga = ApiModel<'MinimalManga'>;
 
-const { data: connectors } = useApi('/v2/MangaConnector');
+const { data: connectors } = await useApiData('/v2/MangaConnector', { FetchKeys: FetchKeys.MangaConnector.All });
 
 const query = ref<string>();
 const connector = useState<MangaConnector>();
@@ -95,14 +95,10 @@ const config = useRuntimeConfig();
 
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
-        return await $fetch<MinimalManga>(new Request(`${config.public.openFetch.api.baseURL}v2/Search/Url`), {
-            method: 'POST',
-            body: JSON.stringify(query),
-        }).then((x) => [x]);
+        return await $api<'/v2/Search/Url', MinimalManga>('/v2/Search/Url', { body: JSON.stringify(query), method: "POST" })
+            .then((x) => [x]);
     } else if (connector.value) {
-        return await $fetch<MinimalManga[]>(
-            new Request(`${config.public.openFetch.api.baseURL}v2/Search/${connector.value.name}/${query}`)
-        );
+        return await $api('/v2/Search/{MangaConnectorName}/{Query}', { path: { MangaConnectorName: connector.value.name, query: query }, method: "POST" });
     }
     return Promise.reject();
 };

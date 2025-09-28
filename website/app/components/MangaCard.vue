@@ -33,10 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import type { components } from '#open-fetch-schemas/api';
+import type { ApiModel } from '#nuxt-api-party'
 import type { PageCardProps } from '#ui/components/PageCard.vue';
-type Manga = components['schemas']['Manga'];
-type MinimalManga = components['schemas']['MinimalManga'];
+type Manga = ApiModel<'Manga'>;
+type MinimalManga = ApiModel<'MinimalManga'>;
 
 defineProps<MangaCardProps>();
 defineEmits(['click']);

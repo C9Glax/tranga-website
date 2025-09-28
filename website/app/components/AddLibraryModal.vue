@@ -15,23 +15,20 @@
 </template>
 
 <script setup lang="ts">
-import type { components } from '#open-fetch-schemas/api';
+import type { ApiModel } from '#nuxt-api-party';
 
 const name = ref('');
 const path = ref('');
 
-const model = computed((): components['schemas']['CreateLibraryRecord'] => {
+const model = computed((): ApiModel<'CreateLibraryRecord'> => {
     return { basePath: path.value, libraryName: name.value };
 });
 
-const config = useRuntimeConfig();
 const busy = ref(false);
-const onAddClick = () => {
+const onAddClick = async () => {
     busy.value = true;
-    $fetch(new Request(`${config.public.openFetch.api.baseURL}v2/FileLibrary`), { method: 'PUT', body: model.value })
-        .then(() => emit('change'))
+    await $api('/v2/FileLibrary', { method: 'PUT', body: model.value })
+        .then(() => refreshNuxtData(Keys.FileLibraries))
         .finally(() => (busy.value = false));
 };
-
-const emit = defineEmits(['change']);
 </script>

@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import type { components } from '#open-fetch-schemas/api';
-type MangaConnectorId = components['schemas']['MangaConnectorId'];
+import type { ApiModel } from '#nuxt-api-party'
+type MangaConnectorId = /* @vue-ignore */ ApiModel<'MangaConnectorId'>;
 
 const props = defineProps<MangaConnectorId>();
 
-const { data: mangaConnector } = useApi('/v2/MangaConnector/{MangaConnectorName}', {
-    path: { MangaConnectorName: props.mangaConnectorName },
+const { data: mangaConnector } = await useApiData('/v2/MangaConnector/{MangaConnectorName}', {
+    path: { MangaConnectorName: props.mangaConnectorName }, key: FetchKeys.MangaConnector.Id(props.mangaConnectorName),
 });
 </script>

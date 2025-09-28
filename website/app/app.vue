@@ -6,7 +6,7 @@
                 <NuxtLink to="https://github.com/C9Glax/tranga-website"
                     ><Icon name="i-lucide-github" />Website</NuxtLink
                 >
-                <NuxtLink to=""><Icon name="i-lucide-book-open" />Swagger</NuxtLink>
+                <NuxtLink :to="`${$config.public.apiParty.endpoints.api?.url}swagger`"><Icon name="i-lucide-book-open" />Swagger</NuxtLink>
             </template>
             <template #default>
                 <NuxtLink to="/">
@@ -37,4 +37,5 @@
         </UMain>
     </UApp>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
