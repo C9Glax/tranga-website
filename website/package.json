@@ -10,7 +10,7 @@
         "postinstall": "nuxt prepare",
         "prettier": "prettier . --write",
         "lint": "eslint . --fix",
-        "clean": "eslint . --fix &&  prettier . --write"
+        "clean": "eslint . --fix && prettier . --write"
     },
     "dependencies": {
         "@nuxt/content": "^3.7.1",
