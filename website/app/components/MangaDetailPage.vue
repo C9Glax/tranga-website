@@ -40,8 +40,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ApiModel } from '#nuxt-api-party';
-type Manga = ApiModel<'Manga'>;
+import type { components } from '#open-fetch-schemas/api';
+type Manga = components['schemas']['Manga'];
 
 export interface MangaDetailPageProps {
     manga?: Manga;

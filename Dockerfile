@@ -1,19 +1,25 @@
-﻿# Build stage
-FROM node:20-alpine AS builder
-
+﻿# use the official Bun image
+# see all versions at https://hub.docker.com/r/oven/bun/tags
+FROM oven/bun:1 AS build
 WORKDIR /app
-COPY ./website /app
-RUN npm install
-RUN npm run generate
 
-# Serve stage
-FROM nginx:alpine3.17-slim
+COPY website/package.json bun.lock* ./
 
-# Copy built files from Vite's dist folder
-COPY --from=builder /app/.output/public /usr/share/nginx/html
-#COPY --from=builder /app/tranga-website/media /usr/share/nginx/html/media
-COPY ./nginx /etc/nginx
+# use ignore-scripts to avoid builting node modules like better-sqlite3
+RUN bun install --frozen-lockfile --ignore-scripts
 
-EXPOSE 80
-ENV API_URL=http://tranga-api:6531
-CMD ["nginx", "-g", "daemon off;"]
+# Copy the entire project
+COPY website/* .
+
+RUN bun --bun run build
+
+# copy production dependencies and source code into final image
+FROM oven/bun:1 AS production
+WORKDIR /app
+
+# Only `.output` folder is needed from the build stage
+COPY --from=build /app/.output /app
+
+# run the app
+EXPOSE 3000/tcp
+ENTRYPOINT [ "bun", "--bun", "run", "/app/server/index.mjs" ]

@@ -11,9 +11,9 @@
 import MangaDetailPage from '~/components/MangaDetailPage.vue';
 
 const route = useRoute();
-const mangaId = route.params.MangaId as string;
+const mangaId = route.params.mangaId as string;
 
-const { data: manga } = await useApiData('/v2/Manga/{MangaId}', {
+const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },
     key: FetchKeys.Manga.Id(mangaId),
 });

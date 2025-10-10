@@ -46,12 +46,13 @@
 </template>
 
 <script setup lang="ts">
-import { $api, type ApiModel } from '#nuxt-api-party';
+import type { components } from '#open-fetch-schemas/api';
 import type { StepperItem } from '@nuxt/ui';
-type MangaConnector = ApiModel<'MangaConnector'>;
-type MinimalManga = ApiModel<'MinimalManga'>;
+import type { AsyncData, FetchResult } from '#app';
+type MangaConnector = components['schemas']['MangaConnector'];
+type MinimalManga = components['schemas']['MinimalManga'];
 
-const { data: connectors } = await useApiData('/v2/MangaConnector', { FetchKeys: FetchKeys.MangaConnector.All });
+const { data: connectors } = await useApi('/v2/MangaConnector', { key: FetchKeys.MangaConnector.All });
 
 const query = ref<string>();
 const connector = useState<MangaConnector>();
@@ -91,21 +92,19 @@ const performSearch = () => {
         .finally(() => (busy.value = false));
 };
 
-const config = useRuntimeConfig();
-
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
-        return await $api<'/v2/Search/Url', MinimalManga>('/v2/Search/Url', {
-            body: JSON.stringify(query),
-            method: 'POST',
-        }).then((x) => [x]);
-    } else if (connector.value) {
-        return await $api('/v2/Search/{MangaConnectorName}/{Query}', {
-            path: { MangaConnectorName: connector.value.name, query: query },
-            method: 'POST',
+        const { data } = await useApi('/v2/Search/Url', { body: JSON.stringify(query), method: 'POST' });
+        if (data.value) return [data.value];
+        else return Promise.reject();
+    } else if (connector.value.name) {
+        const { data } = await useApi('/v2/Search/{MangaConnectorName}/{Query}', {
+            path: { MangaConnectorName: connector.value.name, Query: query },
+            method: 'GET',
         });
-    }
-    return Promise.reject();
+        if (data.value) return data.value;
+        else return Promise.reject();
+    } else return Promise.reject();
 };
 
 const items = ref<StepperItem[]>([

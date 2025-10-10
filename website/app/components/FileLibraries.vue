@@ -13,14 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import type { ApiModel } from '#nuxt-api-party';
-type FileLibrary = ApiModel<'FileLibrary'>;
-const { data: fileLibraries } = await useApiData('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
+import type { components } from '#open-fetch-schemas/api';
+type FileLibrary = components['schemas']['FileLibrary'];
+const { data: fileLibraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
 
 const busy = ref(false);
-const deleteLibrary = async (l: FileLibrary) => {
+const deleteLibrary = async (library: FileLibrary) => {
     busy.value = true;
-    await $api('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: l.key }, method: 'DELETE' })
+    await useApi('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: library.key }, method: 'DELETE' })
         .then(() => refreshNuxtData(FetchKeys.FileLibraries))
         .finally(() => (busy.value = false));
 };
