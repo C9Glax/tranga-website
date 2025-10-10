@@ -41,7 +41,7 @@ type MinimalManga = components['schemas']['MinimalManga'];
 defineProps<MangaCardProps>();
 defineEmits(['click']);
 
-export interface MangaCardProps extends PageCardProps {
+export interface MangaCardProps extends /* @vue-ignore */ PageCardProps {
     manga: Manga | MinimalManga;
     expanded?: boolean;
 }
