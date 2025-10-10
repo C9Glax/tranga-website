@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI amd64v2
 
 on:
   push:
