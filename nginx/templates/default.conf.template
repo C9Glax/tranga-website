@@ -15,10 +15,8 @@ server {
         proxy_pass $API_URL;
     }
     
-    location /_ipx/_/api/ {
-        proxy_pass_request_headers on;
-        rewrite ^/_ipx/_/api/(.*)$ /$1 break;
-        proxy_pass $API_URL;
+    location /_ipx/_/ {
+        rewrite ^/_ipx/_/(.*)$ /$1 break;
     }
 
     location /swagger {
