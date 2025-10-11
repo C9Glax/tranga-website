@@ -14,7 +14,7 @@
                         author.name
                     }}</UBadge>
                     <UBadge v-for="tag in manga.tags" :key="tag" variant="outline">{{ tag }}</UBadge>
-                    <NuxtLink v-for="link in manga.links" :key="link.key" :to="link.url" external noPrefetch>
+                    <NuxtLink v-for="link in manga.links" :key="link.key" :to="link.url" external no-prefetch>
                         <UBadge variant="outline" color="warning">{{ link.provider }}</UBadge>
                     </NuxtLink>
                 </div>
