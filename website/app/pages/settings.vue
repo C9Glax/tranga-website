@@ -1,18 +1,20 @@
 <template>
-    <UPageSection title="Settings" />
-    <UPageSection title="Libraries" orientation="horizontal">
-        <template #footer>
-            <UButton icon="i-lucide-plus" class="w-fit" @click="addLibraryModal.open()">Add</UButton>
-        </template>
-        <FileLibraries />
-    </UPageSection>
-    <UPageSection title="Maintenance" orientation="horizontal">
-        <div class="flex flex-col gap-1 items-end basis-1">
-            <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit" @click="cleanUpDatabase"
-                >Clean database</UButton
-            >
-        </div>
-    </UPageSection>
+    <UPageBody>
+        <UPageSection title="Settings" />
+        <UPageSection title="Libraries" orientation="horizontal">
+            <template #footer>
+                <UButton icon="i-lucide-plus" class="w-fit" @click="addLibraryModal.open()">Add</UButton>
+            </template>
+            <FileLibraries />
+        </UPageSection>
+        <UPageSection title="Maintenance" orientation="horizontal">
+            <div class="flex flex-col gap-1 items-end basis-1">
+                <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit" @click="cleanUpDatabase"
+                    >Clean database</UButton
+                >
+            </div>
+        </UPageSection>
+    </UPageBody>
 </template>
 
 <script setup lang="ts">

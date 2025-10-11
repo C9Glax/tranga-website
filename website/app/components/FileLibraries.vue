@@ -2,6 +2,7 @@
     <UPageList class="gap-2">
         <UPageCard
             v-for="l in fileLibraries"
+            :key="l.key"
             variant="soft"
             icon="i-lucide-library-big"
             :title="l.libraryName"

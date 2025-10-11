@@ -1,54 +1,57 @@
 <template>
-    <UPageSection :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 ' }">
-        <UButton variant="ghost" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
-        <div class="flex flex-row w-full h-full justify-between gap-4">
-            <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled />
-            <UCard class="grow">
-                <div class="flex flex-col justify-between gap-2">
-                    <UInput v-model="query" class="w-full" :disabled="busy" />
-                    <div class="flex gap-1 w-full justify-center">
-                        <UButton
-                            v-for="c in connectors"
-                            :color="connector?.key == c.key ? 'success' : 'neutral'"
-                            :disabled="busy"
-                            @click="connectorClick(c)">
-                            <template #leading>
-                                <NuxtImg :src="c.iconUrl" class="h-lh" />
-                            </template>
-                            {{ c.name }}
-                        </UButton>
-                        <UButton color="secondary" :disabled="busy" :loading="busy" @click="performSearch"
-                            >Search</UButton
-                        >
+    <UPageBody>
+        <UPageSection :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 ' }">
+            <UButton variant="ghost" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
+            <div class="flex flex-row w-full h-full justify-between gap-4">
+                <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled />
+                <UCard class="grow">
+                    <div class="flex flex-col justify-between gap-2">
+                        <UInput v-model="query" class="w-full" :disabled="busy" />
+                        <div class="flex gap-1 w-full justify-center">
+                            <UButton
+                                v-for="c in connectors"
+                                :key="c.key"
+                                :color="connector?.key == c.key ? 'success' : 'neutral'"
+                                :disabled="busy"
+                                @click="connectorClick(c)">
+                                <template #leading>
+                                    <NuxtImg :src="c.iconUrl" class="h-lh" />
+                                </template>
+                                {{ c.name }}
+                            </UButton>
+                            <UButton color="secondary" :disabled="busy" :loading="busy" @click="performSearch"
+                                >Search</UButton
+                            >
+                        </div>
                     </div>
-                </div>
-            </UCard>
-        </div>
-    </UPageSection>
-    <UPageSection v-if="searchResult.length > 0" :ui="{ container: 'py-0 sm:py-0 lg:py-0' }">
-        <template #description>
-            <p class="text-lg">Result for '{{ searchQuery }}'</p>
-        </template>
-        <template #default>
-            <div class="relative flex flex-row flex-wrap gap-6 mt-0">
-                <MangaCard
-                    v-for="(m, i) in searchResult"
-                    :manga="m"
-                    :expanded="i === expanded"
-                    @click="expanded = expanded === i ? -1 : i">
-                    <template #actions="manga">
-                        <UButton :to="`download/${manga.key}`">Download</UButton>
-                    </template>
-                </MangaCard>
+                </UCard>
             </div>
-        </template>
-    </UPageSection>
+        </UPageSection>
+        <UPageSection v-if="searchResult.length > 0" :ui="{ container: 'py-0 sm:py-0 lg:py-0' }">
+            <template #description>
+                <p class="text-lg">Result for '{{ searchQuery }}'</p>
+            </template>
+            <template #default>
+                <div class="relative flex flex-row flex-wrap gap-6 mt-0">
+                    <MangaCard
+                        v-for="(m, i) in searchResult"
+                        :key="m.key"
+                        :manga="m"
+                        :expanded="i === expanded"
+                        @click="expanded = expanded === i ? -1 : i">
+                        <template #actions="manga">
+                            <UButton :to="`download/${manga.key}`">Download</UButton>
+                        </template>
+                    </MangaCard>
+                </div>
+            </template>
+        </UPageSection>
+    </UPageBody>
 </template>
 
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
 import type { StepperItem } from '@nuxt/ui';
-import type { AsyncData, FetchResult } from '#app';
 type MangaConnector = components['schemas']['MangaConnector'];
 type MinimalManga = components['schemas']['MinimalManga'];
 

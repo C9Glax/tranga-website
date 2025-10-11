@@ -2,13 +2,14 @@
     <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
         <USkeleton v-if="status !== 'success'" class="max-w-[600px] w-full h-[350px]" />
         <MangaCard
-            v-else
             v-for="(m, i) in manga"
+            v-else
+            :key="m.key"
             :manga="m"
             :expanded="i === expanded"
             @click="expanded = expanded === i ? -1 : i">
-            <template #actions="manga">
-                <UButton :to="`manga/${manga.key}`">Details</UButton>
+            <template #actions="formanga">
+                <UButton :to="`manga/${formanga.key}`">Details</UButton>
             </template>
         </MangaCard>
     </UPageBody>

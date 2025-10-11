@@ -6,13 +6,15 @@
                 <USkeleton v-else class="w-[240px] h-[350px]" />
                 <p v-if="manga" class="font-semibold text-xl">
                     {{ manga.name }}
-                    <MangaconnectorIcon v-for="m in manga.mangaConnectorIds" v-bind="m" />
+                    <MangaconnectorIcon v-for="m in manga.mangaConnectorIds" v-bind="m" :key="m.key" />
                 </p>
                 <USkeleton v-else class="text-xl h-20 w-full" />
                 <div v-if="manga" class="flex flex-row gap-1 flex-wrap">
-                    <UBadge v-for="author in manga.authors" variant="outline" color="neutral">{{ author.name }}</UBadge>
-                    <UBadge v-for="tag in manga.tags" variant="outline">{{ tag }}</UBadge>
-                    <NuxtLink v-for="link in manga.links" :to="link.url">
+                    <UBadge v-for="author in manga.authors" :key="author.key" variant="outline" color="neutral">{{
+                        author.name
+                    }}</UBadge>
+                    <UBadge v-for="tag in manga.tags" :key="tag" variant="outline">{{ tag }}</UBadge>
+                    <NuxtLink v-for="link in manga.links" :key="link.key" :to="link.url" external noPrefetch>
                         <UBadge variant="outline" color="warning">{{ link.provider }}</UBadge>
                     </NuxtLink>
                 </div>

@@ -23,7 +23,8 @@
                         v-for="mangaconnectorId in chapter.mangaConnectorIds.sort((a, b) =>
                             a.mangaConnectorName < b.mangaConnectorName ? -1 : 1
                         )"
-                        v-bind="mangaconnectorId" />
+                        v-bind="mangaconnectorId"
+                        :key="mangaconnectorId.key" />
                 </div>
             </template>
         </UPageCard>
