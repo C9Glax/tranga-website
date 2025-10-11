@@ -9,10 +9,11 @@ export default defineNuxtConfig({
     openFetch: {
         clients: {
             api: {
-                baseURL: 'http://127.0.0.1:6531/',
+                baseURL: '/api/',
                 schema: 'https://raw.githubusercontent.com/C9Glax/tranga/refs/heads/testing/API/openapi/API_v2.json',
             },
         },
     },
     vite: { plugins: [tailwindcss()] },
+    nitro: { prerender: { failOnError: false } },
 });

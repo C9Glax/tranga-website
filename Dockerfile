@@ -2,6 +2,7 @@
 FROM node:24-alpine AS builder
 
 WORKDIR /app
+
 COPY website/* /app
 RUN npm -dd install -g npm
 RUN npm -dd install

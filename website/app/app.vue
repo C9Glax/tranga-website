@@ -2,18 +2,20 @@
     <UApp>
         <UHeader>
             <template #left>
-                <NuxtLink to="https://github.com/C9Glax/tranga"><Icon name="i-lucide-github" />API</NuxtLink>
-                <NuxtLink to="https://github.com/C9Glax/tranga-website"
+                <NuxtLink to="https://github.com/C9Glax/tranga" external noPrefetch
+                    ><Icon name="i-lucide-github" />API</NuxtLink
+                >
+                <NuxtLink to="https://github.com/C9Glax/tranga-website" external noPrefetch
                     ><Icon name="i-lucide-github" />Website</NuxtLink
                 >
-                <NuxtLink :to="`${$config.public.openFetch.api.baseURL}swagger`"
+                <NuxtLink :to="`${$config.public.openFetch.api.baseURL}swagger`" external noPrefetch
                     ><Icon name="i-lucide-book-open" />Swagger</NuxtLink
                 >
             </template>
             <template #default>
                 <NuxtLink to="/">
                     <div class="h-full flex gap-2 items-center">
-                        <img src="/blahaj.png" class="h-lh cursor-grab" >
+                        <img src="/blahaj.png" class="h-lh cursor-grab" />
                         <p
                             style="
                                 background: linear-gradient(110deg, var(--color-pink), var(--color-blue));
