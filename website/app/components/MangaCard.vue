@@ -13,7 +13,7 @@
         v-else
         orientation="horizontal"
         reverse
-        class="relative max-w-[600px] w-full h-[350px] mt-2 mb-2"
+        class="relative max-w-[600px] w-full h-[350px] mt-2"
         :ui="{ body: 'p-0 sm:p-0', root: 'overflow-visible' }"
         @click="$emit('click')">
         <div class="flex flex-row w-full h-full basis-auto">
