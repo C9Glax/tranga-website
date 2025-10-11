@@ -26,6 +26,11 @@ server {
         proxy_pass $API_URL;
     }
 
+    location /v2 {
+        proxy_pass_request_headers on;
+        proxy_pass $API_URL;
+    }
+
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
