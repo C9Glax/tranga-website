@@ -2,7 +2,7 @@
     <UCard
         v-if="!expanded"
         :ui="{ body: 'p-0 sm:p-0', root: 'overflow-visible' }"
-        class="relative h-[350px] mt-2"
+        class="relative h-[350px] mt-2 mb-2"
         @click="$emit('click')">
         <MangaCover :manga="manga" blur />
         <div class="absolute -top-4 -right-4 flex flex-col bg-pink rounded-full">

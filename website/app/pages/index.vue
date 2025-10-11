@@ -1,6 +1,6 @@
 <template>
     <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-        <USkeleton v-if="status !== 'success'" class="max-w-[600px] w-full h-[350px]" />
+        <USkeleton v-if="status !== 'success'" class="w-[240px] h-[350px]" />
         <MangaCard
             v-for="(m, i) in manga"
             v-else
