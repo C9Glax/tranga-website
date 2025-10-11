@@ -32,7 +32,9 @@
                     <p v-if="title" class="text-3xl">{{ title }}</p>
                 </div>
                 <div v-if="manga" class="flex flex-row gap-2">
-                    <UButton trailing-icon="i-lucide-merge" :to="`${manga.key}/merge/`" color="secondary" >Merge</UButton>
+                    <UButton trailing-icon="i-lucide-merge" :to="`${manga.key}/merge/`" color="secondary"
+                        >Merge</UButton
+                    >
                     <slot name="actions" />
                 </div>
             </div>

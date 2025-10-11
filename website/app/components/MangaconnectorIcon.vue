@@ -6,9 +6,9 @@
                     v-if="mangaConnector"
                     :src="mangaConnector?.iconUrl"
                     :class="[
-                    'w-full rounded-full outline-2 -outline-offset-1',
-                    props.useForDownload ? 'outline-green-500' : 'outline-red-500',
-                ]" />
+                        'w-full rounded-full outline-2 -outline-offset-1',
+                        props.useForDownload ? 'outline-green-500' : 'outline-red-500',
+                    ]" />
                 <p v-else>{{ mangaConnectorName }}</p>
             </UTooltip>
         </NuxtLink>
