@@ -1,9 +1,9 @@
 <template>
     <UPageBody>
         <UPageSection :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 ' }">
-            <UButton variant="ghost" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
+            <UButton variant="soft" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
             <div class="flex flex-row w-full h-full justify-between gap-4">
-                <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled />
+                <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled color="secondary" />
                 <UCard class="grow">
                     <div class="flex flex-col justify-between gap-2">
                         <UInput v-model="query" class="w-full" :disabled="busy" />
@@ -11,7 +11,7 @@
                             <UButton
                                 v-for="c in connectors"
                                 :key="c.key"
-                                :color="connector?.key == c.key ? 'success' : 'neutral'"
+                                :color="connector?.key == c.key ? 'secondary' : 'neutral'"
                                 :disabled="busy"
                                 @click="connectorClick(c)">
                                 <template #leading>
@@ -19,7 +19,7 @@
                                 </template>
                                 {{ c.name }}
                             </UButton>
-                            <UButton color="secondary" :disabled="busy" :loading="busy" @click="performSearch"
+                            <UButton color="primary" :disabled="busy" :loading="busy" @click="performSearch"
                                 >Search</UButton
                             >
                         </div>
