@@ -3,19 +3,24 @@
         <UPageCard
             v-for="chapter in chapters"
             :key="chapter.key"
-            :title="chapter.title"
             orientation="horizontal"
             :ui="{ container: 'p-2 sm:p-2' }">
+            <template #title>
+                <p class="text-primary">{{ chapter.title }}</p>
+            </template>
             <template #leading>
+                <p class="mr-1">Downloaded:</p>
                 <Icon v-if="chapter.downloaded" name="i-lucide-circle-x" />
                 <Icon v-else name="i-lucide-circle-check-big" class="stroke-green-500" />
             </template>
             <template #footer>
-                <p v-if="chapter.volume" class="inline mr-1">Vol. {{ chapter.volume }}</p>
-                <p class="inline">Ch. {{ chapter.chapterNumber }}</p>
+                <p class="text-secondary">
+                    <span v-if="chapter.volume" class="mr-1">Vol. {{ chapter.volume }}</span>
+                    <span class="inline">Ch. {{ chapter.chapterNumber }}</span>
+                </p>
             </template>
             <template #description>
-                {{ chapter.fileName }}
+                <p>{{ chapter.fileName }}</p>
             </template>
             <template #default>
                 <div>

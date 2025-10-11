@@ -21,7 +21,7 @@
             <div class="absolute -top-4 -right-4 flex flex-col bg-pink rounded-full">
                 <MangaconnectorIcon v-for="m in manga.mangaConnectorIds" v-bind="m" :key="m.key" />
             </div>
-            <div class="flex flex-col h-[350px] shrink mx-2">
+            <div class="flex flex-col h-[350px] shrink mx-2 mt-4">
                 <p class="font-semibold text-xl">{{ manga.name }}</p>
                 <p class="max-h-30 overflow-y-hidden grow">{{ manga.description }}</p>
             </div>

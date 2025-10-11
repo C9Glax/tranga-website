@@ -14,7 +14,7 @@
             <MangaCard v-if="target" :manga="target" :expanded="true" />
             <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
         </div>
-        <p>This action is irreversible!</p>
+        <p class="text-warning">This action is irreversible!</p>
         <UButton color="warning" class="w-fit">Merge</UButton>
     </UPageBody>
 </template>

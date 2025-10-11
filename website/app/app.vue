@@ -29,9 +29,9 @@
                 </NuxtLink>
             </template>
             <template #right>
-                <UButton icon="i-lucide-plus" to="/search">Add</UButton>
-                <UColorModeButton />
-                <UButton icon="i-lucide-settings" variant="ghost" to="/settings" />
+                <UButton icon="i-lucide-plus" to="/search" color="primary">Add</UButton>
+                <UColorModeButton color="secondary" />
+                <UButton icon="i-lucide-settings" variant="ghost" to="/settings" color="secondary" />
             </template>
         </UHeader>
         <UMain>
@@ -41,4 +41,5 @@
         </UMain>
     </UApp>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>

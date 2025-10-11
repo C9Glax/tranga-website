@@ -1,11 +1,11 @@
 <template>
     <UPageBody>
         <UPageHeader class="text-3xl px-4"
-            >Merge <span v-if="manga">{{ manga.name }}</span
-            ><USkeleton v-else as="span" class="w-60 h-lh" /> into</UPageHeader
+            >Merge <span v-if="manga" class="italic text-secondary">{{ manga.name }}</span
+            ><USkeleton v-else as="span" class="w-60 h-lh" /> with</UPageHeader
         >
         <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-            <NuxtLink v-for="m in mangas" :key="m.key" :to="`/manga/${m.key}`">
+            <NuxtLink v-for="m in mangas" :key="m.key" :to="m.key">
                 <MangaCard :manga="m" />
             </NuxtLink>
         </UPageBody>

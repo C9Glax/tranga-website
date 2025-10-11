@@ -13,9 +13,9 @@
                     <UBadge v-for="author in manga.authors" :key="author.key" variant="outline" color="neutral">{{
                         author.name
                     }}</UBadge>
-                    <UBadge v-for="tag in manga.tags" :key="tag" variant="outline">{{ tag }}</UBadge>
+                    <UBadge v-for="tag in manga.tags" :key="tag" variant="outline" color="primary">{{ tag }}</UBadge>
                     <NuxtLink v-for="link in manga.links" :key="link.key" :to="link.url" external no-prefetch>
-                        <UBadge variant="outline" color="warning">{{ link.provider }}</UBadge>
+                        <UBadge variant="outline" color="secondary">{{ link.provider }}</UBadge>
                     </NuxtLink>
                 </div>
                 <USkeleton v-else class="w-full h-lh" />
@@ -25,14 +25,14 @@
                 <USkeleton v-else class="w-full h-30" />
             </div>
         </template>
-        <UPageBody class="relative pr-4">
+        <UPageBody class="relative pr-12">
             <div class="w-full flex flex-row justify-between">
                 <div>
                     <UButton variant="soft" :to="backPath ?? '/'" icon="i-lucide-arrow-left">Back</UButton>
                     <p v-if="title" class="text-3xl">{{ title }}</p>
                 </div>
                 <div v-if="manga" class="flex flex-row gap-2">
-                    <UButton trailing-icon="i-lucide-merge" :to="`${manga.key}/merge/`">Merge</UButton>
+                    <UButton trailing-icon="i-lucide-merge" :to="`${manga.key}/merge/`" color="secondary" >Merge</UButton>
                     <slot name="actions" />
                 </div>
             </div>

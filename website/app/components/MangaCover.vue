@@ -9,7 +9,7 @@
                 backdrop-filter: blur(2px) brightness(70%);
                 -webkit-backdrop-filter: blur(2px) brightness(70%);
             ">
-            <p class="p-3 text-xl font-semibold max-h-full overflow-clip">{{ manga?.name }}</p>
+            <p class="p-3 text-xl font-semibold max-h-full overflow-clip text-shadow-lg">{{ manga?.name }}</p>
         </div>
         <LazyNuxtImg
             :src="`${$config.public.openFetch.api.baseURL}v2/Manga/${manga.key}/Cover/Medium`"

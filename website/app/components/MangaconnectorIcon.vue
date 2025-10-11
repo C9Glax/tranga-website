@@ -1,14 +1,16 @@
 <template>
     <div class="w-6 h-6 inline-block align-middle m-1">
-        <NuxtLink :href="$props.websiteUrl ?? ''">
-            <NuxtImg
-                v-if="mangaConnector"
-                :src="mangaConnector?.iconUrl"
-                :class="[
+        <NuxtLink :href="props.websiteUrl ?? ''">
+            <UTooltip :text="`${props.useForDownload ? 'Downloading' : 'Not downloading'}, click to see website`">
+                <NuxtImg
+                    v-if="mangaConnector"
+                    :src="mangaConnector?.iconUrl"
+                    :class="[
                     'w-full rounded-full outline-2 -outline-offset-1',
                     props.useForDownload ? 'outline-green-500' : 'outline-red-500',
                 ]" />
-            <p v-else>{{ mangaConnectorName }}</p>
+                <p v-else>{{ mangaConnectorName }}</p>
+            </UTooltip>
         </NuxtLink>
     </div>
 </template>
