@@ -5,7 +5,10 @@
         icon="i-lucide-library-big"
         color="secondary"
         :items="libraries?.map((l) => l.key)"
-        class="w-xs">
+        class="w-xs"
+        @change="onLibrarySelectChange"
+        :loading="loading"
+    >
         <template #default="{ modelValue }">
             <p v-if="modelValue">
                 <span class="mr-2">{{ libraries?.find((l) => l.key == modelValue)?.libraryName }}</span>
@@ -23,6 +26,7 @@
 
 <script setup lang="ts">
 export interface LibrarySelectProps {
+    mangaId: string;
     libraryId?: string;
 }
 
@@ -30,4 +34,12 @@ const props = defineProps<LibrarySelectProps>();
 
 const library = ref(props.libraryId);
 const { data: libraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
+
+const loading = ref(false);
+const onLibrarySelectChange = async () => {
+    if (!library.value) return;
+    loading.value = true;
+    await useApi('/v2/Manga/{MangaId}/ChangeLibrary/{LibraryId}', { method: 'POST', path: { MangaId: props.mangaId, LibraryId: library.value } });
+    loading.value = false;
+}
 </script>
