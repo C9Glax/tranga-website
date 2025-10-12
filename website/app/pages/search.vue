@@ -1,9 +1,17 @@
 <template>
     <UPageBody>
-        <UPageSection :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 ' }">
+        <UPageSection
+            :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 py-4 sm:py-4 lg:py-4 gap-4 sm:gap-4 lg:gap-4' }"
+            class="h-fit">
             <UButton variant="soft" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
             <div class="flex flex-row w-full h-full justify-between gap-4">
-                <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled color="secondary" />
+                <UStepper
+                    v-model="activeStep"
+                    orientation="vertical"
+                    :items="items"
+                    class="h-full"
+                    disabled
+                    color="secondary" />
                 <UCard class="grow">
                     <div class="flex flex-col justify-between gap-2">
                         <UInput v-model="query" class="w-full" :disabled="busy" />
@@ -27,9 +35,13 @@
                 </UCard>
             </div>
         </UPageSection>
-        <UPageSection v-if="searchResult.length > 0" :ui="{ container: 'py-0 sm:py-0 lg:py-0' }">
+        <UPageSection
+            v-if="searchResult.length > 0"
+            :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 py-4 sm:py-4 lg:py-4 gap-4 sm:gap-4 lg:gap-4' }">
             <template #description>
-                <p class="text-lg">Result for '{{ searchQuery }}'</p>
+                <p class="text-lg">
+                    Result for <span class="text-secondary">'{{ searchQuery }}'</span>
+                </p>
             </template>
             <template #default>
                 <div class="relative flex flex-row flex-wrap gap-6 mt-0">
@@ -40,7 +52,7 @@
                         :expanded="i === expanded"
                         @click="expanded = expanded === i ? -1 : i">
                         <template #actions="manga">
-                            <UButton :to="`download/${manga.key}`">Download</UButton>
+                            <UButton :to="`download/${connector.name}/${manga.key}`">Download</UButton>
                         </template>
                     </MangaCard>
                 </div>
@@ -98,8 +110,12 @@ const performSearch = () => {
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
         const { data } = await useApi('/v2/Search/Url', { body: JSON.stringify(query), method: 'POST' });
-        if (data.value) return [data.value];
-        else return Promise.reject();
+        if (data.value) {
+            connector.value = connectors.value?.find(
+                (c) => c.name == data.value.mangaConnectorIds[0]?.mangaConnectorName
+            );
+            return [data.value];
+        } else return Promise.reject();
     } else if (connector.value.name) {
         const { data } = await useApi('/v2/Search/{MangaConnectorName}/{Query}', {
             path: { MangaConnectorName: connector.value.name, Query: query },

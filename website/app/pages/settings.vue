@@ -45,7 +45,7 @@ const apiUrl = ref(config.public.openFetch.api.baseURL);
 const reloading = ref(false);
 const setUrl = async () => {
     reloading.value = true;
-    config.public.openFetch.api.baseURL = apiUrl.value;
+    config.public.openFetch.api.baseURL = apiUrl.value.endsWith('/') ? apiUrl.value : apiUrl.value + '/';
     await refreshNuxtData();
     reloading.value = false;
 };
