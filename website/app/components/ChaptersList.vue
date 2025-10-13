@@ -24,7 +24,7 @@
                 <p>{{ chapter.fileName }}</p>
             </template>
             <template #default>
-                <div>
+                <div class="flex flex-row gap-2 w-full">
                     <div
                         v-for="mangaconnectorId in chapter.mangaConnectorIds.sort((a, b) =>
                             a.mangaConnectorName < b.mangaConnectorName ? -1 : 1
@@ -37,6 +37,7 @@
                             <UButton :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'" variant="ghost" disabled /> <!-- Not implemented yet -->
                         </UTooltip>
                     </div>
+                    <UButton variant="outline" color="secondary" class="ml-auto" disabled>Force (re)download</UButton> <!-- Not implemented yet -->
                 </div>
             </template>
         </UPageCard>
