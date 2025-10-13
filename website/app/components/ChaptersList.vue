@@ -4,8 +4,7 @@
             v-for="chapter in chapters"
             :key="chapter.key"
             orientation="horizontal"
-            :ui="{ container: 'p-2 sm:p-2' }"
-        >
+            :ui="{ container: 'p-2 sm:p-2' }">
             <template #title>
                 <p class="text-primary">{{ chapter.title }}</p>
                 <p class="text-secondary">
@@ -30,14 +29,25 @@
                             a.mangaConnectorName < b.mangaConnectorName ? -1 : 1
                         )"
                         :key="mangaconnectorId.key"
-                        class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2"
-                    >
+                        class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2">
                         <MangaconnectorIcon v-bind="mangaconnectorId" />
-                        <UTooltip :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'">
-                            <UButton :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'" variant="ghost" disabled /> <!-- Not implemented yet -->
+                        <UTooltip
+                            :text="
+                                mangaconnectorId.useForDownload
+                                    ? 'Stop downloading from this website'
+                                    : 'Download from this website'
+                            ">
+                            <UButton
+                                :icon="
+                                    mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'
+                                "
+                                variant="ghost"
+                                disabled />
+                            <!-- Not implemented yet -->
                         </UTooltip>
                     </div>
-                    <UButton variant="outline" color="secondary" class="ml-auto" disabled>Force (re)download</UButton> <!-- Not implemented yet -->
+                    <UButton variant="outline" color="secondary" class="ml-auto" disabled>Force (re)download</UButton>
+                    <!-- Not implemented yet -->
                 </div>
             </template>
         </UPageCard>
