@@ -16,15 +16,9 @@
                         class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2">
                         <MangaconnectorIcon v-bind="mangaconnectorId" />
                         <UTooltip
-                            :text="
-                                mangaconnectorId.useForDownload
-                                    ? 'Stop downloading from this website'
-                                    : 'Download from this website'
-                            ">
+                            :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'">
                             <UButton
-                                :icon="
-                                    mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'
-                                "
+                                :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                 variant="ghost"
                                 disabled />
                             <!-- Not implemented yet -->
@@ -34,7 +28,7 @@
             </UCard>
         </div>
         <template #actions>
-            <UButton trailing-icon="i-lucide-merge" :to="`${manga.key}/merge/`" color="secondary">Merge</UButton>
+            <UButton trailing-icon="i-lucide-merge" :to="`${manga?.key}/merge/`" color="secondary">Merge</UButton>
             <UButton variant="soft" color="warning" icon="i-lucide-trash" />
         </template>
     </MangaDetailPage>
@@ -49,6 +43,10 @@ const mangaId = route.params.mangaId as string;
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },
     key: FetchKeys.Manga.Id(mangaId),
+    onResponseError: (e) => {
+        console.error(e);
+        navigateTo('/');
+    },
 });
 const libraryId = ref(manga.value?.fileLibraryId);
 </script>

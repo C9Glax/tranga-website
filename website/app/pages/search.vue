@@ -1,17 +1,9 @@
 <template>
     <UPageBody>
-        <UPageSection
-            :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 py-4 sm:py-4 lg:py-4 gap-4 sm:gap-4 lg:gap-4' }"
-            class="h-fit">
+        <UPageSection :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 py-4 sm:py-4 lg:py-4 gap-4 sm:gap-4 lg:gap-4' }" class="h-fit">
             <UButton variant="soft" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
             <div class="flex flex-row w-full h-full justify-between gap-4">
-                <UStepper
-                    v-model="activeStep"
-                    orientation="vertical"
-                    :items="items"
-                    class="h-full"
-                    disabled
-                    color="secondary" />
+                <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled color="secondary" />
                 <UCard class="grow">
                     <div class="flex flex-col justify-between gap-2">
                         <UInput v-model="query" class="w-full" :disabled="busy" />
@@ -27,9 +19,7 @@
                                 </template>
                                 {{ c.name }}
                             </UButton>
-                            <UButton color="primary" :disabled="busy" :loading="busy" @click="performSearch"
-                                >Search</UButton
-                            >
+                            <UButton color="primary" :disabled="busy" :loading="busy" @click="performSearch">Search</UButton>
                         </div>
                     </div>
                 </UCard>
@@ -111,9 +101,7 @@ const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
         const { data } = await useApi('/v2/Search/Url', { body: JSON.stringify(query), method: 'POST' });
         if (data.value) {
-            connector.value = connectors.value?.find(
-                (c) => c.name == data.value.mangaConnectorIds[0]?.mangaConnectorName
-            );
+            connector.value = connectors.value?.find((c) => c.name == data.value.mangaConnectorIds[0]?.mangaConnectorName);
             return [data.value];
         } else return Promise.reject();
     } else if (connector.value.name) {

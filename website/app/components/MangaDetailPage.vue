@@ -10,9 +10,7 @@
                 </p>
                 <USkeleton v-else class="text-xl h-20 w-full" />
                 <div v-if="manga" class="flex flex-row gap-1 flex-wrap">
-                    <UBadge v-for="author in manga.authors" :key="author.key" variant="outline" color="neutral">{{
-                        author.name
-                    }}</UBadge>
+                    <UBadge v-for="author in manga.authors" :key="author.key" variant="outline" color="neutral">{{ author.name }}</UBadge>
                     <UBadge v-for="tag in manga.tags" :key="tag" variant="outline" color="primary">{{ tag }}</UBadge>
                     <NuxtLink v-for="link in manga.links" :key="link.key" :to="link.url" external no-prefetch>
                         <UBadge variant="outline" color="secondary">{{ link.provider }}</UBadge>

@@ -3,9 +3,7 @@
         <h1>{{ error?.statusCode }}</h1>
         <p>{{ error?.message }}</p>
         <NuxtLink to="/">Go back home</NuxtLink>
-        <NuxtLink to="https://github.com/C9Glax/tranga-website/issues/new"
-            ><Icon name="i-lucide-github" />Report this issue</NuxtLink
-        >
+        <NuxtLink to="https://github.com/C9Glax/tranga-website/issues/new"><Icon name="i-lucide-github" />Report this issue</NuxtLink>
     </div>
 </template>
 

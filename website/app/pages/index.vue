@@ -1,11 +1,6 @@
 <template>
     <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-        <MangaCard
-            v-for="(m, i) in manga"
-            :key="m.key"
-            :manga="m"
-            :expanded="i === expanded"
-            @click="expanded = expanded === i ? -1 : i">
+        <MangaCard v-for="(m, i) in manga" :key="m.key" :manga="m" :expanded="i === expanded" @click="expanded = expanded === i ? -1 : i">
             <template #actions="formanga">
                 <UButton :to="`manga/${formanga.key}`">Details</UButton>
             </template>

@@ -1,10 +1,6 @@
 <template>
     <UPageList class="gap-2">
-        <UPageCard
-            v-for="chapter in chapters"
-            :key="chapter.key"
-            orientation="horizontal"
-            :ui="{ container: 'p-2 sm:p-2' }">
+        <UPageCard v-for="chapter in chapters" :key="chapter.key" orientation="horizontal" :ui="{ container: 'p-2 sm:p-2' }">
             <template #title>
                 <p class="text-primary">{{ chapter.title }}</p>
                 <p class="text-secondary">
@@ -32,15 +28,9 @@
                         class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2">
                         <MangaconnectorIcon v-bind="mangaconnectorId" />
                         <UTooltip
-                            :text="
-                                mangaconnectorId.useForDownload
-                                    ? 'Stop downloading from this website'
-                                    : 'Download from this website'
-                            ">
+                            :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'">
                             <UButton
-                                :icon="
-                                    mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'
-                                "
+                                :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                 variant="ghost"
                                 disabled />
                             <!-- Not implemented yet -->
@@ -60,8 +50,5 @@ export interface ChaptersListProps {
 }
 const props = defineProps<ChaptersListProps>();
 
-const { data: chapters } = await useApi('/v2/Manga/{MangaId}/Chapters', {
-    path: { MangaId: props.mangaId },
-    key: FetchKeys.Chapters.All,
-});
+const { data: chapters } = await useApi('/v2/Manga/{MangaId}/Chapters', { path: { MangaId: props.mangaId }, key: FetchKeys.Chapters.All });
 </script>

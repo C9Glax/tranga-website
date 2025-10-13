@@ -2,9 +2,7 @@
     <UApp>
         <UHeader>
             <template #left>
-                <NuxtLink to="https://github.com/C9Glax/tranga" external no-prefetch
-                    ><Icon name="i-lucide-github" />API</NuxtLink
-                >
+                <NuxtLink to="https://github.com/C9Glax/tranga" external no-prefetch><Icon name="i-lucide-github" />API</NuxtLink>
                 <NuxtLink to="https://github.com/C9Glax/tranga-website" external no-prefetch
                     ><Icon name="i-lucide-github" />Website</NuxtLink
                 >

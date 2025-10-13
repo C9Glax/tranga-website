@@ -15,11 +15,7 @@
                     <h1>Maintenance</h1>
                 </template>
                 <div class="flex flex-col gap-1 items-end basis-1">
-                    <UButton
-                        icon="i-lucide-database"
-                        :loading="cleanUpDatabaseBusy"
-                        class="w-fit"
-                        @click="cleanUpDatabase"
+                    <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit" @click="cleanUpDatabase"
                         >Clean database</UButton
                     >
                 </div>

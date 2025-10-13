@@ -21,10 +21,7 @@ const route = useRoute();
 const mangaId = route.params.mangaId as string;
 const mangaConnectorName = route.params.mangaconnectorName as string;
 
-const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
-    path: { MangaId: mangaId },
-    key: FetchKeys.Manga.Id(mangaId),
-});
+const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
 const libraryId = ref({ libraryId: manga.value?.fileLibraryId });
 const { data: mangaConnector } = await useApi('/v2/MangaConnector/{MangaConnectorName}', {
     path: { MangaConnectorName: mangaConnectorName },

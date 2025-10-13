@@ -8,10 +8,7 @@ export default defineNuxtConfig({
     devServer: { host: '127.0.0.1' },
     openFetch: {
         clients: {
-            api: {
-                baseURL: '/api/',
-                schema: 'https://raw.githubusercontent.com/C9Glax/tranga/refs/heads/testing/API/openapi/API_v2.json',
-            },
+            api: { baseURL: '/api/', schema: 'https://raw.githubusercontent.com/C9Glax/tranga/refs/heads/testing/API/openapi/API_v2.json' },
         },
     },
     vite: { plugins: [tailwindcss()] },
