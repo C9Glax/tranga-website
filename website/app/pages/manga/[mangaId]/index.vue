@@ -1,8 +1,15 @@
 <template>
     <MangaDetailPage :manga="manga">
-        <ChaptersList v-if="manga" :manga-id="manga.key" />
+        <div class="grid gap-3 grid-cols-[70%_30%]">
+            <ChaptersList v-if="manga" :manga-id="manga.key" />
+            <UCard>
+                <template #header>
+                    <h1>Download</h1>
+                </template>
+                <LibrarySelect :manga-id="mangaId" :library-id="libraryId" />
+            </UCard>
+        </div>
         <template #actions>
-            <LibrarySelect :library-id="libraryId" />
             <UButton variant="soft" color="warning" icon="i-lucide-trash" />
         </template>
     </MangaDetailPage>
