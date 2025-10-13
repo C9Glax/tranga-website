@@ -10,8 +10,8 @@
             </template>
             <template #leading>
                 <p class="mr-1">Downloaded:</p>
-                <Icon v-if="chapter.downloaded" name="i-lucide-circle-x" />
-                <Icon v-else name="i-lucide-circle-check-big" class="stroke-green-500" />
+                <Icon v-if="chapter.downloaded" name="i-lucide-circle-check-big" class="stroke-green-500" />
+                <Icon v-else name="i-lucide-circle-x" />
             </template>
             <template #footer>
                 <p class="text-secondary">
