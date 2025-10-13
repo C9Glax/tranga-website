@@ -3,7 +3,7 @@
         <UCard>
             <template #default>
                 <div class="flex flex-row gap-2 w-full justify-center">
-                    <LibrarySelect v-bind="libraryId" />
+                    <LibrarySelect :manga-id="mangaId" :library-id="libraryId" />
                     <UButton color="primary" :disabled="!libraryId" :loading="loading" @click="onDownloadClick">
                         Download from {{ mangaConnector?.name }}
                         <template #trailing>
@@ -22,7 +22,7 @@ const mangaId = route.params.mangaId as string;
 const mangaConnectorName = route.params.mangaconnectorName as string;
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
-const libraryId = ref({ libraryId: manga.value?.fileLibraryId });
+const libraryId = ref(manga.value?.fileLibraryId);
 const { data: mangaConnector } = await useApi('/v2/MangaConnector/{MangaConnectorName}', {
     path: { MangaConnectorName: mangaConnectorName },
     key: FetchKeys.MangaConnector.Id(mangaConnectorName),
