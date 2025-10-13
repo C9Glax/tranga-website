@@ -14,13 +14,11 @@
                 <template #header>
                     <h1>Maintenance</h1>
                 </template>
-                <div class="flex flex-col gap-1 items-end basis-1">
-                    <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit" @click="cleanUpDatabase"
-                        >Clean database</UButton
-                    >
-                </div>
+                <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit mb-2" @click="cleanUpDatabase"
+                >Clean database</UButton
+                >
                 <UFormField label="API Url" name="apiUrl">
-                    <UInput v-model="apiUrl" class="max-w-full w-lg" placeholder="http://<ip:port>/" />
+                    <UInput v-model="apiUrl" class="max-w-full w-xs" placeholder="http://<ip:port>/" />
                     <UButton :loading="reloading" class="mx-1" @click="setUrl">Set</UButton>
                 </UFormField>
             </UCard>
@@ -54,5 +52,5 @@ const cleanUpDatabase = async () => {
     cleanUpDatabaseBusy.value = false;
 };
 
-useHead({title: 'Settings'});
+useHead({ title: 'Settings' });
 </script>

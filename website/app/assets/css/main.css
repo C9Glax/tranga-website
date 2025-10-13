@@ -5,3 +5,8 @@
     --color-pink: #f5a9b8;
     --color-blue: #5bcefa;
 }
+
+:root {
+    --mangacover-width: 240px;
+    --mangacover-height: 350px;
+}

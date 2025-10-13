@@ -13,5 +13,5 @@ const { data: manga, refresh } = await useApi('/v2/Manga', { key: FetchKeys.Mang
 onMounted(() => refresh());
 const expanded = ref(-1);
 
-useHead({title: 'Tranga'});
+useHead({ title: 'Tranga' });
 </script>

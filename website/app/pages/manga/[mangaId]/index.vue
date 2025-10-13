@@ -1,6 +1,6 @@
 <template>
     <MangaDetailPage :manga="manga">
-        <div class="grid gap-3 grid-cols-[70%_30%]">
+        <div class="grid gap-3 max-sm:grid-flow-row-dense min-sm:grid-cols-[70%_30%]">
             <ChaptersList v-if="manga" :manga-id="manga.key" />
             <UCard>
                 <template #header>
@@ -57,5 +57,5 @@ const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
 };
 
-useHead({title: `Manga ${manga.value?.name}`});
+useHead({ title: `Manga ${manga.value?.name}` });
 </script>

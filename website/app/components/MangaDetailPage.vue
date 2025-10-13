@@ -23,7 +23,7 @@
                 <USkeleton v-else class="w-full h-30" />
             </div>
         </template>
-        <UPageBody class="relative mr-12">
+        <UPageBody class="relative min-sm:mr-12 max-sm:mx-4">
             <div class="w-full flex flex-row justify-between">
                 <div>
                     <UButton variant="soft" :to="backPath ?? '/'" icon="i-lucide-arrow-left">Back</UButton>

@@ -2,7 +2,7 @@
     <UCard
         v-if="!expanded"
         :ui="{ body: 'p-0 sm:p-0', root: 'overflow-visible' }"
-        class="relative h-[350px] mt-2 mb-2"
+        class="relative max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) mt-2 mb-2"
         @click="$emit('click')">
         <MangaCover :manga="manga" blur />
         <div class="absolute -top-4 -right-4 flex flex-col bg-pink rounded-full">
@@ -13,7 +13,7 @@
         v-else
         orientation="horizontal"
         reverse
-        class="relative max-w-[600px] w-full h-[350px] mt-2 mb-2"
+        class="relative max-sm:w-full max-sm:h-full w-[calc(var(--mangacover-width)*2+1.5rem)] h-(--mangacover-height) mt-2 mb-2"
         :ui="{ body: 'p-0 sm:p-0', root: 'overflow-visible' }"
         @click="$emit('click')">
         <div class="flex flex-row w-full h-full basis-auto">
@@ -21,7 +21,7 @@
             <div class="absolute -top-4 -right-4 flex flex-col bg-pink rounded-full">
                 <MangaconnectorIcon v-for="m in manga.mangaConnectorIds" v-bind="m" :key="m.key" />
             </div>
-            <div class="flex flex-col h-[350px] shrink mx-2 mt-4">
+            <div class="flex flex-col h-(--mangacover-height) shrink mx-2 mt-4">
                 <p class="font-semibold text-xl">{{ manga.name }}</p>
                 <p class="max-h-30 overflow-y-hidden grow">{{ manga.description }}</p>
             </div>

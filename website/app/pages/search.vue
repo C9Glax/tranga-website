@@ -1,13 +1,13 @@
 <template>
     <UPageBody>
-        <UPageSection :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 py-4 sm:py-4 lg:py-4 gap-4 sm:gap-4 lg:gap-4' }" class="h-fit">
+        <UPageSection :ui="{ container: 'gap-1 sm:gap-1 lg:gap-1 py-4 sm:py-1 lg:py-1 gap-1 sm:gap-1 lg:gap-1' }" class="h-fit">
             <UButton variant="soft" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
-            <div class="flex flex-row w-full h-full justify-between gap-4">
+            <div class="flex max-sm:flex-col flex-row w-full h-full justify-between gap-4">
                 <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled color="secondary" />
                 <UCard class="grow">
                     <div class="flex flex-col justify-between gap-2">
                         <UInput v-model="query" class="w-full" :disabled="busy" />
-                        <div class="flex gap-1 w-full justify-center">
+                        <div class="flex flex-wrap gap-1 w-full justify-center">
                             <UButton
                                 v-for="c in connectors"
                                 :key="c.key"
@@ -27,14 +27,14 @@
         </UPageSection>
         <UPageSection
             v-if="searchResult.length > 0"
-            :ui="{ container: 'gap-4 sm:gap-4 lg:gap-4 py-4 sm:py-4 lg:py-4 gap-4 sm:gap-4 lg:gap-4' }">
+            :ui="{ container: 'gap-1 sm:gap-1 lg:gap-1 py-1 sm:py-1 lg:py-1 gap-1 sm:gap-1 lg:gap-1' }">
             <template #description>
                 <p class="text-lg">
                     Result for <span class="text-secondary">'{{ searchQuery }}'</span>
                 </p>
             </template>
             <template #default>
-                <div class="relative flex flex-row flex-wrap gap-6 mt-0">
+                <div class="relative flex flex-row flex-wrap gap-4 mt-0">
                     <MangaCard
                         v-for="(m, i) in searchResult"
                         :key="m.key"
@@ -120,5 +120,5 @@ const items = ref<StepperItem[]>([
     { title: 'Results', icon: 'i-lucide-logs' },
 ]);
 
-useHead({title: 'Search Manga'});
+useHead({ title: 'Search Manga' });
 </script>

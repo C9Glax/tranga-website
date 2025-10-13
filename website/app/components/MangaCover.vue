@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-[240px] h-[350px] rounded-lg overflow-clip">
+    <div class="relative max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip">
         <div
             v-if="blur"
             class="absolute l-0 t-0 w-full h-full rounded-lg overflow-clip"
@@ -9,7 +9,7 @@
                 backdrop-filter: blur(2px) brightness(70%);
                 -webkit-backdrop-filter: blur(2px) brightness(70%);
             ">
-            <p class="p-3 text-xl font-semibold max-h-full overflow-clip text-shadow-lg text-white">
+            <p class="p-3 max-sm:text-sm text-xl font-semibold max-h-full overflow-clip text-shadow-lg text-white">
                 {{ manga?.name }}
             </p>
         </div>
