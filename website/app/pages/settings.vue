@@ -49,8 +49,10 @@ const setUrl = async () => {
 const cleanUpDatabaseBusy = ref(false);
 const cleanUpDatabase = async () => {
     cleanUpDatabaseBusy.value = true;
-    await useApi('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' })
-        .then(() => refreshNuxtData(FetchKeys.Manga.All))
-        .finally(() => (cleanUpDatabaseBusy.value = false));
+    await useApi('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' });
+    await refreshNuxtData(FetchKeys.Manga.All);
+    cleanUpDatabaseBusy.value = false;
 };
+
+useHead({title: 'Settings'});
 </script>

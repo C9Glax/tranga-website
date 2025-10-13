@@ -119,4 +119,6 @@ const items = ref<StepperItem[]>([
     { title: 'Site', description: 'Select the site on which to search', icon: 'i-lucide-panel-top' },
     { title: 'Results', icon: 'i-lucide-logs' },
 ]);
+
+useHead({title: 'Search Manga'});
 </script>

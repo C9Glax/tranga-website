@@ -21,8 +21,8 @@ const { data: fileLibraries } = await useApi('/v2/FileLibrary', { key: FetchKeys
 const busy = ref(false);
 const deleteLibrary = async (library: FileLibrary) => {
     busy.value = true;
-    await useApi('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: library.key }, method: 'DELETE' })
-        .then(() => refreshNuxtData(FetchKeys.FileLibraries))
-        .finally(() => (busy.value = false));
+    await useApi('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: library.key }, method: 'DELETE' });
+    await refreshNuxtData(FetchKeys.FileLibraries);
+    busy.value = false;
 };
 </script>

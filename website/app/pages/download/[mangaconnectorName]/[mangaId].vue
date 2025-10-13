@@ -37,4 +37,6 @@ const onDownloadClick = async () => {
     });
     loading.value = false;
 };
+
+useHead({title: `Download ${manga.value?.name} from ${mangaConnector.value?.name}`});
 </script>

@@ -18,4 +18,6 @@ const mangaId = route.params.mangaId as string;
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
 const { data: mangas } = await useApi('/v2/Manga', { key: FetchKeys.Manga.All });
+
+useHead({title: `Merge Manga ${manga.value?.name}`});
 </script>

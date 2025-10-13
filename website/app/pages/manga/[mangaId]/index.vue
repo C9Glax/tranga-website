@@ -56,4 +56,6 @@ const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean
     });
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
 };
+
+useHead({title: `Manga ${manga.value?.name}`});
 </script>

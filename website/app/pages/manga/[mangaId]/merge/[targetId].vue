@@ -20,4 +20,6 @@ const mangaId = route.params.mangaId as string;
 
 const { data: target } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: targetId }, key: FetchKeys.Manga.Id(targetId) });
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
+
+useHead({title: `Merge ${manga.value?.name} with ${target.value?.name}`});
 </script>
