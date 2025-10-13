@@ -7,7 +7,7 @@
                     <h1>Download</h1>
                 </template>
                 <LibrarySelect :manga-id="mangaId" :library-id="libraryId" class="w-full" />
-                <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2">
+                <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2 justify-between">
                     <div
                         v-for="mangaconnectorId in manga.mangaConnectorIds.sort((a, b) =>
                             a.mangaConnectorName < b.mangaConnectorName ? -1 : 1
@@ -20,8 +20,7 @@
                             <UButton
                                 :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                 variant="ghost"
-                                disabled />
-                            <!-- Not implemented yet -->
+                                @click="setRequestedFrom(mangaconnectorId.mangaConnectorName, !mangaconnectorId.useForDownload)" />
                         </UTooltip>
                     </div>
                 </div>
@@ -49,4 +48,12 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     },
 });
 const libraryId = ref(manga.value?.fileLibraryId);
+
+const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
+    await useApi('/v2/Manga/{MangaId}/SetAsDownloadFrom/{MangaConnectorName}/{IsRequested}', {
+        method: 'POST',
+        path: { MangaId: mangaId, MangaConnectorName: MangaConnectorName, IsRequested: IsRequested },
+    });
+    await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
+};
 </script>
