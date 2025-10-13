@@ -15,7 +15,7 @@
                     <h1>Maintenance</h1>
                 </template>
                 <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit mb-2" @click="cleanUpDatabase"
-                >Clean database</UButton
+                    >Clean database</UButton
                 >
                 <UFormField label="API Url" name="apiUrl">
                     <UInput v-model="apiUrl" class="max-w-full w-xs" placeholder="http://<ip:port>/" />
