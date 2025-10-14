@@ -1,11 +1,11 @@
 <template>
-    <div class="flex flex-row flex-wrap gap-2 justify-evenly">
+    <div class="grid grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))] gap-4">
         <MangaCard
             v-for="(m, i) in manga"
             :key="m.key"
             :manga="m"
             :expanded="i === expanded"
-            class="cursor-pointer"
+            class="cursor-pointer basis-(--mangacover-width)"
             @click="$emit('click', m)" />
     </div>
 </template>
