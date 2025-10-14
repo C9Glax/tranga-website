@@ -43,7 +43,7 @@
             </div>
         </div>
         <template #actions>
-            <UButton trailing-icon="i-lucide-merge" :to="`${manga?.key}/merge/`" color="secondary">Merge</UButton>
+            <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge/`" color="secondary">Merge</UButton>
             <UButton variant="soft" color="warning" icon="i-lucide-trash" />
         </template>
     </MangaDetailPage>
