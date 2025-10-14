@@ -1,11 +1,12 @@
 <template>
-    <div class="grid grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))] gap-4">
+    <div
+        class="grid min-sm:grid-cols-[repeat(auto-fill,_minmax(var(--mangacover-width),_1fr))] max-sm:grid-cols-[repeat(auto-fill,_minmax(var(--mangacover-width-sm),_1fr))] gap-4">
         <MangaCard
             v-for="(m, i) in manga"
             :key="m.key"
             :manga="m"
             :expanded="i === expanded"
-            class="cursor-pointer basis-(--mangacover-width)"
+            class="cursor-pointer"
             @click="$emit('click', m)" />
     </div>
 </template>

@@ -1,22 +1,21 @@
 <template>
     <MangaDetailPage :manga="manga" :back-url="backUrl" :title="metadataFetcherName">
-        <USkeleton v-if="status === 'pending'" class="w-full h-14" />
-        <UCard v-else class="flex flex-wrap gap-2">
-            <div
-                v-for="data in searchData"
-                :key="data.identifier"
-                class="grid grid-cols-[var(--mangacover-width)_auto_auto] grid-flow-col gap-4">
-                <NuxtImg
-                    :src="data.coverUrl ?? '/blahaj.png'"
-                    alt="cover"
-                    class="row-span-3 object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip" />
-                <NuxtLink :href="data.url" no-prefetch external target="_blank" class="underline underline-offset-2">
-                    <h2 class="text-xl text-secondary italic">{{ data.name }}</h2>
-                </NuxtLink>
-                <MDC :value="data.description ?? undefined" />
-                <UButton class="w-min h-min px-4 place-self-end" @click="link(data.identifier)">Link</UButton>
-            </div>
-        </UCard>
+        <div class="flex flex-col flex-wrap gap-2">
+            <USkeleton v-if="status === 'pending'" class="w-full h-14" />
+            <UCard v-for="data in searchData" v-else :key="data.identifier">
+                <div class="grid grid-cols-[var(--mangacover-width)_auto] grid-flow-col gap-4">
+                    <NuxtImg
+                        :src="data.coverUrl ?? '/blahaj.png'"
+                        alt="cover"
+                        class="row-span-3 object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip" />
+                    <NuxtLink :href="data.url" no-prefetch external target="_blank" class="underline underline-offset-2">
+                        <h2 class="text-xl text-secondary italic">{{ data.name }}</h2>
+                    </NuxtLink>
+                    <MDC :value="data.description ?? undefined" class="max-h-full" />
+                    <UButton class="w-min h-min px-4 place-self-end" @click="link(data.identifier)">Link</UButton>
+                </div>
+            </UCard>
+        </div>
     </MangaDetailPage>
 </template>
 

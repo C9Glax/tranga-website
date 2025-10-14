@@ -1,12 +1,16 @@
 <template>
     <TrangaPage :back="{ href: backUrl ?? `/manga/${mangaId}/merge/`, text: 'Back', icon: 'i-lucide-arrow-left' }">
         <div class="flex flex-col items-center justify-center gap-10">
-            <div class="flex flex-row justify-evenly items-center">
+            <div class="flex flex-row max-sm:flex-col justify-evenly items-center">
                 <MangaCard v-if="manga" :manga="manga" :expanded="true" />
                 <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
                 <UButton
                     icon="i-lucide-merge"
-                    :class="[reverse ? 'rotate-270' : 'rotate-90', 'px-20 transition-transform duration-200 p-5 m-10', 'rounded-full']"
+                    :class="[
+                        reverse ? 'min-sm:-rotate-90 rotate-0' : 'min-sm:rotate-90 rotate-180',
+                        'transition-transform duration-200 p-5 ml-6 mr-10 mt-10 mb-6',
+                        'rounded-full',
+                    ]"
                     size="xl"
                     variant="soft"
                     color="primary"
@@ -14,7 +18,7 @@
                 <MangaCard v-if="target" :manga="target" :expanded="true" />
                 <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
             </div>
-            <p class="text-red-500 animate-pulse font-bold text-3xl">This action is irreversible!</p>
+            <p class="text-red-500 animate-pulse font-bold min-sm:text-3xl">This action is irreversible!</p>
             <UButton color="warning" variant="outline" class="w-fit" @click="merge">Merge</UButton>
         </div>
     </TrangaPage>

@@ -1,6 +1,6 @@
 <template>
     <MangaDetailPage :manga="manga" :back-url="backUrl">
-        <div class="grid gap-3 max-sm:grid-flow-row-dense min-sm:grid-cols-[70%_auto]">
+        <div class="grid gap-3 max-xl:grid-flow-row-dense min-2xl:grid-cols-[70%_auto] min-xl:grid-cols-[60%_auto]">
             <ChaptersList :manga-id="mangaId" />
             <div class="flex flex-col gap-2">
                 <UCard :class="[flashDownloading ? 'animate-[flash_0.75s_ease_0.5s]' : '']">
