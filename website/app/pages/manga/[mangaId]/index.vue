@@ -35,7 +35,7 @@
                             {{ row.original }}
                         </template>
                         <template #link-cell="{ row }">
-                            <UButton v-if="metadata.find(me => me.metadataFetcherName == row.original)">Unlink</UButton>
+                            <UButton v-if="metadata.find(me => me.metadataFetcherName == row.original)" @click="unlinkMetadataFetcher(row.original)">Unlink</UButton>
                             <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}`">Link</UButton>
                         </template>
                     </UTable>
@@ -62,11 +62,12 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
         console.error(e);
         navigateTo('/');
     },
+    lazy: true
 });
 const libraryId = ref(manga.value?.fileLibraryId);
 
-const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers });
-const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Metadata.Manga(mangaId) });
+const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true });
+const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Metadata.Manga(mangaId), lazy: true });
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
     await useApi('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
@@ -75,6 +76,11 @@ const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean
     });
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
 };
+
+const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
+    await useApi('/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}', { method: 'POST', path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName } });
+    await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId) );
+}
 
 useHead({ title: `Manga ${manga.value?.name}` });
 </script>

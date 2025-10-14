@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip">
+        class="relative object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip">
         <div
             v-if="blur"
             class="absolute l-0 t-0 w-full h-full rounded-lg overflow-clip"
