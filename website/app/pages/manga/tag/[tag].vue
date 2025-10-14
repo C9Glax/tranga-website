@@ -1,9 +1,11 @@
 <template>
-    <LoadingPage :loading="status === 'pending'" class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-        <UButton variant="soft" to="/" icon="i-lucide-arrow-left">Home</UButton>
-        <h1 class="text-2xl">
-            Manga with Tag <span class="text-primary font-semibold">{{ tag }}</span>
-        </h1>
+    <LoadingPage :loading="status === 'pending'" class="p-4">
+        <div class="flex flex-row gap-4">
+            <UButton variant="soft" to="/" icon="i-lucide-arrow-left">Home</UButton>
+            <h1 class="text-2xl">
+                Manga with Tag <UBadge variant="outline" class="text-primary font-semibold text-xl">{{ tag }}</UBadge>
+            </h1>
+        </div>
         <MangaCardList :manga="manga" />
     </LoadingPage>
 </template>
