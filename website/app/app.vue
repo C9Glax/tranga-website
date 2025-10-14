@@ -30,10 +30,10 @@
                 <div class="flex text-dimmed gap-2">
                     <NuxtLink to="https://github.com/C9Glax/tranga" external no-prefetch><Icon name="i-lucide-github" />API</NuxtLink>
                     <NuxtLink to="https://github.com/C9Glax/tranga-website" external no-prefetch
-                    ><Icon name="i-lucide-github" />Website</NuxtLink
+                        ><Icon name="i-lucide-github" />Website</NuxtLink
                     >
                     <NuxtLink :to="`${$config.public.openFetch.api.baseURL}swagger`" external no-prefetch
-                    ><Icon name="i-lucide-book-open" />Swagger</NuxtLink
+                        ><Icon name="i-lucide-book-open" />Swagger</NuxtLink
                     >
                 </div>
             </template>
@@ -50,5 +50,4 @@
         </UMain>
     </UApp>
 </template>
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>

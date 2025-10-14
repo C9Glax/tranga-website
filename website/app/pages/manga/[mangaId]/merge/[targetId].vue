@@ -4,7 +4,13 @@
         <div class="flex flex-row justify-evenly items-center">
             <MangaCard v-if="manga" :manga="manga" :expanded="true" />
             <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
-            <UButton icon="i-lucide-merge" :class="[reverse ? 'rotate-270' : 'rotate-90', 'px-20 transition-transform duration-200 p-5 m-10']" size="xl" variant="ghost" color="neutral" @click="reverse = !reverse" />
+            <UButton
+                icon="i-lucide-merge"
+                :class="[reverse ? 'rotate-270' : 'rotate-90', 'px-20 transition-transform duration-200 p-5 m-10']"
+                size="xl"
+                variant="ghost"
+                color="neutral"
+                @click="reverse = !reverse" />
             <MangaCard v-if="target" :manga="target" :expanded="true" />
             <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
         </div>
@@ -28,7 +34,7 @@ const merge = async () => {
     const to = reverse.value == false ? targetId : mangaId;
     await $api('/v2/Manga/{MangaIdFrom}/MergeInto/{MangaIdInto}', { method: 'POST', path: { MangaIdFrom: from, MangaIdInto: to } });
     navigateTo(`/manga/${to}`);
-}
+};
 
 useHead({ title: `Merge ${manga.value?.name} with ${target.value?.name}` });
 </script>

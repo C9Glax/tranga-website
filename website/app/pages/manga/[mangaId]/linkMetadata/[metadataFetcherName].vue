@@ -3,8 +3,14 @@
         <h1 class="text-2xl text-secondary font-semibold">{{ metadataFetcherName }}</h1>
         <USkeleton v-if="status === 'pending'" class="w-full h-14" />
         <UCard v-else class="flex flex-wrap gap-2 basis-0">
-            <div v-for="data in searchData" :key="data.identifier" class="grid grid-cols-[var(--mangacover-width)_auto_auto] auto-rows-fr grid-flow-col gap-4">
-                <NuxtImg :src="data.coverUrl ?? '/blahaj.png'" alt="cover" class="row-span-3 object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip" />
+            <div
+                v-for="data in searchData"
+                :key="data.identifier"
+                class="grid grid-cols-[var(--mangacover-width)_auto_auto] auto-rows-fr grid-flow-col gap-4">
+                <NuxtImg
+                    :src="data.coverUrl ?? '/blahaj.png'"
+                    alt="cover"
+                    class="row-span-3 object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip" />
                 <a :href="data.url ?? undefined">
                     <h2 class="text-xl font-semibold text-primary">{{ data.name }}</h2>
                 </a>
@@ -14,7 +20,6 @@
         </UCard>
     </MangaDetailPage>
 </template>
-
 
 <script setup lang="ts">
 const route = useRoute();
@@ -35,13 +40,17 @@ const { data: searchData, status } = await useApi('/v2/MetadataFetcher/{Metadata
     method: 'POST',
     path: { MetadataFetcherName: metadataFetcherName, MangaId: mangaId },
     lazy: true,
-})
+});
 
 const link = async (identifier: string) => {
-    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Link/{MangaId}', { method: 'POST' ,path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName }, body: identifier });
-    await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId) );
+    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Link/{MangaId}', {
+        method: 'POST',
+        path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName },
+        body: identifier,
+    });
+    await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId));
     navigateTo(`/manga/${mangaId}`);
-}
+};
 
 useHead({ title: `Link Metadata ${manga.value?.name} ${metadataFetcherName}` });
 </script>

@@ -11,13 +11,15 @@
                     <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2 justify-between">
                         <div
                             v-for="mangaconnectorId in manga.mangaConnectorIds.sort((a, b) =>
-                            a.mangaConnectorName < b.mangaConnectorName ? -1 : 1
-                        )"
+                                a.mangaConnectorName < b.mangaConnectorName ? -1 : 1
+                            )"
                             :key="mangaconnectorId.key"
                             class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2">
                             <MangaconnectorIcon v-bind="mangaconnectorId" />
                             <UTooltip
-                                :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'">
+                                :text="
+                                    mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'
+                                ">
                                 <UButton
                                     :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                     variant="ghost"
@@ -31,12 +33,22 @@
                     <template #header>
                         <h1>Metadata</h1>
                     </template>
-                    <UTable v-if="metadataFetchers && metadata" :data="metadataFetchers" :columns="[{header: 'Name', id: 'name'}, {header: '', id: 'link'}]">
+                    <UTable
+                        v-if="metadataFetchers && metadata"
+                        :data="metadataFetchers"
+                        :columns="[
+                            { header: 'Name', id: 'name' },
+                            { header: '', id: 'link' },
+                        ]">
                         <template #name-cell="{ row }">
                             {{ row.original }}
                         </template>
                         <template #link-cell="{ row }">
-                            <UButton v-if="metadata.find(me => me.metadataFetcherName == row.original)" @click="unlinkMetadataFetcher(row.original)">Unlink</UButton>
+                            <UButton
+                                v-if="metadata.find((me) => me.metadataFetcherName == row.original)"
+                                @click="unlinkMetadataFetcher(row.original)"
+                                >Unlink</UButton
+                            >
                             <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}`">Link</UButton>
                         </template>
                     </UTable>
@@ -63,12 +75,16 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
         console.error(e);
         navigateTo('/');
     },
-    lazy: true
+    lazy: true,
 });
 const libraryId = computed(() => manga.value?.fileLibraryId);
 
 const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true });
-const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Metadata.Manga(mangaId), lazy: true });
+const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', {
+    path: { MangaId: mangaId },
+    key: FetchKeys.Metadata.Manga(mangaId),
+    lazy: true,
+});
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
     await $api('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
@@ -79,9 +95,12 @@ const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean
 };
 
 const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
-    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}', { method: 'POST', path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName } });
-    await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId) );
-}
+    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}', {
+        method: 'POST',
+        path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName },
+    });
+    await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId));
+};
 
 useHead({ title: `Manga ${manga.value?.name}` });
 </script>

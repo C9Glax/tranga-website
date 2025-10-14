@@ -99,7 +99,7 @@ const performSearch = () => {
 
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
-        const { data } = await useApi('/v2/Search', { query: {url : JSON.stringify(query) } });
+        const { data } = await useApi('/v2/Search', { query: { url: JSON.stringify(query) } });
         if (data.value) {
             connector.value = connectors.value!.find((c) => c.name == data.value!.mangaConnectorIds[0]!.mangaConnectorName)!;
             return [data.value];
