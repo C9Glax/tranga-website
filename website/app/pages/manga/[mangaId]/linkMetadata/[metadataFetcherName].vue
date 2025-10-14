@@ -17,10 +17,10 @@
 
 
 <script setup lang="ts">
-
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 const metadataFetcherName = route.params.metadataFetcherName as string;
+const { $api } = useNuxtApp();
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },
@@ -38,7 +38,7 @@ const { data: searchData, status } = await useApi('/v2/MetadataFetcher/{Metadata
 })
 
 const link = async (identifier: string) => {
-    await useApi('/v2/MetadataFetcher/{MetadataFetcherName}/Link/{MangaId}', { method: 'POST' ,path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName }, body: identifier });
+    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Link/{MangaId}', { method: 'POST' ,path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName }, body: identifier });
     await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId) );
     navigateTo(`/manga/${mangaId}`);
 }

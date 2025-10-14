@@ -24,6 +24,8 @@
 </template>
 
 <script setup lang="ts">
+const { $api } = useNuxtApp();
+
 export interface LibrarySelectProps {
     mangaId: string;
     libraryId?: string;
@@ -38,7 +40,7 @@ const loading = ref(false);
 const onLibrarySelectChange = async () => {
     if (!library.value) return;
     loading.value = true;
-    await useApi('/v2/Manga/{MangaId}/ChangeLibrary/{LibraryId}', {
+    await $api('/v2/Manga/{MangaId}/ChangeLibrary/{LibraryId}', {
         method: 'POST',
         path: { MangaId: props.mangaId, LibraryId: library.value },
     });

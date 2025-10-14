@@ -21,6 +21,7 @@
                                 <UButton
                                     :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                     variant="ghost"
+                                    :disabled="!libraryId"
                                     @click="setRequestedFrom(mangaconnectorId.mangaConnectorName, !mangaconnectorId.useForDownload)" />
                             </UTooltip>
                         </div>
@@ -51,9 +52,9 @@
 
 <script setup lang="ts">
 import MangaDetailPage from '~/components/MangaDetailPage.vue';
-
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
+const { $api } = useNuxtApp();
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },
@@ -70,7 +71,7 @@ const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: Fe
 const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Metadata.Manga(mangaId), lazy: true });
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
-    await useApi('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
+    await $api('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
         method: 'PATCH',
         path: { MangaId: mangaId, MangaConnectorName: MangaConnectorName, IsRequested: IsRequested },
     });
@@ -78,7 +79,7 @@ const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean
 };
 
 const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
-    await useApi('/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}', { method: 'POST', path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName } });
+    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}', { method: 'POST', path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName } });
     await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId) );
 }
 

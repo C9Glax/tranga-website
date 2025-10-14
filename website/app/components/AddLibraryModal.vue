@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
 type CreateLibraryRecord = components['schemas']['CreateLibraryRecord'];
+const { $api } = useNuxtApp();
 
 const name = ref('');
 const path = ref('');
@@ -29,8 +30,8 @@ const busy = ref(false);
 const onAddClick = async () => {
     if (!model.value) return;
     busy.value = true;
-    await useApi('/v2/FileLibrary', { method: 'PUT', body: model.value })
-        .then(() => refreshNuxtData(FetchKeys.FileLibraries))
-        .finally(() => (busy.value = false));
+    await $api('/v2/FileLibrary', { method: 'PUT', body: model.value });
+    await refreshNuxtData(FetchKeys.FileLibraries);
+    busy.value = false;
 };
 </script>

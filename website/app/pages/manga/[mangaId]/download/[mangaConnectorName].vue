@@ -20,6 +20,7 @@
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 const mangaConnectorName = route.params.mangaConnectorName as string;
+const { $api } = useNuxtApp();
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
 const libraryId = ref(manga.value?.fileLibraryId);
@@ -31,7 +32,7 @@ const { data: mangaConnector } = await useApi('/v2/MangaConnector/{MangaConnecto
 const loading = ref(false);
 const onDownloadClick = async () => {
     loading.value = true;
-    await useApi('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
+    await $api('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
         method: 'PATCH',
         path: { MangaId: mangaId, MangaConnectorName: mangaConnectorName, IsRequested: true },
     });

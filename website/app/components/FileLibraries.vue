@@ -16,12 +16,14 @@
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
 type FileLibrary = components['schemas']['FileLibrary'];
+const { $api } = useNuxtApp();
+
 const { data: fileLibraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
 
 const busy = ref(false);
 const deleteLibrary = async (library: FileLibrary) => {
     busy.value = true;
-    await useApi('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: library.key }, method: 'DELETE' });
+    await $api('/v2/FileLibrary/{FileLibraryId}', { path: { FileLibraryId: library.key }, method: 'DELETE' });
     await refreshNuxtData(FetchKeys.FileLibraries);
     busy.value = false;
 };

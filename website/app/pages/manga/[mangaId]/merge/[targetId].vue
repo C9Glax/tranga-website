@@ -4,12 +4,12 @@
         <div class="flex flex-row justify-evenly items-center">
             <MangaCard v-if="manga" :manga="manga" :expanded="true" />
             <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
-            <UIcon name="i-lucide-merge" class="rotate-90 px-20" size="50" />
+            <UButton icon="i-lucide-merge" :class="[reverse ? 'rotate-270' : 'rotate-90', 'px-20 transition-transform duration-200 p-5 m-10']" size="xl" variant="ghost" color="neutral" @click="reverse = !reverse" />
             <MangaCard v-if="target" :manga="target" :expanded="true" />
             <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
         </div>
         <p class="text-warning">This action is irreversible!</p>
-        <UButton color="warning" class="w-fit">Merge</UButton>
+        <UButton color="warning" class="w-fit" @click="merge">Merge</UButton>
     </UPageBody>
 </template>
 
@@ -17,9 +17,18 @@
 const route = useRoute();
 const targetId = route.params.targetId as string;
 const mangaId = route.params.mangaId as string;
+const { $api } = useNuxtApp();
 
+const reverse = ref(false);
 const { data: target } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: targetId }, key: FetchKeys.Manga.Id(targetId) });
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
+
+const merge = async () => {
+    const from = reverse.value ? mangaId : targetId;
+    const to = reverse.value == false ? targetId : mangaId;
+    await $api('/v2/Manga/{MangaIdFrom}/MergeInto/{MangaIdInto}', { method: 'POST', path: { MangaIdFrom: from, MangaIdInto: to } });
+    navigateTo(`/manga/${to}`);
+}
 
 useHead({ title: `Merge ${manga.value?.name} with ${target.value?.name}` });
 </script>

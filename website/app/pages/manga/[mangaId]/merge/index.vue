@@ -5,7 +5,8 @@
             ><USkeleton v-else as="span" class="w-60 h-lh" /> with</UPageHeader
         >
         <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-            <NuxtLink v-for="m in mangas" :key="m.key" :to="m.key">
+            <USkeleton v-if="!mangas" class="w-full h-[350px]" />
+            <NuxtLink v-for="m in mangas.filter(m => m.key != mangaId)" v-else :key="m.key" :to="m.key">
                 <MangaCard :manga="m" />
             </NuxtLink>
         </UPageBody>
