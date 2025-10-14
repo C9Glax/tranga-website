@@ -1,9 +1,7 @@
 <template>
     <MangaDetailPage :manga="manga" :back="{ text: 'Back', href: `/manga/${mangaId}`, icon: 'i-lucide-arrow-left' }" title="Merge with">
         <USkeleton v-if="!mangas" class="w-full h-[350px]" />
-        <NuxtLink v-for="m in mangas.filter((x) => x.key != mangaId)" v-else :key="m.key" :to="`/manga/${mangaId}/merge/${m.key}`">
-            <MangaCard :manga="m" />
-        </NuxtLink>
+        <MangaCardList :manga="mangas" @click="(m) => navigateTo(`/manga/${mangaId}/merge/${m.key}`)" />
     </MangaDetailPage>
 </template>
 

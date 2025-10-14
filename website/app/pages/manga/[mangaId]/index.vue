@@ -7,7 +7,7 @@
                     <template #header>
                         <h1 class="font-semibold">Download</h1>
                     </template>
-                    <LibrarySelect :manga-id="mangaId" :library-id="libraryId" class="w-full" />
+                    <LibrarySelect :manga-id="mangaId" :library-id="manga?.fileLibraryId" class="w-full" />
                     <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2 justify-between">
                         <div
                             v-for="mangaconnectorId in manga.mangaConnectorIds.sort((a, b) =>
@@ -23,7 +23,7 @@
                                 <UButton
                                     :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                     variant="ghost"
-                                    :disabled="!libraryId"
+                                    :disabled="!manga?.fileLibraryId"
                                     @click="setRequestedFrom(mangaconnectorId.mangaConnectorName, !mangaconnectorId.useForDownload)" />
                             </UTooltip>
                         </div>
@@ -81,7 +81,6 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     },
     lazy: true,
 });
-const libraryId = computed(() => manga.value?.fileLibraryId);
 
 const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true });
 const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', {

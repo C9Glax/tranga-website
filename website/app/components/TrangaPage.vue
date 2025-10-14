@@ -1,7 +1,7 @@
 <template>
     <UPageBody v-bind="$props" class="mt-0 pb-0 pr-4 h-full">
         <div class="flex flex-row gap-4 h-full relative">
-            <div v-if="$slots.left" class="flex flex-col gap-2 bg-elevated w-1/5 h-full pl-4 py-4">
+            <div v-if="$slots.left" class="flex flex-col gap-2 bg-elevated w-2/7 h-full px-4 py-4">
                 <slot name="left" />
             </div>
             <div :class="['flex flex-col gap-2 w-full py-4 relative', $slots.left ? '' : 'pl-4']">

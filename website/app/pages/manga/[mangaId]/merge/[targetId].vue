@@ -1,22 +1,23 @@
 <template>
-    <UPageBody class="flex flex-col items-center">
-        <UButton icon="i-lucide-arrow-left" class="w-fit self-start m-20" variant="soft" :to="`/manga/${mangaId}/merge/`">Back</UButton>
-        <div class="flex flex-row justify-evenly items-center">
-            <MangaCard v-if="manga" :manga="manga" :expanded="true" />
-            <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
-            <UButton
-                icon="i-lucide-merge"
-                :class="[reverse ? 'rotate-270' : 'rotate-90', 'px-20 transition-transform duration-200 p-5 m-10']"
-                size="xl"
-                variant="ghost"
-                color="neutral"
-                @click="reverse = !reverse" />
-            <MangaCard v-if="target" :manga="target" :expanded="true" />
-            <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
+    <TrangaPage :back="{ href: `/manga/${mangaId}/merge/`, text: 'Back', icon: 'i-lucide-arrow-left' }">
+        <div class="flex flex-col items-center justify-center gap-10">
+            <div class="flex flex-row justify-evenly items-center">
+                <MangaCard v-if="manga" :manga="manga" :expanded="true" />
+                <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
+                <UButton
+                    icon="i-lucide-merge"
+                    :class="[reverse ? 'rotate-270' : 'rotate-90', 'px-20 transition-transform duration-200 p-5 m-10', 'rounded-full']"
+                    size="xl"
+                    variant="soft"
+                    color="primary"
+                    @click="reverse = !reverse" />
+                <MangaCard v-if="target" :manga="target" :expanded="true" />
+                <USkeleton v-else class="max-w-[600px] w-full h-[350px]" />
+            </div>
+            <p class="text-red-500 animate-pulse font-bold text-3xl">This action is irreversible!</p>
+            <UButton color="warning" variant="outline" class="w-fit" @click="merge">Merge</UButton>
         </div>
-        <p class="text-warning">This action is irreversible!</p>
-        <UButton color="warning" class="w-fit" @click="merge">Merge</UButton>
-    </UPageBody>
+    </TrangaPage>
 </template>
 
 <script setup lang="ts">

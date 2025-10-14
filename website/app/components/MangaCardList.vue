@@ -1,10 +1,12 @@
 <template>
-    <div class="flex flex-row flex-wrap gap-2">
-        <MangaCard v-for="(m, i) in manga" :key="m.key" :manga="m" :expanded="i === expanded" @click="expanded = expanded === i ? -1 : i">
-            <template #actions="forManga">
-                <UButton :to="`/manga/${forManga.key}`">Details</UButton>
-            </template>
-        </MangaCard>
+    <div class="flex flex-row flex-wrap gap-2 justify-evenly">
+        <MangaCard
+            v-for="(m, i) in manga"
+            :key="m.key"
+            :manga="m"
+            :expanded="i === expanded"
+            class="cursor-pointer"
+            @click="$emit('click', m)" />
     </div>
 </template>
 
@@ -14,5 +16,7 @@ type Manga = components['schemas']['Manga'];
 type MinimalManga = components['schemas']['MinimalManga'];
 
 const expanded = ref(-1);
+
+defineEmits<{ (e: 'click', manga: MinimalManga | Manga): void }>();
 defineProps<{ manga?: (MinimalManga | Manga)[] }>();
 </script>

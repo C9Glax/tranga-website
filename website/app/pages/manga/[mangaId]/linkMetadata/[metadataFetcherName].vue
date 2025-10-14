@@ -13,8 +13,8 @@
                     :src="data.coverUrl ?? '/blahaj.png'"
                     alt="cover"
                     class="row-span-3 object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip" />
-                <NuxtLink :href="data.url" no-prefetch external target="_blank">
-                    <h2 class="text-xl font-semibold text-primary">{{ data.name }}</h2>
+                <NuxtLink :href="data.url" no-prefetch external target="_blank" class="underline underline-offset-2">
+                    <h2 class="text-xl text-secondary italic">{{ data.name }}</h2>
                 </NuxtLink>
                 <MDC :value="data.description ?? undefined" />
                 <UButton class="w-min h-min px-4 place-self-end" @click="link(data.identifier)">Link</UButton>

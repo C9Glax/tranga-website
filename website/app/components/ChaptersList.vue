@@ -8,18 +8,14 @@
                     <span class="inline">Ch. {{ chapter.chapterNumber }}</span>
                 </p>
             </template>
-            <template #footer>
-                <div class="flex flex-row gap-1 items-center text-dimmed">
-                    <p>Downloaded:</p>
-                    <Icon v-if="chapter.downloaded" name="i-lucide-circle-check-big" />
-                    <Icon v-else name="i-lucide-circle-x" />
-                </div>
-            </template>
             <template #description>
                 <p>{{ chapter.fileName }}</p>
             </template>
             <template #default>
-                <div class="flex flex-row gap-2 w-full">
+                <div class="flex flex-row gap-2 w-full items-center">
+                    <UTooltip :text="chapter.downloaded ? 'Downloaded' : 'Not downloaded'">
+                        <UIcon :name="chapter.downloaded ? 'i-lucide-cloud-check' : 'i-lucide-cloud-alert'" size="20" />
+                    </UTooltip>
                     <div
                         v-for="mangaconnectorId in chapter.mangaConnectorIds.sort((a, b) =>
                             a.mangaConnectorName < b.mangaConnectorName ? -1 : 1

@@ -33,7 +33,7 @@ export interface LibrarySelectProps {
 
 const props = defineProps<LibrarySelectProps>();
 
-const library = ref(props.libraryId);
+const library = computed(() => props.libraryId);
 const { data: libraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
 
 const loading = ref(false);
