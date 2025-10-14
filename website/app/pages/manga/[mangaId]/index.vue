@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </UCard>
-                <UCard>
+                <UCard :ui="{ body: 'p-0 sm:p-0' }">
                     <template #header>
                         <h1>Metadata</h1>
                     </template>

@@ -27,17 +27,16 @@
                         :key="mangaconnectorId.key"
                         class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2">
                         <MangaconnectorIcon v-bind="mangaconnectorId" />
-                        <UTooltip
-                            :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'">
+                        <UTooltip text="Not implemented yet.">
+                            <!-- TODO: :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'"> -->
                             <UButton
                                 :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                 variant="ghost"
                                 disabled />
-                            <!-- Not implemented yet -->
                         </UTooltip>
                     </div>
+                    <!-- TODO: Not implemented yet -->
                     <UButton variant="outline" color="secondary" class="ml-auto" disabled>Force (re)download</UButton>
-                    <!-- Not implemented yet -->
                 </div>
             </template>
         </UPageCard>
