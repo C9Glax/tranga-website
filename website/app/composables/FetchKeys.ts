@@ -3,4 +3,5 @@ export const FetchKeys = {
     Chapters: { All: 'Chapters' },
     Manga: { All: 'Manga', Id: (id: string) => `Manga/${id}` },
     MangaConnector: { Id: (id: string) => `MangaConnector/${id}`, All: 'MangaConnector' },
+    Metadata: { Fetchers: 'Metadata', Links: 'Metadata/Links', Manga: (mangaId: string) => `Metadata/Links/${mangaId}` },
 };

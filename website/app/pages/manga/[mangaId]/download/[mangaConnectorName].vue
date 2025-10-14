@@ -19,7 +19,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
-const mangaConnectorName = route.params.mangaconnectorName as string;
+const mangaConnectorName = route.params.mangaConnectorName as string;
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
 const libraryId = ref(manga.value?.fileLibraryId);

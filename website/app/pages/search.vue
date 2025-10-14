@@ -42,7 +42,7 @@
                         :expanded="i === expanded"
                         @click="expanded = expanded === i ? -1 : i">
                         <template #actions="manga">
-                            <UButton :to="`download/${connector.name}/${manga.key}`">Download</UButton>
+                            <UButton :to="`/manga/${manga.key}/download/${connector.name}`">Download</UButton>
                         </template>
                     </MangaCard>
                 </div>
