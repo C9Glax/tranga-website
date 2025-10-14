@@ -17,9 +17,7 @@
                     </NuxtLink>
                 </div>
                 <USkeleton v-else class="w-full h-lh" />
-                <p v-if="manga" class="max-h-30 overflow-y-hidden grow">
-                    {{ manga.description }}
-                </p>
+                <MDC v-if="manga" :value="manga.description" class="min-h-lh grow" />
                 <USkeleton v-else class="w-full h-30" />
             </div>
         </template>

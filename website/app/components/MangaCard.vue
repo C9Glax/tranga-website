@@ -23,7 +23,6 @@
             </div>
             <div class="flex flex-col h-(--mangacover-height) shrink mx-2 mt-4">
                 <p class="font-semibold text-xl">{{ manga.name }}</p>
-                <p class="max-h-30 overflow-y-hidden grow">{{ manga.description }}</p>
             </div>
         </div>
         <div class="absolute bottom-0 w-full p-2 flex flex-row justify-end">

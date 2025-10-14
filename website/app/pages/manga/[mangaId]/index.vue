@@ -1,7 +1,7 @@
 <template>
     <MangaDetailPage :manga="manga">
         <div class="grid gap-3 max-sm:grid-flow-row-dense min-sm:grid-cols-[70%_30%]">
-            <ChaptersList v-if="manga" :manga-id="manga.key" />
+            <ChaptersList :manga-id="mangaId" />
             <div class="flex flex-col gap-2">
                 <UCard>
                     <template #header>
@@ -65,7 +65,7 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     },
     lazy: true
 });
-const libraryId = ref(manga.value?.fileLibraryId);
+const libraryId = computed(() => manga.value?.fileLibraryId);
 
 const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true });
 const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Metadata.Manga(mangaId), lazy: true });

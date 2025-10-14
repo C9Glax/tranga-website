@@ -8,7 +8,7 @@
                 <a :href="data.url ?? undefined">
                     <h2 class="text-xl font-semibold text-primary">{{ data.name }}</h2>
                 </a>
-                <p>{{ data.description }}</p>
+                <MDC :value="data.description ?? undefined" />
                 <UButton class="w-min h-min px-4 place-self-end" @click="link(data.identifier)">Link</UButton>
             </div>
         </UCard>

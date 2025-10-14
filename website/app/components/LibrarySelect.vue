@@ -44,6 +44,7 @@ const onLibrarySelectChange = async () => {
         method: 'POST',
         path: { MangaId: props.mangaId, LibraryId: library.value },
     });
+    await refreshNuxtData(FetchKeys.Manga.Id(props.mangaId));
     loading.value = false;
 };
 </script>

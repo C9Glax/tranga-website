@@ -8,5 +8,5 @@
         { "path": "./.nuxt/tsconfig.node.json" }
     ],
     "compileOnSave": true,
-    "compilerOptions": { "noUncheckedIndexedAccess": true, "module": "ESNext", "moduleResolution": "Bundler" }
+    "compilerOptions": { "noUncheckedIndexedAccess": true, "module": "ESNext", "moduleResolution": "Bundler"}
 }
