@@ -12,5 +12,5 @@ type Manga = components['schemas']['Manga'];
 type MinimalManga = components['schemas']['MinimalManga'];
 
 const expanded = ref(-1);
-defineProps<{manga?: (MinimalManga | Manga)[]}>()
+defineProps<{ manga?: (MinimalManga | Manga)[] }>();
 </script>

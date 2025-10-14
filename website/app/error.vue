@@ -1,6 +1,6 @@
 <template>
     <UPageBody>
-        <UPageHero :title="error?.statusCode??'Error'">
+        <UPageHero :title="error?.statusCode ?? 'Error'">
             <p>{{ error?.message }}</p>
             <NuxtLink to="/">Go back home</NuxtLink>
             <NuxtLink to="https://github.com/C9Glax/tranga-website/issues/new"><Icon name="i-lucide-github" />Report this issue</NuxtLink>
