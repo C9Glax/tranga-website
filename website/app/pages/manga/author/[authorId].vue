@@ -2,7 +2,7 @@
     <TrangaPage :back="backUrl ? { href: backUrl, icon: 'i-lucide-arrow-left', text: 'Back' } : undefined">
         <template #title>
             <h1 class="text-2xl">
-                Manga with Tag <UBadge variant="outline" color="primary" class="font-semibold text-xl ml-1">{{ tag }}</UBadge>
+                Manga with Author <UBadge variant="outline" color="neutral" class="font-semibold text-xl ml-1">{{ author?.name }}</UBadge>
             </h1>
         </template>
         <LoadingPage :loading="status === 'pending'">
@@ -13,9 +13,11 @@
 
 <script setup lang="ts">
 const route = useRoute();
-const tag = route.params.tag as string;
+const authorId = route.params.authorId as string;
 const backUrl = route.query.return as string | undefined;
-const { data: manga, status } = await useApi('/v2/Manga/WithTag/{Tag}', { path: { Tag: tag }, lazy: true });
 
-useHead({ title: 'Tag search' });
+const { data: author } = await useApi('/v2/Author/{AuthorId}', { path: { AuthorId: authorId } });
+const { data: manga, status } = await useApi('/v2/Manga/WithAuthorId/{AuthorId}', { path: { AuthorId: authorId }, lazy: true });
+
+useHead({ title: 'Author Search' });
 </script>

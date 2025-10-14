@@ -24,6 +24,7 @@
 const route = useRoute();
 const targetId = route.params.targetId as string;
 const mangaId = route.params.mangaId as string;
+const path = route.fullPath;
 const { $api } = useNuxtApp();
 
 const reverse = ref(false);
@@ -34,7 +35,7 @@ const merge = async () => {
     const from = reverse.value ? mangaId : targetId;
     const to = reverse.value == false ? targetId : mangaId;
     await $api('/v2/Manga/{MangaIdFrom}/MergeInto/{MangaIdInto}', { method: 'POST', path: { MangaIdFrom: from, MangaIdInto: to } });
-    navigateTo(`/manga/${to}`);
+    navigateTo(`/manga/${to}?return=${path}`);
 };
 
 useHead({ title: 'Confirm merge' });

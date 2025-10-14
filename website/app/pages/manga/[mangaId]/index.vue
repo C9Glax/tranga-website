@@ -1,5 +1,5 @@
 <template>
-    <MangaDetailPage :manga="manga">
+    <MangaDetailPage :manga="manga" :back-url="backUrl">
         <div class="grid gap-3 max-sm:grid-flow-row-dense min-sm:grid-cols-[70%_auto]">
             <ChaptersList :manga-id="mangaId" />
             <div class="flex flex-col gap-2">
@@ -67,9 +67,11 @@
 
 <script setup lang="ts">
 import MangaDetailPage from '~/components/MangaDetailPage.vue';
+const { $api } = useNuxtApp();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
-const { $api } = useNuxtApp();
+const backUrl = route.query.return as string | undefined;
+
 const flashDownloading = route.query.download;
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {

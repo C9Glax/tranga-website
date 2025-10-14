@@ -41,7 +41,7 @@
                         :expanded="i === expanded"
                         @click="expanded = expanded === i ? -1 : i">
                         <template #actions="manga">
-                            <UButton :to="`/manga/${manga.key}?download=true`">Download</UButton>
+                            <UButton :to="`/manga/${manga.key}?download=true&return=${path}`">Download</UButton>
                         </template>
                     </MangaCard>
                 </div>
@@ -55,6 +55,8 @@ import type { components } from '#open-fetch-schemas/api';
 import type { StepperItem } from '@nuxt/ui';
 type MangaConnector = components['schemas']['MangaConnector'];
 type MinimalManga = components['schemas']['MinimalManga'];
+
+const path = useRoute().fullPath;
 
 const { data: connectors } = await useApi('/v2/MangaConnector', { key: FetchKeys.MangaConnector.All });
 
