@@ -31,8 +31,8 @@ const { data: mangaConnector } = await useApi('/v2/MangaConnector/{MangaConnecto
 const loading = ref(false);
 const onDownloadClick = async () => {
     loading.value = true;
-    await useApi('/v2/Manga/{MangaId}/SetAsDownloadFrom/{MangaConnectorName}/{IsRequested}', {
-        method: 'POST',
+    await useApi('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
+        method: 'PATCH',
         path: { MangaId: mangaId, MangaConnectorName: mangaConnectorName, IsRequested: true },
     });
     loading.value = false;

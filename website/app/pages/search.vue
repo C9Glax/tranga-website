@@ -99,9 +99,9 @@ const performSearch = () => {
 
 const search = async (query: string): Promise<MinimalManga[]> => {
     if (isUrl(query)) {
-        const { data } = await useApi('/v2/Search/Url', { body: JSON.stringify(query), method: 'POST' });
+        const { data } = await useApi('/v2/Search', { query: {url : JSON.stringify(query) } });
         if (data.value) {
-            connector.value = connectors.value?.find((c) => c.name == data.value!.mangaConnectorIds[0]?.mangaConnectorName)!;
+            connector.value = connectors.value!.find((c) => c.name == data.value!.mangaConnectorIds[0]!.mangaConnectorName)!;
             return [data.value];
         } else return Promise.reject();
     } else if (connector.value.name) {

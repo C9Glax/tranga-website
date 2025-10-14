@@ -50,8 +50,8 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
 const libraryId = ref(manga.value?.fileLibraryId);
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
-    await useApi('/v2/Manga/{MangaId}/SetAsDownloadFrom/{MangaConnectorName}/{IsRequested}', {
-        method: 'POST',
+    await useApi('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
+        method: 'PATCH',
         path: { MangaId: mangaId, MangaConnectorName: MangaConnectorName, IsRequested: IsRequested },
     });
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
