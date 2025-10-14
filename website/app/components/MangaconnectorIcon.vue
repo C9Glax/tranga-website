@@ -1,6 +1,6 @@
 <template>
     <div class="w-6 h-6 inline-block align-middle m-1">
-        <NuxtLink :href="props.websiteUrl ?? ''">
+        <NuxtLink :href="props.websiteUrl ?? ''" target="_blank" external no-prefetch>
             <UTooltip :text="`${props.useForDownload ? 'Downloading' : 'Not downloading'}, click to see website`">
                 <NuxtImg
                     v-if="mangaConnector"
