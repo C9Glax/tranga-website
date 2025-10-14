@@ -17,25 +17,11 @@
                     </div>
                 </NuxtLink>
             </template>
-            <template #content>
-                <NuxtLink to="https://github.com/C9Glax/tranga" external no-prefetch><Icon name="i-lucide-github" />API</NuxtLink>
-                <NuxtLink to="https://github.com/C9Glax/tranga-website" external no-prefetch
-                    ><Icon name="i-lucide-github" />Website</NuxtLink
-                >
-                <NuxtLink :to="`${$config.public.openFetch.api.baseURL}swagger`" external no-prefetch
-                    ><Icon name="i-lucide-book-open" />Swagger</NuxtLink
-                >
+            <template #body>
+                <UNavigationMenu :items="items" orientation="vertical" variant="link" color="neutral" />
             </template>
             <template #default>
-                <div class="flex text-dimmed gap-2">
-                    <NuxtLink to="https://github.com/C9Glax/tranga" external no-prefetch><Icon name="i-lucide-github" />API</NuxtLink>
-                    <NuxtLink to="https://github.com/C9Glax/tranga-website" external no-prefetch
-                        ><Icon name="i-lucide-github" />Website</NuxtLink
-                    >
-                    <NuxtLink :to="`${$config.public.openFetch.api.baseURL}swagger`" external no-prefetch
-                        ><Icon name="i-lucide-book-open" />Swagger</NuxtLink
-                    >
-                </div>
+                <UNavigationMenu :items="items" orientation="horizontal" variant="link" color="neutral" />
             </template>
             <template #right>
                 <UButton icon="i-lucide-plus" to="/search" color="primary">Manga</UButton>
@@ -50,4 +36,13 @@
         </UMain>
     </UApp>
 </template>
-<script setup lang="ts"></script>
+
+<script setup lang="ts">
+import type { NavigationMenuItem } from '#ui/components/NavigationMenu.vue';
+
+const items = computed<NavigationMenuItem[]>(() => [
+    { label: 'API', to: 'https://github.com/C9Glax/tranga', icon: 'i-lucide-github' },
+    { label: 'Website', to: 'https://github.com/C9Glax/tranga/website', icon: 'i-lucide-github' },
+    { label: 'Swagger', to: `${useRuntimeConfig().public.openFetch.api.baseURL}swagger`, icon: 'i-lucide-book-open' },
+]);
+</script>
