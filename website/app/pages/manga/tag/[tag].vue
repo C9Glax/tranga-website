@@ -1,12 +1,13 @@
 <template>
-    <LoadingPage :loading="status === 'pending'" class="p-4">
-        <div class="flex flex-row gap-4">
-            <UButton variant="soft" to="/" icon="i-lucide-arrow-left">Home</UButton>
-            <h1 class="text-2xl">
-                Manga with Tag <UBadge variant="outline" class="text-primary font-semibold text-xl">{{ tag }}</UBadge>
-            </h1>
-        </div>
-        <MangaCardList :manga="manga" />
+    <LoadingPage :loading="status === 'pending'">
+        <TrangaPage>
+            <template #title>
+                <h1 class="text-2xl">
+                    Manga with Tag <UBadge variant="outline" class="text-primary font-semibold text-xl">{{ tag }}</UBadge>
+                </h1>
+            </template>
+            <MangaCardList :manga="manga" />
+        </TrangaPage>
     </LoadingPage>
 </template>
 

@@ -1,16 +1,10 @@
 <template>
-    <UPageBody>
-        <UPageHeader class="text-3xl px-4"
-            >Merge <span v-if="manga" class="italic text-secondary">{{ manga.name }}</span
-            ><USkeleton v-else as="span" class="w-60 h-lh" /> with</UPageHeader
-        >
-        <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-            <USkeleton v-if="!mangas" class="w-full h-[350px]" />
-            <NuxtLink v-for="m in mangas.filter((x) => x.key != mangaId)" v-else :key="m.key" :to="`/manga/${mangaId}/merge/${m.key}`">
-                <MangaCard :manga="m" />
-            </NuxtLink>
-        </UPageBody>
-    </UPageBody>
+    <MangaDetailPage :manga="manga" :back="{ text: 'Back', href: `/manga/${mangaId}`, icon: 'i-lucide-arrow-left' }" title="Merge with">
+        <USkeleton v-if="!mangas" class="w-full h-[350px]" />
+        <NuxtLink v-for="m in mangas.filter((x) => x.key != mangaId)" v-else :key="m.key" :to="`/manga/${mangaId}/merge/${m.key}`">
+            <MangaCard :manga="m" />
+        </NuxtLink>
+    </MangaDetailPage>
 </template>
 
 <script setup lang="ts">

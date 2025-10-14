@@ -2,7 +2,7 @@
     <UPageBody v-if="loading">
         <UPageHero title="Loading..." />
     </UPageBody>
-    <UPageBody v-else v-bind="$props">
+    <UPageBody v-else v-bind="$props" class="mt-0 pb-0 pr-4 h-full">
         <template v-for="(_, slotName) in $slots" #[slotName]>
             <slot :name="slotName" />
         </template>

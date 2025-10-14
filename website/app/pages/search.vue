@@ -1,7 +1,6 @@
 <template>
-    <UPageBody>
+    <TrangaPage>
         <UPageSection :ui="{ container: 'gap-1 sm:gap-1 lg:gap-1 py-4 sm:py-1 lg:py-1 gap-1 sm:gap-1 lg:gap-1' }" class="h-fit">
-            <UButton variant="soft" to="/" icon="i-lucide-arrow-left" class="w-min">Back</UButton>
             <div class="flex max-sm:flex-col flex-row w-full h-full justify-between gap-4">
                 <UStepper v-model="activeStep" orientation="vertical" :items="items" class="h-full" disabled color="secondary" />
                 <UCard class="grow">
@@ -30,7 +29,7 @@
             :ui="{ container: 'gap-1 sm:gap-1 lg:gap-1 py-1 sm:py-1 lg:py-1 gap-1 sm:gap-1 lg:gap-1' }">
             <template #description>
                 <p class="text-lg">
-                    Result for <span class="text-secondary">'{{ searchQuery }}'</span>
+                    Result for <span class="text-secondary">{{ searchQuery }}</span>
                 </p>
             </template>
             <template #default>
@@ -42,13 +41,13 @@
                         :expanded="i === expanded"
                         @click="expanded = expanded === i ? -1 : i">
                         <template #actions="manga">
-                            <UButton :to="`/manga/${manga.key}/download/${connector.name}`">Download</UButton>
+                            <UButton :to="`/manga/${manga.key}?download=true`">Download</UButton>
                         </template>
                     </MangaCard>
                 </div>
             </template>
         </UPageSection>
-    </UPageBody>
+    </TrangaPage>
 </template>
 
 <script setup lang="ts">

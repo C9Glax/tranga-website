@@ -1,11 +1,11 @@
 <template>
     <MangaDetailPage :manga="manga">
-        <div class="grid gap-3 max-sm:grid-flow-row-dense min-sm:grid-cols-[70%_30%]">
+        <div class="grid gap-3 max-sm:grid-flow-row-dense min-sm:grid-cols-[70%_auto]">
             <ChaptersList :manga-id="mangaId" />
             <div class="flex flex-col gap-2">
-                <UCard>
+                <UCard :class="[flashDownloading ? 'animate-[flash_0.75s_ease_0.5s]' : '']">
                     <template #header>
-                        <h1>Download</h1>
+                        <h1 class="font-semibold">Download</h1>
                     </template>
                     <LibrarySelect :manga-id="mangaId" :library-id="libraryId" class="w-full" />
                     <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2 justify-between">
@@ -31,7 +31,7 @@
                 </UCard>
                 <UCard :ui="{ body: 'p-0 sm:p-0' }">
                     <template #header>
-                        <h1>Metadata</h1>
+                        <h1 class="font-semibold">Metadata</h1>
                     </template>
                     <UTable
                         v-if="metadataFetchers && metadata"
@@ -41,15 +41,18 @@
                             { header: '', id: 'link' },
                         ]">
                         <template #name-cell="{ row }">
-                            {{ row.original }}
+                            <UTooltip :text="metadata.find((me) => me.metadataFetcherName == row.original)?.identifier ?? undefined">{{
+                                row.original
+                            }}</UTooltip>
                         </template>
                         <template #link-cell="{ row }">
                             <UButton
                                 v-if="metadata.find((me) => me.metadataFetcherName == row.original)"
+                                class="float-right px-4"
                                 @click="unlinkMetadataFetcher(row.original)"
                                 >Unlink</UButton
                             >
-                            <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}`">Link</UButton>
+                            <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}`" class="float-right px-4">Link</UButton>
                         </template>
                     </UTable>
                 </UCard>
@@ -67,6 +70,7 @@ import MangaDetailPage from '~/components/MangaDetailPage.vue';
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 const { $api } = useNuxtApp();
+const flashDownloading = route.query.download;
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },
@@ -104,3 +108,15 @@ const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
 
 useHead({ title: 'Manga' });
 </script>
+
+<style>
+@keyframes flash {
+    0%,
+    100% {
+        background-color: initial;
+    }
+    50% {
+        background-color: var(--color-secondary);
+    }
+}
+</style>

@@ -1,19 +1,21 @@
 <template>
-    <MangaDetailPage :manga="manga" :back-path="`/manga/${mangaId}`">
-        <h1 class="text-2xl text-secondary font-semibold">{{ metadataFetcherName }}</h1>
+    <MangaDetailPage
+        :manga="manga"
+        :back="{ text: 'Back', href: `/manga/${mangaId}`, icon: 'i-lucide-arrow-left' }"
+        :title="metadataFetcherName">
         <USkeleton v-if="status === 'pending'" class="w-full h-14" />
-        <UCard v-else class="flex flex-wrap gap-2 basis-0">
+        <UCard v-else class="flex flex-wrap gap-2">
             <div
                 v-for="data in searchData"
                 :key="data.identifier"
-                class="grid grid-cols-[var(--mangacover-width)_auto_auto] auto-rows-fr grid-flow-col gap-4">
+                class="grid grid-cols-[var(--mangacover-width)_auto_auto] grid-flow-col gap-4">
                 <NuxtImg
                     :src="data.coverUrl ?? '/blahaj.png'"
                     alt="cover"
                     class="row-span-3 object-contain max-sm:w-[calc(var(--mangacover-width)/2)] max-sm:h-[calc(var(--mangacover-height)/2)] w-(--mangacover-width) h-(--mangacover-height) rounded-lg overflow-clip" />
-                <a :href="data.url ?? undefined">
+                <NuxtLink :href="data.url" no-prefetch external target="_blank">
                     <h2 class="text-xl font-semibold text-primary">{{ data.name }}</h2>
-                </a>
+                </NuxtLink>
                 <MDC :value="data.description ?? undefined" />
                 <UButton class="w-min h-min px-4 place-self-end" @click="link(data.identifier)">Link</UButton>
             </div>

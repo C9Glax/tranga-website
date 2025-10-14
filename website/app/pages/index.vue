@@ -1,6 +1,6 @@
 <template>
-    <LoadingPage :loading="status === 'pending'" class="p-4 flex flex-row flex-wrap gap-6 mt-0">
-        <MangaCardList :manga="manga" />
+    <LoadingPage :loading="status === 'pending'">
+        <MangaCardList :manga="manga" class="mx-4 mt-2" />
     </LoadingPage>
 </template>
 

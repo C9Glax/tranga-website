@@ -1,9 +1,11 @@
 <template>
-    <MangaCard v-for="(m, i) in manga" :key="m.key" :manga="m" :expanded="i === expanded" @click="expanded = expanded === i ? -1 : i">
-        <template #actions="forManga">
-            <UButton :to="`/manga/${forManga.key}`">Details</UButton>
-        </template>
-    </MangaCard>
+    <div class="flex flex-row flex-wrap gap-2">
+        <MangaCard v-for="(m, i) in manga" :key="m.key" :manga="m" :expanded="i === expanded" @click="expanded = expanded === i ? -1 : i">
+            <template #actions="forManga">
+                <UButton :to="`/manga/${forManga.key}`">Details</UButton>
+            </template>
+        </MangaCard>
+    </div>
 </template>
 
 <script setup lang="ts">
