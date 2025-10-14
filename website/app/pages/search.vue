@@ -39,11 +39,7 @@
                         :key="m.key"
                         :manga="m"
                         :expanded="i === expanded"
-                        @click="expanded = expanded === i ? -1 : i">
-                        <template #actions="manga">
-                            <UButton :to="`/manga/${manga.key}?download=true&return=${path}`">Download</UButton>
-                        </template>
-                    </MangaCard>
+                        @click="navigateTo(`/manga/${m.key}?download=true&return=${path}`)" />
                 </div>
             </template>
         </UPageSection>

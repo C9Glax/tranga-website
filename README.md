@@ -22,9 +22,9 @@
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
 
-| ![Main Page](Screenshots/Overview.png) | ![Search](Screenshots/Search%20Modal.png) | ![Manga Detail](Screenshots/Manga%20Detail.png) |
-|----------------------------------------|-------------------------------------------|-------------------------------------------------|
-| Overview                               | Search Dialog                             | Manga Detail                                    |
+| ![Main Page](Screenshots/Overview.png) | ![Search](Screenshots/Search.png) | ![Manga Detail](Screenshots/MangaDetail.png) |
+|----------------------------------------|------------------------------------------|------------------------------------------------|
+| Overview                               | Search Dialog                            | Manga Detail                                   |
 
 ## About The Project
 
@@ -37,9 +37,10 @@ This project makes HTTP-requests to the [Tranga-API](https://github.com/C9Glax/t
 ## Built With
 
 - nginx
-- vite
-- react
-- typescript
+- [nuxt](https://github.com/nuxt/nuxt)
+- [nuxt ui](https://github.com/nuxt/ui)
+- [vue](https://github.com/vuejs/)
+- [vite](https://github.com/vitejs/vite)
 - 💙 Blåhaj 🦈
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
