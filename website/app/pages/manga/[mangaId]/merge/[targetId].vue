@@ -36,5 +36,5 @@ const merge = async () => {
     navigateTo(`/manga/${to}`);
 };
 
-useHead({ title: `Merge ${manga.value?.name} with ${target.value?.name}` });
+useHead({ title: 'Confirm merge' });
 </script>

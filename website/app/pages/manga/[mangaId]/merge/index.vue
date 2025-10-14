@@ -6,7 +6,7 @@
         >
         <UPageBody class="p-4 flex flex-row flex-wrap gap-6 mt-0">
             <USkeleton v-if="!mangas" class="w-full h-[350px]" />
-            <NuxtLink v-for="m in mangas.filter((m) => m.key != mangaId)" v-else :key="m.key" :to="m.key">
+            <NuxtLink v-for="m in mangas.filter((x) => x.key != mangaId)" v-else :key="m.key" :to="`/manga/${mangaId}/merge/${m.key}`">
                 <MangaCard :manga="m" />
             </NuxtLink>
         </UPageBody>
@@ -20,5 +20,5 @@ const mangaId = route.params.mangaId as string;
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
 const { data: mangas } = await useApi('/v2/Manga', { key: FetchKeys.Manga.All });
 
-useHead({ title: `Merge Manga ${manga.value?.name}` });
+useHead({ title: 'Merge Manga' });
 </script>

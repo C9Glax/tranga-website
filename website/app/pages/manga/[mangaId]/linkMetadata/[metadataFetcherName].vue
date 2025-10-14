@@ -52,5 +52,5 @@ const link = async (identifier: string) => {
     navigateTo(`/manga/${mangaId}`);
 };
 
-useHead({ title: `Link Metadata ${manga.value?.name} ${metadataFetcherName}` });
+useHead({ title: 'Link Metadata' });
 </script>

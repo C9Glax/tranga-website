@@ -102,5 +102,5 @@ const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
     await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId));
 };
 
-useHead({ title: `Manga ${manga.value?.name}` });
+useHead({ title: 'Manga' });
 </script>
