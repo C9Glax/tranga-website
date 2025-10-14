@@ -1,8 +1,5 @@
 <template>
-    <MangaDetailPage
-        :manga="manga"
-        :back="{ text: 'Back', href: backUrl ?? `/manga/${mangaId}`, icon: 'i-lucide-arrow-left' }"
-        title="Merge with">
+    <MangaDetailPage :manga="manga" :back-url="backUrl" title="Merge with">
         <USkeleton v-if="!mangas" class="w-full h-[350px]" />
         <MangaCardList :manga="mangas" @click="(m) => navigateTo(`/manga/${mangaId}/merge/${m.key}?return=${path}`)" />
     </MangaDetailPage>

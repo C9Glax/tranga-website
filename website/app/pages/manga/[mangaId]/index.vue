@@ -52,15 +52,17 @@
                                 @click="unlinkMetadataFetcher(row.original)"
                                 >Unlink</UButton
                             >
-                            <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}`" class="float-right px-4">Link</UButton>
+                            <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}?return=${path}`" class="float-right px-4"
+                                >Link</UButton
+                            >
                         </template>
                     </UTable>
                 </UCard>
             </div>
         </div>
         <template #actions>
-            <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge/`" color="secondary">Merge</UButton>
-            <UButton variant="soft" color="warning" icon="i-lucide-trash" />
+            <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${path}`" color="secondary">Merge</UButton>
+            <UButton variant="soft" color="warning" icon="i-lucide-trash" @click="remove" />
         </template>
     </MangaDetailPage>
 </template>
@@ -71,6 +73,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 const backUrl = route.query.return as string | undefined;
+const path = route.fullPath;
 
 const flashDownloading = route.query.download;
 
@@ -105,6 +108,12 @@ const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
         path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName },
     });
     await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId));
+};
+
+const remove = async () => {
+    await $api('/v2/Manga/{MangaId}', { method: 'DELETE', path: { MangaId: mangaId } });
+    await refreshNuxtData(FetchKeys.Manga.All);
+    navigateTo('/');
 };
 
 useHead({ title: 'Manga' });
