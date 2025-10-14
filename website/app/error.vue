@@ -1,10 +1,11 @@
 <template>
-    <div>
-        <h1>{{ error?.statusCode }}</h1>
-        <p>{{ error?.message }}</p>
-        <NuxtLink to="/">Go back home</NuxtLink>
-        <NuxtLink to="https://github.com/C9Glax/tranga-website/issues/new"><Icon name="i-lucide-github" />Report this issue</NuxtLink>
-    </div>
+    <UPageBody>
+        <UPageHero :title="error?.statusCode??'Error'">
+            <p>{{ error?.message }}</p>
+            <NuxtLink to="/">Go back home</NuxtLink>
+            <NuxtLink to="https://github.com/C9Glax/tranga-website/issues/new"><Icon name="i-lucide-github" />Report this issue</NuxtLink>
+        </UPageHero>
+    </UPageBody>
 </template>
 
 <script setup lang="ts">

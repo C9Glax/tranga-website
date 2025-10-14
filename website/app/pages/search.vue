@@ -85,16 +85,19 @@ const connectorClick = (c: MangaConnector) => {
 const searchResult = useState<MinimalManga[]>(() => []);
 const expanded = useState(() => -1);
 const searchQuery = useState<string>(() => '');
-const performSearch = () => {
+const performSearch = async () => {
     if (!query.value) return;
     busy.value = true;
     searchQuery.value = query.value;
-    search(query.value)
+    await search(query.value)
         .then((data) => {
             searchResult.value = data;
             activeStep.value = 2;
         })
-        .finally(() => (busy.value = false));
+        .finally(() => {
+            refreshNuxtData(FetchKeys.Manga.All);
+            busy.value = false;
+        });
 };
 
 const search = async (query: string): Promise<MinimalManga[]> => {
