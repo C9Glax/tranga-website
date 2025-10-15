@@ -41,8 +41,8 @@
 import type { NavigationMenuItem } from '#ui/components/NavigationMenu.vue';
 
 const items = computed<NavigationMenuItem[]>(() => [
-    { label: 'API', to: 'https://github.com/C9Glax/tranga', icon: 'i-lucide-github' },
-    { label: 'Website', to: 'https://github.com/C9Glax/tranga/website', icon: 'i-lucide-github' },
-    { label: 'Swagger', to: `${useRuntimeConfig().public.openFetch.api.baseURL}swagger`, icon: 'i-lucide-book-open' },
+    { label: 'API', to: 'https://github.com/C9Glax/tranga', icon: 'i-lucide-github', target: '_blank' },
+    { label: 'Website', to: 'https://github.com/C9Glax/tranga/website', icon: 'i-lucide-github', target: '_blank' },
+    { label: 'Swagger', to: `${useRuntimeConfig().public.openFetch.api.baseURL}swagger`, icon: 'i-lucide-book-open', target: '_blank' },
 ]);
 </script>
