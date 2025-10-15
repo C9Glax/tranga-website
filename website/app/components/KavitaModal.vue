@@ -1,5 +1,5 @@
 <template>
-    <UModal v-bind="$props" title="Connect Komga">
+    <UModal v-bind="$props" title="Connect Kavita">
         <template #body>
             <UFormField label="URL">
                 <UInput v-model="requestData.url" placeholder="https://" class="w-full" :disabled="busy" />
@@ -27,7 +27,7 @@ import type { components } from '#open-fetch-schemas/api';
 type CreateLibraryConnectorRecord = components['schemas']['CreateLibraryConnectorRecord'];
 const { $api } = useNuxtApp();
 
-const requestData = ref<CreateLibraryConnectorRecord>({ libraryType: 'Komga', url: '', username: '', password: '' });
+const requestData = ref<CreateLibraryConnectorRecord>({ libraryType: 'Kavita', url: '', username: '', password: '' });
 
 const allowSend = computed(() => requestData.value.url && requestData.value.username && requestData.value.password);
 
