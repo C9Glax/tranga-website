@@ -1,5 +1,5 @@
 <template>
-    <UPageList class="gap-2">
+    <div class="flex flex-row flex-wrap">
         <UPageCard
             v-for="l in fileLibraries"
             :key="l.key"
@@ -8,9 +8,9 @@
             :title="l.libraryName"
             :description="l.basePath"
             orientation="horizontal">
-            <UButton color="warning" :loading="busy" @click="deleteLibrary(l)">Delete</UButton>
+            <UButton color="warning" :loading="busy" class="w-fit justify-self-end" @click="deleteLibrary(l)">Delete</UButton>
         </UPageCard>
-    </UPageList>
+    </div>
 </template>
 
 <script setup lang="ts">

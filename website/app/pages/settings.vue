@@ -1,13 +1,21 @@
 <template>
     <UPageBody>
         <UPageSection title="Settings">
-            <UCard>
+            <template #description>
+                <div>
+                    <p>API Url</p>
+                    <UInput v-model="apiUrl" class="max-w-full w-xs" placeholder="http://<ip:port>/" />
+                    <UButton :loading="reloading" class="mx-1" @click="setUrl">Set</UButton>
+                    <p v-if="settingsStatus === 'error'" class="text-warning">Unable to connect to api.</p>
+                </div>
+            </template>
+            <UCard v-if="settingsStatus === 'success'">
                 <template #header>
                     <h1>Libraries</h1>
                 </template>
                 <template #footer>
                     <div class="flex flex-row gap-2">
-                        <UButton icon="i-lucide-plus" class="w-fit" @click="addLibraryModal.open()">Add</UButton>
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addLibraryModal.open()">Add FileLibrary</UButton>
                         <UTooltip :text="komgaConnected ? 'Disconnect Komga' : 'Connect Komga'">
                             <UButton
                                 :icon="komgaConnected ? 'i-lucide-unlink' : 'i-lucide-link'"
@@ -26,17 +34,13 @@
                 </template>
                 <FileLibraries />
             </UCard>
-            <UCard>
+            <UCard v-if="settingsStatus === 'success'">
                 <template #header>
                     <h1>Maintenance</h1>
                 </template>
                 <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit mb-2" @click="cleanUpDatabase"
                     >Clean database</UButton
                 >
-                <UFormField label="API Url" name="apiUrl">
-                    <UInput v-model="apiUrl" class="max-w-full w-xs" placeholder="http://<ip:port>/" />
-                    <UButton :loading="reloading" class="mx-1" @click="setUrl">Set</UButton>
-                </UFormField>
             </UCard>
         </UPageSection>
     </UPageBody>
@@ -90,6 +94,8 @@ const onKavitaClick = async () => {
         await refreshNuxtData(FetchKeys.Libraries.All);
     }
 };
+
+const { data: settings, status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All });
 
 useHead({ title: 'Settings' });
 </script>
