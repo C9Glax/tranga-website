@@ -6,7 +6,14 @@
                     <h1>Libraries</h1>
                 </template>
                 <template #footer>
-                    <UButton icon="i-lucide-plus" class="w-fit" @click="addLibraryModal.open()">Add</UButton>
+                    <div class="flex flex-row gap-2">
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addLibraryModal.open()">Add</UButton>
+                        <UTooltip :text="komgaConnected ? 'Disconnect Komga' : 'Connect Komga'">
+                            <UButton :icon="komgaConnected ? 'i-lucide-unlink' : 'i-lucide-link'" class="w-fit" @click="onKomgaClick"
+                            >Komga</UButton
+                            >
+                        </UTooltip>
+                    </div>
                 </template>
                 <FileLibraries />
             </UCard>
@@ -27,12 +34,14 @@
 </template>
 
 <script setup lang="ts">
-import { LazyAddLibraryModal } from '#components';
+import { LazyAddLibraryModal, LazyKomgaModal } from '#components';
 import FileLibraries from '~/components/FileLibraries.vue';
 import { refreshNuxtData } from '#app';
 const overlay = useOverlay();
+const { $api } = useNuxtApp();
 
 const addLibraryModal = overlay.create(LazyAddLibraryModal);
+const komgaModal = overlay.create(LazyKomgaModal);
 
 const config = useRuntimeConfig();
 const apiUrl = ref(config.public.openFetch.api.baseURL);
@@ -50,6 +59,17 @@ const cleanUpDatabase = async () => {
     await useApi('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' });
     await refreshNuxtData(FetchKeys.Manga.All);
     cleanUpDatabaseBusy.value = false;
+};
+
+const { data: libraries } = useApi('/v2/LibraryConnector', { key: FetchKeys.Libraries.All });
+const komgaConnected = computed(() => libraries.value?.find((l) => l.type === "Komga")?.key);
+const onKomgaClick = async () => {
+    if (!komgaConnected.value) {
+        komgaModal.open();
+    }else{
+        await $api("/v2/LibraryConnector/{LibraryConnectorId}", { method: "DELETE", path: { LibraryConnectorId: komgaConnected.value } });
+        await refreshNuxtData(FetchKeys.Libraries.All);
+    }
 };
 
 useHead({ title: 'Settings' });
