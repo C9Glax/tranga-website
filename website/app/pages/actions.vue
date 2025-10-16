@@ -1,9 +1,10 @@
 <template>
     <TrangaPage rimless>
         <template #center>
-            <USelect v-model="params.action" :items="ActionTypes?.map(a => a.split(/(?=[A-Z])/).join(' '))" class="w-50" @change="refreshData" />
+            <USelect v-model="params.action" :items="ActionTypes" class="w-50" @change="refreshData" />
             <UInput v-model="params.start" trailing-icon="i-lucide-chevron-first" type="datetime-local" @change="refreshData" />
             <UInput v-model="params.end" icon="i-lucide-chevron-last" type="datetime-local" @change="refreshData" />
+            <UButton color="primary" icon="i-lucide-rotate-ccw" @click="resetFilter" />
         </template>
         <template #actions>
             <UTooltip text="Reload" :kbds="['meta', 'R']">
@@ -41,10 +42,11 @@ type ActionRecord = components['schemas']['ActionRecord'];
 
 const { $api } = useNuxtApp();
 
-const params = computed<Partial<Filter>>(() => { return  { ...useRoute().query,
-    start: new Date(Date.now()-(24 * 60 * 60 * 1000)).toISOString().slice(0, 16),
-    end: new Date(Date.now()).toISOString().slice(0, 16),
-}});
+const timezoneOffsetMillis = new Date().getTimezoneOffset() * 60 * 1000;
+const params = ref<Partial<Filter>>({ ...useRoute().query,
+    start: new Date(Date.now()-(24 * 60 * 60 * 1000) - timezoneOffsetMillis).toISOString().slice(0, 16),
+    end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16)
+});
 const data = ref(await $api('/v2/Actions/Filter', { method: 'POST', body: params.value }));
 const { data: ActionTypes } = useApi('/v2/Actions/Types', { key : FetchKeys.Actions.Types });
 
@@ -74,6 +76,13 @@ const columns: TableColumn<ActionRecord>[] = [
         header: 'Additional'
     },
 ];
+
+const resetFilter = () => {
+    params.value = { ...useRoute().query,
+        start: new Date(Date.now()-(24 * 60 * 60 * 1000) - timezoneOffsetMillis).toISOString().slice(0, 16),
+        end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16)
+    };
+}
 
 const refreshData = async (): Promise<void> => {
     data.value = await $api('/v2/Actions/Filter', { method: 'POST', body: params.value });

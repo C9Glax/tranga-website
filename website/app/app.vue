@@ -8,6 +8,7 @@
                         <p
                             style="
                                 background: linear-gradient(110deg, var(--color-pink), var(--color-blue));
+                                background-clip: text;
                                 -webkit-background-clip: text;
                                 -webkit-text-fill-color: transparent;
                             "
@@ -27,7 +28,7 @@
                 <UButton icon="i-lucide-brick-wall-shield" :to="`/actions?return=${$route.fullPath}`" :disabled="$route.fullPath.startsWith('/actions')" variant="soft" color="secondary" />
                 <UButton icon="i-lucide-plus" to="/search" color="primary" label="Manga" />
                 <UColorModeButton color="secondary" />
-                <UButton icon="i-lucide-settings" variant="ghost" :to="`/settings?return=${$route.fullPath}`" color="secondary" />
+                <UButton icon="i-lucide-settings" variant="ghost" :to="`/settings?return=${$route.fullPath}`" :disabled="$route.fullPath.startsWith('/settings')" color="secondary" />
             </template>
         </UHeader>
         <UMain>
