@@ -1,15 +1,12 @@
 <template>
-    <MangaDetailPage :manga="manga" :back-url="backUrl" title="Merge with">
+    <MangaDetailPage :manga="manga" title="Merge with">
         <USkeleton v-if="!mangas" class="w-full h-[350px]" />
-        <MangaCardList :manga="mangas" @click="(m) => navigateTo(`/manga/${mangaId}/merge/${m.key}?return=${path}`)" />
+        <MangaCardList :manga="mangas" @click="(m) => navigateTo(`/manga/${mangaId}/merge/${m.key}?return=${$route.fullPath}`)" />
     </MangaDetailPage>
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-const mangaId = route.params.mangaId as string;
-const backUrl = route.query.return as string | undefined;
-const path = route.fullPath;
+const mangaId = useRoute().params.mangaId as string;
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
 const { data: mangas } = await useApi('/v2/Manga', { key: FetchKeys.Manga.All });

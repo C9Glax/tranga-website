@@ -39,7 +39,7 @@
                         :key="m.key"
                         :manga="m"
                         :expanded="i === expanded"
-                        @click="navigateTo(`/manga/${m.key}?download=true&return=${path}`)" />
+                        @click="navigateTo(`/manga/${m.key}?download=true&return=${$route.fullPath}`)" />
                 </div>
             </template>
         </UPageSection>
@@ -51,8 +51,6 @@ import type { components } from '#open-fetch-schemas/api';
 import type { StepperItem } from '@nuxt/ui';
 type MangaConnector = components['schemas']['MangaConnector'];
 type MinimalManga = components['schemas']['MinimalManga'];
-
-const path = useRoute().fullPath;
 
 const { data: connectors } = await useApi('/v2/MangaConnector', { key: FetchKeys.MangaConnector.All });
 

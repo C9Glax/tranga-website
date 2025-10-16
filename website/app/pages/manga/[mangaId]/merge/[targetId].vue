@@ -1,5 +1,5 @@
 <template>
-    <TrangaPage :back="{ href: backUrl ?? `/manga/${mangaId}/merge/`, text: 'Back', icon: 'i-lucide-arrow-left' }">
+    <TrangaPage>
         <div class="flex flex-col items-center justify-center gap-10">
             <div class="flex flex-row max-sm:flex-col justify-evenly items-center">
                 <MangaCard v-if="manga" :manga="manga" :expanded="true" />
@@ -28,8 +28,6 @@
 const route = useRoute();
 const targetId = route.params.targetId as string;
 const mangaId = route.params.mangaId as string;
-const path = route.fullPath;
-const backUrl = route.query.return as string | undefined;
 const { $api } = useNuxtApp();
 
 const reverse = ref(false);

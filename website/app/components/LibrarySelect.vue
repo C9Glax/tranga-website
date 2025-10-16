@@ -1,11 +1,13 @@
 <template>
+    <USkeleton v-if="libraryId === undefined" class="w-full h-8" />
     <USelect
+        v-else
         v-model="library"
         placeholder="Library"
         icon="i-lucide-library-big"
         color="secondary"
         :items="libraries?.map((l) => l.key)"
-        class="w-xs"
+        :class="[libraryId ? '' : 'ring-warning animate-[pulse_1s]']"
         :loading="loading"
         @change="onLibrarySelectChange">
         <template #default="{ modelValue }">
@@ -28,7 +30,7 @@ const { $api } = useNuxtApp();
 
 export interface LibrarySelectProps {
     mangaId: string;
-    libraryId?: string;
+    libraryId?: string | null;
 }
 
 const props = defineProps<LibrarySelectProps>();
@@ -49,7 +51,5 @@ const onLibrarySelectChange = async () => {
     emit('libraryChanged', library.value);
 };
 
-const emit = defineEmits<{
-    (e: 'libraryChanged', id?: string): void;
-}>();
+const emit = defineEmits<{ (e: 'libraryChanged', id?: string): void }>();
 </script>

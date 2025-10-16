@@ -1,5 +1,5 @@
 <template>
-    <UPageBody>
+    <TrangaPage>
         <UPageSection title="Settings">
             <template #description>
                 <div>
@@ -43,7 +43,7 @@
                 >
             </UCard>
         </UPageSection>
-    </UPageBody>
+    </TrangaPage>
 </template>
 
 <script setup lang="ts">
@@ -95,7 +95,7 @@ const onKavitaClick = async () => {
     }
 };
 
-const { data: settings, status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All });
+const { status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All });
 
 useHead({ title: 'Settings' });
 </script>

@@ -26,7 +26,7 @@
             <template #right>
                 <UButton icon="i-lucide-plus" to="/search" color="primary">Manga</UButton>
                 <UColorModeButton color="secondary" />
-                <UButton icon="i-lucide-settings" variant="ghost" to="/settings" color="secondary" />
+                <UButton icon="i-lucide-settings" variant="ghost" :to="`/settings?return=${$route.fullPath}`" color="secondary" />
             </template>
         </UHeader>
         <UMain>

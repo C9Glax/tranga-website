@@ -1,5 +1,5 @@
 <template>
-    <MangaDetailPage :manga="manga" :back-url="backUrl">
+    <MangaDetailPage :manga="manga">
         <div class="grid gap-3 max-xl:grid-flow-row-dense min-2xl:grid-cols-[70%_auto] min-xl:grid-cols-[60%_auto]">
             <ChaptersList :manga-id="mangaId" />
             <div class="flex flex-col gap-2">
@@ -7,7 +7,11 @@
                     <template #header>
                         <h1 class="font-semibold">Download</h1>
                     </template>
-                    <LibrarySelect :manga-id="mangaId" :library-id="manga?.fileLibraryId" class="w-full" @library-changed="refreshNuxtData(FetchKeys.Manga.Id(mangaId))" />
+                    <LibrarySelect
+                        :manga-id="mangaId"
+                        :library-id="manga?.fileLibraryId"
+                        class="w-full"
+                        @library-changed="refreshNuxtData(FetchKeys.Manga.Id(mangaId))" />
                     <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2 justify-between">
                         <div
                             v-for="mangaconnectorId in manga.mangaConnectorIds.sort((a, b) =>
@@ -41,28 +45,34 @@
                             { header: '', id: 'link' },
                         ]">
                         <template #name-cell="{ row }">
-                            <UTooltip :text="metadata.find((me) => me.metadataFetcherName == row.original)?.identifier ?? undefined">{{
-                                row.original
-                            }}</UTooltip>
+                            <UTooltip :text="metadata.find((me) => me.metadataFetcherName == row.original)?.identifier ?? undefined">
+                                <p class="text-toned">{{ row.original }}</p></UTooltip
+                            >
                         </template>
                         <template #link-cell="{ row }">
                             <UButton
                                 v-if="metadata.find((me) => me.metadataFetcherName == row.original)"
-                                class="float-right px-4"
-                                @click="unlinkMetadataFetcher(row.original)"
-                                >Unlink</UButton
-                            >
-                            <UButton v-else :to="`/manga/${mangaId}/linkMetadata/${row.original}?return=${path}`" class="float-right px-4"
-                                >Link</UButton
-                            >
+                                class="float-right"
+                                icon="i-lucide-unlink"
+                                @click="unlinkMetadataFetcher(row.original)" />
+                            <UButton
+                                v-else
+                                :to="`/manga/${mangaId}/linkMetadata/${row.original}?return=${$route.fullPath}`"
+                                class="float-right"
+                                icon="i-lucide-link" />
                         </template>
                     </UTable>
                 </UCard>
             </div>
         </div>
         <template #actions>
-            <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${path}`" color="secondary">Merge</UButton>
+            <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${$route.fullPath}`" color="secondary"
+                >Merge</UButton
+            >
             <UButton variant="soft" color="warning" icon="i-lucide-trash" @click="remove" />
+            <UTooltip text="Reload" :kbds="['meta', 'R']">
+                <UButton variant="soft" color="secondary" icon="i-lucide-refresh-ccw" :loading="refreshingData" @click="refreshData" />
+            </UTooltip>
         </template>
     </MangaDetailPage>
 </template>
@@ -72,8 +82,6 @@ import MangaDetailPage from '~/components/MangaDetailPage.vue';
 const { $api } = useNuxtApp();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
-const backUrl = route.query.return as string | undefined;
-const path = route.fullPath;
 
 const flashDownloading = route.query.download;
 
@@ -115,6 +123,15 @@ const remove = async () => {
     await refreshNuxtData(FetchKeys.Manga.All);
     navigateTo('/');
 };
+
+const refreshingData = ref(false);
+const refreshData = async () => {
+    refreshingData.value = true;
+    await refreshNuxtData([FetchKeys.Manga.Id(mangaId), FetchKeys.Metadata.Manga(mangaId), FetchKeys.FileLibraries]);
+    refreshingData.value = false;
+};
+
+defineShortcuts({ meta_r: { usingInput: true, handler: refreshData } });
 
 useHead({ title: 'Manga' });
 </script>

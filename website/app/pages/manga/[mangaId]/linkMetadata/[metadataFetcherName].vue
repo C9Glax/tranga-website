@@ -1,5 +1,5 @@
 <template>
-    <MangaDetailPage :manga="manga" :back-url="backUrl" :title="metadataFetcherName">
+    <MangaDetailPage :manga="manga" :title="metadataFetcherName">
         <div class="flex flex-col flex-wrap gap-2">
             <USkeleton v-if="status === 'pending'" class="w-full h-14" />
             <UCard v-for="data in searchData" v-else :key="data.identifier">
@@ -23,7 +23,6 @@
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 const metadataFetcherName = route.params.metadataFetcherName as string;
-const backUrl = route.query.return as string | undefined;
 const { $api } = useNuxtApp();
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {

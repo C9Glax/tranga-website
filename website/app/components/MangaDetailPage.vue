@@ -1,5 +1,5 @@
 <template>
-    <TrangaPage v-bind="$props" :back="backUrl ? { href: backUrl, icon: 'i-lucide-arrow-left', text: 'Back' } : undefined">
+    <TrangaPage v-bind="$props">
         <template #left>
             <div class="flex flex-col gap-2">
                 <MangaCover v-if="manga" :manga="manga" class="self-center" />
@@ -8,13 +8,13 @@
                     {{ manga.name }}
                     <MangaconnectorIcon v-for="m in manga.mangaConnectorIds" v-bind="m" :key="m.key" />
                 </p>
-                <USkeleton v-else class="text-xl h-20 w-full" />
+                <USkeleton v-else as="p" class="h-20 w-full" />
                 <div v-if="manga" class="flex flex-row gap-1 flex-wrap">
                     <UBadge v-for="author in manga.authors" :key="author.key" variant="outline" color="neutral"
-                        ><NuxtLink :to="`/manga/author/${author.key}?return=${path}`">{{ author.name }}</NuxtLink></UBadge
+                        ><NuxtLink :to="`/manga/author/${author.key}?return=${$route.fullPath}`">{{ author.name }}</NuxtLink></UBadge
                     >
                     <UBadge v-for="tag in manga.tags" :key="tag" variant="outline" color="primary"
-                        ><NuxtLink :to="`/manga/tag/${tag}?return=${path}`">{{ tag }}</NuxtLink></UBadge
+                        ><NuxtLink :to="`/manga/tag/${tag}?return=${$route.fullPath}`">{{ tag }}</NuxtLink></UBadge
                     >
                     <NuxtLink v-for="link in manga.links" :key="link.key" :to="link.url" external no-prefetch>
                         <UBadge variant="outline" color="secondary">{{ link.provider }}</UBadge>
@@ -36,11 +36,9 @@
 import type { components } from '#open-fetch-schemas/api';
 import TrangaPage, { type PageProps } from '~/components/TrangaPage.vue';
 type Manga = components['schemas']['Manga'];
-const path = useRoute().fullPath;
 
 export interface MangaDetailPageProps extends PageProps {
     manga?: Manga;
-    backUrl?: string;
 }
 
 defineProps<MangaDetailPageProps>();
