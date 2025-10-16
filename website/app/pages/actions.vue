@@ -19,10 +19,22 @@
                 {{ new Date(row.original.performedAt).toLocaleString() }}
             </template>
             <template #manga-cell="{ row }">
-                <UButton v-if="row.original.mangaId" :to="`/manga/${row.original.mangaId}?return=${$route.fullPath}`" variant="ghost" color="primary">Manga</UButton>
+                <UButton
+                    v-if="row.original.mangaId"
+                    :to="`/manga/${row.original.mangaId}?return=${$route.fullPath}`"
+                    variant="ghost"
+                    color="primary"
+                    >Manga</UButton
+                >
             </template>
             <template #chapter-cell="{ row }">
-                <UButton v-if="row.original.chapterId" :to="`/manga/${row.original.chapterId}?return=${$route.fullPath}`" variant="ghost" color="secondary">Chapter</UButton>
+                <UButton
+                    v-if="row.original.chapterId"
+                    :to="`/manga/${row.original.chapterId}?return=${$route.fullPath}`"
+                    variant="ghost"
+                    color="secondary"
+                    >Chapter</UButton
+                >
             </template>
             <template #additional-cell="{ row }">
                 <p v-if="row.original.from">From: {{ row.original.from }}</p>
@@ -43,46 +55,29 @@ type ActionRecord = components['schemas']['ActionRecord'];
 const { $api } = useNuxtApp();
 
 const timezoneOffsetMillis = new Date().getTimezoneOffset() * 60 * 1000;
-const params = ref<Partial<Filter>>({ ...useRoute().query,
-    start: new Date(Date.now()-(24 * 60 * 60 * 1000) - timezoneOffsetMillis).toISOString().slice(0, 16),
-    end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16)
+const params = ref<Partial<Filter>>({
+    ...useRoute().query,
+    start: new Date(Date.now() - 24 * 60 * 60 * 1000 - timezoneOffsetMillis).toISOString().slice(0, 16),
+    end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
 });
 const data = ref(await $api('/v2/Actions/Filter', { method: 'POST', body: params.value }));
-const { data: ActionTypes } = useApi('/v2/Actions/Types', { key : FetchKeys.Actions.Types });
+const { data: ActionTypes } = useApi('/v2/Actions/Types', { key: FetchKeys.Actions.Types });
 
 const columns: TableColumn<ActionRecord>[] = [
-    {
-        id: 'action',
-        accessorKey: 'action',
-        header: 'Action'
-    },
-    {
-        id: 'timestamp',
-        accessorKey: 'performedAt',
-        header: 'Timestamp'
-    },
-    {
-        id: 'manga',
-        accessorKey: 'mangaId',
-        header: 'Manga'
-    },
-    {
-        id: 'chapter',
-        accessorKey: 'chapterId',
-        header: 'Chapter'
-    },
-    {
-        id: 'additional',
-        header: 'Additional'
-    },
+    { id: 'action', accessorKey: 'action', header: 'Action' },
+    { id: 'timestamp', accessorKey: 'performedAt', header: 'Timestamp' },
+    { id: 'manga', accessorKey: 'mangaId', header: 'Manga' },
+    { id: 'chapter', accessorKey: 'chapterId', header: 'Chapter' },
+    { id: 'additional', header: 'Additional' },
 ];
 
 const resetFilter = () => {
-    params.value = { ...useRoute().query,
-        start: new Date(Date.now()-(24 * 60 * 60 * 1000) - timezoneOffsetMillis).toISOString().slice(0, 16),
-        end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16)
+    params.value = {
+        ...useRoute().query,
+        start: new Date(Date.now() - 24 * 60 * 60 * 1000 - timezoneOffsetMillis).toISOString().slice(0, 16),
+        end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
     };
-}
+};
 
 const refreshData = async (): Promise<void> => {
     data.value = await $api('/v2/Actions/Filter', { method: 'POST', body: params.value });

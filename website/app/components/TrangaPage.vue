@@ -25,7 +25,7 @@
                         <slot name="actions" />
                     </div>
                 </div>
-                <div :class="[$slots.left ? rimless ? '' : 'min-md:mr-4 max-md:mx-2' : rimless ? '' : 'mx-4', 'h-full']">
+                <div :class="[$slots.left ? (rimless ? '' : 'min-md:mr-4 max-md:mx-2') : rimless ? '' : 'mx-4', 'h-full']">
                     <slot />
                 </div>
             </div>

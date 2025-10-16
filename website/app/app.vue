@@ -25,10 +25,20 @@
                 <UNavigationMenu :items="items" orientation="horizontal" variant="link" color="neutral" />
             </template>
             <template #right>
-                <UButton icon="i-lucide-brick-wall-shield" :to="`/actions?return=${$route.fullPath}`" :disabled="$route.fullPath.startsWith('/actions')" variant="soft" color="secondary" />
+                <UButton
+                    icon="i-lucide-brick-wall-shield"
+                    :to="`/actions?return=${$route.fullPath}`"
+                    :disabled="$route.fullPath.startsWith('/actions')"
+                    variant="soft"
+                    color="secondary" />
                 <UButton icon="i-lucide-plus" to="/search" color="primary" label="Manga" />
                 <UColorModeButton color="secondary" />
-                <UButton icon="i-lucide-settings" variant="ghost" :to="`/settings?return=${$route.fullPath}`" :disabled="$route.fullPath.startsWith('/settings')" color="secondary" />
+                <UButton
+                    icon="i-lucide-settings"
+                    variant="ghost"
+                    :to="`/settings?return=${$route.fullPath}`"
+                    :disabled="$route.fullPath.startsWith('/settings')"
+                    color="secondary" />
             </template>
         </UHeader>
         <UMain>
