@@ -66,6 +66,7 @@
             </div>
         </div>
         <template #actions>
+            <UButton icon="i-lucide-brick-wall-shield" :to="`/actions?mangaId=${mangaId}&return=${$route.fullPath}`" variant="soft" color="secondary" />
             <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${$route.fullPath}`" color="secondary"
                 >Merge</UButton
             >

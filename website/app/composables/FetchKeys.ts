@@ -6,4 +6,5 @@ export const FetchKeys = {
     Metadata: { Fetchers: 'Metadata', Links: 'Metadata/Links', Manga: (mangaId: string) => `Metadata/Links/${mangaId}` },
     Libraries: { All: 'Libraries', Id: (id: string) => `Libraries/${id}` },
     Settings: { All: 'Settings' },
+    Actions: { Types: 'Actions/Types'}
 };

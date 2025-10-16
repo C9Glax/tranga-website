@@ -3,6 +3,7 @@
     <USelect
         v-else
         v-model="library"
+        :default-value="libraryId ?? undefined"
         placeholder="Library"
         icon="i-lucide-library-big"
         color="secondary"
@@ -35,8 +36,8 @@ export interface LibrarySelectProps {
 
 const props = defineProps<LibrarySelectProps>();
 
-const library = ref(props.libraryId);
-const { data: libraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
+const library = ref();
+const { data: libraries } = await useApi('/v2/FileLibrary');
 
 const loading = ref(false);
 const onLibrarySelectChange = async () => {

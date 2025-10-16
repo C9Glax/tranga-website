@@ -19,6 +19,9 @@
                         </slot>
                     </div>
                     <div class="flex flew-row gap-2">
+                        <slot name="center" />
+                    </div>
+                    <div class="flex flew-row gap-2">
                         <slot name="actions" />
                     </div>
                 </div>
