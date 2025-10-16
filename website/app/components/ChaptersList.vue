@@ -1,5 +1,5 @@
 <template>
-    <UPageList class="gap-2">
+    <UPageList class="gap-2 h-full overflow-y-scroll">
         <UPageCard v-for="chapter in chapters" :key="chapter.key" orientation="horizontal" :ui="{ container: 'p-2 sm:p-2' }">
             <template #title>
                 <p class="text-primary">{{ chapter.title }}</p>

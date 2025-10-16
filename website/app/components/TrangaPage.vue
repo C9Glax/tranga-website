@@ -1,11 +1,11 @@
 <template>
-    <UPageBody v-bind="$props" class="mt-0 pb-0 min-md:pr-4 h-full">
+    <UPageBody v-bind="$props" class="mt-0 pb-0 h-[calc(100dvh-var(--ui-header-height))] relative min-xl:overflow-clip">
         <div class="flex min-md:flex-row max-md:flex-col gap-4 h-full relative">
-            <div v-if="$slots.left" class="flex flex-col gap-2 bg-elevated min-md:w-3/7 min-xl:w-2/7 max-md:w-full px-4 max-md:px-2 py-4">
+            <div v-if="$slots.left" class="flex flex-col gap-2 bg-elevated min-md:w-3/7 min-xl:w-2/7 max-md:w-full py-4 pl-4 pr-2">
                 <slot name="left" />
             </div>
-            <div :class="['flex flex-col gap-2 w-full py-4 relative max-md:px-2', $slots.left ? '' : 'pl-4']">
-                <div class="w-full flex flex-row justify-between mb-4">
+            <div class="flex flex-col gap-2 w-full h-full py-4 relative">
+                <div :class="['w-full flex flex-row justify-between', $slots.left ? 'min-md:pr-4 max-md:px-2' : 'px-4']">
                     <div class="flex flex-row gap-6">
                         <UButton
                             variant="outline"
@@ -22,7 +22,9 @@
                         <slot name="actions" />
                     </div>
                 </div>
-                <slot />
+                <div :class="[$slots.left ? rimless ? '' : 'min-md:mr-4 max-md:mx-2' : rimless ? '' : 'mx-4', 'h-full']">
+                    <slot />
+                </div>
             </div>
         </div>
     </UPageBody>
@@ -36,6 +38,7 @@ const backUrl = route.query.return as string | undefined;
 
 export interface PageProps extends PageBodyProps {
     title?: string;
+    rimless?: boolean;
 }
 
 defineProps<PageProps>();

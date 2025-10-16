@@ -24,7 +24,8 @@
                 <UNavigationMenu :items="items" orientation="horizontal" variant="link" color="neutral" />
             </template>
             <template #right>
-                <UButton icon="i-lucide-plus" to="/search" color="primary">Manga</UButton>
+                <UButton icon="i-lucide-brick-wall-shield" :to="`/actions?return=${$route.fullPath}`" variant="soft" color="secondary" />
+                <UButton icon="i-lucide-plus" to="/search" color="primary" label="Manga" />
                 <UColorModeButton color="secondary" />
                 <UButton icon="i-lucide-settings" variant="ghost" :to="`/settings?return=${$route.fullPath}`" color="secondary" />
             </template>
