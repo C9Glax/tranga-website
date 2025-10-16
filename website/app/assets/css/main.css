@@ -9,8 +9,8 @@
 :root {
     --mangacover-width: 240px;
     --mangacover-height: 350px;
-    --mangacover-width-sm: 180px;
-    --mangacover-height-sm: 260px;
+    --mangacover-width-sm: 150px;
+    --mangacover-height-sm: 220px;
 }
 
 @keyframes shake {

@@ -1,6 +1,6 @@
 <template>
     <LoadingPage :loading="status === 'pending'">
-        <MangaCardList :manga="manga" class="mx-4 mt-2" @click="(m) => navigateTo(`/manga/${m.key}`)" />
+        <MangaCardList :manga="manga" class="min-md:mx-4 max-md:mx-0 mt-2" @click="(m) => navigateTo(`/manga/${m.key}`)" />
     </LoadingPage>
 </template>
 
