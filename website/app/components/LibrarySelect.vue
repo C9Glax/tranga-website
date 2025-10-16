@@ -33,7 +33,7 @@ export interface LibrarySelectProps {
 
 const props = defineProps<LibrarySelectProps>();
 
-const library = computed(() => props.libraryId);
+const library = ref(props.libraryId);
 const { data: libraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
 
 const loading = ref(false);
@@ -46,5 +46,10 @@ const onLibrarySelectChange = async () => {
     });
     await refreshNuxtData(FetchKeys.Manga.Id(props.mangaId));
     loading.value = false;
+    emit('libraryChanged', library.value);
 };
+
+const emit = defineEmits<{
+    (e: 'libraryChanged', id?: string): void;
+}>();
 </script>

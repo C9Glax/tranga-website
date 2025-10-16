@@ -7,7 +7,7 @@
                     <template #header>
                         <h1 class="font-semibold">Download</h1>
                     </template>
-                    <LibrarySelect :manga-id="mangaId" :library-id="manga?.fileLibraryId" class="w-full" />
+                    <LibrarySelect :manga-id="mangaId" :library-id="manga?.fileLibraryId" class="w-full" @library-changed="refreshNuxtData(FetchKeys.Manga.Id(mangaId))" />
                     <div v-if="manga" class="flex flex-row gap-2 w-full flex-wrap my-2 justify-between">
                         <div
                             v-for="mangaconnectorId in manga.mangaConnectorIds.sort((a, b) =>
