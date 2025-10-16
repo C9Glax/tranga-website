@@ -71,16 +71,25 @@ const columns: TableColumn<ActionRecord>[] = [
     { id: 'additional', header: 'Additional' },
 ];
 
-const resetFilter = () => {
+const resetFilter = async () => {
     params.value = {
         ...useRoute().query,
         start: new Date(Date.now() - 24 * 60 * 60 * 1000 - timezoneOffsetMillis).toISOString().slice(0, 16),
         end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
     };
+    await refreshData();
 };
 
 const refreshData = async (): Promise<void> => {
-    data.value = await $api('/v2/Actions/Filter', { method: 'POST', body: params.value });
+    if (!params.value.start || !params.value.end) return Promise.reject();
+    data.value = await $api('/v2/Actions/Filter', {
+        method: 'POST',
+        body: {
+            ...params.value,
+            start: new Date(Date.parse(params.value.start) - timezoneOffsetMillis).toISOString(),
+            end: new Date(Date.parse(params.value.end) - timezoneOffsetMillis).toISOString(),
+        },
+    });
 };
 defineShortcuts({ meta_r: { usingInput: true, handler: refreshData } });
 </script>
