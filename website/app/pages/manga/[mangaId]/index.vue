@@ -88,7 +88,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 
-const flashDownloading = route.hash.substring(1) == "download";
+const flashDownloading = route.hash.substring(1) == 'download';
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },

@@ -38,7 +38,7 @@ const merge = async () => {
     const from = reverse.value ? mangaId : targetId;
     const to = reverse.value == false ? targetId : mangaId;
     await $api('/v2/Manga/{MangaIdFrom}/MergeInto/{MangaIdInto}', { method: 'POST', path: { MangaIdFrom: from, MangaIdInto: to } });
-    navigateTo(`/manga/${to}?return=${path}`);
+    navigateTo(`/manga/${to}?return=${useRoute().fullPath}`);
 };
 
 useHead({ title: 'Confirm merge' });

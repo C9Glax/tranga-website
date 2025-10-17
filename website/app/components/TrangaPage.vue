@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div :class="[$slots.left ? (rimless ? '' : 'min-md:mr-4 max-md:mx-2') : rimless ? '' : 'mx-4', 'h-full']">
-                    <div v-if="$slots.center" class="flex flew-row gap-2 w-full justify-center">
+                    <div v-if="$slots.center" class="flex flex-col min-md:flex-row gap-2 w-full min-md:justify-center max-md:items-center">
                         <slot name="center" />
                     </div>
                     <slot />

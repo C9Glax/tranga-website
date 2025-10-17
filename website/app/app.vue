@@ -31,7 +31,11 @@
                     :disabled="$route.fullPath.startsWith('/actions')"
                     variant="soft"
                     color="secondary" />
-                <UButton icon="i-lucide-plus" to="/search" color="primary" label="Manga" />
+                <UButton icon="i-lucide-plus" to="/search" color="primary">
+                    <template #default>
+                        <span class="max-sm:hidden">Manga</span>
+                    </template>
+                </UButton>
                 <UColorModeButton color="secondary" />
                 <UButton
                     icon="i-lucide-settings"

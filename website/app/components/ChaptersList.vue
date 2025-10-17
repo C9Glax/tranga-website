@@ -1,6 +1,12 @@
 <template>
     <UPageList class="gap-2 h-full overflow-y-scroll">
-        <UPageCard v-for="chapter in chapters" :id="chapter.key" :key="chapter.key" orientation="horizontal" :ui="{ container: 'p-2 sm:p-2' }" :class="[$route.hash.substring(1) == chapter.key ? 'animate-[flash_0.75s_ease_0.5s]' : '']">
+        <UPageCard
+            v-for="chapter in chapters"
+            :id="chapter.key"
+            :key="chapter.key"
+            orientation="horizontal"
+            :ui="{ container: 'p-2 sm:p-2' }"
+            :class="[$route.hash.substring(1) == chapter.key ? 'animate-[flash_0.75s_ease_0.5s]' : '']">
             <template #title>
                 <p class="text-primary">{{ chapter.title }}</p>
                 <p class="text-secondary">
