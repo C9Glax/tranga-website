@@ -48,3 +48,13 @@
         transform: translate(1px, -2px) rotate(-1deg);
     }
 }
+
+@keyframes flash {
+    0%,
+    100% {
+        background-color: initial;
+    }
+    50% {
+        background-color: var(--color-secondary);
+    }
+}

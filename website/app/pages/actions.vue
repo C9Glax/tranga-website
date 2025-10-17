@@ -1,10 +1,11 @@
 <template>
     <TrangaPage rimless>
         <template #center>
+            <UButton color="primary" icon="i-lucide-rotate-ccw" @click="resetFilter" />
             <USelect v-model="params.action" :items="ActionTypes" class="w-50" @change="refreshData" />
             <UInput v-model="params.start" trailing-icon="i-lucide-chevron-first" type="datetime-local" @change="refreshData" />
+            <UButton color="primary" icon="i-lucide-infinity" @click="noTimeLimit" />
             <UInput v-model="params.end" icon="i-lucide-chevron-last" type="datetime-local" @change="refreshData" />
-            <UButton color="primary" icon="i-lucide-rotate-ccw" @click="resetFilter" />
         </template>
         <template #actions>
             <UTooltip text="Reload" :kbds="['meta', 'R']">
@@ -30,7 +31,7 @@
             <template #chapter-cell="{ row }">
                 <UButton
                     v-if="row.original.chapterId"
-                    :to="`/manga/${row.original.chapterId}?return=${$route.fullPath}`"
+                    :to="`/manga/${row.original.mangaId}?return=${$route.fullPath}#${row.original.chapterId}`"
                     variant="ghost"
                     color="secondary"
                     >Chapter</UButton
@@ -75,6 +76,15 @@ const resetFilter = async () => {
     params.value = {
         ...useRoute().query,
         start: new Date(Date.now() - 24 * 60 * 60 * 1000 - timezoneOffsetMillis).toISOString().slice(0, 16),
+        end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
+    };
+    await refreshData();
+};
+
+const noTimeLimit = async () => {
+    params.value = {
+        ...params.value,
+        start: new Date(0).toISOString().slice(0, 16),
         end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
     };
     await refreshData();

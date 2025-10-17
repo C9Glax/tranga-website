@@ -88,7 +88,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
 
-const flashDownloading = route.query.download;
+const flashDownloading = route.hash.substring(1) == "download";
 
 const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     path: { MangaId: mangaId },
@@ -140,15 +140,3 @@ defineShortcuts({ meta_r: { usingInput: true, handler: refreshData } });
 
 useHead({ title: 'Manga' });
 </script>
-
-<style>
-@keyframes flash {
-    0%,
-    100% {
-        background-color: initial;
-    }
-    50% {
-        background-color: var(--color-secondary);
-    }
-}
-</style>

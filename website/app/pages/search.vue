@@ -39,7 +39,7 @@
                         :key="m.key"
                         :manga="m"
                         :expanded="i === expanded"
-                        @click="navigateTo(`/manga/${m.key}?download=true&return=${$route.fullPath}`)" />
+                        @click="navigateTo(`/manga/${m.key}?return=${$route.fullPath}#download`)" />
                 </div>
             </template>
         </UPageSection>
