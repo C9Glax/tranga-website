@@ -30,21 +30,14 @@
                     :to="`/actions?return=${$route.fullPath}`"
                     :disabled="$route.fullPath.startsWith('/actions')"
                     variant="soft"
-                    color="secondary"
-                    no-prefetch />
+                    color="secondary" />
                 <UButton icon="i-lucide-plus" to="/search" color="primary">
                     <template #default>
                         <span class="max-sm:hidden">Manga</span>
                     </template>
                 </UButton>
                 <UColorModeButton color="secondary" />
-                <UButton
-                    icon="i-lucide-settings"
-                    variant="ghost"
-                    :to="`/settings?return=${$route.fullPath}`"
-                    :disabled="$route.fullPath.startsWith('/settings')"
-                    color="secondary"
-                    no-prefetch />
+                <UButton icon="i-lucide-settings" variant="ghost" to="/settings" color="secondary" />
             </template>
         </UHeader>
         <UMain>
