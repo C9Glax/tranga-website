@@ -17,19 +17,12 @@
         <div class="w-full pt-2">
             <div class="flex justify-center">
                 <UPagination
-                    :default-page="(table?.getState().pagination.pageIndex || 0) + 1"
-                    :items-per-page="table?.getState().pagination.pageSize"
-                    :total="table?.getFilteredRowModel().rows.length"
-                    @update:page="(p) => table?.setPageIndex(p - 1)" />
+                    :default-page="pagination.pageIndex + 1"
+                    :items-per-page="pagination.pageSize"
+                    :total="data?.totalCount ?? 0"
+                    @update:page="(p) => (pagination.pageIndex = p - 1)" />
             </div>
-            <UTable
-                ref="table"
-                v-model:pagination="pagination"
-                :data="data"
-                :columns="columns"
-                :sticky="'header'"
-                class="h-full"
-                :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }">
+            <UTable ref="table" :data="data?.data" :columns="columns" :sticky="'header'" :loading="status === 'pending'" class="h-full">
                 <template #action-cell="{ row }">
                     {{ row.original.action.split(/(?=[A-Z])/).join(' ') }}
                 </template>
@@ -67,14 +60,14 @@
 
 <script setup lang="ts">
 import type { TableColumn } from '#ui/components/Table.vue';
-import { getPaginationRowModel, type Table } from '@tanstack/vue-table';
 import type { UTable } from '#components';
-import { useTemplateRef } from '#imports';
 import type { components } from '#open-fetch-schemas/api';
 type Filter = components['schemas']['Filter'];
 type ActionRecord = components['schemas']['ActionRecord'];
 
 const { $api } = useNuxtApp();
+
+const pagination = ref({ pageIndex: 0, pageSize: 10 });
 
 const timezoneOffsetMillis = new Date().getTimezoneOffset() * 60 * 1000;
 const params = ref<Partial<Filter>>({
@@ -82,7 +75,16 @@ const params = ref<Partial<Filter>>({
     start: new Date(Date.now() - 24 * 60 * 60 * 1000 - timezoneOffsetMillis).toISOString().slice(0, 16),
     end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
 });
-const data = ref(await $api('/v2/Actions/Filter', { method: 'POST', body: params.value }));
+const { data, refresh, status } = useAsyncData(
+    FetchKeys.Actions.Page(params.value, pagination.value.pageIndex),
+    () =>
+        $api('/v2/Actions/Filter', {
+            method: 'POST',
+            body: params.value,
+            query: { page: pagination.value.pageIndex + 1, pageSize: pagination.value.pageSize },
+        }),
+    { watch: [pagination.value], lazy: true }
+);
 const { data: ActionTypes } = useApi('/v2/Actions/Types', { key: FetchKeys.Actions.Types });
 
 const columns: TableColumn<ActionRecord>[] = [
@@ -92,9 +94,6 @@ const columns: TableColumn<ActionRecord>[] = [
     { id: 'chapter', accessorKey: 'chapterId', header: 'Chapter' },
     { id: 'additional', header: 'Additional' },
 ];
-
-const table = useTemplateRef<Table<ActionRecord> | null>('table');
-const pagination = ref({ pageIndex: 0, pageSize: 10 });
 
 const resetFilter = async () => {
     params.value = {
@@ -116,14 +115,8 @@ const noTimeLimit = async () => {
 
 const refreshData = async (): Promise<void> => {
     if (!params.value.start || !params.value.end) return Promise.reject();
-    data.value = await $api('/v2/Actions/Filter', {
-        method: 'POST',
-        body: {
-            ...params.value,
-            start: new Date(Date.parse(params.value.start) - timezoneOffsetMillis).toISOString(),
-            end: new Date(Date.parse(params.value.end) - timezoneOffsetMillis).toISOString(),
-        },
-    });
+    pagination.value.pageIndex = 0;
+    await refresh();
 };
 defineShortcuts({ meta_r: { usingInput: true, handler: refreshData } });
 </script>
