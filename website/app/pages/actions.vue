@@ -17,10 +17,10 @@
         <div class="w-full pt-2">
             <div class="flex justify-center">
                 <UPagination
-                    :default-page="/* @ts-ignore */ (table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-                    :items-per-page="/* @ts-ignore */ table?.tableApi?.getState().pagination.pageSize"
-                    :total="/* @ts-ignore */ table?.tableApi?.getFilteredRowModel().rows.length"
-                    @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)" />
+                    :default-page="(table?.getState().pagination.pageIndex || 0) + 1"
+                    :items-per-page="table?.getState().pagination.pageSize"
+                    :total="table?.getFilteredRowModel().rows.length"
+                    @update:page="(p) => table?.setPageIndex(p - 1)" />
             </div>
             <UTable
                 ref="table"
@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import type { TableColumn } from '#ui/components/Table.vue';
-import { getPaginationRowModel } from '@tanstack/vue-table';
+import { getPaginationRowModel, type Table } from '@tanstack/vue-table';
 import type { UTable } from '#components';
 import { useTemplateRef } from '#imports';
 import type { components } from '#open-fetch-schemas/api';
@@ -93,7 +93,7 @@ const columns: TableColumn<ActionRecord>[] = [
     { id: 'additional', header: 'Additional' },
 ];
 
-const table = useTemplateRef<typeof UTable>('table');
+const table = useTemplateRef<Table<ActionRecord> | null>('table');
 const pagination = ref({ pageIndex: 0, pageSize: 10 });
 
 const resetFilter = async () => {

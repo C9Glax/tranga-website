@@ -51,5 +51,5 @@ export interface ChaptersListProps {
 }
 const props = defineProps<ChaptersListProps>();
 
-const { data: chapters } = await useApi('/v2/Chapters/{MangaId}', { path: { MangaId: props.mangaId }, key: FetchKeys.Chapters.All });
+const { data: chapters } = await useApi('/v2/Chapters/Manga/{MangaId}', { path: { MangaId: props.mangaId }, key: FetchKeys.Chapters.All });
 </script>
