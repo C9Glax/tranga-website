@@ -30,7 +30,8 @@
                     :to="`/actions?return=${$route.fullPath}`"
                     :disabled="$route.fullPath.startsWith('/actions')"
                     variant="soft"
-                    color="secondary" />
+                    color="secondary"
+                    no-prefetch />
                 <UButton icon="i-lucide-plus" to="/search" color="primary">
                     <template #default>
                         <span class="max-sm:hidden">Manga</span>
@@ -42,7 +43,8 @@
                     variant="ghost"
                     :to="`/settings?return=${$route.fullPath}`"
                     :disabled="$route.fullPath.startsWith('/settings')"
-                    color="secondary" />
+                    color="secondary"
+                    no-prefetch />
             </template>
         </UHeader>
         <UMain>
