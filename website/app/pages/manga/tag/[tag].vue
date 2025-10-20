@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 const tag = useRoute().params.tag as string;
-const { data: manga, status } = await useApi('/v2/Manga/WithTag/{Tag}', { path: { Tag: tag }, lazy: true });
+const { data: manga, status } = await useApi('/v2/Manga/WithTag/{Tag}', { path: { Tag: tag }, lazy: true, server: false });
 
 useHead({ title: 'Tag search' });
 </script>

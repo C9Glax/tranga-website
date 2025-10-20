@@ -98,13 +98,15 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
         navigateTo('/');
     },
     lazy: true,
+    server: false,
 });
 
-const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true });
+const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true, server: false });
 const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', {
     path: { MangaId: mangaId },
     key: FetchKeys.Metadata.Manga(mangaId),
     lazy: true,
+    server: false,
 });
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {

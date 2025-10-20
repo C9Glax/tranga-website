@@ -14,8 +14,12 @@
 <script setup lang="ts">
 const authorId = useRoute().params.authorId as string;
 
-const { data: author } = await useApi('/v2/Author/{AuthorId}', { path: { AuthorId: authorId } });
-const { data: manga, status } = await useApi('/v2/Manga/WithAuthorId/{AuthorId}', { path: { AuthorId: authorId }, lazy: true });
+const { data: author } = await useApi('/v2/Author/{AuthorId}', { path: { AuthorId: authorId }, server: false });
+const { data: manga, status } = await useApi('/v2/Manga/WithAuthorId/{AuthorId}', {
+    path: { AuthorId: authorId },
+    lazy: true,
+    server: false,
+});
 
 useHead({ title: 'Author Search' });
 </script>

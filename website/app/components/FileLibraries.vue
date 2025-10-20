@@ -18,7 +18,7 @@ import type { components } from '#open-fetch-schemas/api';
 type FileLibrary = components['schemas']['FileLibrary'];
 const { $api } = useNuxtApp();
 
-const { data: fileLibraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries });
+const { data: fileLibraries } = await useApi('/v2/FileLibrary', { key: FetchKeys.FileLibraries, server: false });
 
 const busy = ref(false);
 const deleteLibrary = async (library: FileLibrary) => {

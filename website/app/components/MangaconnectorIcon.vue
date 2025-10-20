@@ -24,5 +24,6 @@ const props = defineProps<MangaConnectorId>();
 const { data: mangaConnector } = await useApi('/v2/MangaConnector/{MangaConnectorName}', {
     path: { MangaConnectorName: props.mangaConnectorName },
     key: FetchKeys.MangaConnector.Id(props.mangaConnectorName),
+    server: false,
 });
 </script>

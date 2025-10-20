@@ -52,7 +52,7 @@ import type { StepperItem } from '@nuxt/ui';
 type MangaConnector = components['schemas']['MangaConnector'];
 type MinimalManga = components['schemas']['MinimalManga'];
 
-const { data: connectors } = await useApi('/v2/MangaConnector', { key: FetchKeys.MangaConnector.All });
+const { data: connectors } = await useApi('/v2/MangaConnector', { key: FetchKeys.MangaConnector.All, server: false });
 
 const query = ref<string>();
 const connector = useState<MangaConnector>();

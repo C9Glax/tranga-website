@@ -8,8 +8,12 @@
 <script setup lang="ts">
 const mangaId = useRoute().params.mangaId as string;
 
-const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
-const { data: mangas } = await useApi('/v2/Manga', { key: FetchKeys.Manga.All });
+const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
+    path: { MangaId: mangaId },
+    key: FetchKeys.Manga.Id(mangaId),
+    server: false,
+});
+const { data: mangas } = await useApi('/v2/Manga', { key: FetchKeys.Manga.All, server: false });
 
 useHead({ title: 'Merge Manga' });
 </script>

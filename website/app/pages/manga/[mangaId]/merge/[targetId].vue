@@ -31,8 +31,16 @@ const mangaId = route.params.mangaId as string;
 const { $api } = useNuxtApp();
 
 const reverse = ref(false);
-const { data: target } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: targetId }, key: FetchKeys.Manga.Id(targetId) });
-const { data: manga } = await useApi('/v2/Manga/{MangaId}', { path: { MangaId: mangaId }, key: FetchKeys.Manga.Id(mangaId) });
+const { data: target } = await useApi('/v2/Manga/{MangaId}', {
+    path: { MangaId: targetId },
+    key: FetchKeys.Manga.Id(targetId),
+    server: false,
+});
+const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
+    path: { MangaId: mangaId },
+    key: FetchKeys.Manga.Id(mangaId),
+    server: false,
+});
 
 const merge = async () => {
     const from = reverse.value ? mangaId : targetId;

@@ -83,9 +83,9 @@ const { data, refresh, status } = useAsyncData(
             body: params.value,
             query: { page: pagination.value.pageIndex + 1, pageSize: pagination.value.pageSize },
         }),
-    { watch: [pagination.value], lazy: true }
+    { watch: [pagination.value], lazy: true, server: false }
 );
-const { data: ActionTypes } = useApi('/v2/Actions/Types', { key: FetchKeys.Actions.Types });
+const { data: ActionTypes } = useApi('/v2/Actions/Types', { key: FetchKeys.Actions.Types, server: false });
 
 const columns: TableColumn<ActionRecord>[] = [
     { id: 'action', accessorKey: 'action', header: 'Action' },

@@ -95,7 +95,7 @@ const onKavitaClick = async () => {
     }
 };
 
-const { status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All });
+const { status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All, server: false });
 
 useHead({ title: 'Settings' });
 </script>

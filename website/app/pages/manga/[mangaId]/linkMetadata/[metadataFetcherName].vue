@@ -38,6 +38,7 @@ const { data: searchData, status } = await useApi('/v2/MetadataFetcher/{Metadata
     method: 'POST',
     path: { MetadataFetcherName: metadataFetcherName, MangaId: mangaId },
     lazy: true,
+    server: false,
 });
 
 const link = async (identifier: string) => {

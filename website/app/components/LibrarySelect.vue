@@ -37,7 +37,7 @@ export interface LibrarySelectProps {
 const props = defineProps<LibrarySelectProps>();
 
 const library = ref();
-const { data: libraries } = await useApi('/v2/FileLibrary');
+const { data: libraries } = await useApi('/v2/FileLibrary', { server: false });
 
 const loading = ref(false);
 const onLibrarySelectChange = async () => {
