@@ -134,7 +134,12 @@ const remove = async () => {
 const refreshingData = ref(false);
 const refreshData = async () => {
     refreshingData.value = true;
-    await refreshNuxtData([FetchKeys.Manga.Id(mangaId), FetchKeys.Metadata.Manga(mangaId), FetchKeys.FileLibraries]);
+    await refreshNuxtData([
+        FetchKeys.Manga.Id(mangaId),
+        FetchKeys.Metadata.Manga(mangaId),
+        FetchKeys.FileLibraries,
+        FetchKeys.Chapters.All,
+    ]);
     refreshingData.value = false;
 };
 

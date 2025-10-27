@@ -38,12 +38,17 @@
                             :key="mangaconnectorId.key"
                             class="bg-elevated p-1 rounded-lg w-fit flex items-center justify-center gap-2">
                             <MangaconnectorIcon v-bind="mangaconnectorId" />
-                            <UTooltip text="Not implemented yet.">
-                                <!-- TODO: :text="mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'"> -->
+                            <UTooltip
+                                :text="
+                                    mangaconnectorId.useForDownload ? 'Stop downloading from this website' : 'Download from this website'
+                                ">
                                 <UButton
                                     :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                     variant="ghost"
-                                    disabled />
+                                    loading-auto
+                                    @click="
+                                        setDownload(chapter.key, mangaconnectorId.mangaConnectorName, !mangaconnectorId.useForDownload)
+                                    " />
                             </UTooltip>
                         </div>
                         <!-- TODO: Not implemented yet -->
@@ -64,7 +69,8 @@ export interface ChaptersListProps {
 const props = defineProps<ChaptersListProps>();
 const { $api } = useNuxtApp();
 
-const { data } = useAsyncData(
+const { data, refresh } = useAsyncData(
+    FetchKeys.Chapters.All,
     () =>
         $api('/v2/Chapters/Manga/{MangaId}', {
             method: 'GET',
@@ -73,4 +79,12 @@ const { data } = useAsyncData(
         }),
     { watch: [pagination.value], lazy: true, server: false }
 );
+
+const setDownload = async (chapterId: string, mangaConnector: string, requested: boolean) => {
+    await $api('/v2/Chapters/{ChapterId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
+        method: 'PATCH',
+        path: { ChapterId: chapterId, MangaConnectorName: mangaConnector, IsRequested: requested },
+    });
+    await refresh();
+};
 </script>
