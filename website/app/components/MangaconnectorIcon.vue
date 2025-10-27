@@ -17,9 +17,10 @@
 
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
-type MangaConnectorId = components['schemas']['MangaConnectorId'];
+type MangaMangaConnectorId = components['schemas']['MangaMangaConnectorId'];
+type ChapterMangaConnectorId = components['schemas']['ChapterMangaConnectorId'];
 
-const props = defineProps<MangaConnectorId>();
+const props = defineProps<MangaMangaConnectorId | ChapterMangaConnectorId>();
 
 const { data: mangaConnector } = await useApi('/v2/MangaConnector/{MangaConnectorName}', {
     path: { MangaConnectorName: props.mangaConnectorName },
