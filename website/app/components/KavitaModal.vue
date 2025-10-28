@@ -24,7 +24,7 @@ import type { components } from '#open-fetch-schemas/api';
 type CreateKavitaRecord = components['schemas']['CreateKavitaRecord'];
 const { $api } = useNuxtApp();
 
-const requestData = ref<CreateKavitaRecord>({});
+const requestData = ref<CreateKavitaRecord>({ url: '', apiKey: '' });
 
 const allowSend = computed(() => requestData.value.url && requestData.value.apiKey);
 
