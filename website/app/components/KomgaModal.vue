@@ -24,7 +24,7 @@ import type { components } from '#open-fetch-schemas/api';
 type CreateKomgaRecord = components['schemas']['CreateKomgaRecord'];
 const { $api } = useNuxtApp();
 
-const requestData = ref<CreateKomgaRecord>({ });
+const requestData = ref<CreateKomgaRecord>({});
 
 const allowSend = computed(() => requestData.value.url && requestData.value.apiKey);
 
