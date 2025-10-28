@@ -4,11 +4,8 @@
             <UFormField label="URL">
                 <UInput v-model="requestData.url" placeholder="https://" class="w-full" :disabled="busy" />
             </UFormField>
-            <UFormField label="Username">
-                <UInput v-model="requestData.username" class="w-full" :disabled="busy" />
-            </UFormField>
-            <UFormField label="Password">
-                <UInput v-model="requestData.password" type="password" class="w-full" :disabled="busy" />
+            <UFormField label="ApiKey">
+                <UInput v-model="requestData.apiKey" class="w-full" :disabled="busy" />
             </UFormField>
             <UButton
                 icon="i-lucide-link"
@@ -24,12 +21,12 @@
 
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
-type CreateLibraryConnectorRecord = components['schemas']['CreateLibraryConnectorRecord'];
+type CreateKavitaRecord = components['schemas']['CreateKavitaRecord'];
 const { $api } = useNuxtApp();
 
-const requestData = ref<CreateLibraryConnectorRecord>({ libraryType: 'Kavita', url: '', username: '', password: '' });
+const requestData = ref<CreateKavitaRecord>({ });
 
-const allowSend = computed(() => requestData.value.url && requestData.value.username && requestData.value.password);
+const allowSend = computed(() => requestData.value.url && requestData.value.apiKey);
 
 const busy = ref<boolean>(false);
 const success = ref<boolean | undefined>(undefined);
@@ -37,7 +34,7 @@ const emit = defineEmits<{ close: [boolean] }>();
 const connect = async () => {
     busy.value = true;
     try {
-        await $api('/v2/LibraryConnector', { method: 'PUT', body: requestData.value });
+        await $api('/v2/LibraryConnector/Kavita', { method: 'PUT', body: requestData.value });
         await refreshNuxtData(FetchKeys.Libraries.All);
         emit('close', false);
         success.value = true;
