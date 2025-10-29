@@ -76,21 +76,21 @@ const cleanUpDatabase = async () => {
 };
 
 const { data: libraries } = useApi('/v2/LibraryConnector', { key: FetchKeys.Libraries.All });
-const komgaConnected = computed(() => libraries.value?.find((l) => l.type === 'Komga')?.key);
+const komgaConnected = computed(() => libraries.value?.find((l) => l.type === 'Komga'));
 const onKomgaClick = async () => {
     if (!komgaConnected.value) {
         komgaModal.open();
     } else {
-        await $api('/v2/LibraryConnector/{LibraryConnectorId}', { method: 'DELETE', path: { LibraryConnectorId: komgaConnected.value } });
+        await $api('/v2/LibraryConnector/{LibraryConnectorId}', { method: 'DELETE', path: { LibraryConnectorId: komgaConnected.value.key } });
         await refreshNuxtData(FetchKeys.Libraries.All);
     }
 };
-const kavitaConnected = computed(() => libraries.value?.find((l) => l.type === 'Kavita')?.key);
+const kavitaConnected = computed(() => libraries.value?.find((l) => l.type === 'Kavita'));
 const onKavitaClick = async () => {
     if (!kavitaConnected.value) {
         kavitaModal.open();
     } else {
-        await $api('/v2/LibraryConnector/{LibraryConnectorId}', { method: 'DELETE', path: { LibraryConnectorId: kavitaConnected.value } });
+        await $api('/v2/LibraryConnector/{LibraryConnectorId}', { method: 'DELETE', path: { LibraryConnectorId: kavitaConnected.value.key } });
         await refreshNuxtData(FetchKeys.Libraries.All);
     }
 };
