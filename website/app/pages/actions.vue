@@ -62,7 +62,7 @@
 import type { TableColumn } from '#ui/components/Table.vue';
 import type { UTable } from '#components';
 import type { components } from '#open-fetch-schemas/api';
-type Filter = components['schemas']['Filter'];
+type ActionsFilterRecord = components['schemas']['ActionsFilterRecord'];
 type ActionRecord = components['schemas']['ActionRecord'];
 
 const { $api } = useNuxtApp();
@@ -70,7 +70,7 @@ const { $api } = useNuxtApp();
 const pagination = ref({ pageIndex: 0, pageSize: 10 });
 
 const timezoneOffsetMillis = new Date().getTimezoneOffset() * 60 * 1000;
-const params = ref<Partial<Filter>>({
+const params = ref<Partial<ActionsFilterRecord>>({
     ...useRoute().query,
     start: new Date(Date.now() - 24 * 60 * 60 * 1000 - timezoneOffsetMillis).toISOString().slice(0, 16),
     end: new Date(Date.now() - timezoneOffsetMillis).toISOString().slice(0, 16),
