@@ -19,6 +19,12 @@ server {
         rewrite ^/api/(.*)$ /$1 break;
         proxy_pass $API_URL;
     }
+
+    location /_ipx/_/api{
+        proxy_pass_request_headers on;
+        rewrite ^/_ipx/_/api/(.*)$ /$1 break;
+        proxy_pass $API_URL;
+    }
     
     # redirect server error pages to the static page /504.html
     #
