@@ -2,16 +2,16 @@
     <UModal v-bind="$props" title="Connect Kavita">
         <template #body>
             <UFormField label="URL">
-                <UInput v-model="requestData.url" placeholder="https://" class="w-full" :disabled="busy" />
+                <UInput v-model="requestData.url" placeholder="https://" class="w-full" />
             </UFormField>
             <UFormField label="ApiKey">
-                <UInput v-model="requestData.apiKey" class="w-full" :disabled="busy" />
+                <UInput v-model="requestData.apiKey" class="w-full" />
             </UFormField>
             <UButton
                 icon="i-lucide-link"
                 :class="['mt-2 float-right', success == false ? 'animate-[shake_0.2s] bg-error' : '']"
-                :loading="busy"
-                :disabled="busy || !allowSend"
+                loading-auto
+                :disabled="!allowSend"
                 @click="connect"
                 >Connect</UButton
             >
@@ -28,11 +28,9 @@ const requestData = ref<CreateKavitaRecord>({ url: '', apiKey: '' });
 
 const allowSend = computed(() => requestData.value.url && requestData.value.apiKey);
 
-const busy = ref<boolean>(false);
 const success = ref<boolean | undefined>(undefined);
 const emit = defineEmits<{ close: [boolean] }>();
 const connect = async () => {
-    busy.value = true;
     try {
         await $api('/v2/LibraryConnector/Kavita', { method: 'PUT', body: requestData.value });
         await refreshNuxtData(FetchKeys.Libraries.All);
@@ -41,8 +39,6 @@ const connect = async () => {
     } catch {
         success.value = false;
         setTimeout(() => (success.value = undefined), 200);
-    } finally {
-        busy.value = false;
     }
 };
 </script>
