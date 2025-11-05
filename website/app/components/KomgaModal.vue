@@ -32,7 +32,6 @@ const requestData = ref<CreateKomgaRecord>({ url: '', apiKey: '' });
 const allowSend = computed(() => requestData.value.url && requestData.value.apiKey);
 
 const apiLink = computed(() => {
-    console.log(requestData.value.url)
     if (!requestData.value.url)
         return undefined;
     try {

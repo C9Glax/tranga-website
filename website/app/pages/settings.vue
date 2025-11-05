@@ -34,6 +34,20 @@
             </UCard>
             <UCard v-if="settingsStatus === 'success'">
                 <template #header>
+                    <h1>Notifications</h1>
+                </template>
+                <NotificationConnectors />
+                <template #footer>
+                    <div class="flex flex-row gap-2">
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addGotifyModal.open()">Add Gotify</UButton>
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addNtfyModal.open()">Add Ntfy</UButton>
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addPushoverModal.open()">Add Pushover</UButton>
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addGenericConnectorModal.open()">Add Generic Notification Connector</UButton>
+                    </div>
+                </template>
+            </UCard>
+            <UCard v-if="settingsStatus === 'success'">
+                <template #header>
                     <h1>Maintenance</h1>
                 </template>
                 <div class="flex gap-2">
@@ -46,7 +60,15 @@
 </template>
 
 <script setup lang="ts">
-import { LazyAddLibraryModal, LazyKavitaModal, LazyKomgaModal } from '#components';
+import {
+    LazyAddLibraryModal,
+    LazyGenericNotificationConnectorModal,
+    LazyGotifyModal,
+    LazyKavitaModal,
+    LazyKomgaModal,
+    LazyNtfyModal,
+    LazyPushoverModal,
+} from '#components';
 import FileLibraries from '~/components/FileLibraries.vue';
 import { refreshNuxtData } from '#app';
 const overlay = useOverlay();
@@ -55,6 +77,11 @@ const { $api } = useNuxtApp();
 const addLibraryModal = overlay.create(LazyAddLibraryModal);
 const komgaModal = overlay.create(LazyKomgaModal);
 const kavitaModal = overlay.create(LazyKavitaModal);
+
+const addGotifyModal = overlay.create(LazyGotifyModal);
+const addNtfyModal = overlay.create(LazyNtfyModal);
+const addPushoverModal = overlay.create(LazyPushoverModal);
+const addGenericConnectorModal = overlay.create(LazyGenericNotificationConnectorModal);
 
 const cleanUpDatabase = async () => {
     await useApi('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' });

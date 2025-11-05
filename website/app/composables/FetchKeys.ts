@@ -10,4 +10,5 @@ export const FetchKeys = {
     Libraries: { All: 'Libraries', Id: (id: string) => `Libraries/${id}` },
     Settings: { All: 'Settings' },
     Actions: { Types: 'Actions/Types', Page: (filter: ActionsFilterRecord, page: number) => `Actions/${JSON.stringify(filter)}/${page}` },
+    NotificationConnectors: { All: 'All' }
 };
