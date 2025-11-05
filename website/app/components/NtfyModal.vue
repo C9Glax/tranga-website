@@ -36,9 +36,18 @@ import type { components } from '#open-fetch-schemas/api';
 type CreateNtfyConnectorRecord = components['schemas']['CreateNtfyConnectorRecord'];
 const { $api } = useNuxtApp();
 
-const requestData = ref<CreateNtfyConnectorRecord>({ name: 'Ntfy', url: '', priority: 3, username: '', password: '', topic: 'Tranga'});
+const requestData = ref<CreateNtfyConnectorRecord>({ name: 'Ntfy', url: '', priority: 3, username: '', password: '', topic: 'Tranga' });
 
-const allowSend = computed(() => requestData.value.name && requestData.value.url && requestData.value.username && requestData.value.password && requestData.value.topic && requestData.value.priority >= 1 && requestData.value.priority <= 5 );
+const allowSend = computed(
+    () =>
+        requestData.value.name &&
+        requestData.value.url &&
+        requestData.value.username &&
+        requestData.value.password &&
+        requestData.value.topic &&
+        requestData.value.priority >= 1 &&
+        requestData.value.priority <= 5
+);
 
 const success = ref<boolean | undefined>(undefined);
 const emit = defineEmits<{ close: [boolean] }>();

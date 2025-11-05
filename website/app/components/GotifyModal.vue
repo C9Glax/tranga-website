@@ -32,7 +32,14 @@ const { $api } = useNuxtApp();
 
 const requestData = ref<CreateGotifyConnectorRecord>({ name: 'Gotify', url: '', appToken: '', priority: 3 });
 
-const allowSend = computed(() => requestData.value.name && requestData.value.url && requestData.value.appToken && requestData.value.priority >= 1 && requestData.value.priority <= 5 );
+const allowSend = computed(
+    () =>
+        requestData.value.name &&
+        requestData.value.url &&
+        requestData.value.appToken &&
+        requestData.value.priority >= 1 &&
+        requestData.value.priority <= 5
+);
 
 const success = ref<boolean | undefined>(undefined);
 const emit = defineEmits<{ close: [boolean] }>();

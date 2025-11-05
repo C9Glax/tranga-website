@@ -42,7 +42,9 @@
                         <UButton icon="i-lucide-plus" class="w-fit" @click="addGotifyModal.open()">Add Gotify</UButton>
                         <UButton icon="i-lucide-plus" class="w-fit" @click="addNtfyModal.open()">Add Ntfy</UButton>
                         <UButton icon="i-lucide-plus" class="w-fit" @click="addPushoverModal.open()">Add Pushover</UButton>
-                        <UButton icon="i-lucide-plus" class="w-fit" @click="addGenericConnectorModal.open()">Add Generic Notification Connector</UButton>
+                        <UButton icon="i-lucide-plus" class="w-fit" @click="addGenericConnectorModal.open()"
+                            >Add Generic Notification Connector</UButton
+                        >
                     </div>
                 </template>
             </UCard>

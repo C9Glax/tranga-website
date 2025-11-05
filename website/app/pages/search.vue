@@ -33,7 +33,10 @@
                 </p>
             </template>
         </UPageSection>
-        <MangaCardList :manga="searchResult" class="overflow-y-scroll h-full pb-70" @click="(m) => navigateTo(`/manga/${m.key}?return=${$route.fullPath}#download`)" />
+        <MangaCardList
+            :manga="searchResult"
+            class="overflow-y-scroll h-full pb-70"
+            @click="(m) => navigateTo(`/manga/${m.key}?return=${$route.fullPath}#download`)" />
     </TrangaPage>
 </template>
 
@@ -69,7 +72,6 @@ const connectorClick = (c: MangaConnector) => {
 };
 
 const searchResult = useState<MinimalManga[]>(() => []);
-const expanded = useState(() => -1);
 const searchQuery = useState<string>(() => '');
 const performSearch = async () => {
     if (!query.value) return;

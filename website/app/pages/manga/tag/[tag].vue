@@ -6,7 +6,10 @@
             </h1>
         </template>
         <LoadingPage :loading="status === 'pending'">
-            <MangaCardList :manga="manga" class="overflow-y-scroll h-full" @click="(m) => navigateTo(`/manga/${m.key}?return=${$route.fullPath}`)" />
+            <MangaCardList
+                :manga="manga"
+                class="overflow-y-scroll h-full"
+                @click="(m) => navigateTo(`/manga/${m.key}?return=${$route.fullPath}`)" />
         </LoadingPage>
     </TrangaPage>
 </template>

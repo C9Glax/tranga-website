@@ -26,7 +26,7 @@
                         <template #content>
                             <div class="flex gap-1 p-2">
                                 <UInput v-model="keyRef" placeholder="key" />
-                                <UInput v-model="valRef"  placeholder="value" />
+                                <UInput v-model="valRef" placeholder="value" />
                                 <UButton icon="i-lucide-plus" @click="(e) => addHeader(e)">Add</UButton>
                             </div>
                         </template>
@@ -52,7 +52,14 @@ const { $api } = useNuxtApp();
 
 const requestData = ref<CreateNotificationConnectorRecord>({ name: '', url: '', httpMethod: 'POST', body: '', headers: {} });
 
-const allowSend = computed(() => requestData.value.name && requestData.value.url && requestData.value.httpMethod && requestData.value.body && requestData.value.headers);
+const allowSend = computed(
+    () =>
+        requestData.value.name &&
+        requestData.value.url &&
+        requestData.value.httpMethod &&
+        requestData.value.body &&
+        requestData.value.headers
+);
 
 const addHeaderOpen = ref(false);
 const keyRef = ref('');
@@ -60,7 +67,7 @@ const valRef = ref('');
 const addHeader = () => {
     requestData.value.headers[keyRef.value] = valRef.value;
     addHeaderOpen.value = false;
-}
+};
 
 const success = ref<boolean | undefined>(undefined);
 const emit = defineEmits<{ close: [boolean] }>();

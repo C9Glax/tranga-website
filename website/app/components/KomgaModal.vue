@@ -6,7 +6,9 @@
             </UFormField>
             <UFormField label="ApiKey">
                 <template #description>
-                    <ULink class="underline" :disabled="!apiLink" :to="apiLink" target="_blank" external no-prefetch>Get your API Key</ULink>
+                    <ULink class="underline" :disabled="!apiLink" :to="apiLink" target="_blank" external no-prefetch
+                        >Get your API Key</ULink
+                    >
                 </template>
                 <UInput v-model="requestData.apiKey" class="w-full" />
             </UFormField>
@@ -32,12 +34,11 @@ const requestData = ref<CreateKomgaRecord>({ url: '', apiKey: '' });
 const allowSend = computed(() => requestData.value.url && requestData.value.apiKey);
 
 const apiLink = computed(() => {
-    if (!requestData.value.url)
-        return undefined;
+    if (!requestData.value.url) return undefined;
     try {
         const url = new URL(requestData.value.url);
         return `${url.protocol}//${url.host}/account/api-keys`;
-    }catch{
+    } catch {
         return undefined;
     }
 });
