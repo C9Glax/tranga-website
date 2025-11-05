@@ -29,20 +29,11 @@
             :ui="{ container: 'gap-1 sm:gap-1 lg:gap-1 py-1 sm:py-1 lg:py-1 gap-1 sm:gap-1 lg:gap-1' }">
             <template #description>
                 <p class="text-lg">
-                    Result for <span class="text-secondary">{{ searchQuery }}</span>
+                    Result<span v-if="searchResult.length > 1">s</span> for <span class="text-secondary">{{ searchQuery }}</span>
                 </p>
             </template>
-            <template #default>
-                <div class="relative flex flex-row flex-wrap gap-4 mt-0">
-                    <MangaCard
-                        v-for="(m, i) in searchResult"
-                        :key="m.key"
-                        :manga="m"
-                        :expanded="i === expanded"
-                        @click="navigateTo(`/manga/${m.key}?return=${$route.fullPath}#download`)" />
-                </div>
-            </template>
         </UPageSection>
+        <MangaCardList :manga="searchResult" class="overflow-y-scroll h-full pb-70" @click="(m) => navigateTo(`/manga/${m.key}?return=${$route.fullPath}#download`)" />
     </TrangaPage>
 </template>
 
