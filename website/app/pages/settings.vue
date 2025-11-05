@@ -36,9 +36,10 @@
                 <template #header>
                     <h1>Maintenance</h1>
                 </template>
-                <UButton icon="i-lucide-database" :loading="cleanUpDatabaseBusy" class="w-fit mb-2" @click="cleanUpDatabase"
-                    >Clean database</UButton
-                >
+                <div class="flex gap-2">
+                    <UButton icon="i-lucide-database" loading-auto class="w-fit mb-2" @click="cleanUpDatabase">Clean database</UButton>
+                    <UButton icon="i-lucide-captions-off" loading-auto class="w-fit mb-2" @click="cleanUpActions">Clean actions</UButton>
+                </div>
             </UCard>
         </UPageSection>
     </TrangaPage>
@@ -55,12 +56,12 @@ const addLibraryModal = overlay.create(LazyAddLibraryModal);
 const komgaModal = overlay.create(LazyKomgaModal);
 const kavitaModal = overlay.create(LazyKavitaModal);
 
-const cleanUpDatabaseBusy = ref(false);
 const cleanUpDatabase = async () => {
-    cleanUpDatabaseBusy.value = true;
     await useApi('/v2/Maintenance/CleanupNoDownloadManga', { method: 'POST' });
     await refreshNuxtData(FetchKeys.Manga.All);
-    cleanUpDatabaseBusy.value = false;
+};
+const cleanUpActions = async () => {
+    await useApi('/v2/Maintenance/CleanupActions', { method: 'POST' });
 };
 
 const { data: libraries } = useApi('/v2/LibraryConnector', { key: FetchKeys.Libraries.All });
