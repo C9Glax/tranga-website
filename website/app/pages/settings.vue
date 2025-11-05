@@ -2,11 +2,9 @@
     <TrangaPage>
         <UPageSection title="Settings">
             <template #description>
-                <div>
-                    <p>API Url</p>
-                    <UInput v-model="apiUrl" class="max-w-full w-xs" placeholder="http://<ip:port>/" />
-                    <UButton :loading="reloading" class="mx-1" @click="setUrl">Set</UButton>
-                    <p v-if="settingsStatus === 'error'" class="text-warning">Unable to connect to api.</p>
+                <div v-if="settingsStatus === 'error'">
+                    <p class="text-warning">Unable to connect to api.</p>
+                    <p class="">NUXT_PUBLIC_OPEN_FETCH_API_BASE_URL: {{ $config.public.openFetch.api.baseURL }}</p>
                 </div>
             </template>
             <UCard v-if="settingsStatus === 'success'">
@@ -56,16 +54,6 @@ const { $api } = useNuxtApp();
 const addLibraryModal = overlay.create(LazyAddLibraryModal);
 const komgaModal = overlay.create(LazyKomgaModal);
 const kavitaModal = overlay.create(LazyKavitaModal);
-
-const config = useRuntimeConfig();
-const apiUrl = ref(config.public.openFetch.api.baseURL);
-const reloading = ref(false);
-const setUrl = async () => {
-    reloading.value = true;
-    config.public.openFetch.api.baseURL = apiUrl.value.endsWith('/') ? apiUrl.value : apiUrl.value + '/';
-    await refreshNuxtData();
-    reloading.value = false;
-};
 
 const cleanUpDatabaseBusy = ref(false);
 const cleanUpDatabase = async () => {

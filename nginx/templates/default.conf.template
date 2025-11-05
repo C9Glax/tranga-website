@@ -8,32 +8,16 @@ server {
 
     access_log  /dev/stdout  main;
     error_log  /dev/stderr;
-
-    location /api/ {
-        proxy_pass_request_headers on;
-        rewrite ^/api/(.*)$ /$1 break;
-        proxy_pass $API_URL;
-    }
     
-    location /_ipx/_/api/ {
-        proxy_pass_request_headers on;
-        rewrite ^/_ipx/_/api/(.*)$ /$1 break;
-        proxy_pass $API_URL;
-    }
-
-    location /swagger {
-        proxy_pass_request_headers on;
-        proxy_pass $API_URL;
-    }
-
-    location /v2 {
-        proxy_pass_request_headers on;
-        proxy_pass $API_URL;
-    }
-
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
+    }
+
+    location /api {
+        proxy_pass_request_headers on;
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass $API_URL;
     }
     
     # redirect server error pages to the static page /504.html

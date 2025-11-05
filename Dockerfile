@@ -6,6 +6,7 @@ WORKDIR /app
 COPY website/* /app
 RUN npm -dd install -g npm
 RUN npm -dd install
+ENV NUXT_PUBLIC_OPEN_FETCH_API_BASE_URL="/api"
 RUN npm -dd run generate
 
 # Serve stage
