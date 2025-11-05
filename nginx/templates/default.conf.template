@@ -19,6 +19,16 @@ server {
         rewrite ^/api/(.*)$ /$1 break;
         proxy_pass $API_URL;
     }
+    
+    location /swagger {
+        proxy_pass_request_headers on;
+        proxy_pass $API_URL;
+    }
+
+    location /v2 {
+        proxy_pass_request_headers on;
+        proxy_pass $API_URL;
+    }
 
     location /_ipx/_/api{
         proxy_pass_request_headers on;
