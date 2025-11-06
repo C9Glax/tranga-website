@@ -33,36 +33,7 @@
                         </div>
                     </div>
                 </UCard>
-                <UCard :ui="{ body: 'p-0 sm:p-0' }">
-                    <template #header>
-                        <h1 class="font-semibold">Metadata</h1>
-                    </template>
-                    <UTable
-                        v-if="metadataFetchers && metadata"
-                        :data="metadataFetchers"
-                        :columns="[
-                            { header: 'Name', id: 'name' },
-                            { header: '', id: 'link' },
-                        ]">
-                        <template #name-cell="{ row }">
-                            <UTooltip :text="metadata.find((me) => me.metadataFetcherName == row.original)?.identifier ?? undefined">
-                                <p class="text-toned">{{ row.original }}</p></UTooltip
-                            >
-                        </template>
-                        <template #link-cell="{ row }">
-                            <UButton
-                                v-if="metadata.find((me) => me.metadataFetcherName == row.original)"
-                                class="float-right"
-                                icon="i-lucide-unlink"
-                                @click="unlinkMetadataFetcher(row.original)" />
-                            <UButton
-                                v-else
-                                :to="`/manga/${mangaId}/linkMetadata/${row.original}?return=${$route.fullPath}`"
-                                class="float-right"
-                                icon="i-lucide-link" />
-                        </template>
-                    </UTable>
-                </UCard>
+                <MangaMetadataFetcherTable :manga-id="mangaId" />
             </div>
         </div>
         <template #actions>
@@ -101,28 +72,12 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     server: false,
 });
 
-const { data: metadataFetchers } = await useApi('/v2/MetadataFetcher', { key: FetchKeys.Metadata.Fetchers, lazy: true, server: false });
-const { data: metadata } = await useApi('/v2/MetadataFetcher/Links/{MangaId}', {
-    path: { MangaId: mangaId },
-    key: FetchKeys.Metadata.Manga(mangaId),
-    lazy: true,
-    server: false,
-});
-
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
     await $api('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
         method: 'PATCH',
         path: { MangaId: mangaId, MangaConnectorName: MangaConnectorName, IsRequested: IsRequested },
     });
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
-};
-
-const unlinkMetadataFetcher = async (metadataFetcherName: string) => {
-    await $api('/v2/MetadataFetcher/{MetadataFetcherName}/Unlink/{MangaId}', {
-        method: 'POST',
-        path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName },
-    });
-    await refreshNuxtData(FetchKeys.Metadata.Manga(mangaId));
 };
 
 const remove = async () => {
