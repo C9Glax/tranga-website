@@ -1,13 +1,23 @@
 <template>
     <TrangaPage rimless>
         <template #center>
-            <UButton color="primary" icon="i-lucide-rotate-ccw" @click="resetFilter" />
-            <USelect v-model="params.action" :items="ActionTypes" class="w-70" @change="refreshData" />
-            <UInput v-model="params.start" icon="i-lucide-chevron-first" class="w-70" type="datetime-local" @change="refreshData" />
-            <UTooltip text="No timelimit">
+            <UButton color="primary" icon="i-lucide-rotate-ccw" class="max-md:order-1" @click="resetFilter" />
+            <USelect v-model="params.action" :items="ActionTypes" class="w-70 max-md:order-3" @change="refreshData" />
+            <UInput
+                v-model="params.start"
+                icon="i-lucide-chevron-first"
+                class="w-70 max-md:order-4"
+                type="datetime-local"
+                @change="refreshData" />
+            <UTooltip text="No timelimit" class="max-md:order-2">
                 <UButton color="primary" icon="i-lucide-infinity" @click="noTimeLimit" />
             </UTooltip>
-            <UInput v-model="params.end" icon="i-lucide-chevron-last" type="datetime-local" class="w-70" @change="refreshData" />
+            <UInput
+                v-model="params.end"
+                icon="i-lucide-chevron-last"
+                type="datetime-local"
+                class="w-70 max-md:order-5"
+                @change="refreshData" />
         </template>
         <template #actions>
             <UTooltip text="Reload" :kbds="['meta', 'R']">
@@ -15,11 +25,13 @@
             </UTooltip>
         </template>
         <div class="w-full pt-2">
-            <div class="flex justify-center">
+            <div class="flex gap-2 justify-center items-center max-sm:flex-col">
+                <p class="text-dimmed basis-0 text-nowrap">{{ data?.totalCount }} Actions</p>
                 <UPagination
                     :default-page="pagination.pageIndex + 1"
                     :items-per-page="pagination.pageSize"
                     :total="data?.totalCount ?? 0"
+                    class="basis-0"
                     @update:page="(p) => (pagination.pageIndex = p - 1)" />
             </div>
             <UTable ref="table" :data="data?.data" :columns="columns" :sticky="'header'" :loading="status === 'pending'" class="h-full">

@@ -24,7 +24,9 @@
                 </div>
                 <div
                     :class="[$slots.left ? (rimless ? '' : 'min-md:mr-4 max-md:mx-2') : rimless ? '' : 'mx-4', 'h-full overflow-y-scroll']">
-                    <div v-if="$slots.center" class="flex flex-col min-md:flex-row gap-2 w-full min-md:justify-center max-md:items-center">
+                    <div
+                        v-if="$slots.center"
+                        class="flex flex-row max-md:flex-wrap max-md:justify-center gap-2 w-full min-md:justify-center max-md:items-center">
                         <slot name="center" />
                     </div>
                     <slot />

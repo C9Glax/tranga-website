@@ -1,10 +1,13 @@
 <template>
     <div class="w-full pt-2">
         <div class="flex min-2xl:flex-row max-2xl:flex-col gap-2 justify-around items-center mb-2">
-            <UFieldGroup class="grow-1 basis-0 max-2xl:order-2">
-                <UInput v-model="filter.name" placeholder="Name" />
-                <UButton icon="i-lucide-rotate-ccw" variant="outline" size="xs" @click="filter.name = undefined" />
-            </UFieldGroup>
+            <div class="grow-1 basis-0 flex gap-2 flex-row max-sm:flex-wrap max-2xl:order-2 items-center">
+                <p class="text-dimmed">{{ data?.totalCount }} chapters</p>
+                <UFieldGroup>
+                    <UInput v-model="filter.name" placeholder="Name" />
+                    <UButton icon="i-lucide-rotate-ccw" variant="outline" size="xs" @click="filter.name = undefined" />
+                </UFieldGroup>
+            </div>
             <UPagination
                 :default-page="pagination.pageIndex + 1"
                 :items-per-page="pagination.pageSize"
