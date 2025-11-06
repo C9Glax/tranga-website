@@ -27,7 +27,7 @@
                             <div class="flex gap-1 p-2">
                                 <UInput v-model="keyRef" placeholder="key" />
                                 <UInput v-model="valRef" placeholder="value" />
-                                <UButton icon="i-lucide-plus" @click="(e) => addHeader(e)">Add</UButton>
+                                <UButton icon="i-lucide-plus" @click="addHeader">Add</UButton>
                             </div>
                         </template>
                     </UPopover>
