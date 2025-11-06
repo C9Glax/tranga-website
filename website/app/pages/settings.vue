@@ -132,7 +132,8 @@ const onKavitaClick = async () => {
 const { status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All, server: false });
 
 const { data: stats } = useApi('/v2/Stats', { server: false });
-const deCamel = (camel : string) : string => camel.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+const deCamel = (camel: string): string =>
+    camel.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
 
 useHead({ title: 'Settings' });
 </script>

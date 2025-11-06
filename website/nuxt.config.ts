@@ -13,15 +13,5 @@ export default defineNuxtConfig({
     },
     vite: { plugins: [tailwindcss()] },
     nitro: { prerender: { failOnError: false } },
-    app: {
-        head: {
-            title: 'Tranga',
-            htmlAttrs: {
-                lang: 'en',
-            },
-            link: [
-                { rel: 'icon', type: 'image/png', href: '/blahaj.png' },
-            ],
-        },
-    },
+    app: { head: { title: 'Tranga', htmlAttrs: { lang: 'en' }, link: [{ rel: 'icon', type: 'image/png', href: '/blahaj.png' }] } },
 });

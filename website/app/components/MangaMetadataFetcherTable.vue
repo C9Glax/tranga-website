@@ -7,9 +7,9 @@
             v-if="metadataFetchers && metadata"
             :data="metadataFetchers"
             :columns="[
-                            { header: 'Name', id: 'name' },
-                            { header: '', id: 'link' },
-                        ]">
+                { header: 'Name', id: 'name' },
+                { header: '', id: 'link' },
+            ]">
             <template #name-cell="{ row }">
                 <UTooltip :text="metadata.find((me) => me.metadataFetcherName == row.original)?.identifier ?? undefined">
                     <p class="text-toned">{{ row.original }}</p></UTooltip
@@ -23,10 +23,7 @@
                         loading-auto
                         @click="unlinkMetadataFetcher(row.original)" />
                     <UTooltip v-if="metadata.find((me) => me.metadataFetcherName === row.original)" text="Update Metadata">
-                        <UButton
-                            icon="i-lucide-refresh-ccw-dot"
-                            loading-auto
-                            @click="updateMetadata(row.original)" />
+                        <UButton icon="i-lucide-refresh-ccw-dot" loading-auto @click="updateMetadata(row.original)" />
                     </UTooltip>
                     <UButton
                         v-if="metadata.find((me) => me.metadataFetcherName === row.original) === undefined"
@@ -67,5 +64,5 @@ const updateMetadata = async (metadataFetcherName: string) => {
         path: { MangaId: mangaId, MetadataFetcherName: metadataFetcherName },
     });
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
-}
+};
 </script>
