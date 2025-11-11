@@ -1,6 +1,4 @@
-# Testers for V2 wanted!
-
-[Details](https://github.com/C9Glax/tranga/pull/355#issuecomment-2764217944)
+# Unmaintained branch!
 
 <!-- PROJECT LOGO -->
 <br />
