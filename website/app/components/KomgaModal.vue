@@ -37,7 +37,7 @@ const apiLink = computed(() => {
     if (!requestData.value.url) return undefined;
     try {
         const url = new URL(requestData.value.url);
-        return `${url.protocol}//${url.host}/account/api-keys`;
+        return `${url}${url.href.endsWith('/') ? '' : '/'}account/api-keys`;
     } catch {
         return undefined;
     }
