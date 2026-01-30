@@ -49,6 +49,21 @@
                 </template>
             </UCard>
             <UCard v-if="settingsStatus === 'success'">
+              <template #header>
+                <h1>Content</h1>
+              </template>
+              <div class="flex items-center justify-between p-2">
+                <div>
+                  <p class="font-medium">Show NSFW content</p>
+                  <p class="text-sm text-neutral-500">Allow NSFW manga connectors to appear in search results</p>
+                </div>
+                <USwitch
+                  :model-value="showNsfw"
+                  @update:model-value="toggleShowNsfw"
+                />
+              </div>
+            </UCard>
+            <UCard v-if="settingsStatus === 'success'">
                 <template #header>
                     <h1>Maintenance</h1>
                 </template>
@@ -127,6 +142,13 @@ const onKavitaClick = async () => {
         });
         await refreshNuxtData(FetchKeys.Libraries.All);
     }
+};
+const { data: showNsfw } = await useApi('/v2/Settings/ShowNSFW', {server: false});
+const toggleShowNsfw = async (value: boolean) => {
+    await useApi('/v2/Settings/ShowNSFW/{enabled}', {
+        method: 'PATCH',
+        path: { enabled: value }
+    });
 };
 
 const { status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All, server: false });
