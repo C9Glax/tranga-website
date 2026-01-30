@@ -8,7 +8,7 @@
                         <UInput v-model="query" class="w-full" :disabled="busy" />
                         <div class="flex flex-wrap gap-1 w-full justify-center">
                             <UButton
-                                v-for="c in connectors"
+                                v-for="c in visibleConnectors"
                                 :key="c.key"
                                 :color="connector?.key == c.key ? 'secondary' : 'neutral'"
                                 :disabled="busy"
@@ -48,10 +48,13 @@ type MinimalManga = components['schemas']['MinimalManga'];
 
 const { data: connectors } = await useApi('/v2/MangaConnector', { key: FetchKeys.MangaConnector.All, server: false });
 
+const { data: showNsfw } = await useApi('/v2/Settings/ShowNSFW', { server: false });
+
 const query = ref<string>();
 const connector = useState<MangaConnector>();
 const activeStep = ref(0);
 const busy = ref<boolean>(false);
+
 watch(query, (v) => {
     if (!v) activeStep.value = 0;
     else activeStep.value = 1;
@@ -65,6 +68,11 @@ const isUrl = (input: string): boolean => {
         return false;
     }
 };
+
+// Filter connectors based on NSFW setting
+const visibleConnectors = computed(() =>
+    connectors.value?.filter(c => c.enabled && (showNsfw.value || !c.nsfw)) ?? []
+);
 
 const connectorClick = (c: MangaConnector) => {
     connector.value = c;
